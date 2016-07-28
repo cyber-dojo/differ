@@ -4,7 +4,7 @@ difffer_client:
   links:
     - "differ_server"
   ports:
-    - "80:80"
+    - "4568:4568"
 
 
 differ_server:
