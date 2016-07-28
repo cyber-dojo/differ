@@ -1,0 +1,14 @@
+
+difffer_client:
+  image: differ_client
+  links:
+    - "differ_server"
+  ports:
+    - "80:80"
+
+
+differ_server:
+  image: differ_server
+  ports:
+    - "4567:4567"
+
