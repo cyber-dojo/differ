@@ -1,22 +1,28 @@
-FROM base
+FROM alpine:3.2
+MAINTAINER Jon Jagger <jon@jaggersoft.com>
+# See https://blog.codeship.com/build-minimal-docker-container-ruby-apps/
 
-MAINTAINER tcnksm "https://github.com/tcnksm"
+ENV BUILD_PACKAGES bash curl-dev ruby-dev build-base
+ENV RUBY_PACKAGES ruby ruby-io-console ruby-bundler
 
-# Install packages for building ruby
-RUN apt-get update
-RUN apt-get install -y --force-yes build-essential wget git
-RUN apt-get install -y --force-yes zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev
-RUN apt-get clean
+# Update and install all of the required packages.
+# At the end, remove the apk cache
+RUN apk update && \
+    apk upgrade && \
+    apk add $BUILD_PACKAGES && \
+    apk add $RUBY_PACKAGES && \
+    rm -rf /var/cache/apk/*
 
-RUN wget -P /root/src http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
-RUN cd /root/src; tar xvf ruby-2.2.2.tar.gz
-RUN cd /root/src/ruby-2.2.2; ./configure; make install
+RUN mkdir /usr/app
+WORKDIR /usr/app
 
-RUN gem update --system
-RUN gem install bundler
+COPY Gemfile /usr/app/
+COPY Procfile /usr/app/
+COPY config.ru /usr/app/
+COPY app.rb /usr/app/
 
-RUN git clone https://github.com/tcnksm/docker-sinatra /root/sinatra
-RUN cd /root/sinatra; bundle install
+RUN bundle install
 
+#COPY . /usr/app
 EXPOSE 4567
-CMD ["/usr/local/bin/foreman","start","-d","/root/sinatra"]
+CMD ["foreman","start","-d","/usr/app"]
