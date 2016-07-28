@@ -1,37 +1,20 @@
-# Runing a sinatra application on Docker
 
-This is sample project for running a sinatra application on Docker.
+Scratch project to spike splitting off cyber-dojo test submission diffing
+into its own microservice.
 
-## Usage
-
-Create Image
+create images and bring up containers
 
 ```
-docker build -t sinatra .
+./diff.sh
 ```
 
-Run it !
+This creates two docker images; a diff-client and a diff-server (both using sinatra).
+The diff-client sends two sets of files (in a json body) to the server
+and (eventually) the diff-server returns their diff.
+The diff-client runs on port 4568 and the diff-server on port 4567.
+If the diff-client's IP address is 192.168.99.100 then putting
+192.168.99.100:4568/diff into your browser should display
 
 ```
-ID=$(docker run -p 4567:4567 -d sinatra)
-```
-
-You can access it from your browser, [http://localhost:4567/](http://localhost:4567/).
-
-Check logs.
-
-```
-docker logs $ID
-```
-
-Stop it.
-
-```
-docker stop $ID
-```
-
-Delete it.
-
-```
-docker rm $ID
+{"key":"was<-diff->now"}
 ```
