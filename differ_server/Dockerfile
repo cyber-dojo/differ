@@ -17,12 +17,11 @@ RUN mkdir /usr/app
 WORKDIR /usr/app
 
 COPY Gemfile /usr/app/
+RUN bundle install
+
 COPY Procfile /usr/app/
 COPY config.ru /usr/app/
 COPY app.rb /usr/app/
 
-RUN bundle install
-
-#COPY . /usr/app
 EXPOSE 4567
 CMD ["foreman","start","-d","/usr/app"]
