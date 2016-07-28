@@ -1,6 +1,7 @@
 
 difffer_client:
   image: differ_client
+  container_name: differ_client
   links:
     - "differ_server"
   ports:
@@ -9,6 +10,7 @@ difffer_client:
 
 differ_server:
   image: differ_server
+  container_name: differ_server
   ports:
     - "4567:4567"
 
