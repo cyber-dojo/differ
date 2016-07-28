@@ -6,10 +6,11 @@ require 'json'
 class App < Sinatra::Base
   get '/differ' do
 
-    p "/differ: received request..."
+    hash = JSON.parse(request.body.read)
+    p hash
 
     content_type :json
-    { :key1 => 'Hello from docker!' }.to_json
+    { :key => 'was diff now' }.to_json
   end
 end
 
