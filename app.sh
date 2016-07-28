@@ -1,5 +1,7 @@
 #!/bin/sh
 
+my_dir="$( cd "$( dirname "${0}" )" && pwd )"
+
 docker_compose_cmd="docker-compose --file=${my_dir}/docker-compose.yml"
 
 app_up() {
