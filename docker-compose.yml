@@ -1,5 +1,5 @@
 
-difffer_client:
+differ_client:
   image: differ_client
   container_name: differ_client
   links:

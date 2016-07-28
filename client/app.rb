@@ -3,12 +3,11 @@ require 'sinatra/base'
 require 'json'
 require 'net/http'
 
-# DifferClient
 class App < Sinatra::Base
 
-  get '/differ' do
+  get '/diff' do
     differ_server = ENV['DIFFER_SERVER_PORT']
-    addr = differ_server.sub('tcp', 'http') + '/differ'
+    addr = differ_server.sub('tcp', 'http') + '/diff'
     uri = URI(addr)
     http = Net::HTTP.new(uri.host, uri.port)
     req = Net::HTTP::Get.new(uri.path, 'Content-Type' => 'application/json')
