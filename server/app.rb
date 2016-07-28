@@ -4,11 +4,8 @@ require 'json'
 
 class App < Sinatra::Base
   get '/diff' do
-    p was
-    p now
-
     content_type :json
-    { :key => 'was<-diff->now' }.to_json
+    { :was => was, :now => now }.to_json
   end
 
   private
