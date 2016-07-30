@@ -4,6 +4,7 @@ require 'json'
 require_relative './stdout_logger'
 require_relative './host_sheller'
 require_relative './host_gitter'
+require_relative './file_writer'
 require_relative './name_of_caller'
 require_relative './unslashed'
 require_relative './delta_maker'
@@ -13,14 +14,16 @@ class App < Sinatra::Base
 
   def initialize
     super
-    ENV['DIFFER_LOG_CLASS'] = 'StdoutLogger'
-    ENV['DIFFER_SHELL_CLASS'] = 'HostSheller'
-    ENV['DIFFER_GIT_CLASS'] = 'HostGitter'
+    ENV['DIFFER_CLASS_LOG']   = 'StdoutLogger'
+    ENV['DIFFER_CLASS_SHELL'] = 'HostSheller'
+    ENV['DIFFER_CLASS_GIT']   = 'HostGitter'
+    ENV['DIFFER_CLASS_FILE']  = 'FileWriter'
   end
 
   def log;   @log   ||= external_object; end
   def shell; @shell ||= external_object; end
   def git;   @git   ||= external_object; end
+  def file;  @file  ||= external_object; end
 
   get '/diff' do
     diff = nil
@@ -36,7 +39,7 @@ class App < Sinatra::Base
 
       # copy was_files into tag 0
       was_files.each do |filename,content|
-        write(sandbox_dir + '/' + filename, content)
+        file.write(sandbox_dir + '/' + filename, content)
         git.add(sandbox_dir, filename)
       end
       git.commit(tmp_dir, was_tag=0)
@@ -47,11 +50,11 @@ class App < Sinatra::Base
         git.rm(sandbox_dir, filename)
       end
       delta[:new].each do |filename|
-        write(sandbox_dir + '/' + filename, now_files[filename])
+        file.write(sandbox_dir + '/' + filename, now_files[filename])
         git.add(sandbox_dir, filename)
       end
       delta[:changed].each do |filename|
-        write(sandbox_dir + '/' + filename, now_files[filename])
+        file.write(sandbox_dir + '/' + filename, now_files[filename])
       end
       git.commit(tmp_dir, now_tag=1)
 
@@ -73,7 +76,7 @@ class App < Sinatra::Base
 
   def external_object
     key = name_of(caller)
-    var = my_env(key + '_class')
+    var = my_env('class_' + key)
     Object.const_get(var).new(self)
   end
 
@@ -84,13 +87,6 @@ class App < Sinatra::Base
 
   def env_name(suffix) #
     'DIFFER_' + suffix.upcase
-  end
-
-  # - - - - - - - - - - - - - - - - - - -
-
-  def write(pathed_filename, content)
-    # NB: this has no external_object ENV
-    File.open(pathed_filename, 'w') { |fd| fd.write(content) }
   end
 
   # - - - - - - - - - - - - - - - - - - -
