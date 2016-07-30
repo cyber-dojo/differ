@@ -75,18 +75,9 @@ class App < Sinatra::Base
   include GitDiff
 
   def external_object
-    key = name_of(caller)
-    var = my_env('class_' + key)
+    name = 'DIFFER_CLASS_' + name_of(caller).upcase
+    var = unslashed(ENV[name] || fail("ENV[#{name}] not set"))
     Object.const_get(var).new(self)
-  end
-
-  def my_env(suffix)
-    name = env_name(suffix)
-    unslashed(ENV[name] || fail("ENV[#{name}] not set"))
-  end
-
-  def env_name(suffix) #
-    'DIFFER_' + suffix.upcase
   end
 
   # - - - - - - - - - - - - - - - - - - -
