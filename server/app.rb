@@ -22,17 +22,10 @@ class App < Sinatra::Base
   get '/diff' do
 
     Dir.mktmpdir('differ') do |tmp_dir|
-
-      #log << "tmp_dir=#{tmp_dir}"
-      #shell.cd_exec(tmp_dir, 'pwd')
-
       # make empty git repo
       user_name = 'differ'
       user_email = user_name + '@cyber-dojo.org'
-
-      # This requires git inside the image!!!
-      #git.setup(tmp_dir, user_name, user_email)
-
+      git.setup(tmp_dir, user_name, user_email)
 
       # copy was_files
       # tag 0

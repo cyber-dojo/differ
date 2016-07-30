@@ -1,7 +1,7 @@
 FROM cyberdojo/sinatra
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-#RUN apk add --update git
+RUN apk add --update git
 
 COPY Procfile  /usr/app/
 COPY config.ru /usr/app/
