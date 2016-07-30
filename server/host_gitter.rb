@@ -52,12 +52,6 @@ class HostGitter
     )
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def XXX_show(path, options)
-    output_of(shell.cd_exec(path, "git show #{options}"))
-  end
-
   private
 
   include ExternalParentChainer
