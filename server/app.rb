@@ -7,6 +7,7 @@ require_relative './host_gitter'
 require_relative './name_of_caller'
 require_relative './unslashed'
 require_relative './delta_maker'
+require_relative './git_diff'
 
 class App < Sinatra::Base
 
@@ -15,7 +16,6 @@ class App < Sinatra::Base
     ENV['DIFFER_LOG_CLASS'] = 'StdoutLogger'
     ENV['DIFFER_SHELL_CLASS'] = 'HostSheller'
     ENV['DIFFER_GIT_CLASS'] = 'HostGitter'
-    log << "Hello from differ_server.App"
   end
 
   def log;   @log   ||= external_object; end
@@ -23,12 +23,8 @@ class App < Sinatra::Base
   def git;   @git   ||= external_object; end
 
   get '/diff' do
-
+    diff = nil
     Dir.mktmpdir('differ') do |tmp_dir|
-
-      #log << "tmp_dir=#{tmp_dir}"
-      #shell.exec('git --version')  # 2.4.11 (needs to be 2.9+ for `--compaction-heuristic`)
-
       # make empty git repo
       user_name = 'differ'
       user_email = user_name + '@cyber-dojo.org'
@@ -60,14 +56,12 @@ class App < Sinatra::Base
       git.commit(tmp_dir, now_tag=1)
 
       # get the diff
-      diff = git.diff(tmp_dir, was_tag, now_tag)
-
-      # combine diff with now_files (app/lib/git_diff.rb)
-
+      diff_lines = git.diff(tmp_dir, was_tag, now_tag)
+      diff = git_diff(diff_lines, now_files)
     end
 
     content_type :json
-    { :was_files => was_files, :now_files => now_files }.to_json
+    diff.to_json
   end
 
   private
@@ -75,6 +69,7 @@ class App < Sinatra::Base
   include NameOfCaller
   include Unslashed
   include DeltaMaker
+  include GitDiff
 
   def external_object
     key = name_of(caller)
