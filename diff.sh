@@ -17,7 +17,9 @@ cd client && ./build-image.sh
 cd ..
 cd server && ./build-image.sh
 cd ..
-docker-compose up &
 
 ip=$(docker-machine ip default)
 echo "${ip}:4568/diff"
+
+docker-compose up
+

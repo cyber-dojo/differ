@@ -19,27 +19,14 @@ class HostGitter
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def diff(path, n, m)
-    options = [
-      '--ignore-space-at-eol',
-      '--find-copies-harder',
-      "#{n}",
-      "#{m}",
-      'sandbox'
-    ].join(space = ' ')
-    output_of(shell.cd_exec(path, "git diff #{options}"))
+  def add(path, filename)
+    shell.cd_exec(path, "git add #{quoted(filename)}")
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def rm(path, filename)
     shell.cd_exec(path, "git rm #{quoted(filename)}")
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def add(path, filename)
-    shell.cd_exec(path, "git add #{quoted(filename)}")
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,12 +38,29 @@ class HostGitter
     )
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def diff(path, n, m)
+    options = [
+      '--ignore-space-at-eol',
+      '--find-copies-harder',
+      "#{n}",
+      "#{m}",
+      'sandbox'
+    ].join(space)
+    output_of(shell.cd_exec(path, "git diff #{options}"))
+  end
+
   private
 
   include ExternalParentChainer
 
   def quoted(s)
     "'" + s + "'"
+  end
+
+  def space
+    ' '
   end
 
   def output_of(args)
