@@ -3,6 +3,7 @@ require 'sinatra/base'
 require 'json'
 require_relative './stdout_logger'
 require_relative './host_sheller'
+require_relative './host_gitter'
 
 class App < Sinatra::Base
 
@@ -10,22 +11,29 @@ class App < Sinatra::Base
     super
     ENV['DIFFER_LOG_CLASS'] = 'StdoutLogger'
     ENV['DIFFER_SHELL_CLASS'] = 'HostSheller'
+    ENV['DIFFER_GIT_CLASS'] = 'HostGitter'
     log << "Hello from differ_server.App"
   end
 
-  def log;  @log ||= external_object; end
+  def log;   @log   ||= external_object; end
   def shell; @shell ||= external_object; end
-  # setup git
+  def git;   @git   ||= external_object; end
 
   get '/diff' do
 
     Dir.mktmpdir('differ') do |tmp_dir|
 
-      log << "tmp_dir=#{tmp_dir}"
-      shell.cd_exec(tmp_dir, 'pwd')
+      #log << "tmp_dir=#{tmp_dir}"
+      #shell.cd_exec(tmp_dir, 'pwd')
 
-      # make empty git repo  (lib/host_git.rb setup())
-      #
+      # make empty git repo
+      user_name = 'differ'
+      user_email = user_name + '@cyber-dojo.org'
+
+      # This requires git inside the image!!!
+      #git.setup(tmp_dir, user_name, user_email)
+
+
       # copy was_files
       # tag 0
       # create delta between was_files and now_files

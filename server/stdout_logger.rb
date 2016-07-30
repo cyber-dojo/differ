@@ -1,7 +1,7 @@
 
 class StdoutLogger
 
-  def initialize(_dojo)
+  def initialize(_parent)
   end
 
   def <<(message)
