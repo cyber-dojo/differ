@@ -47,7 +47,6 @@ class HostGitter
   def commit(path, tag)
     shell.cd_exec(path,
       "git commit -a -m #{tag} --quiet",
-      'git gc --auto --quiet',
       "git tag -m '#{tag}' #{tag} HEAD"
     )
   end
