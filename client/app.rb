@@ -21,7 +21,7 @@ class App < Sinatra::Base
       'hiker.c': '#include "hiker.h"',
       'hiker.h': '#ifndef HIKER_INCLUDED\n#endif'
     }
-    req.body = { was: was_files, now: now_files }.to_json
+    req.body = { was_files: was_files, now_files: now_files }.to_json
 
     res = http.request(req)
     res.body
