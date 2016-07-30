@@ -1,206 +1,204 @@
 
 # Parses the output of 'git diff' command.
-# Used in app/lib/git_diff_parser.rb git_diff()
-# See test/lib/git_diff_parser_tests.rb
 
 require_relative './line_splitter'
 
 class GitDiffParser
 
-    def initialize(diff_text)
-      @lines = LineSplitter.line_split(diff_text)
-      @n = 0
-    end
+  def initialize(diff_text)
+    @lines = LineSplitter.line_split(diff_text)
+    @n = 0
+  end
 
-    attr_reader :lines, :n
+  attr_reader :lines, :n
 
-    def parse_all
-      all = {}
-      while /^diff/.match(@lines[@n]) do
-        one = parse_one
-        if one[:now_filename] != '/dev/null'
-          name = one[:now_filename]
-        else
-          name = one[:was_filename]
-        end
-        all[name] = one
+  def parse_all
+    all = {}
+    while /^diff/.match(@lines[@n]) do
+      one = parse_one
+      if one[:now_filename] != '/dev/null'
+        name = one[:now_filename]
+      else
+        name = one[:was_filename]
       end
-      all
+      all[name] = one
     end
+    all
+  end
 
-    def parse_one
-      one =
-      {
-        prefix_lines: parse_prefix_lines,
-        was_filename: parse_was_filename,
-        now_filename: parse_now_filename,
-              chunks: parse_chunk_all
-      }
-      check_for_unchanged_rename_or_copy(one)
-      check_for_deleted_file(one)
-      one
+  def parse_one
+    one =
+    {
+      prefix_lines: parse_prefix_lines,
+      was_filename: parse_was_filename,
+      now_filename: parse_now_filename,
+            chunks: parse_chunk_all
+    }
+    check_for_unchanged_rename_or_copy(one)
+    check_for_deleted_file(one)
+    one
+  end
+
+  RENAME_OR_COPY_FROM_RE = /^(rename|copy) from (.*)/
+  RENAME_OR_COPY_TO_RE   = /^(rename|copy) to (.*)/
+
+  def check_for_unchanged_rename_or_copy(one)
+    prefix = one[:prefix_lines]
+    if prefix.length == 4 && prefix[1] == 'similarity index 100%'
+      one[:was_filename] = 'a/' + unescaped(RENAME_OR_COPY_FROM_RE.match(prefix[2])[2])
+      one[:now_filename] = 'b/' + unescaped(RENAME_OR_COPY_TO_RE.match(prefix[3])[2])
     end
+  end
 
-    RENAME_OR_COPY_FROM_RE = /^(rename|copy) from (.*)/
-    RENAME_OR_COPY_TO_RE   = /^(rename|copy) to (.*)/
+  DIFF_GIT_RE = /^diff --git (.*)/
 
-    def check_for_unchanged_rename_or_copy(one)
-      prefix = one[:prefix_lines]
-      if prefix.length == 4 && prefix[1] == 'similarity index 100%'
-        one[:was_filename] = 'a/' + unescaped(RENAME_OR_COPY_FROM_RE.match(prefix[2])[2])
-        one[:now_filename] = 'b/' + unescaped(RENAME_OR_COPY_TO_RE.match(prefix[3])[2])
-      end
-    end
-
-    DIFF_GIT_RE = /^diff --git (.*)/
-
-    def check_for_deleted_file(one)
-      prefix = one[:prefix_lines]
-      if prefix.length == 3 and prefix[1] == 'deleted file mode 100644'
-        re = DIFF_GIT_RE.match(prefix[0])
-        if re
-          both = re[1]
-          # e.g. both = "a/sandbox/xx b/sandbox/xx"
-          # -1 (space in middle) / 2 (to get one filename)
-          was = both[0..both.length/2 - 1]
-          one[:was_filename] = unescaped(was)
-          one[:now_filename] = '/dev/null'
-        end
-      end
-      one
-    end
-
-    def parse_chunk_all
-      chunks = []
-      while chunk = parse_chunk_one
-        chunks << chunk
-      end
-      chunks
-    end
-
-    def parse_chunk_one
-      if range = parse_range
-        { range: range, before_lines: parse_common_lines, sections: parse_sections }
+  def check_for_deleted_file(one)
+    prefix = one[:prefix_lines]
+    if prefix.length == 3 and prefix[1] == 'deleted file mode 100644'
+      re = DIFF_GIT_RE.match(prefix[0])
+      if re
+        both = re[1]
+        # e.g. both = "a/sandbox/xx b/sandbox/xx"
+        # -1 (space in middle) / 2 (to get one filename)
+        was = both[0..both.length/2 - 1]
+        one[:was_filename] = unescaped(was)
+        one[:now_filename] = '/dev/null'
       end
     end
+    one
+  end
 
-    RANGE_RE = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
-
-    def parse_range
-      if range = RANGE_RE.match(@lines[@n])
-        @n += 1
-        was = { start_line: range[1].to_i,
-                      size: size_or_default(range[2])
-              }
-        now = { start_line: range[3].to_i,
-                      size: size_or_default(range[4])
-              }
-        { was: was, now: now }
-      end
+  def parse_chunk_all
+    chunks = []
+    while chunk = parse_chunk_one
+      chunks << chunk
     end
+    chunks
+  end
 
-    def size_or_default(size)
-      # http://www.artima.com/weblogs/viewpost.jsp?thread=164293
-      # Is a blog entry by Guido van Rossum.
-      # He says that in L,S the ,S can be omitted if the chunk size
-      # S is 1. So -3 is the same as -3,1
-      size != nil ? size.to_i : 1
+  def parse_chunk_one
+    if range = parse_range
+      { range: range, before_lines: parse_common_lines, sections: parse_sections }
     end
+  end
 
-    DELETED_LINE_OR_ADDED_LINE_OR_COMMON_LINE_RE = /^[\+\- ]/
+  RANGE_RE = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
 
-    def parse_sections
+  def parse_range
+    if range = RANGE_RE.match(@lines[@n])
+      @n += 1
+      was = { start_line: range[1].to_i,
+                    size: size_or_default(range[2])
+            }
+      now = { start_line: range[3].to_i,
+                    size: size_or_default(range[4])
+            }
+      { was: was, now: now }
+    end
+  end
+
+  def size_or_default(size)
+    # http://www.artima.com/weblogs/viewpost.jsp?thread=164293
+    # Is a blog entry by Guido van Rossum.
+    # He says that in L,S the ,S can be omitted if the chunk size
+    # S is 1. So -3 is the same as -3,1
+    size != nil ? size.to_i : 1
+  end
+
+  DELETED_LINE_OR_ADDED_LINE_OR_COMMON_LINE_RE = /^[\+\- ]/
+
+  def parse_sections
+    parse_newline_at_eof
+    sections = []
+    while DELETED_LINE_OR_ADDED_LINE_OR_COMMON_LINE_RE.match(@lines[@n])
+      deleted_lines = parse_deleted_lines
       parse_newline_at_eof
-      sections = []
-      while DELETED_LINE_OR_ADDED_LINE_OR_COMMON_LINE_RE.match(@lines[@n])
-        deleted_lines = parse_deleted_lines
-        parse_newline_at_eof
 
-        added_lines = parse_added_lines
-        parse_newline_at_eof
+      added_lines = parse_added_lines
+      parse_newline_at_eof
 
-        after_lines = parse_common_lines
-        parse_newline_at_eof
+      after_lines = parse_common_lines
+      parse_newline_at_eof
 
-        sections << {
-          deleted_lines: deleted_lines,
-          added_lines: added_lines,
-          after_lines: after_lines
-        }
-      end
-      sections
+      sections << {
+        deleted_lines: deleted_lines,
+        added_lines: added_lines,
+        after_lines: after_lines
+      }
     end
+    sections
+  end
 
-    DELETED_LINE_RE = /^\-(.*)/
+  DELETED_LINE_RE = /^\-(.*)/
 
-    def parse_deleted_lines
-      parse_lines(DELETED_LINE_RE)
+  def parse_deleted_lines
+    parse_lines(DELETED_LINE_RE)
+  end
+
+  ADDED_LINE_RE   = /^\+(.*)/
+
+  def parse_added_lines
+    parse_lines(ADDED_LINE_RE)
+  end
+
+  COMMON_LINE_RE = %r|^ (.*)|
+
+  def parse_common_lines
+    parse_lines(COMMON_LINE_RE)
+  end
+
+  PREFIX_RE = %r|^([^-+].*)|
+
+  def parse_prefix_lines
+    parse_lines(PREFIX_RE)
+  end
+
+  WAS_FILENAME_RE = %r|^\-\-\- (.*)|
+
+  def parse_was_filename
+    parse_filename(WAS_FILENAME_RE)
+  end
+
+  NOW_FILENAME_RE = %r|^\+\+\+ (.*)|
+
+  def parse_now_filename
+    parse_filename(NOW_FILENAME_RE)
+  end
+
+  def parse_filename(re)
+    if md = re.match(@lines[@n])
+      @n += 1
+      filename = md[1]
+      # If you have filenames with spaces in them then the 'git diff'
+      # command used in git_diff_view() sometimes generates
+      # --- and +++ lines with a tab appended to the filename!!!
+      filename.rstrip!
+      filename = unescaped(filename)
     end
+    filename
+  end
 
-    ADDED_LINE_RE   = /^\+(.*)/
+  def unescaped(filename)
+    # If the filename contains a backslash, then the 'git diff'
+    # command will escape the filename
+    filename = eval(filename) if filename[0].chr == '"'
+    filename
+  end
 
-    def parse_added_lines
-      parse_lines(ADDED_LINE_RE)
+  def parse_lines(re)
+    lines = []
+    while md = re.match(@lines[@n])
+      lines << md[1]
+      @n += 1
     end
+    lines
+  end
 
-    COMMON_LINE_RE = %r|^ (.*)|
+  NEWLINE_AT_EOF_RE = /^\\ No newline at end of file/
 
-    def parse_common_lines
-      parse_lines(COMMON_LINE_RE)
-    end
-
-    PREFIX_RE = %r|^([^-+].*)|
-
-    def parse_prefix_lines
-      parse_lines(PREFIX_RE)
-    end
-
-    WAS_FILENAME_RE = %r|^\-\-\- (.*)|
-
-    def parse_was_filename
-      parse_filename(WAS_FILENAME_RE)
-    end
-
-    NOW_FILENAME_RE = %r|^\+\+\+ (.*)|
-
-    def parse_now_filename
-      parse_filename(NOW_FILENAME_RE)
-    end
-
-    def parse_filename(re)
-      if md = re.match(@lines[@n])
-        @n += 1
-        filename = md[1]
-        # If you have filenames with spaces in them then the 'git diff'
-        # command used in git_diff_view() sometimes generates
-        # --- and +++ lines with a tab appended to the filename!!!
-        filename.rstrip!
-        filename = unescaped(filename)
-      end
-      filename
-    end
-
-    def unescaped(filename)
-      # If the filename contains a backslash, then the 'git diff'
-      # command will escape the filename
-      filename = eval(filename) if filename[0].chr == '"'
-      filename
-    end
-
-    def parse_lines(re)
-      lines = []
-      while md = re.match(@lines[@n])
-        lines << md[1]
-        @n += 1
-      end
-      lines
-    end
-
-    NEWLINE_AT_EOF_RE = /^\\ No newline at end of file/
-
-    def parse_newline_at_eof
-      @n += 1 if NEWLINE_AT_EOF_RE.match(@lines[@n])
-    end
+  def parse_newline_at_eof
+    @n += 1 if NEWLINE_AT_EOF_RE.match(@lines[@n])
+  end
 
 end
 
