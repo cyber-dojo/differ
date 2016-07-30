@@ -1,29 +1,23 @@
 require 'sinatra'
 require 'sinatra/base'
 require 'json'
-require_relative './stdout_logger'
-require_relative './host_sheller'
-require_relative './host_gitter'
-require_relative './file_writer'
-require_relative './name_of_caller'
-require_relative './unslashed'
-require_relative './delta_maker'
-require_relative './git_diff'
+
+%w(
+  delta_maker
+  file_writer
+  git_diff
+  host_sheller
+  host_gitter
+  name_of_caller
+  stdout_logger
+  unslashed
+).each { |file|
+  require_relative './' + file
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
 
 class App < Sinatra::Base
-
-  def initialize
-    super
-    ENV['DIFFER_CLASS_LOG']   = 'StdoutLogger'
-    ENV['DIFFER_CLASS_SHELL'] = 'HostSheller'
-    ENV['DIFFER_CLASS_GIT']   = 'HostGitter'
-    ENV['DIFFER_CLASS_FILE']  = 'FileWriter'
-  end
-
-  def log;   @log   ||= external_object; end
-  def shell; @shell ||= external_object; end
-  def git;   @git   ||= external_object; end
-  def file;  @file  ||= external_object; end
 
   get '/diff' do
     diff = nil
@@ -74,13 +68,16 @@ class App < Sinatra::Base
   include DeltaMaker
   include GitDiff
 
+  def log;   @log   ||= external_object; end
+  def shell; @shell ||= external_object; end
+  def git;   @git   ||= external_object; end
+  def file;  @file  ||= external_object; end
+
   def external_object
     name = 'DIFFER_CLASS_' + name_of(caller).upcase
     var = unslashed(ENV[name] || fail("ENV[#{name}] not set"))
     Object.const_get(var).new(self)
   end
-
-  # - - - - - - - - - - - - - - - - - - -
 
   def was_files
     arg['was_files']
