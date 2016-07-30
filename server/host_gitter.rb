@@ -54,7 +54,7 @@ class HostGitter
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def show(path, options)
+  def XXX_show(path, options)
     output_of(shell.cd_exec(path, "git show #{options}"))
   end
 

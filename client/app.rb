@@ -14,7 +14,7 @@ class App < Sinatra::Base
 
     was_files = {
       'cyber-dojo.sh': "blah blah",
-      'hiker.c': '#include "hiker.h"'
+      'hiker.c': '#include <hiker.h>'
     }
     now_files = {
       'cyber-dojo.sh': "blah blah blah",
