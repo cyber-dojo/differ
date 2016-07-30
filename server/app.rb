@@ -2,17 +2,19 @@ require 'sinatra'
 require 'sinatra/base'
 require 'json'
 require_relative './stdout_logger'
+require_relative './host_sheller'
 
 class App < Sinatra::Base
 
   def initialize
     super
     ENV['DIFFER_LOG_CLASS'] = 'StdoutLogger'
+    ENV['DIFFER_SHELL_CLASS'] = 'HostSheller'
     log << "Hello from differ_server.App"
   end
 
   def log;  @log ||= external_object; end
-  # setup shell
+  def shell; @shell ||= external_object; end
   # setup git
 
   get '/diff' do
@@ -20,6 +22,7 @@ class App < Sinatra::Base
     Dir.mktmpdir('differ') do |tmp_dir|
 
       log << "tmp_dir=#{tmp_dir}"
+      shell.cd_exec(tmp_dir, 'pwd')
 
       # make empty git repo  (lib/host_git.rb setup())
       #
