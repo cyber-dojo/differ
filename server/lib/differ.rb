@@ -29,6 +29,8 @@ class Differ
     end
   end
 
+  include Externals
+
   private
 
   def make_empty_git_repo_in(git_dir)
@@ -68,7 +70,6 @@ class Differ
   end
 
   include DeltaMaker
-  include Externals
   include GitDiff
 
 end

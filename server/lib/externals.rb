@@ -24,8 +24,6 @@ require_relative './unslashed'
 
 module Externals # mix-in
 
-  module_function
-
   def log  ; @log   ||= external_object; end
   def shell; @shell ||= external_object; end
   def git  ; @git   ||= external_object; end
