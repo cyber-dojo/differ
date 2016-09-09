@@ -4,15 +4,11 @@ require_relative './string_cleaner'
 
 class HostSheller
 
-  def initialize(dojo)
-    @dojo = dojo
+  def initialize(parent)
+    @parent = parent
   end
 
-  # queries
-
-  def parent
-    @dojo
-  end
+  attr_reader :parent
 
   def success
     0

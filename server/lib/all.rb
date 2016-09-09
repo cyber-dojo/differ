@@ -1,8 +1,7 @@
 
 %w(
-  delta_maker
+  differ
   file_writer
-  git_diff
   host_sheller
   host_gitter
   name_of_caller
