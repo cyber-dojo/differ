@@ -29,7 +29,7 @@ class App < Sinatra::Base
     now_files = {
       'cyber-dojo.sh': "blah blah blah",
       'hiker.c': '#include "hiker.h"',
-      'hiker.h': '#ifndef HIKER_INCLUDED\n#endif',
+      'hiker.h': "#ifndef HIKER_INCLUDED\n#endif",
       'compacted.eg':
         [ "def finalize(values)",
           "",

@@ -46,8 +46,7 @@ class HostGitter
       '--find-copies-harder',
       '--compaction-heuristic',
       "#{n}",
-      "#{m}",
-      'sandbox'
+      "#{m}"
     ].join(space)
     output_of(shell.cd_exec(path, "git diff #{options}"))
   end

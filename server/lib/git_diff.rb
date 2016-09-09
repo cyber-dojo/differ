@@ -11,8 +11,8 @@ module GitDiff # mix-in
   def git_diff(diff_lines, visible_files)
     view = {}
     diffs = GitDiffParser.new(diff_lines).parse_all
-    diffs.each do |sandbox_name, diff|
-      md = %r{^(.)/sandbox/(.*)}.match(sandbox_name)
+    diffs.each do |path, diff|
+      md = %r{^(.)/(.*)}.match(path)
       if md
         filename = md[2]
         if deleted_file?(md[1])
