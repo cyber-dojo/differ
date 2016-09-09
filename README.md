@@ -9,5 +9,12 @@ If the diff-client's IP address is 192.168.99.100 then put
 To create images and bring up containers
 
 ```
-./diff.sh
+./up.sh
 ```
+
+To run the tests inside the differ server container
+```
+./test.sh
+```
+
+

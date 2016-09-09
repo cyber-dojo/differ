@@ -4,4 +4,5 @@
 
 require 'json'
 require_relative './test_base'
-require_relative '../lib/all'
+require_relative '../lib/differ'
+require_relative '../lib/externals'

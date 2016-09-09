@@ -2,7 +2,8 @@ require 'sinatra'
 require 'sinatra/base'
 require 'json'
 
-require_relative './lib/all'
+require_relative './lib/differ'
+require_relative './lib/externals'
 
 class App < Sinatra::Base
 
@@ -19,19 +20,7 @@ class App < Sinatra::Base
 
   def differ; Differ.new(self); end
 
-  def log;   @log   ||= external_object; end
-  def shell; @shell ||= external_object; end
-  def git;   @git   ||= external_object; end
-  def file;  @file  ||= external_object; end
-
-  def external_object
-    name = 'DIFFER_CLASS_' + name_of(caller).upcase
-    var = unslashed(ENV[name] || fail("ENV[#{name}] not set"))
-    Object.const_get(var).new(self)
-  end
-
-  include NameOfCaller
-  include Unslashed
+  include Externals
 
 end
 
