@@ -1,15 +1,27 @@
+class String
+  def snake_case
+    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+    gsub(/([a-z\d])([A-Z])/,'\1_\2').
+    tr('-', '_').
+    gsub(/\s/, '_').
+    gsub(/__+/, '_').
+    downcase
+  end
+end
 
-%w(name_of_caller unslashed file_writer host_sheller host_gitter stdout_logger
-).each { |file|
-  require_relative './' + file
-}
+# - - - - - - - - - - - - - - - - - - - - - - - -
 
 {
   'LOG'   => 'StdoutLogger',
   'SHELL' => 'HostSheller',
   'GIT'   => 'HostGitter',
   'FILE'  => 'FileWriter'
-}.each { |service,name| ENV['DIFFER_CLASS_'+service] = name }
+}.each do |service,name|
+  ENV['DIFFER_CLASS_'+service] = name
+  require_relative './' + name.snake_case
+end
+
+%w(name_of_caller unslashed).each { |file| require_relative './' + file }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 
