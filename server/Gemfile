@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+
+gem 'json'
+gem 'foreman'
+gem 'sinatra'
+gem 'thin'
+
+gem 'minitest'
+gem 'ruby-prof' # Needed by minitest?!

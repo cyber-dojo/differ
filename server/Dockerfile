@@ -6,7 +6,12 @@ RUN apk add --update git
 COPY Procfile  /usr/app/
 COPY config.ru /usr/app/
 COPY *.rb      /usr/app/
-COPY lib/*.rb  /usr/app/lib/
+COPY lib/      /usr/app/lib/
+COPY test/     /usr/app/test/
+
+WORKDIR /usr/app
+COPY Gemfile /usr/app/
+RUN bundle install
 
 EXPOSE 4567
 CMD [ "foreman", "start", "-d", "/usr/app" ]

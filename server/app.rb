@@ -2,18 +2,7 @@ require 'sinatra'
 require 'sinatra/base'
 require 'json'
 
-%w(
-  delta_maker
-  file_writer
-  git_diff
-  host_sheller
-  host_gitter
-  name_of_caller
-  stdout_logger
-  unslashed
-).each { |file|
-  require_relative './lib/' + file
-}
+require_relative './lib/all'
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -23,8 +12,6 @@ class App < Sinatra::Base
     content_type :json
     diff.to_json
   end
-
-  private
 
   def diff
     Dir.mktmpdir('differ') do |git_dir|
@@ -42,6 +29,8 @@ class App < Sinatra::Base
       git_diff(diff_lines, now_files)
     end
   end
+
+  private
 
   def make_empty_git_repo_in(git_dir)
     user_name = 'nobody'
