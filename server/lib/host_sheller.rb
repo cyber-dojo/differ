@@ -1,6 +1,6 @@
 
-require 'external_parent_chainer'
-require 'string_cleaner'
+require_relative './external_parent_chainer'
+require_relative './string_cleaner'
 
 class HostSheller
 

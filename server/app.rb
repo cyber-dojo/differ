@@ -12,7 +12,7 @@ require 'json'
   stdout_logger
   unslashed
 ).each { |file|
-  require_relative './' + file
+  require_relative './lib/' + file
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -38,14 +38,14 @@ class App < Sinatra::Base
       end
       git.commit(tmp_dir, was_tag=0)
 
-      # copy now_files into tag 1
+      # add/remove/copy now_files into tag 1
       delta = make_delta(was_files, now_files)
-      delta[:deleted].each do |filename|
-        git.rm(sandbox_dir, filename)
-      end
       delta[:new].each do |filename|
         file.write(sandbox_dir + '/' + filename, now_files[filename])
         git.add(sandbox_dir, filename)
+      end
+      delta[:deleted].each do |filename|
+        git.rm(sandbox_dir, filename)
       end
       delta[:changed].each do |filename|
         file.write(sandbox_dir + '/' + filename, now_files[filename])
