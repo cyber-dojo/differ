@@ -12,10 +12,10 @@ end
 # - - - - - - - - - - - - - - - - - - - - - - - -
 
 {
-  'LOG'   => 'StdoutLogger',
-  'SHELL' => 'HostSheller',
-  'GIT'   => 'HostGitter',
-  'FILE'  => 'FileWriter'
+  'LOG'   => 'ExternalStdoutLogger',
+  'SHELL' => 'ExternalSheller',
+  'GIT'   => 'ExternalGitter',
+  'FILE'  => 'ExternalFileWriter'
 }.each do |service,name|
   ENV['DIFFER_CLASS_'+service] = name
   require_relative './' + name.snake_case

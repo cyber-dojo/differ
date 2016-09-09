@@ -1,5 +1,5 @@
 
-class FileWriter
+class ExternalFileWriter
 
   def initialize(_parent)
   end

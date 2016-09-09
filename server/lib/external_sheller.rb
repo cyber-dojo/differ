@@ -2,7 +2,7 @@
 require_relative './external_parent_chainer'
 require_relative './string_cleaner'
 
-class HostSheller
+class ExternalSheller
 
   def initialize(parent)
     @parent = parent

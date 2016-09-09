@@ -1,5 +1,5 @@
 
-class HostGitter
+class ExternalGitter
 
   def initialize(parent)
     @parent = parent
