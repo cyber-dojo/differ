@@ -4,6 +4,13 @@
   require_relative './' + file
 }
 
+{
+  'LOG'   => 'StdoutLogger',
+  'SHELL' => 'HostSheller',
+  'GIT'   => 'HostGitter',
+  'FILE'  => 'FileWriter'
+}.each { |service,name| ENV['DIFFER_CLASS_'+service] = name }
+
 # - - - - - - - - - - - - - - - - - - - - - - - -
 
 module Externals # mix-in

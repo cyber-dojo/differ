@@ -12,11 +12,6 @@ differ:
   user: nobody
   image: cyberdojo/differ
   container_name: differ
-  environment:
-    - DIFFER_CLASS_LOG=StdoutLogger
-    - DIFFER_CLASS_SHELL=HostSheller
-    - DIFFER_CLASS_GIT=HostGitter
-    - DIFFER_CLASS_FILE=FileWriter
   ports:
     - "4567:4567"
 
