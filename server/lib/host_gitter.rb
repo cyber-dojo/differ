@@ -13,7 +13,8 @@ class HostGitter
     shell.cd_exec(path,
       'git init --quiet',
       "git config user.name #{quoted(user_name)}",
-      "git config user.email #{quoted(user_email)}"
+      "git config user.email #{quoted(user_email)}",
+      "git config --global diff.compactionHeuristic 1"
     )
   end
 

@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 # See https://blog.codeship.com/build-minimal-docker-container-ruby-apps/
 
