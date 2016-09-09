@@ -3,14 +3,14 @@ differ_client:
   image: differ_client
   container_name: differ_client
   links:
-    - "differ_server"
+    - "differ"
   ports:
     - "4568:4568"
 
 
-differ_server:
-  image: differ_server
-  container_name: differ_server
+differ:
+  image: cyberdojo/differ
+  container_name: differ
   environment:
     - DIFFER_CLASS_LOG=StdoutLogger
     - DIFFER_CLASS_SHELL=HostSheller

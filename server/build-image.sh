@@ -1,1 +1,1 @@
-docker build -t differ_server .
+docker build -t cyberdojo/differ .
