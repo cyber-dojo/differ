@@ -9,9 +9,5 @@ COPY *.rb      /usr/app/
 COPY lib/      /usr/app/lib/
 COPY test/     /usr/app/test/
 
-WORKDIR /usr/app
-COPY Gemfile /usr/app/
-RUN bundle install
-
 EXPOSE 4567
 CMD [ "foreman", "start", "-d", "/usr/app" ]
