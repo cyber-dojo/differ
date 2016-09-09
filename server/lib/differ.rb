@@ -1,23 +1,18 @@
 
-%w(
-  delta_maker
-  external_parent_chainer
-  git_diff
-).each { |file|
-  require_relative './' + file
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - -
+require_relative './delta_maker'
+require_relative './externals'
+require_relative './git_diff'
 
 class Differ
 
-  def initialize(parent)
-    @parent = parent
+  def initialize(was_files, now_files)
+    @was_files = was_files
+    @now_files = now_files
   end
 
-  attr_reader :parent
+  attr_reader :was_files, :now_files
 
-  def diff(was_files, now_files)
+  def diff
     Dir.mktmpdir('differ') do |git_dir|
       make_empty_git_repo_in(git_dir)
 
@@ -73,7 +68,7 @@ class Differ
   end
 
   include DeltaMaker
-  include ExternalParentChainer
+  include Externals
   include GitDiff
 
 end

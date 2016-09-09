@@ -1,4 +1,6 @@
 
+require_relative './external_parent_chainer'
+
 class ExternalGitter
 
   def initialize(parent)
