@@ -10,10 +10,6 @@ class ExternalSheller
 
   attr_reader :parent
 
-  def success
-    0
-  end
-
   # modifiers
 
   def cd_exec(path, *commands)
@@ -23,7 +19,10 @@ class ExternalSheller
 
   def exec(*commands)
     command = commands.join(' && ')
-    log << "shell.exec:#{'-'*40}"
+    log << ''
+    log << ''
+    log << ''
+    log << "#{'-'*40}"
     log << "shell.exec:COMMAND: #{command}"
     output = `#{command}`
     exit_status = $?.exitstatus
