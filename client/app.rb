@@ -18,9 +18,11 @@ class App < Sinatra::Base
       'deleted.txt': 'tweedle-dee',
       'compacted.eg':
         [ "def finalize(values)",
+          "",
           "  values.each do |v|",
           "    v.finalize",
           "  end",
+          "",
           "end"
         ].join("\n")
     }
@@ -30,12 +32,15 @@ class App < Sinatra::Base
       'hiker.h': '#ifndef HIKER_INCLUDED\n#endif',
       'compacted.eg':
         [ "def finalize(values)",
+          "",
           "  values.each do |v|",
           "    v.prepare",
           "  end",
+          "",
           "  values.each do |v|",
           "    v.finalize",
           "  end",
+          "",
           "end"
         ].join("\n")
     }

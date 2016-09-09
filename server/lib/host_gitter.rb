@@ -13,8 +13,7 @@ class HostGitter
     shell.cd_exec(path,
       'git init --quiet',
       "git config user.name #{quoted(user_name)}",
-      "git config user.email #{quoted(user_email)}",
-      "git config --global diff.compactionHeuristic 1"
+      "git config user.email #{quoted(user_email)}"
     )
   end
 
@@ -45,6 +44,7 @@ class HostGitter
     options = [
       '--ignore-space-at-eol',
       '--find-copies-harder',
+      '--compaction-heuristic',
       "#{n}",
       "#{m}",
       'sandbox'
