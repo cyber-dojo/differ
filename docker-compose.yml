@@ -9,6 +9,7 @@ differ_client:
 
 
 differ:
+  user: nobody
   image: cyberdojo/differ
   container_name: differ
   environment:

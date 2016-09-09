@@ -6,7 +6,6 @@ require 'net/http'
 class App < Sinatra::Base
 
   get '/diff' do
-    p ENV
     differ_server = ENV['DIFFER_PORT']
     addr = differ_server.sub('tcp', 'http') + '/diff'
     uri = URI(addr)

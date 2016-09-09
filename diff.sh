@@ -13,9 +13,26 @@ exit_if_not_installed 'docker'
 exit_if_not_installed 'docker-machine'
 exit_if_not_installed 'docker-compose'
 
+cd sinatra && ./build-image.sh
+if [ $? != 0 ]; then
+  echo "FAILED TO BUILD cyberdojo/sinatra"
+  exit 1
+fi
+
+cd ..
 cd client && ./build-image.sh
+if [ $? != 0 ]; then
+  echo "FAILED TO BUILD differ_client"
+  exit 1
+fi
+
 cd ..
 cd server && ./build-image.sh
+if [ $? != 0 ]; then
+  echo "FAILED TO BUILD cyberdojo/differ"
+  exit 1
+fi
+
 cd ..
 
 ip=$(docker-machine ip default)
