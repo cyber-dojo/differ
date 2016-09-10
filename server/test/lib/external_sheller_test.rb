@@ -6,8 +6,8 @@ require_relative './spy_logger'
 class ExternalShellerTest < LibTestBase
 
   def setup
-    ENV['DIFFER_CLASS_LOG'] = 'SpyLogger'
     super
+    ENV['DIFFER_CLASS_LOG'] = 'SpyLogger'
     @differ = Differ.new(nil, nil)
   end
 
