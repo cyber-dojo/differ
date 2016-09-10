@@ -12,10 +12,10 @@ end
 
 def env_map
   {
-    env_root('LOG')   => 'ExternalStdoutLogger',
-    env_root('SHELL') => 'ExternalSheller',
+    env_root('FILE')  => 'ExternalFileWriter',
     env_root('GIT')   => 'ExternalGitter',
-    env_root('FILE')  => 'ExternalFileWriter'
+    env_root('LOG')   => 'ExternalStdoutLogger',
+    env_root('SHELL') => 'ExternalSheller'
   }
 end
 
@@ -30,10 +30,10 @@ require_relative './name_of_caller'
 
 module Externals # mix-in
 
+  def file ; @file  ||= external; end
+  def git  ; @git   ||= external; end
   def log  ; @log   ||= external; end
   def shell; @shell ||= external; end
-  def git  ; @git   ||= external; end
-  def file ; @file  ||= external; end
 
   private
 

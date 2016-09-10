@@ -15,14 +15,6 @@ class ExternalShellerTest < LibTestBase
   def log  ; @differ.log  ; end
 
   # - - - - - - - - - - - - - - - - -
-
-  test '6591B1',
-  'default shell is ExternalSheller' do
-    assert_equal 'ExternalSheller', shell.class.name
-    assert_equal [], log.spied
-  end
-
-  # - - - - - - - - - - - - - - - - -
   # exec()
   # - - - - - - - - - - - - - - - - -
 
