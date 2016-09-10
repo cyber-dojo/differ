@@ -3,16 +3,19 @@
 require_relative './lib_test_base'
 require_relative './spy_logger'
 
+
 class ExternalShellerTest < LibTestBase
+
+  class App; include Externals; end
 
   def setup
     super
     ENV['DIFFER_CLASS_LOG'] = 'SpyLogger'
-    @differ = Differ.new(nil, nil)
+    @app = App.new
   end
 
-  def shell; @differ.shell; end
-  def log  ; @differ.log  ; end
+  def shell; @app.shell; end
+  def log  ; @app.log  ; end
 
   # - - - - - - - - - - - - - - - - -
   # exec()

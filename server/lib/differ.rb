@@ -8,6 +8,7 @@ class Differ
   def initialize(was_files, now_files)
     @was_files = was_files
     @now_files = now_files
+    @delta = make_delta(was_files, now_files)
   end
 
   attr_reader :was_files, :now_files
@@ -32,6 +33,8 @@ class Differ
   include Externals
 
   private
+
+  attr_reader :delta
 
   def make_empty_git_repo_in(git_dir)
     user_name = 'nobody'
@@ -63,10 +66,6 @@ class Differ
     delta[:changed].each do |filename|
       file.write(git_dir + '/' + filename, now_files[filename])
     end
-  end
-
-  def delta
-    make_delta(was_files, now_files)
   end
 
   include DeltaMaker

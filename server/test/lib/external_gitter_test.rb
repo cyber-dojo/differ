@@ -5,14 +5,16 @@ require_relative './spy_sheller'
 
 class ExternalGitterTest < LibTestBase
 
+  class App; include Externals; end
+
   def setup
     super
     ENV['DIFFER_CLASS_SHELL'] = 'SpySheller'
-    @differ = Differ.new(nil, nil)
+    @app = App.new
   end
 
-  def shell; @differ.shell; end
-  def git  ; @differ.git  ; end
+  def shell; @app.shell; end
+  def git  ; @app.git  ; end
 
   # - - - - - - - - - - - - - - - - -
 
