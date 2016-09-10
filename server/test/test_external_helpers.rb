@@ -7,18 +7,12 @@ module TestExternalHelpers # mix-in
     raise "setup already called" unless @setup_called.nil?
     @setup_called = true
     @config = {}
-    %w( LOG SHELL GIT FILE ).each do |suffix|
-      key = $differ_env_root + suffix
-      @config[key] = ENV[key]
-    end
+    env_map.keys.each { |key| @config[key] = ENV[key] }
   end
 
   def teardown
     fail_if_setup_not_called('teardown')
-    %w( LOG SHELL GIT FILE ).each do |suffix|
-      key = $differ_env_root + suffix
-      ENV[key] = @config[key]
-    end
+    env_map.keys.each { |key| ENV[key] = @config[key] }
     @setup_called = nil
   end
 

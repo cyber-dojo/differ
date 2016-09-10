@@ -1,19 +1,26 @@
 
-$differ_env_root = 'DIFFER_CLASS_'
 
 require_relative './snake_case'
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 # set defauls ENV-vars for all externals
-# unit-tests can reset these in the setups
+# unit-tests can set/reset these
 
-{
-  'LOG'   => 'ExternalStdoutLogger',
-  'SHELL' => 'ExternalSheller',
-  'GIT'   => 'ExternalGitter',
-  'FILE'  => 'ExternalFileWriter'
-}.each do |service,name|
-  ENV[$differ_env_root + service] = name
+def env_root(suffix = '')
+  'DIFFER_CLASS_' + suffix
+end
+
+def env_map
+  {
+    env_root('LOG')   => 'ExternalStdoutLogger',
+    env_root('SHELL') => 'ExternalSheller',
+    env_root('GIT')   => 'ExternalGitter',
+    env_root('FILE')  => 'ExternalFileWriter'
+  }
+end
+
+env_map.each do |key,name|
+  ENV[key] = name
   require_relative "./#{name.snake_case}"
 end
 
@@ -24,15 +31,15 @@ require_relative './unslashed'
 
 module Externals # mix-in
 
-  def log  ; @log   ||= external_object; end
-  def shell; @shell ||= external_object; end
-  def git  ; @git   ||= external_object; end
-  def file ; @file  ||= external_object; end
+  def log  ; @log   ||= external; end
+  def shell; @shell ||= external; end
+  def git  ; @git   ||= external; end
+  def file ; @file  ||= external; end
 
   private
 
-  def external_object
-    name = $differ_env_root + name_of(caller).upcase
+  def external
+    name = env_root(name_of(caller).upcase)
     var = unslashed(ENV[name] || fail("ENV[#{name}] not set"))
     Object.const_get(var).new(self)
   end
