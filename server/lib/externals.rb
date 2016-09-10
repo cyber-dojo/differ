@@ -27,7 +27,6 @@ end
 # - - - - - - - - - - - - - - - - - - - - - - - -
 
 require_relative './name_of_caller'
-require_relative './unslashed'
 
 module Externals # mix-in
 
@@ -40,11 +39,10 @@ module Externals # mix-in
 
   def external
     name = env_root(name_of(caller).upcase)
-    var = unslashed(ENV[name] || fail("ENV[#{name}] not set"))
+    var = ENV[name] || fail("ENV[#{name}] not set")
     Object.const_get(var).new(self)
   end
 
   include NameOfCaller
-  include Unslashed
 
 end
