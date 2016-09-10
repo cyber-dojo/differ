@@ -6,8 +6,9 @@ require_relative './git_diff'
 class Differ
 
   def initialize(was_files, now_files)
-    @delta = make_delta(was_files, now_files)
+    @was_files = was_files
     @now_files = now_files
+    @delta = make_delta(was_files, now_files)
   end
 
   def diff
@@ -15,7 +16,7 @@ class Differ
       make_empty_git_repo_in(git_dir)
 
       was_tag = 0
-      write_files_into(git_dir)
+      write_was_files_into(git_dir)
       git.commit(git_dir, was_tag)
 
       now_tag = 1
@@ -33,7 +34,7 @@ class Differ
 
   private
 
-  attr_reader :delta, :now_files
+  attr_reader :delta, :was_files, :now_files
 
   def make_empty_git_repo_in(git_dir)
     user_name = 'differ'
@@ -41,7 +42,7 @@ class Differ
     git.setup(git_dir, user_name, user_email)
   end
 
-  def write_files_into(git_dir)
+  def write_was_files_into(git_dir)
     was_files.each do |filename, content|
       file.write(git_dir + '/' + filename, content)
       git.add(git_dir, filename)
