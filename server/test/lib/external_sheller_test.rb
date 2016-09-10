@@ -31,15 +31,17 @@ class ExternalShellerTest < LibTestBase
   '(1)output is captured,' +
   '(2)exit-status is success,' +
   '(3)log records success' do
-    output, exit_status = shell.exec('echo -n Hello')
-    assert_equal 'Hello', output
-    assert_equal success, exit_status
-    assert_log_equal [
+    shell_exec('echo -n Hello')
+    assert_output 'Hello'
+    assert_exit_status success
+    assert_log [
       'COMMAND:echo -n Hello',
       'OUTPUT:Hello',
       'EXITED:0'
     ]
   end
+
+  # - - - - - - - - - - - - - - - - -
 
   test '3C3AF6',
   'when exec() fails:' +
@@ -47,8 +49,8 @@ class ExternalShellerTest < LibTestBase
   '(1)output is captured,' +
   '(2)exit-status is not success,' +
   '(3)log records failure' do
-    assert_raises { shell.exec('zzzz') }
-    assert_log_equal [
+    assert_raises { shell_exec('zzzz') }
+    assert_log [
       'COMMAND:zzzz',
       'RAISED-CLASS:Errno::ENOENT',
       'RAISED-TO_S:No such file or directory - zzzz'
@@ -65,38 +67,42 @@ class ExternalShellerTest < LibTestBase
   '(1)output is empty,' +
   '(2)exit-status is not success,' +
   '(3)log records no-output and exit-status' do
-    output, exit_status = shell.cd_exec('zzzz', 'echo -n Hello')
-    assert_equal '', output
-    refute_equal success, exit_status
-    assert_log_equal [
+    shell_cd_exec('zzzz', 'echo -n Hello')
+    assert_output ''
+    assert_exit_status  1
+    assert_log [
       'COMMAND:[[ -d zzzz ]] && cd zzzz && echo -n Hello',
       'NO-OUTPUT:',
       'EXITED:1'
     ]
   end
 
+  # - - - - - - - - - - - - - - - - -
+
   test 'E180B8',
   'cd_exec(): when the cd succeeds and the exec succeeds:' +
   '(0)output is captured,'+
   '(1)exit-status is success,' +
   '(2)log records output and exit-status' do
-    output, exit_status = shell.cd_exec('.', 'echo -n Hello')
-    assert_equal 'Hello', output
-    assert_equal success, exit_status
-    assert_log_equal [
+    shell_cd_exec('.', 'echo -n Hello')
+    assert_output 'Hello'
+    assert_exit_status success
+    assert_log [
       'COMMAND:[[ -d . ]] && cd . && echo -n Hello',
       'OUTPUT:Hello',
       'EXITED:0'
     ]
   end
 
+  # - - - - - - - - - - - - - - - - -
+
   test '373995',
   'cd_exec(): when cd succeeds and the exec fails:' +
   '(0) output is captured and exit-status is not success' do
-    output, exit_status = shell.cd_exec('.', 'zzzz 2> /dev/null')
-    assert_equal '', output
-    refute_equal success, exit_status
-    assert_log_equal [
+    shell_cd_exec('.', 'zzzz 2> /dev/null')
+    assert_output ''
+    assert_exit_status 127
+    assert_log [
       'COMMAND:[[ -d . ]] && cd . && zzzz 2> /dev/null',
       'NO-OUTPUT:',
       'EXITED:127'
@@ -105,9 +111,25 @@ class ExternalShellerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  def assert_log_equal(expected)
-    line = '-'*40
-    assert_equal [line]+expected, log.spied
+  def shell_exec(command)
+    @output, @exit_status = shell.exec(command)
+  end
+
+  def shell_cd_exec(dir, command)
+    @output, @exit_status = shell.cd_exec(dir, command)
+  end
+
+  def assert_output(expected)
+    assert_equal expected, @output
+  end
+
+  def assert_exit_status(expected)
+    assert_equal expected, @exit_status
+  end
+
+  def assert_log(expected)
+    line = '-' * 40
+    assert_equal [line] + expected, log.spied
   end
 
   def success
