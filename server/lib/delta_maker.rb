@@ -8,8 +8,12 @@ module DeltaMaker # mix-in
   # It also allows unchanged files to *not* be (re)saved.
 
   def make_delta(was, now)
-    now_keys = now.keys.clone
-    result = { unchanged: [], changed: [], deleted: [] }
+    result = {
+      new: now.keys - was.keys,
+      unchanged:[],
+      changed:[],
+      deleted:[]
+    }
     was.each do |filename, content|
       if now[filename] == content
         result[:unchanged] << filename
@@ -18,9 +22,7 @@ module DeltaMaker # mix-in
       else
         result[:deleted] << filename
       end
-      now_keys.delete(filename)
     end
-    result[:new] = now_keys
     result
   end
 
