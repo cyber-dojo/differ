@@ -16,13 +16,6 @@ class ExternalGitterTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '133A38',
-  'default git is ExternalGitter' do
-    assert_equal 'ExternalGitter', git.class.name
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
   test 'DC30B4',
   'git.setup' do
     user_name = 'lion'
