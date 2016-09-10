@@ -8,7 +8,6 @@ class GitDiffTest < LibTestBase
 
   test '74CA5C',
   'empty file is deleted' do
-
     diff_lines =
     [
       'diff --git a/xx.rb b/xx.rb',
@@ -112,7 +111,7 @@ class GitDiffTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '70DA2C',
-  "empty file is created" do
+  'empty file is created' do
     diff_lines =
     [
       'diff --git a/empty.h b/empty.h',
@@ -148,7 +147,7 @@ class GitDiffTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '76CD09',
-  "non-empty file is created" do
+  'non-empty file is created' do
     diff_lines =
     [
       "diff --git a/non-empty.c b/non-empty.c",
@@ -214,7 +213,7 @@ class GitDiffTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '3D94D0',
-  "existing file is changed" do
+  'existing file is changed' do
     diff_lines =
     [
       "diff --git a/non-empty.c b/non-empty.c",
@@ -280,7 +279,7 @@ class GitDiffTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AF735C',
-  "unchanged file" do
+  'unchanged file' do
     diff_lines = [].join("\n")
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
