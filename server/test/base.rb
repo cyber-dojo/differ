@@ -1,8 +1,8 @@
 
 require 'minitest/autorun'
 
-require_relative './test_external_helpers'
-require_relative './test_hex_id_helpers'
+require_relative './external_helpers'
+require_relative './hex_id_helpers'
 
 class TestBase < MiniTest::Test
 

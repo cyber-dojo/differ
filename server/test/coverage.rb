@@ -8,7 +8,7 @@ SimpleCov.start do
     # ObjectSpace.define_finalizer(self, proc { ... }
     # to detect any unfound hex-id args
     src.filename.start_with?('/usr/app/test/') &&
-    src.filename != '/usr/app/test/test_hex_id_helpers.rb'
+    src.filename != '/usr/app/test/hex_id_helpers.rb'
   }
 end
 
