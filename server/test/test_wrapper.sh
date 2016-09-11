@@ -18,17 +18,23 @@ fi
 
 while (( "$#" )); do
   if [[ $1 == *.rb ]]; then
-    testFiles+=($1)
+    TEST_FILES+=($1)
     shift
   else
-    args=($*)
+    ARGS=($*)
     break
   fi
 done
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# run-the-tests!
+# run-the-tests
 
 mkdir /usr/app/coverage
-ruby -e "%w( ${testFiles[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${args[*]} | tee /usr/app/coverage/test.log
+TEST_LOG=/usr/app/coverage/test.log
+ruby -e "%w( ${TEST_FILES[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${ARGS[*]} | tee ${TEST_LOG}
 
+MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+ruby ${MY_DIR}/check_test_results.rb ${TEST_LOG}
+EXIT_STATUS=$?
+echo ${EXIT_STATUS}
+exit ${EXIT_STATUS}
