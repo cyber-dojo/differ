@@ -13,7 +13,7 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '9552DC',
-  'empty was_files and now_files is benign no-op' do
+  'empty was_files and empty now_files is benign no-op' do
     diffs = Differ.new({},{}).diff
     assert_equal({}, diffs)
   end
@@ -21,7 +21,7 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '1870E3',
-  'deleted empty file shows empty array' do
+  'deleted empty file shows as empty array' do
     was_files = { 'hiker.h' => '' }
     now_files = {}
     diffs = Differ.new(was_files, now_files).diff
