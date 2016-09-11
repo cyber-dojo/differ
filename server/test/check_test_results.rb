@@ -44,9 +44,9 @@ end
 def print_index_stats_for(stats)
   print "#{stats[:name]}:" +
     " Coverage #{stats[:coverage]}%," +
-    " Files #{stats[:file_count]}," +
-    " Lines #{stats[:line_count]}," +
-    " Hits/Line #{stats[:hits_per_line]}\n"
+    " files #{stats[:file_count]}," +
+    " lines #{stats[:line_count]}," +
+    " hits/line #{stats[:hits_per_line]}\n"
 end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
@@ -92,17 +92,17 @@ done =
      [ 'skips == 0', log_stats[:skip_count] == 0],
      [ 'secs < 1', log_stats[:time].to_f < 1 ],
      [ 'assertions per sec > 500', log_stats[:assertions_per_sec] > 500 ],
-     [ 'test_lines/code_line > 1.5', (test_stats[:line_count].to_f / lib_stats[:line_count].to_f) > 1.5 ],
-     [ 'lib hits/line < 50', lib_stats[:hits_per_line].to_f < 50 ],
-     [ 'tests hits/line < 5', test_stats[:hits_per_line].to_f < 5 ]
+     [ 'test(lines)/lib(lines) > 1.5', (test_stats[:line_count].to_f / lib_stats[:line_count].to_f) > 1.5 ],
+     [ 'lib(hits/line) < 50', lib_stats[:hits_per_line].to_f < 50 ],
+     [ 'test(hits/line) < 5', test_stats[:hits_per_line].to_f < 5 ]
   ]
 
 yes,no = done.partition { |criteria| criteria[1] }
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
-print_index_stats_for test_stats
 print_index_stats_for lib_stats
+print_index_stats_for test_stats
 
 unless yes.empty?
   print "\n"
