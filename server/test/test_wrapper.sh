@@ -4,16 +4,10 @@ if [ "$#" -eq 0 ]; then
   echo
   echo '  How to use test_wrapper.sh'
   echo
-  echo '  1. running specific tests in one folder'
-  echo "     $ cd test/app_model"
+  echo '  1. running specific tests'
   echo '     $ ./run.sh <ID*>'
   echo
-  echo '  2. running all the tests in one folder'
-  echo "     $ cd test/app_model"
-  echo '     $ ./run.sh'
-  echo
-  echo '  3. running all the tests in all the folders'
-  echo "     $ cd test"
+  echo '  2. running all the tests'
   echo '     $ ./run.sh'
   echo
   exit
@@ -35,5 +29,6 @@ done
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # run-the-tests!
 
-ruby -e "%w( ${testFiles[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${args[*]} 2>&1 | tee ${test_log}
+mkdir /usr/app/coverage
+ruby -e "%w( ${testFiles[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${args[*]} | tee /usr/app/coverage/test.log
 
