@@ -29,12 +29,11 @@ done
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # run-the-tests
 
-mkdir /usr/app/coverage
-TEST_LOG=/usr/app/coverage/test.log
+COV_DIR=/usr/app/coverage
+mkdir ${COV_DIR}
+TEST_LOG=${COV_DIR}/test.log
 ruby -e "%w( ${TEST_FILES[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${ARGS[*]} | tee ${TEST_LOG}
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-ruby ${MY_DIR}/check_test_results.rb ${TEST_LOG}
-EXIT_STATUS=$?
-echo ${EXIT_STATUS}
-exit ${EXIT_STATUS}
+ruby ${MY_DIR}/check_test_results.rb ${TEST_LOG} ${COV_DIR}/index.html
+exit $?

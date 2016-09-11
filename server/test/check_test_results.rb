@@ -1,17 +1,61 @@
 
+def number
+  '[\.|\d]+'
+end
+
 def f2(s)
   result = ("%.2f" % s).to_s
   result += '0' if result.end_with?('.0')
   result
 end
 
+def get_index_stats(flat, name)
+  html = `cat #{ARGV[1]}`
+  # guard against invalid byte sequence
+  html = html.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+  html = html.encode('UTF-8', 'UTF-16')
+
+  pattern = /<div class=\"file_list_container\" id=\"#{flat}\">
+  \s*<h2>\s*<span class=\"group_name\">#{name}<\/span>
+  \s*\(<span class=\"covered_percent\"><span class=\"\w+\">([\d\.]*)\%<\/span><\/span>
+  \s*covered at
+  \s*<span class=\"covered_strength\">
+  \s*<span class=\"\w+\">
+  \s*(#{number})
+  \s*<\/span>
+  \s*<\/span> hits\/line\)
+  \s*<\/h2>
+  \s*<a name=\"#{flat}\"><\/a>
+  \s*<div>
+  \s*<b>(#{number})<\/b> files in total.
+  \s*<b>(#{number})<\/b> relevant lines./m
+  r = html.match(pattern)
+  h = {}
+  h[:coverage]      = f2(r[1])
+  h[:hits_per_line] = f2(r[2])
+  h[:file_count]    = r[3].to_i
+  h[:line_count]    = r[4].to_i
+  h[:name] = name
+  h
+end
+
+# - - - - - - - - - - - - - - - - - - - - - - -
+
+def print_index_stats_for(stats)
+  print "#{stats[:name]}:" +
+    " Coverage #{stats[:coverage]}%," +
+    " Files #{stats[:file_count]}," +
+    " Lines #{stats[:line_count]}," +
+    " Hits/Line #{stats[:hits_per_line]}\n"
+end
+
+# - - - - - - - - - - - - - - - - - - - - - - -
+
 def get_test_log_stats
-  test_log=`cat #{ARGV[0]}`
+  test_log = `cat #{ARGV[0]}`
   # guard against invalid byte sequence
   test_log = test_log.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
   test_log = test_log.encode('UTF-8', 'UTF-16')
-
-  number = '[\.|\d]+'
 
   h = {}
   finished_pattern = "Finished in (#{number})s, (#{number}) runs/s, (#{number}) assertions/s"
@@ -36,28 +80,40 @@ end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
-stats = get_test_log_stats
+log_stats = get_test_log_stats
+test_stats = get_index_stats('testlib', 'test/lib')
+lib_stats = get_index_stats('lib', 'lib')
+
 done =
   [
-     [ "coverage == 100%", stats[:coverage] == '100.00' ],
-     [ "total failures == 0", stats[:failure_count] <= 0 ],
-     [ "total errors == 0", stats[:error_count] == 0 ],
-     [ "total skips == 0", stats[:skip_count] == 0],
-     [ "total secs < 1", stats[:time].to_f < 1 ],
-     [ "total assertions per sec > 500", stats[:assertions_per_sec] > 500 ]
+     [ 'coverage == 100%', log_stats[:coverage] == '100.00' ],
+     [ 'failures == 0', log_stats[:failure_count] <= 0 ],
+     [ 'errors == 0', log_stats[:error_count] == 0 ],
+     [ 'skips == 0', log_stats[:skip_count] == 0],
+     [ 'secs < 1', log_stats[:time].to_f < 1 ],
+     [ 'assertions per sec > 500', log_stats[:assertions_per_sec] > 500 ],
+     [ 'test_lines/code_line > 1.5', (test_stats[:line_count].to_f / lib_stats[:line_count].to_f) > 1.5 ],
+     [ 'lib hits/line < 50', lib_stats[:hits_per_line].to_f < 50 ],
+     [ 'tests hits/line < 5', test_stats[:hits_per_line].to_f < 5 ]
   ]
 
 yes,no = done.partition { |criteria| criteria[1] }
 
+# - - - - - - - - - - - - - - - - - - - - - - -
+
+print_index_stats_for test_stats
+print_index_stats_for lib_stats
+
 unless yes.empty?
+  print "\n"
   puts "DONE"
-  yes.each { |criteria| puts criteria[0] }
+  yes.each { |criteria| puts '  ' + criteria[0] }
 end
 
 unless no.empty?
   print "\n"
-  puts "!DONE"
-  no.each { |criteria| puts criteria[0] }
+  puts "NOT-DONE"
+  no.each { |criteria| puts '  ' + criteria[0] }
   exit 1
 else
   exit 0
