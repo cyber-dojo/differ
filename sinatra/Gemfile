@@ -7,4 +7,5 @@ gem 'thin'
 gem 'simplecov'
 
 gem 'minitest'
+gem 'rack-test'
 gem 'ruby-prof' # Needed by minitest?!
