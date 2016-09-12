@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 ./build.sh
 if [ $? != 0 ]; then

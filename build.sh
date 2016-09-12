@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 exit_if_not_installed() {
   hash ${1} 2> /dev/null
@@ -13,25 +14,8 @@ exit_if_not_installed 'docker'
 exit_if_not_installed 'docker-machine'
 exit_if_not_installed 'docker-compose'
 
-cd sinatra && ./build-image.sh
-if [ $? != 0 ]; then
-  echo "FAILED TO BUILD cyberdojo/sinatra"
-  exit 1
-fi
+MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
-cd ..
-cd client && ./build-image.sh
-if [ $? != 0 ]; then
-  echo "FAILED TO BUILD differ_client"
-  exit 1
-fi
-
-cd ..
-cd server && ./build-image.sh
-if [ $? != 0 ]; then
-  echo "FAILED TO BUILD cyberdojo/differ"
-  exit 1
-fi
-
-cd ..
-
+cd ${MY_DIR}/sinatra && ./build-image.sh
+cd ${MY_DIR}/client && ./build-image.sh
+cd ${MY_DIR}/server && ./build-image.sh
