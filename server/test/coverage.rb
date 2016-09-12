@@ -6,8 +6,8 @@ SimpleCov.start do
   # to detect any unfound hex-id args
   add_filter '/usr/app/test/hex_id_helpers.rb'
 
-  add_group 'lib',      '/usr/app/lib'
-  add_group 'test/lib', '/usr/app/test'
+  add_group 'src',      '/usr/app/src'
+  add_group 'test/src', '/usr/app/test'
 end
 
 cov_root = File.expand_path('..', File.dirname(__FILE__))

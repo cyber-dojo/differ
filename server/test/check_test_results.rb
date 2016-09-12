@@ -81,8 +81,8 @@ end
 # - - - - - - - - - - - - - - - - - - - - - - -
 
 log_stats = get_test_log_stats
-test_stats = get_index_stats('testlib', 'test/lib')
-lib_stats = get_index_stats('lib', 'lib')
+test_stats = get_index_stats('testsrc', 'test/src')
+lib_stats = get_index_stats('src', 'src')
 
 done =
   [

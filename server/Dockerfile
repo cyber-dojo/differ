@@ -6,7 +6,7 @@ RUN apk add --update git
 COPY Procfile  /usr/app/
 COPY config.ru /usr/app/
 COPY *.rb      /usr/app/
-COPY lib/      /usr/app/lib/
+COPY src/      /usr/app/src/
 COPY test/     /usr/app/test/
 
 EXPOSE 4567

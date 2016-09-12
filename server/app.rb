@@ -2,7 +2,7 @@ require 'sinatra'
 require 'sinatra/base'
 require 'json'
 
-require_relative './lib/differ'
+require_relative './src/differ'
 
 class App < Sinatra::Base
 
