@@ -72,7 +72,7 @@ def get_test_log_stats
   h[:error_count]     = m[4].to_i
   h[:skip_count]      = m[5].to_i
 
-  coverage_pattern = "Coverage report generated for MiniTest to /usr/app/coverage. #{number} / #{number} LOC \\((#{number})%\\)"
+  coverage_pattern = "Coverage report generated for MiniTest to /tmp/coverage. #{number} / #{number} LOC \\((#{number})%\\)"
   m = test_log.match(Regexp.new(coverage_pattern))
   h[:coverage] = f2(m[1])
   h

@@ -29,7 +29,7 @@ done
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # run-the-tests
 
-COV_DIR=/usr/app/coverage
+COV_DIR=/tmp/coverage
 mkdir ${COV_DIR}
 TEST_LOG=${COV_DIR}/test.log
 ruby -e "%w( ${TEST_FILES[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${ARGS[*]} | tee ${TEST_LOG}
