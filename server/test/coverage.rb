@@ -1,6 +1,12 @@
 require 'simplecov'
 
 SimpleCov.start do
+
+  add_group('debug') { |src|
+    #p src.filename
+    false
+  }
+
   add_group 'src',      '/usr/app/src'
   add_group 'test/src', '/usr/app/test/src'
 end

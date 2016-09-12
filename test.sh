@@ -14,5 +14,6 @@ fi
 docker run --rm cyberdojo/differ sh -c 'cat /usr/app/Gemfile.lock'
 docker run cyberdojo/differ sh -c "cd test/src && ./run.sh ${1}"
 CID=`docker ps --latest --quiet`
+echo "coverage written to ${MY_DIR}"
 docker cp ${CID}:/tmp/coverage ${MY_DIR}
 docker rm ${CID} > /dev/null
