@@ -1,13 +1,8 @@
 require 'simplecov'
 
 SimpleCov.start do
-  # exclude test_hex_id_helpers.rb because it contains
-  # ObjectSpace.define_finalizer(self, proc { ... }
-  # to detect any unfound hex-id args
-  add_filter '/usr/app/test/hex_id_helpers.rb'
-
   add_group 'src',      '/usr/app/src'
-  add_group 'test/src', '/usr/app/test'
+  add_group 'test/src', '/usr/app/test/src'
 end
 
 cov_root = File.expand_path('..', File.dirname(__FILE__))

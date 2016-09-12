@@ -1,14 +1,11 @@
 #!/bin/bash ../test_wrapper.sh
 
 require_relative './lib_test_base'
-require 'minitest'
 require 'rack/test'
 
-class AppTest < MiniTest::Test
+class AppTest < LibTestBase
 
   include Rack::Test::Methods
-  include TestExternalHelpers
-  include TestHexIdHelpers
 
   def app
     App
