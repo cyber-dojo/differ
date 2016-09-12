@@ -5,7 +5,6 @@ RUN apk add --update git
 
 COPY Procfile  /usr/app/
 COPY config.ru /usr/app/
-COPY *.rb      /usr/app/
 COPY src/      /usr/app/src/
 COPY test/     /usr/app/test/
 
