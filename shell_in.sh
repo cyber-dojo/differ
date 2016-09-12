@@ -2,7 +2,7 @@
 
 #docker run --rm --interactive --tty cyberdojo/differ sh
 
-docker run --interactive --tty cyberdojo/differ sh
+docker run --user=nobody --interactive --tty cyberdojo/differ sh
 CID=`docker ps --latest --quiet`
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
