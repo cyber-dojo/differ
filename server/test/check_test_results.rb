@@ -91,7 +91,7 @@ done =
      [ 'errors == 0', log_stats[:error_count] == 0 ],
      [ 'skips == 0', log_stats[:skip_count] == 0],
      [ 'secs < 1', log_stats[:time].to_f < 1 ],
-     [ 'assertions per sec > 500', log_stats[:assertions_per_sec] > 500 ],
+     [ 'assertions per sec > 400', log_stats[:assertions_per_sec] > 400 ],
      [ 'test(lines)/lib(lines) > 1.5', (test_stats[:line_count].to_f / lib_stats[:line_count].to_f) > 1.5 ],
      [ 'lib(hits/line) < 50', lib_stats[:hits_per_line].to_f < 50 ],
      [ 'test(hits/line) < 5', test_stats[:hits_per_line].to_f < 5 ]
