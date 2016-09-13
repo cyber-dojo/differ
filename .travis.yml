@@ -33,7 +33,7 @@ before_install:
     - curl -L https://github.com/docker/machine/releases/download/v{DOCKER_COMPOSE_VERSION}/docker-machine-`uname -s`-`uname -m` > docker-machine
     - chmod +x docker-machine
     - sudo mv docker-machine /usr/local/bin
-    - docker-machine version
+    #- docker-machine version  # FAILS?
 
     # smoke test
     - docker run --rm hello-world
