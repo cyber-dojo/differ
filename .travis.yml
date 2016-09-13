@@ -34,6 +34,7 @@ before_install:
     - chmod +x docker-machine
     - sudo mv docker-machine /usr/local/bin
     #- docker-machine version  # FAILS?
+    - docker-machine --help
 
     # smoke test
     - docker run --rm hello-world
