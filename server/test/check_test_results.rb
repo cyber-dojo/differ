@@ -57,22 +57,22 @@ def get_test_log_stats
   test_log = test_log.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
   test_log = test_log.encode('UTF-8', 'UTF-16')
 
-  h = {}
+  stats = {}
   finished_pattern = "Finished in (#{number})s, (#{number}) runs/s, (#{number}) assertions/s"
   m = test_log.match(Regexp.new(finished_pattern))
-  h[:time]               = f2(m[1])
-  h[:tests_per_sec]      = m[2].to_i
-  h[:assertions_per_sec] = m[3].to_i
+  stats[:time]               = f2(m[1])
+  stats[:tests_per_sec]      = m[2].to_i
+  stats[:assertions_per_sec] = m[3].to_i
 
   summary_pattern = %w(runs assertions failures errors skips).map{ |s| "(#{number}) #{s}" }.join(', ')
   m = test_log.match(Regexp.new(summary_pattern))
-  h[:test_count]      = m[1].to_i
-  h[:assertion_count] = m[2].to_i
-  h[:failure_count]   = m[3].to_i
-  h[:error_count]     = m[4].to_i
-  h[:skip_count]      = m[5].to_i
+  stats[:test_count]      = m[1].to_i
+  stats[:assertion_count] = m[2].to_i
+  stats[:failure_count]   = m[3].to_i
+  stats[:error_count]     = m[4].to_i
+  stats[:skip_count]      = m[5].to_i
 
-  h
+  stats
 end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
