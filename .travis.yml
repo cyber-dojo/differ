@@ -42,9 +42,9 @@ before_install:
 
 script:
 
-    - cd ${HOME_DIR}/sinatra && ./build-image.sh
-    - cd ${HOME_DIR}/client  && ./build-image.sh
-    - cd ${HOME_DIR}/server  && ./build-image.sh
+    #- cd ${HOME_DIR}/sinatra && ./build-image.sh
+    #- cd ${HOME_DIR}/client  && ./build-image.sh
+    #- cd ${HOME_DIR}/server  && ./build-image.sh
     - docker images | grep cyberdojo/differ
-    - cd ${HOME_DIR} && docker-compose up -d
+    #- cd ${HOME_DIR} && docker-compose up -d
     - cd ${HOME_DIR} && ./test.sh

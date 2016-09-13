@@ -17,5 +17,5 @@ exit_if_not_installed 'docker-compose'
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
 cd ${MY_DIR}/sinatra && ./build-image.sh
-cd ${MY_DIR}/client && ./build-image.sh
-cd ${MY_DIR}/server && ./build-image.sh
+cd ${MY_DIR}/client  && ./build-image.sh
+cd ${MY_DIR}/server  && ./build-image.sh
