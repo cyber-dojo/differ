@@ -1,18 +1,18 @@
 FROM alpine:edge
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
-# See https://blog.codeship.com/build-minimal-docker-container-ruby-apps/
 
-ENV BUILD_PACKAGES bash curl-dev ruby-dev build-base
 ENV RUBY_PACKAGES ruby ruby-io-console ruby-bundler
+RUN  apk --update add $RUBY_PACKAGES
 
-RUN apk update && \
-    apk upgrade && \
-    apk add $BUILD_PACKAGES && \
-    apk add $RUBY_PACKAGES && \
-    rm -rf /var/cache/apk/*
-
-RUN mkdir /usr/app
-WORKDIR /usr/app
-
+RUN    mkdir /usr/app
+WORKDIR      /usr/app
 COPY Gemfile /usr/app/
-RUN bundle install
+
+RUN apk --update add bash
+
+ENV BUILD_PACKAGES ruby-dev build-base
+RUN  apk --update \
+        add --virtual build-dependencies \
+          $BUILD_PACKAGES \
+        && bundle install --without development test \
+        && apk del build-dependencies
