@@ -84,7 +84,7 @@ done =
      [ 'coverage(src) == 100%', src_stats[:coverage] == '100.00'],
      [ 'coverage(test) == 100%', test_stats[:coverage] == '100.00'],
      [ "hits_per_line(src) < 50 [#{hits_per_line_src}]", hits_per_line_src < 50 ],
-     [ "hits_per_line(test) < 5 [#{hits_per_line_test}]", hits_per_line_test < 5 ],
+     [ "hits_per_line(test) < 2 [#{hits_per_line_test}]", hits_per_line_test < 2 ],
      [ "lines(test)/lines(src) > 1.5 [#{f2 line_ratio}]", line_ratio > 1.5 ],
   ]
 
