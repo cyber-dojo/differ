@@ -45,7 +45,4 @@ script:
     - cd ${HOME_DIR}/client  && ./build-image.sh
     - cd ${HOME_DIR}/server  && ./build-image.sh
     - cd ${HOME_DIR} && docker-compose up -d
-
     - cd ${HOME_DIR} && ./test.sh
-    #- docker run --rm cyberdojo/differ sh -c 'cat /usr/app/Gemfile.lock'
-    #- docker run cyberdojo/differ sh -c "cd test/src && ./run.sh"

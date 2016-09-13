@@ -14,7 +14,7 @@ if [[ $1 == *_test.rb ]]; then
 else
   # test.sh -> run.sh
   FILES=(*_test.rb)
-  ARGS=${*}
+  ARGS=(${*})
 fi
 
 # run the tests with coverage

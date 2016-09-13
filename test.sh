@@ -12,7 +12,7 @@ if [ $? != 0 ]; then
 fi
 
 docker run --rm cyberdojo/differ sh -c 'cat /usr/app/Gemfile.lock'
-docker run cyberdojo/differ sh -c "cd test/src && ./run.sh ${1}"
+docker run cyberdojo/differ sh -c "cd test/src && ./run.sh ${*}"
 CID=`docker ps --latest --quiet`
 docker cp ${CID}:/tmp/coverage ${MY_DIR}
 docker rm ${CID} > /dev/null
