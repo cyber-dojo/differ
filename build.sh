@@ -2,7 +2,8 @@
 set -e
 
 exit_if_not_installed() {
-  echo "Checking if ${1} is installed"
+  # Note that .travis.yml does fake installs
+  # of docker-machine and docker-compose.
   hash ${1} 2> /dev/null
   if [ $? != 0 ]; then
     echo
@@ -12,12 +13,8 @@ exit_if_not_installed() {
 }
 
 exit_if_not_installed 'docker'
-
-#OS=`uname -s`
-#if [ ${OS} == 'Darwin' ]; then
-  exit_if_not_installed 'docker-machine'
-  exit_if_not_installed 'docker-compose'
-#fi
+exit_if_not_installed 'docker-machine'
+exit_if_not_installed 'docker-compose'
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
