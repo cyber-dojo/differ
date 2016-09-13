@@ -1,4 +1,4 @@
-require 'sinatra'
+#require 'sinatra'
 require 'sinatra/base'
 require 'json'
 
@@ -7,16 +7,27 @@ require_relative './differ'
 class App < Sinatra::Base
 
   get '/diff' do
-    content_type :json
+    #content_type :json
     differ.diff.to_json
   end
 
   private
 
   def differ; Differ.new(was_files, now_files); end
-  def was_files; arg['was_files']; end
-  def now_files; arg['now_files']; end
-  def arg; @arg ||= JSON.parse(request.body.read); end
+  def was_files; json('was_files'); end
+  def now_files; json('now_files'); end
+
+  def json(name)
+    p "....params"
+    p params
+    p "....params"
+    #p request.body.read.length
+    arg = JSON.parse(params[name])
+    p "...arg"
+    p arg
+    p "...arg"
+    arg
+  end
 
 end
 
