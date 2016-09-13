@@ -72,9 +72,6 @@ def get_test_log_stats
   h[:error_count]     = m[4].to_i
   h[:skip_count]      = m[5].to_i
 
-  coverage_pattern = "Coverage report generated for MiniTest to /tmp/coverage. #{number} / #{number} LOC \\((#{number})%\\)"
-  m = test_log.match(Regexp.new(coverage_pattern))
-  h[:coverage] = f2(m[1])
   h
 end
 
@@ -82,18 +79,19 @@ end
 
 log_stats = get_test_log_stats
 test_stats = get_index_stats('testsrc', 'test/src')
-lib_stats = get_index_stats('src', 'src')
+src_stats = get_index_stats('src', 'src')
 
 done =
   [
-     [ 'coverage == 100%', log_stats[:coverage] == '100.00' ],
      [ 'failures == 0', log_stats[:failure_count] <= 0 ],
      [ 'errors == 0', log_stats[:error_count] == 0 ],
      [ 'skips == 0', log_stats[:skip_count] == 0],
+     [ 'src(coverage) == 100%', src_stats[:coverage] == '100.00'],
+     [ 'test(coverage) == 100%', test_stats[:coverage] == '100.00'],
      [ 'secs < 1', log_stats[:time].to_f < 1 ],
      [ 'assertions per sec > 400', log_stats[:assertions_per_sec] > 400 ],
-     [ 'test(lines)/lib(lines) > 1.5', (test_stats[:line_count].to_f / lib_stats[:line_count].to_f) > 1.5 ],
-     [ 'lib(hits/line) < 50', lib_stats[:hits_per_line].to_f < 50 ],
+     [ 'test(lines)/src(lines) > 1.5', (test_stats[:line_count].to_f / src_stats[:line_count].to_f) > 1.5 ],
+     [ 'src(hits/line) < 50', src_stats[:hits_per_line].to_f < 50 ],
      [ 'test(hits/line) < 5', test_stats[:hits_per_line].to_f < 5 ]
   ]
 
@@ -101,7 +99,7 @@ yes,no = done.partition { |criteria| criteria[1] }
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
-print_index_stats_for lib_stats
+print_index_stats_for src_stats
 print_index_stats_for test_stats
 
 unless yes.empty?
