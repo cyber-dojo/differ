@@ -12,9 +12,11 @@ exit_if_not_installed() {
 
 exit_if_not_installed 'docker'
 
-#!Linux only
-#exit_if_not_installed 'docker-machine'
-#exit_if_not_installed 'docker-compose'
+OS=`uname -s`
+if [ ${OS} == 'Darwin' ]; then
+  exit_if_not_installed 'docker-machine'
+  exit_if_not_installed 'docker-compose'
+fi
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
