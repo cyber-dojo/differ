@@ -80,7 +80,7 @@ done =
      [ 'errors == 0', log_stats[:error_count] == 0 ],
      [ 'skips == 0', log_stats[:skip_count] == 0],
      [ 'test duration < 1', log_stats[:time].to_f < 1 ],
-     [ 'assertions per sec > 400', log_stats[:assertions_per_sec] > 400 ],
+     [ 'assertions per sec > 300', log_stats[:assertions_per_sec] > 300 ],
      [ 'coverage(src) == 100%', src_stats[:coverage] == '100.00'],
      [ 'coverage(test) == 100%', test_stats[:coverage] == '100.00'],
      [ "hits_per_line(src) < 50 [#{hits_per_line_src}]", hits_per_line_src < 50 ],
