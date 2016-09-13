@@ -6,12 +6,6 @@ require 'net/http'
 class App < Sinatra::Base
 
   get '/diff' do
-    differ_server = ENV['DIFFER_PORT']
-    addr = differ_server.sub('tcp', 'http') + '/diff'
-
-    uri = URI(addr)
-    http = Net::HTTP.new(uri.host, uri.port)
-    req = Net::HTTP::Get.new(uri.path, 'Content-Type' => 'application/json')
 
     was_files = {
       'cyber-dojo.sh': "blah blah",
@@ -45,11 +39,18 @@ class App < Sinatra::Base
           "end"
         ].join("\n")
     }
-    req.body = { was_files: was_files, now_files: now_files }.to_json
 
-    res = http.request(req)
-    json = JSON.parse(res.body)
+    params = {
+      :was_files => was_files.to_json,
+      :now_files => now_files.to_json
+    }
+
+    uri = URI.parse(ENV['DIFFER_PORT'].sub('tcp', 'http') + '/diff')
+    uri.query = URI.encode_www_form(params)
+    response = Net::HTTP.get_response(uri)
+    json = JSON.parse(response.body)
     '<pre>' + JSON.pretty_unparse(json) + '</pre>'
+
   end
 
 end
