@@ -25,4 +25,4 @@ TEST_LOG=${COV_DIR}/test.log
 ruby -e "%w( ${FILES[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${ARGS[@]} | tee ${TEST_LOG}
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 # collect coverage stats
-ruby ${MY_DIR}/../check_test_results.rb ${TEST_LOG} ${COV_DIR}/index.html
+ruby ${MY_DIR}/../check_test_results.rb ${TEST_LOG} ${COV_DIR}/index.html > ${COV_DIR}/done.txt

@@ -27,26 +27,15 @@ def get_index_stats(flat, name)
   \s*<\/h2>
   \s*<a name=\"#{flat}\"><\/a>
   \s*<div>
-  \s*<b>(#{number})<\/b> files in total.
+  \s*<b>#{number}<\/b> files in total.
   \s*<b>(#{number})<\/b> relevant lines./m
   r = html.match(pattern)
   h = {}
   h[:coverage]      = f2(r[1])
   h[:hits_per_line] = f2(r[2])
-  h[:file_count]    = r[3].to_i
-  h[:line_count]    = r[4].to_i
+  h[:line_count]    = r[3].to_i
   h[:name] = name
   h
-end
-
-# - - - - - - - - - - - - - - - - - - - - - - -
-
-def print_index_stats_for(stats)
-  print "#{stats[:name]}:" +
-    " Coverage #{stats[:coverage]}%," +
-    " files #{stats[:file_count]}," +
-    " lines #{stats[:line_count]}," +
-    " hits/line #{stats[:hits_per_line]}\n"
 end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
@@ -81,26 +70,27 @@ log_stats = get_test_log_stats
 test_stats = get_index_stats('testsrc', 'test/src')
 src_stats = get_index_stats('src', 'src')
 
+hits_per_line_src = src_stats[:hits_per_line].to_f
+hits_per_line_test = test_stats[:hits_per_line].to_f
+line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
+
 done =
   [
      [ 'failures == 0', log_stats[:failure_count] <= 0 ],
      [ 'errors == 0', log_stats[:error_count] == 0 ],
      [ 'skips == 0', log_stats[:skip_count] == 0],
-     [ 'src(coverage) == 100%', src_stats[:coverage] == '100.00'],
-     [ 'test(coverage) == 100%', test_stats[:coverage] == '100.00'],
-     [ 'secs < 1', log_stats[:time].to_f < 1 ],
+     [ 'test duration < 1', log_stats[:time].to_f < 1 ],
      [ 'assertions per sec > 400', log_stats[:assertions_per_sec] > 400 ],
-     [ 'test(lines)/src(lines) > 1.5', (test_stats[:line_count].to_f / src_stats[:line_count].to_f) > 1.5 ],
-     [ 'src(hits/line) < 50', src_stats[:hits_per_line].to_f < 50 ],
-     [ 'test(hits/line) < 5', test_stats[:hits_per_line].to_f < 5 ]
+     [ 'coverage(src) == 100%', src_stats[:coverage] == '100.00'],
+     [ 'coverage(test) == 100%', test_stats[:coverage] == '100.00'],
+     [ "hits_per_line(src) < 50 [#{hits_per_line_src}]", hits_per_line_src < 50 ],
+     [ "hits_per_line(test) < 5 [#{hits_per_line_test}]", hits_per_line_test < 5 ],
+     [ "lines(test)/lines(src) > 1.5 [#{f2 line_ratio}]", line_ratio > 1.5 ],
   ]
 
 yes,no = done.partition { |criteria| criteria[1] }
 
 # - - - - - - - - - - - - - - - - - - - - - - -
-
-print_index_stats_for src_stats
-print_index_stats_for test_stats
 
 unless yes.empty?
   print "\n"
