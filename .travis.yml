@@ -8,7 +8,7 @@ language: ruby
 env:
     global:
         - DOCKER_ENGINE_VERSION=1.12.1
-        - DOCKER_MACHINE_VERSION=0.8.1
+        #- DOCKER_MACHINE_VERSION=0.8.1
         - DOCKER_COMPOSE_VERSION=1.8.0
         - HOME_DIR=${TRAVIS_BUILD_DIR}
 
