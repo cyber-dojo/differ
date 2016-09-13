@@ -4,7 +4,7 @@
 # I want the [docker cp] command to extract the coverage info
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-cd ${MY_DIR} && ./build.sh
+${MY_DIR}/build.sh
 if [ $? != 0 ]; then
   echo
   echo "./build.sh FAILED"

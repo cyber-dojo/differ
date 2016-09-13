@@ -2,6 +2,7 @@
 set -e
 
 exit_if_not_installed() {
+  echo "Checking if ${1} is installed"
   hash ${1} 2> /dev/null
   if [ $? != 0 ]; then
     echo
