@@ -10,7 +10,7 @@ env:
         - DOCKER_ENGINE_VERSION=1.12.1
         - DOCKER_MACHINE_VERSION=0.8.1
         - DOCKER_COMPOSE_VERSION=1.8.0
-        - DOCKER_DIR=${TRAVIS_BUILD_DIR}/docker
+        - HOME_DIR=${TRAVIS_BUILD_DIR}
 
 before_install:
     # list docker-engine versions
@@ -32,8 +32,8 @@ before_install:
     # install docker-machine at specific version
     - curl -L https://github.com/docker/machine/releases/download/v{DOCKER_COMPOSE_VERSION}/docker-machine-`uname -s`-`uname -m` > docker-machine
     - chmod +x docker-machine
+    - docker-machine --version
     - sudo mv docker-machine /usr/local/bin
-    #- docker-machine --version
 
     # smoke test
     - docker run --rm hello-world
@@ -41,9 +41,9 @@ before_install:
 
 script:
 
-    - cd ${DOCKER_DIR}/sinatra && ./build-image.sh
-    - cd ${DOCKER_DIR}/server  && ./build-image.sh
-    - cd ${DOCKER_DIR} && docker-compose up -d
+    - cd ${HOME_DIR}/sinatra && ./build-image.sh
+    - cd ${HOME_DIR}/server  && ./build-image.sh
+    - cd ${HOME_DIR} && docker-compose up -d
 
     - docker run --rm cyberdojo/differ sh -c 'cat /usr/app/Gemfile.lock'
     - docker run --rm cyberdojo/differ sh -c "cd test/src && ./run.sh"
