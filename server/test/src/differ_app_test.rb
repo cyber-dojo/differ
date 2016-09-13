@@ -25,6 +25,7 @@ class DifferAppTest < LibTestBase
     }
 
     get '/', params
+
     assert_raises(JSON::ParserError) { JSON.parse(last_response.body) }
     assert false, "body is not JSON!"
 
