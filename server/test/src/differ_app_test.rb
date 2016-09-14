@@ -4,6 +4,7 @@
 
 ENV['RACK_ENV'] = 'test'
 require_relative './lib_test_base'
+require_relative './null_logger'
 require 'rack/test'
 
 class DifferAppTest < LibTestBase
@@ -31,6 +32,174 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test '88A313',
+  'deleted empty file shows as empty array' do
+    @was_files = { 'hiker.h' => '' }
+    @now_files = {}
+    json = get_diff
+    assert_equal [], json['hiker.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '389069',
+  'deleted non-empty file shows as all lines deleted' do
+    @was_files = {
+      'hiker.h' => "a\nb\nc\nd\n"
+    }
+    @now_files = {
+      'diamond.h' => ''
+    }
+    json = get_diff
+    assert_equal [
+      deleted(1, 'a'),
+      deleted(2, 'b'),
+      deleted(3, 'c'),
+      deleted(4, 'd')
+    ], json['hiker.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '95F45F',
+  'added empty file shows as one empty line' do
+    @was_files = {
+      'hiker.h' => "a\nb\nc\nd"
+    }
+    @now_files = {
+      'diamond.h' => ''
+    }
+    json = get_diff
+    assert_equal [
+      same(1, '')
+    ], json['diamond.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '2C3991',
+  'added non-empty file shows as all lines added' do
+    @was_files = {
+      'hiker.h' => ''
+    }
+    @now_files = {
+      'diamond.h' => "a\nb\nc\nd"
+    }
+    json = get_diff
+    assert_equal [
+      section(0),
+      added(1, 'a'),
+      added(2, 'b'),
+      added(3, 'c'),
+      added(4, 'd')
+    ], json['diamond.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '7FE518',
+  'unchanged empty-file shows as one empty line' do
+    @was_files = {
+      'diamond.h' => ''
+    }
+    @now_files = {
+      'diamond.h' => ''
+    }
+    json = get_diff
+    assert_equal [
+      same(1, '')
+    ], json['diamond.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '3651DD',
+  'unchanged non-empty file shows as all lines same' do
+    @was_files = {
+      'diamond.h' => "a\nb\nc\nd"
+    }
+    @now_files = {
+      'diamond.h' => "a\nb\nc\nd"
+    }
+    json = get_diff
+    assert_equal [
+      same(1, 'a'),
+      same(2, 'b'),
+      same(3, 'c'),
+      same(4, 'd')
+    ], json['diamond.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'E3FF9F',
+  'changed non-empty file shows as deleted and added lines' do
+    @was_files = {
+      'diamond.h' => 'a'
+    }
+    @now_files = {
+      'diamond.h' => 'b'
+    }
+    json = get_diff
+    assert_equal [
+      section(0),
+      deleted(1, 'a'),
+      added(  1, 'b')
+    ], json['diamond.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'B9F6D7',
+  'changed non-empty file shows as deleted and added lines',
+  'with each chunk in its own indexed section' do
+    @was_files = {
+      'diamond.h' =>
+        [
+          '#ifndef DIAMOND',
+          '#define DIAMOND',
+          '',
+          '#include <strin>', # no g
+          '',
+          'void diamond(char)', # no ;
+          '',
+          '#endif',
+        ].join("\n")
+    }
+    @now_files = {
+      'diamond.h' =>
+        [
+        '#ifndef DIAMOND',
+        '#define DIAMOND',
+        '',
+        '#include <string>',
+        '',
+        'void diamond(char);',
+        '',
+        '#endif',
+        ].join("\n")
+    }
+    json = get_diff
+    assert_equal [
+      same(   1, '#ifndef DIAMOND'),
+      same(   2, '#define DIAMOND'),
+      same(   3, ''),
+
+      section(0),
+      deleted(4, '#include <strin>'),
+      added(  4, '#include <string>'),
+      same(   5, ''),
+
+      section(1),
+      deleted(6, 'void diamond(char)'),
+      added(  6, 'void diamond(char);'),
+      same(   7, ''),
+      same(   8, '#endif'),
+    ], json['diamond.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   def get_diff
     params = {
       :was_files => @was_files.to_json,
@@ -38,6 +207,28 @@ class DifferAppTest < LibTestBase
     }
     get '/diff', params
     JSON.parse(last_response.body)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def deleted(number, text)
+    line(text, 'deleted', number)
+  end
+
+  def same(number, text)
+    line(text, 'same', number)
+  end
+
+  def added(number, text)
+    line(text,'added', number)
+  end
+
+  def line(text, type, number)
+    { 'line'=>text, 'type'=>type, 'number'=>number }
+  end
+
+  def section(index)
+    { 'type'=>'section', 'index'=>index }
   end
 
 end
