@@ -2,17 +2,28 @@
 
 # check already shelled inside docker container
 if [ ! -f /.dockerenv ]; then
-  echo "FAILED: run.sh is being executed outside of docker-container. See test.sh"
+  echo 'FAILED: run.sh is being executed outside of docker-container.'
+  echo 'See test.sh which first calls build.sh'
   exit 1
 fi
 
-# collect trailing arguments to forward to tests
+# Use 1: ./test.sh
+#    -> run.sh
+#   load and run all tests.
+# Use 2: ./test.sh 347
+#   -> run.sh ARG=347
+#   load all tests and run those whose hex-id matches 347
+# Use 3: cd server/test/src && ./line_splitter_test.rb
+#   -> run.sh ARG=line_splitter_test.rb
+#   (via test_wrapper.sh -> test.sh)
+#   load one test-file and run all its tests
+
 if [[ $1 == *_test.rb ]]; then
-  # shebang -> test_wrapper.sh -> test.sh -> run.sh
+  # Use 3
   FILES=($1)
   ARGS=()
 else
-  # test.sh -> run.sh
+  # Uses 1 & 2
   FILES=(*_test.rb)
   ARGS=(${*})
 fi

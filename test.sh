@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# I cant do [set -e] because if docker test-run fails
+# Don't do [set -e] because if [docker run ... && ./run.sh] fails
 # I want the [docker cp] command to extract the coverage info
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
