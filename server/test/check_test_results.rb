@@ -15,6 +15,8 @@ def get_index_stats(flat, name)
   html = html.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
   html = html.encode('UTF-8', 'UTF-16')
 
+  # It would be nice if simplecov saved the raw data to a json file
+  # and created the html from that, but alas it does not.
   pattern = /<div class=\"file_list_container\" id=\"#{flat}\">
   \s*<h2>\s*<span class=\"group_name\">#{name}<\/span>
   \s*\(<span class=\"covered_percent\"><span class=\"\w+\">([\d\.]*)\%<\/span><\/span>

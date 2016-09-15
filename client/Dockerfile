@@ -1,4 +1,4 @@
-FROM cyberdojo/sinatra
+FROM cyberdojo/differ
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
 COPY Procfile  /app/
