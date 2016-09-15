@@ -1,5 +1,7 @@
 
 # NB: if you call this file app.rb then SimpleCov fails to see it?!
+#     or rather, it botches its appearance in the html view where it
+#     appears as src..rb
 
 require 'sinatra/base'
 require 'json'
