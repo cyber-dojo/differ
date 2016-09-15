@@ -35,7 +35,7 @@ class DifferAppTest < LibTestBase
   test '88A313',
   'deleted empty file shows as empty array' do
     @was_files = { 'hiker.h' => '' }
-    @now_files = {}
+    @now_files = { }
     json = get_diff
     assert_equal [], json['hiker.h']
   end
@@ -44,12 +44,8 @@ class DifferAppTest < LibTestBase
 
   test '389069',
   'deleted non-empty file shows as all lines deleted' do
-    @was_files = {
-      'hiker.h' => "a\nb\nc\nd\n"
-    }
-    @now_files = {
-      'diamond.h' => ''
-    }
+    @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
+    @now_files = { }
     json = get_diff
     assert_equal [
       deleted(1, 'a'),
@@ -61,14 +57,28 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test 'B67194',
+  'all lines deleted but file not deleted',
+  'shows as all lines deleted plus one empty line' do
+    @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
+    @now_files = { 'hiker.h' => '' }
+    json = get_diff
+    assert_equal [
+      section(0),
+      deleted(1, 'a'),
+      deleted(2, 'b'),
+      deleted(3, 'c'),
+      deleted(4, 'd'),
+      same(1, '')
+    ], json['hiker.h']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   test '95F45F',
   'added empty file shows as one empty line' do
-    @was_files = {
-      'hiker.h' => "a\nb\nc\nd"
-    }
-    @now_files = {
-      'diamond.h' => ''
-    }
+    @was_files = { }
+    @now_files = { 'diamond.h' => '' }
     json = get_diff
     assert_equal [
       same(1, '')
@@ -79,12 +89,8 @@ class DifferAppTest < LibTestBase
 
   test '2C3991',
   'added non-empty file shows as all lines added' do
-    @was_files = {
-      'hiker.h' => ''
-    }
-    @now_files = {
-      'diamond.h' => "a\nb\nc\nd"
-    }
+    @was_files = { }
+    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
     json = get_diff
     assert_equal [
       section(0),
@@ -99,12 +105,8 @@ class DifferAppTest < LibTestBase
 
   test '7FE518',
   'unchanged empty-file shows as one empty line' do
-    @was_files = {
-      'diamond.h' => ''
-    }
-    @now_files = {
-      'diamond.h' => ''
-    }
+    @was_files = { 'diamond.h' => '' }
+    @now_files = { 'diamond.h' => '' }
     json = get_diff
     assert_equal [
       same(1, '')
@@ -115,12 +117,8 @@ class DifferAppTest < LibTestBase
 
   test '3651DD',
   'unchanged non-empty file shows as all lines same' do
-    @was_files = {
-      'diamond.h' => "a\nb\nc\nd"
-    }
-    @now_files = {
-      'diamond.h' => "a\nb\nc\nd"
-    }
+    @was_files = { 'diamond.h' => "a\nb\nc\nd" }
+    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
     json = get_diff
     assert_equal [
       same(1, 'a'),
@@ -134,12 +132,8 @@ class DifferAppTest < LibTestBase
 
   test 'E3FF9F',
   'changed non-empty file shows as deleted and added lines' do
-    @was_files = {
-      'diamond.h' => 'a'
-    }
-    @now_files = {
-      'diamond.h' => 'b'
-    }
+    @was_files = { 'diamond.h' => 'a' }
+    @now_files = { 'diamond.h' => 'b' }
     json = get_diff
     assert_equal [
       section(0),
