@@ -1,4 +1,5 @@
 #!/bin/bash
+# This is the only shell script that needs bash rather than sh
 
 # check already shelled inside docker container
 if [ ! -f /.dockerenv ]; then

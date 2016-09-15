@@ -8,6 +8,7 @@ RUN    mkdir /usr/app
 WORKDIR      /usr/app
 COPY Gemfile /usr/app/
 
+# server/test/src/run.sh needs bash
 RUN apk --update add bash
 
 ENV BUILD_PACKAGES build-base
