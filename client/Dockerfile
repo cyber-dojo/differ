@@ -1,9 +1,10 @@
 FROM cyberdojo/differ
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-COPY Procfile  /app/
-COPY config.ru /app/
-COPY app.rb    /app/
+ARG app_dir
+
+COPY Procfile  ${app_dir}/
+COPY config.ru ${app_dir}/
+COPY app.rb    ${app_dir}/
 
 EXPOSE 4568
-CMD [ "foreman", "start", "-d", "/app" ]

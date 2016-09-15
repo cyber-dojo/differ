@@ -1,18 +1,19 @@
 FROM alpine:edge
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-WORKDIR /app/
+ARG app_dir
 
-COPY prepare_platform.sh /app/
+WORKDIR ${app_dir}/
+
+COPY prepare_platform.sh ${app_dir}/
 RUN [ "./prepare_platform.sh" ]
 
-COPY Gemfile        /app/
-COPY prepare_app.sh /app/
-COPY Procfile       /app/
-COPY config.ru      /app/
-COPY src/       /app/src/
-COPY test/      /app/test/
+COPY Gemfile        ${app_dir}/
+COPY prepare_app.sh ${app_dir}/
+COPY Procfile       ${app_dir}/
+COPY config.ru      ${app_dir}/
+COPY src/           ${app_dir}/src/
+COPY test/          ${app_dir}/test/
 RUN [ "./prepare_app.sh" ]
 
 EXPOSE 4567
-CMD [ "foreman", "start", "-d", "/app" ]
