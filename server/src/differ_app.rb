@@ -1,10 +1,12 @@
 
+# NB: if you call this file app.rb then SimpleCov fails to see it?!
+
 require 'sinatra/base'
 require 'json'
 
 require_relative './differ'
 
-class App < Sinatra::Base
+class DifferApp < Sinatra::Base
 
   get '/diff' do
     differ.diff.to_json

@@ -12,7 +12,7 @@ class DifferAppTest < LibTestBase
   include Rack::Test::Methods  # get
 
   def app
-    App
+    DifferApp
   end
 
   def setup
