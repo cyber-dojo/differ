@@ -1,5 +1,6 @@
 #!/bin/bash
 # This is the only shell script that needs bash rather than sh
+# It needs it for the (array) handling below.
 
 # check already shelled inside docker container
 if [ ! -f /.dockerenv ]; then
@@ -19,14 +20,14 @@ fi
 #   (via test_wrapper.sh -> test.sh)
 #   load one test-file and run all its tests
 
-if [[ $1 == *_test.rb ]]; then
-  # Use 3
-  FILES=($1)
-  ARGS=()
-else
+if [[ $1 != *_test.rb ]]; then
   # Uses 1 & 2
   FILES=(*_test.rb)
   ARGS=(${*})
+else
+  # Use 3
+  FILES=($1)
+  ARGS=()
 fi
 
 # run the tests with coverage
