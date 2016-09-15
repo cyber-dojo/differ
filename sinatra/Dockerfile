@@ -16,3 +16,7 @@ RUN  apk --update \
           $BUILD_PACKAGES \
         && bundle install --without development test \
         && apk del build-dependencies
+
+# This creates a server image of ~76MB
+# Look into this for a probably smaller image
+# https://github.com/sashaegorov/docker-alpine-sinatra
