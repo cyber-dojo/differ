@@ -1,4 +1,4 @@
-#!/bin/bash ../test_wrapper.sh
+#!/bin/sh ../test_wrapper.sh
 
 require_relative './lib_test_base'
 require_relative './null_logger'

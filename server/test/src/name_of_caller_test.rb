@@ -1,8 +1,10 @@
-#!/bin/bash ../test_wrapper.sh
+#!/bin/sh ../test_wrapper.sh
 
 require_relative './lib_test_base'
 
 class NameOfCallerTest < LibTestBase
+
+  include NameOfCaller
 
   test '07ADA9',
   'name of caller is name of callers method' do
@@ -27,7 +29,5 @@ class NameOfCallerTest < LibTestBase
   def helper
     name_of(caller)
   end
-
-  include NameOfCaller
 
 end
