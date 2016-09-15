@@ -1,4 +1,4 @@
-#!/bin/sh ../test_wrapper.sh
+#!/bin/sh ../shebang_run.sh
 
 require_relative './lib_test_base'
 require_relative './spy_sheller'

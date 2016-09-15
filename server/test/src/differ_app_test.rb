@@ -1,4 +1,4 @@
-#!/bin/sh ../test_wrapper.sh
+#!/bin/sh ../shebang_run.sh
 
 # NB: if you call this file app_test.rb then SimpleCov fails to see it?!
 
