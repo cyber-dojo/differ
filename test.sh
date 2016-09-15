@@ -12,7 +12,7 @@ if [ $? != 0 ]; then
 fi
 
 docker run --rm cyberdojo/differ sh -c 'cat Gemfile.lock'
-docker run cyberdojo/differ sh -c "cd test/src && ./run.sh ${*}"
+docker run cyberdojo/differ sh -c "cd test && ./run.sh ${*}"
 EXIT_STATUS=$?
 CID=`docker ps --latest --quiet`
 docker cp ${CID}:/tmp/coverage ${MY_DIR}

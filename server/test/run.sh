@@ -20,8 +20,11 @@ fi
 #   (via test_wrapper.sh -> test.sh)
 #   load one test-file and run all its tests
 
+MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+
 if [[ $1 != *_test.rb ]]; then
   # Uses 1 & 2
+  cd ${MY_DIR}/src
   FILES=(*_test.rb)
   ARGS=(${*})
 else
@@ -35,7 +38,6 @@ COV_DIR=/tmp/coverage
 mkdir ${COV_DIR}
 TEST_LOG=${COV_DIR}/test.log
 # turn off the effect of the shebangs in each individual file
-ruby -e "%w( ${FILES[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${ARGS[@]} | tee ${TEST_LOG}
-MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+cd ${MY_DIR}/src && ruby -e "%w( ${FILES[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${ARGS[@]} | tee ${TEST_LOG}
 # collect coverage stats
-ruby ${MY_DIR}/../check_test_results.rb ${TEST_LOG} ${COV_DIR}/index.html > ${COV_DIR}/done.txt
+ruby ${MY_DIR}/check_test_results.rb ${TEST_LOG} ${COV_DIR}/index.html > ${COV_DIR}/done.txt
