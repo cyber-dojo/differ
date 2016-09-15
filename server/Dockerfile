@@ -1,7 +1,8 @@
 FROM cyberdojo/sinatra
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-RUN apk add --update git
+# server/test/src/run.sh needs bash
+RUN apk add --update git bash
 
 COPY Procfile  /usr/app/
 COPY config.ru /usr/app/

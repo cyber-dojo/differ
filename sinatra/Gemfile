@@ -4,7 +4,8 @@ gem 'json'
 gem 'foreman'
 gem 'sinatra'
 gem 'thin'
-gem 'simplecov'
 
+# for testing
+gem 'simplecov'
 gem 'minitest'
 gem 'rack-test'

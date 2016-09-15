@@ -14,4 +14,5 @@ cd ${MY_DIR}/sinatra && ./build-image.sh
 cd ${MY_DIR}/client  && ./build-image.sh
 cd ${MY_DIR}/server  && ./build-image.sh
 
+docker images | grep cyberdojo/sinatra
 docker images | grep cyberdojo/differ
