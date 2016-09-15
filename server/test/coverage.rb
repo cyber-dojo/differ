@@ -7,8 +7,8 @@ SimpleCov.start do
   #  false
   #}
 
-  add_group 'src',      '/usr/app/src'
-  add_group 'test/src', '/usr/app/test/src'
+  add_group 'src',      '/app/src'
+  add_group 'test/src', '/app/test/src'
 end
 
 cov_root = File.expand_path('..', File.dirname(__FILE__))

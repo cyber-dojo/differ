@@ -11,7 +11,7 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-docker run --rm cyberdojo/differ sh -c 'cat /usr/app/Gemfile.lock'
+docker run --rm cyberdojo/differ sh -c 'cat /app/Gemfile.lock'
 docker run cyberdojo/differ sh -c "cd test/src && ./run.sh ${*}"
 EXIT_STATUS=$?
 CID=`docker ps --latest --quiet`
