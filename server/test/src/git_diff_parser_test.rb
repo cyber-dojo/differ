@@ -4,8 +4,6 @@ require_relative './lib_test_base'
 
 class GitDiffParserTest < LibTestBase
 
-  include GitDiff
-
   test 'B5642B',
   'lines are split' do
     lines = [ 'a', 'b' ]

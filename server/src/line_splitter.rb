@@ -3,7 +3,7 @@ module LineSplitter # mix-in
 
   module_function
 
-  def self.line_split(source)
+  def line_split(source)
     if source.nil?
       []
     elsif source == ''

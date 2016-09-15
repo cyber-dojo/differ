@@ -18,5 +18,6 @@ RUN  apk --update \
         && apk del build-dependencies
 
 # This creates a server image of ~76MB
+# without rack-prof gem ~74MB
 # Look into this for a probably smaller image
 # https://github.com/sashaegorov/docker-alpine-sinatra

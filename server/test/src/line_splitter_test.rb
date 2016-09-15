@@ -4,6 +4,8 @@ require_relative './lib_test_base'
 
 class LineSplitterTest < LibTestBase
 
+  include LineSplitter
+
   test 'B2BCCA',
   'splitting nil is an empty array' do
     assert_equal [ ], line_split(nil)
@@ -43,14 +45,6 @@ class LineSplitterTest < LibTestBase
     assert_equal ['a'], line_split('a'+"\n")
     assert_equal ['a','b'], line_split('a'+"\n"+'b')
     assert_equal ['a','b'], line_split('a'+"\n"+'b'+"\n")
-  end
-
-  #- - - - - - - - - - - - - - - -
-
-  private
-
-  def line_split(lines)
-    LineSplitter.line_split(lines)
   end
 
 end
