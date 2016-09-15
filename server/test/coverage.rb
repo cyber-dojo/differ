@@ -1,5 +1,7 @@
 require 'simplecov'
 
+cov_root = File.expand_path('..', File.dirname(__FILE__))
+
 SimpleCov.start do
 
   #add_group('debug') { |src|
@@ -7,10 +9,9 @@ SimpleCov.start do
   #  false
   #}
 
-  add_group 'src',      '/app/src'
-  add_group 'test/src', '/app/test/src'
+  add_group 'src',      "#{cov_root}/src"
+  add_group 'test/src', "#{cov_root}/test/src"
 end
 
-cov_root = File.expand_path('..', File.dirname(__FILE__))
 SimpleCov.root cov_root
 SimpleCov.coverage_dir '/tmp/coverage'
