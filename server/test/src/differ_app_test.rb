@@ -228,8 +228,8 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff(filename, expected)
-    get_diff
-    assert_equal expected, @json[filename]
+    json = get_diff
+    assert_equal expected, json[filename]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -240,7 +240,7 @@ class DifferAppTest < LibTestBase
       :now_files => @now_files.to_json
     }
     get '/diff', params
-    @json = JSON.parse(last_response.body)
+    JSON.parse(last_response.body)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
