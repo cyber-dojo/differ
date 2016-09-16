@@ -36,8 +36,7 @@ class DifferAppTest < LibTestBase
   'deleted empty file shows as empty array' do
     @was_files = { 'hiker.h' => '' }
     @now_files = { }
-    json = get_diff
-    assert_equal [], json['hiker.h']
+    assert_diff 'hiker.h', []
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -46,13 +45,12 @@ class DifferAppTest < LibTestBase
   'deleted non-empty file shows as all lines deleted' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { }
-    json = get_diff
-    assert_equal [
+    assert_diff 'hiker.h', [
       deleted(1, 'a'),
       deleted(2, 'b'),
       deleted(3, 'c'),
       deleted(4, 'd')
-    ], json['hiker.h']
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -62,15 +60,14 @@ class DifferAppTest < LibTestBase
   'shows as all lines deleted plus one empty line' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { 'hiker.h' => '' }
-    json = get_diff
-    assert_equal [
+    assert_diff 'hiker.h', [
       section(0),
       deleted(1, 'a'),
       deleted(2, 'b'),
       deleted(3, 'c'),
       deleted(4, 'd'),
       same(1, '')
-    ], json['hiker.h']
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -79,10 +76,7 @@ class DifferAppTest < LibTestBase
   'added empty file shows as one empty line' do
     @was_files = { }
     @now_files = { 'diamond.h' => '' }
-    json = get_diff
-    assert_equal [
-      same(1, '')
-    ], json['diamond.h']
+    assert_diff 'diamond.h', [ same(1, '') ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -91,14 +85,13 @@ class DifferAppTest < LibTestBase
   'added non-empty file shows as all lines added' do
     @was_files = { }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
-    json = get_diff
-    assert_equal [
+    assert_diff 'diamond.h', [
       section(0),
       added(1, 'a'),
       added(2, 'b'),
       added(3, 'c'),
       added(4, 'd')
-    ], json['diamond.h']
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -107,10 +100,7 @@ class DifferAppTest < LibTestBase
   'unchanged empty-file shows as one empty line' do
     @was_files = { 'diamond.h' => '' }
     @now_files = { 'diamond.h' => '' }
-    json = get_diff
-    assert_equal [
-      same(1, '')
-    ], json['diamond.h']
+    assert_diff 'diamond.h', [ same(1, '') ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -119,13 +109,12 @@ class DifferAppTest < LibTestBase
   'unchanged non-empty file shows as all lines same' do
     @was_files = { 'diamond.h' => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
-    json = get_diff
-    assert_equal [
+    assert_diff 'diamond.h', [
       same(1, 'a'),
       same(2, 'b'),
       same(3, 'c'),
       same(4, 'd')
-    ], json['diamond.h']
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -134,12 +123,11 @@ class DifferAppTest < LibTestBase
   'changed non-empty file shows as deleted and added lines' do
     @was_files = { 'diamond.h' => 'a' }
     @now_files = { 'diamond.h' => 'b' }
-    json = get_diff
-    assert_equal [
+    assert_diff 'diamond.h', [
       section(0),
       deleted(1, 'a'),
       added(  1, 'b')
-    ], json['diamond.h']
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -173,8 +161,7 @@ class DifferAppTest < LibTestBase
         '#endif',
         ].join("\n")
     }
-    json = get_diff
-    assert_equal [
+    assert_diff 'diamond.h', [
       same(   1, '#ifndef DIAMOND'),
       same(   2, '#define DIAMOND'),
       same(   3, ''),
@@ -189,7 +176,7 @@ class DifferAppTest < LibTestBase
       added(  6, 'void diamond(char);'),
       same(   7, ''),
       same(   8, '#endif'),
-    ], json['diamond.h']
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -200,10 +187,15 @@ class DifferAppTest < LibTestBase
       :now_files => @now_files.to_json
     }
     get '/diff', params
-    JSON.parse(last_response.body)
+    @json = JSON.parse(last_response.body)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+
+  def assert_diff(filename, expected)
+    get_diff
+    assert_equal expected, @json[filename]
+  end
 
   def deleted(number, text)
     line(text, 'deleted', number)
