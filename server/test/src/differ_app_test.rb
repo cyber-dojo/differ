@@ -21,6 +21,8 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+  # corner case
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '200AEC',
   'empty was_files and empty now_files is benign no-op' do
@@ -39,6 +41,8 @@ class DifferAppTest < LibTestBase
     assert_diff 'hiker.h', []
   end
 
+  # - - - - - - - - - - - - - - - - - - - -
+  # delete
   # - - - - - - - - - - - - - - - - - - - -
 
   test '389069',
@@ -71,6 +75,8 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+  # add
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '95F45F',
   'added empty file shows as one empty line' do
@@ -95,9 +101,13 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+  # no change
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '7FE518',
   'unchanged empty-file shows as one empty line' do
+    # same as adding an empty file except in this case
+    # the filename exists in was_files
     @was_files = { 'diamond.h' => '' }
     @now_files = { 'diamond.h' => '' }
     assert_diff 'diamond.h', [ same(1, '') ]
@@ -118,19 +128,7 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-
-  test 'E50C06',
-  'renamed file also shows as all lines same' do
-    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
-    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_diff 'diamond.h', [
-      same(1, 'a'),
-      same(2, 'b'),
-      same(3, 'c'),
-      same(4, 'd')
-    ]
-  end
-
+  # change
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'E3FF9F',
@@ -190,6 +188,40 @@ class DifferAppTest < LibTestBase
       added(  6, 'void diamond(char);'),
       same(   7, ''),
       same(   8, '#endif'),
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+  # rename
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'E50C06',
+  'renamed file shows as all lines same' do
+    # same as unchanged non-empty file except the filename
+    # does not exist in was_files
+    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
+    assert_diff 'diamond.h', [
+      same(1, 'a'),
+      same(2, 'b'),
+      same(3, 'c'),
+      same(4, 'd')
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'FDB6BE',
+  'renamed and slightly changed file shows as lines same except for changed lines' do
+    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'diamond.h' => "a\nb\nX\nd" }
+    assert_diff 'diamond.h', [
+      same(   1, 'a'),
+      same(   2, 'b'),
+      section(0),
+      deleted(3, 'c'),
+      added(  3, 'X'),
+      same(   4, 'd')
     ]
   end
 
