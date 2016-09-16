@@ -119,6 +119,20 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test 'E50C06',
+  'renamed file also shows as all lines same' do
+    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
+    assert_diff 'diamond.h', [
+      same(1, 'a'),
+      same(2, 'b'),
+      same(3, 'c'),
+      same(4, 'd')
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   test 'E3FF9F',
   'changed non-empty file shows as deleted and added lines' do
     @was_files = { 'diamond.h' => 'a' }
@@ -181,6 +195,13 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  def assert_diff(filename, expected)
+    get_diff
+    assert_equal expected, @json[filename]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   def get_diff
     params = {
       :was_files => @was_files.to_json,
@@ -191,11 +212,6 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-
-  def assert_diff(filename, expected)
-    get_diff
-    assert_equal expected, @json[filename]
-  end
 
   def deleted(number, text)
     line(text, 'deleted', number)
