@@ -212,7 +212,7 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'FDB6BE',
-  'renamed and slightly changed file shows as lines same except for changed lines' do
+  'renamed and slightly changed file shows as mostly same lines' do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }
     assert_diff 'diamond.h', [
