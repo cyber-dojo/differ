@@ -5,15 +5,8 @@
 ENV['RACK_ENV'] = 'test'
 require_relative './lib_test_base'
 require_relative './null_logger'
-require 'rack/test'
 
-class DifferAppTest < LibTestBase
-
-  include Rack::Test::Methods  # get
-
-  def app
-    DifferApp
-  end
+class DifferTest < LibTestBase
 
   def setup
     super
@@ -24,21 +17,16 @@ class DifferAppTest < LibTestBase
   # corner case
   # - - - - - - - - - - - - - - - - - - - -
 
-  def self.hex(suffix)
-    '200' + suffix
-  end
-
-  test hex('AEC'),
+  test '100AEC',
   'empty was_files and empty now_files is benign no-op' do
     @was_files = {}
     @now_files = {}
-    json = get_diff
-    assert_equal({}, json)
+    assert_equal({}, diff)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('313'),
+  test '88A313',
   'deleted empty file shows as empty array' do
     @was_files = { 'hiker.h' => '' }
     @now_files = { }
@@ -49,7 +37,7 @@ class DifferAppTest < LibTestBase
   # delete
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('389'),
+  test '389069',
   'deleted non-empty file shows as all lines deleted' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { }
@@ -63,7 +51,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('B67'),
+  test 'B67194',
   'all lines deleted but file not deleted',
   'shows as all lines deleted plus one empty line' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
@@ -82,7 +70,7 @@ class DifferAppTest < LibTestBase
   # add
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('95F'),
+  test '95F45F',
   'added empty file shows as one empty line' do
     @was_files = { }
     @now_files = { 'diamond.h' => '' }
@@ -91,7 +79,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('2C3'),
+  test '2C3991',
   'added non-empty file shows as all lines added' do
     @was_files = { }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
@@ -108,7 +96,7 @@ class DifferAppTest < LibTestBase
   # no change
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('7FE'),
+  test '7FE518',
   'unchanged empty-file shows as one empty line' do
     # same as adding an empty file except in this case
     # the filename exists in was_files
@@ -119,7 +107,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('365'),
+  test '3651DD',
   'unchanged non-empty file shows as all lines same' do
     @was_files = { 'diamond.h' => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
@@ -135,7 +123,7 @@ class DifferAppTest < LibTestBase
   # change
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('E3F'),
+  test 'E3FF9F',
   'changed non-empty file shows as deleted and added lines' do
     @was_files = { 'diamond.h' => 'a' }
     @now_files = { 'diamond.h' => 'b' }
@@ -148,7 +136,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('B9F'),
+  test 'B9F6D7',
   'changed non-empty file shows as deleted and added lines',
   'with each chunk in its own indexed section' do
     @was_files = {
@@ -199,7 +187,7 @@ class DifferAppTest < LibTestBase
   # rename
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('E50'),
+  test 'E50C06',
   'renamed file shows as all lines same' do
     # same as unchanged non-empty file except the filename
     # does not exist in was_files
@@ -215,7 +203,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('FDB'),
+  test 'FDB6BE',
   'renamed and slightly changed file shows as mostly same lines' do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }
@@ -232,41 +220,33 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff(filename, expected)
-    json = get_diff
-    assert_equal expected, json[filename]
+    assert_equal expected, diff[filename]
   end
 
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def get_diff
-    params = {
-      :was_files => @was_files.to_json,
-      :now_files => @now_files.to_json
-    }
-    get '/diff', params
-    JSON.parse(last_response.body)
+  def diff
+    Differ.new(@was_files, @now_files).diff
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   def deleted(number, text)
-    line(text, 'deleted', number)
+    line(text, :deleted, number)
   end
 
   def same(number, text)
-    line(text, 'same', number)
+    line(text, :same, number)
   end
 
   def added(number, text)
-    line(text,'added', number)
+    line(text, :added, number)
   end
 
   def line(text, type, number)
-    { 'line'=>text, 'type'=>type, 'number'=>number }
+    { :line => text, :type => type, :number => number }
   end
 
   def section(index)
-    { 'type'=>'section', 'index'=>index }
+    { :type => :section, :index => index }
   end
 
 end

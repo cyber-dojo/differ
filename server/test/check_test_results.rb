@@ -82,10 +82,10 @@ done =
      [ 'errors == 0', log_stats[:error_count] == 0 ],
      [ 'skips == 0', log_stats[:skip_count] == 0],
      [ 'test duration < 1', log_stats[:time].to_f < 1 ],
-     [ 'assertions per sec > 250', log_stats[:assertions_per_sec] > 250 ],
+     [ 'assertions per sec > 200', log_stats[:assertions_per_sec] > 200 ],
      [ 'coverage(src) == 100%', src_stats[:coverage] == '100.00'],
      [ 'coverage(test) == 100%', test_stats[:coverage] == '100.00'],
-     [ "hits_per_line(src) < 50 [#{hits_per_line_src}]", hits_per_line_src < 50 ],
+     [ "hits_per_line(src) < 60 [#{hits_per_line_src}]", hits_per_line_src < 60 ],
      [ "hits_per_line(test) < 2 [#{hits_per_line_test}]", hits_per_line_test < 2 ],
      [ "lines(test)/lines(src) > 1.5 [#{f2 line_ratio}]", line_ratio > 1.5 ],
   ]
