@@ -13,51 +13,54 @@ class GitDiffParserTest < LibTestBase
     assert_equal lines, GitDiffParser.new(lines.join("\n")).lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # parse_was_filename()
+  # parse_now_filename()
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E14',
   'parse diff for filename ending in tab removes the tab' do
     was_line =  '--- a/sandbox/ab cd'
     assert_equal 'a/sandbox/ab cd',
-      GitDiffParser.new(was_line + "\t").parse_was_filename
+      GitDiffParser.new(was_line + "\t").parse_was_filename(nil)
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D5F',
   'parse diff for filename with space in its name' do
     was_line =  '--- a/sandbox/ab cd'
     assert_equal 'a/sandbox/ab cd',
-      GitDiffParser.new(was_line).parse_was_filename
+      GitDiffParser.new(was_line).parse_was_filename(nil)
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',
   'parse diff for deleted file' do
     was_line =  '--- a/sandbox/xxx'
     assert_equal 'a/sandbox/xxx',
-      GitDiffParser.new(was_line).parse_was_filename
+      GitDiffParser.new(was_line).parse_was_filename(nil)
 
     now_line = '+++ /dev/null'
     assert_equal '/dev/null',
-      GitDiffParser.new(now_line).parse_now_filename
+      GitDiffParser.new(now_line).parse_now_filename(nil)
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2A9',
   'parse diff for new file' do
     was_line =  '--- /dev/null'
     assert_equal '/dev/null',
-      GitDiffParser.new(was_line).parse_was_filename
+      GitDiffParser.new(was_line).parse_was_filename(nil)
 
     now_line = '+++ b/sandbox/untitled_6TJ'
     assert_equal 'b/sandbox/untitled_6TJ',
-      GitDiffParser.new(now_line).parse_now_filename
+      GitDiffParser.new(now_line).parse_now_filename(nil)
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '808',
   'parse diff containing quoted filename with backslash' do
@@ -67,7 +70,9 @@ class GitDiffParserTest < LibTestBase
     assert_equal expected, actual
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # parse_all
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E10',
   'parse diff containing filename with backslash' do
@@ -124,7 +129,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '196',
   'parse diff deleted file' do
@@ -158,7 +163,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '0FE',
   'parse another diff-form of a deleted file' do
@@ -225,7 +230,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D91',
   'parse diff for renamed but unchanged file and newname is quoted' do
@@ -261,7 +266,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E38',
   'parse diff for renamed but unchanged file' do
@@ -297,7 +302,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A61',
   "parse diff for renamed and changed file" do
@@ -364,7 +369,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '91D',
   'parse diffs for two files' do
@@ -471,7 +476,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D56',
   'parse range was-size and now-size defaulted' do
@@ -484,7 +489,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AAA',
   'parse range was-size defaulted' do
@@ -497,7 +502,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '787',
   'parse range now-size defaulted' do
@@ -510,7 +515,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '64D',
   'parse range nothing defaulted' do
@@ -523,7 +528,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A14',
   'parse no-newline-at-eof without leading backslash' do
@@ -535,7 +540,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal 0, parser.n
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '9B9',
   'parse no-newline-at-eof with leading backslash' do
@@ -547,7 +552,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal 1, parser.n
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1BC',
   'two chunks with no newline at end of file' do
@@ -626,7 +631,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B2C',
   'diff one chunk one section' do
@@ -663,7 +668,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_chunk_one
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E9F',
   'diff one chunk two sections' do
@@ -711,7 +716,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A8A',
   'standard diff' do
@@ -766,7 +771,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '3B5',
   'find copies harder finds a rename' do
@@ -784,7 +789,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines.join("\n")).parse_prefix_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2B9',
   'not an deleted line' do
@@ -800,7 +805,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_deleted_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '7A5',
   'not an added line' do
@@ -816,7 +821,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_added_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6EE',
   'single deleted line' do
@@ -835,7 +840,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_deleted_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B75',
   'single added line' do
@@ -854,7 +859,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_added_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '66D',
   'single deleted line with trailing newline-at-eof' do
@@ -873,7 +878,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_deleted_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '439',
   'single added line with trailing newline-at-eof' do
@@ -892,7 +897,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_added_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '956',
   'two deleted lines' do
@@ -912,7 +917,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_deleted_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '08A',
   'two added lines' do
@@ -932,7 +937,7 @@ class GitDiffParserTest < LibTestBase
     GitDiffParser.new(lines).parse_added_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '788',
   'two deleted lines with trailing newline-at-eof' do
@@ -953,7 +958,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_deleted_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'FD8',
   'two added lines with trailing newline-at-eof' do
@@ -974,7 +979,7 @@ class GitDiffParserTest < LibTestBase
       GitDiffParser.new(lines).parse_added_lines
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'C10',
   'diff two chunks' do
@@ -1042,7 +1047,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD3',
   'when diffs are one line apart' do
@@ -1105,7 +1110,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D3C',
   'when diffs are 2 lines apart' do
@@ -1169,7 +1174,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '922',
     'when there is less than 7 unchanged lines',
@@ -1237,7 +1242,7 @@ class GitDiffParserTest < LibTestBase
     assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '274',
     '7 unchanged lines between two changed lines',
@@ -1318,7 +1323,7 @@ class GitDiffParserTest < LibTestBase
 
   end
 
-  #-----------------------------------------------------
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '8E3',
     'no-newline-at-end-of-file line at end of',

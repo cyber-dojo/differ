@@ -27,16 +27,16 @@ class GitDiffParser
   end
 
   def parse_one
+    prefix = parse_prefix_lines
     one = {
-      prefix_lines: parse_prefix_lines,
-      was_filename: parse_was_filename,
-      now_filename: parse_now_filename,
+      prefix_lines: prefix,
+      was_filename: parse_was_filename(prefix),
+      now_filename: parse_now_filename(prefix),
             chunks: parse_chunk_all
     }
     # 3 kinds of entries have prefix_lines *only* and
     # need to set was/now filenames from prefix_lines
     check_for_unchanged_rename_or_copy(one)
-    check_for_deleted_empty_file(one)
     check_for_new_empty_file(one)
     one
   end
@@ -53,24 +53,6 @@ class GitDiffParser
   end
 
   DIFF_GIT_RE = /^diff --git (.*)/
-
-  def check_for_deleted_empty_file(one)
-    prefix = one[:prefix_lines]
-    was_nil = one[:was_filename].nil?
-    now_nil = one[:now_filename].nil?
-    if was_nil && now_nil && prefix[1] == 'deleted file mode 100644'
-      re = DIFF_GIT_RE.match(prefix[0])
-      if re
-        both = re[1]
-        # e.g. both = "a/xx b/xx"
-        # -1 (space in middle) / 2 (to get one filename)
-        was = both[0..both.length/2 - 1]
-        one[:was_filename] = unescaped(was)
-        one[:now_filename] = '/dev/null'
-      end
-    end
-    one
-  end
 
   def check_for_new_empty_file(one)
     prefix = one[:prefix_lines]
@@ -176,14 +158,27 @@ class GitDiffParser
 
   WAS_FILENAME_RE = %r|^\-\-\- (.*)|
 
-  def parse_was_filename
-    parse_filename(WAS_FILENAME_RE)
+  def parse_was_filename(prefix)
+    filename = parse_filename(WAS_FILENAME_RE)
+    if filename.nil? && prefix[1] == 'deleted file mode 100644'
+      re = DIFF_GIT_RE.match(prefix[0])
+      both = re[1] # e.g. both = "a/xx b/xx"
+      # -1 (space in middle) / 2 (to get one filename)
+      was = both[0..both.length/2 - 1]
+      filename = unescaped(was)
+    end
+    filename
+    #if was_nil && now_nil && prefix[1] == 'deleted file mode 100644'
   end
 
   NOW_FILENAME_RE = %r|^\+\+\+ (.*)|
 
-  def parse_now_filename
-    parse_filename(NOW_FILENAME_RE)
+  def parse_now_filename(prefix)
+    filename = parse_filename(NOW_FILENAME_RE)
+    if filename.nil? && prefix[1] == 'deleted file mode 100644'
+      filename = '/dev/null'
+    end
+    filename
   end
 
   def parse_filename(re)
