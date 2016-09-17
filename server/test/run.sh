@@ -9,12 +9,13 @@ if [ ! -f /.dockerenv ]; then
   exit 1
 fi
 
+cov_dir=/tmp/coverage
+mkdir ${cov_dir}
+test_log=${cov_dir}/test.log
+
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 cd ${my_dir}/src
 files=(*_test.rb)
 args=(${*})
-cov_dir=/tmp/coverage
-mkdir ${cov_dir}
-test_log=${cov_dir}/test.log
 ruby -e "%w( ${files[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${args[@]} | tee ${test_log}
 cd ${my_dir} && ruby ./check_test_results.rb ${test_log} ${cov_dir}/index.html > ${cov_dir}/done.txt
