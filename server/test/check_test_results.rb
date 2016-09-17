@@ -72,6 +72,8 @@ log_stats = get_test_log_stats
 test_stats = get_index_stats('testsrc', 'test/src')
 src_stats = get_index_stats('src', 'src')
 
+test_duration = log_stats[:time].to_f
+assertions_per_sec = log_stats[:assertions_per_sec].to_i
 hits_per_line_src = src_stats[:hits_per_line].to_f
 hits_per_line_test = test_stats[:hits_per_line].to_f
 line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
@@ -81,13 +83,13 @@ done =
      [ 'failures == 0', log_stats[:failure_count] <= 0 ],
      [ 'errors == 0', log_stats[:error_count] == 0 ],
      [ 'skips == 0', log_stats[:skip_count] == 0],
-     [ 'test duration < 1', log_stats[:time].to_f < 1 ],
-     [ 'assertions per sec > 200', log_stats[:assertions_per_sec] > 200 ],
+     [ "test duration < 1 [#{test_duration}]", test_duration < 1 ],
+     [ "assertions per sec > 200 [#{assertions_per_sec}]", assertions_per_sec > 200 ],
      [ 'coverage(src) == 100%', src_stats[:coverage] == '100.00'],
      [ 'coverage(test) == 100%', test_stats[:coverage] == '100.00'],
      [ "hits_per_line(src) < 60 [#{hits_per_line_src}]", hits_per_line_src < 60 ],
      [ "hits_per_line(test) < 2 [#{hits_per_line_test}]", hits_per_line_test < 2 ],
-     [ "lines(test)/lines(src) > 1.5 [#{f2 line_ratio}]", line_ratio > 1.5 ],
+     [ "lines(test)/lines(src) > 2 [#{f2 line_ratio}]", line_ratio > 2 ],
   ]
 
 yes,no = done.partition { |criteria| criteria[1] }
