@@ -28,13 +28,15 @@ class GitDiffParser
 
   def parse_one
     prefix = parse_prefix_lines
-    one = {
+    was_filename = parse_was_filename(prefix)
+    now_filename = parse_now_filename(prefix)
+    chunks = parse_chunk_all
+    {
       prefix_lines: prefix,
-      was_filename: parse_was_filename(prefix),
-      now_filename: parse_now_filename(prefix),
-            chunks: parse_chunk_all
+      was_filename: was_filename,
+      now_filename: now_filename,
+            chunks: chunks
     }
-    one
   end
 
   def parse_chunk_all
