@@ -10,9 +10,9 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
-cd ${MY_DIR}/server  && ./build-image.sh ${app_dir}
-cd ${MY_DIR}/client  && ./build-image.sh ${app_dir}
+cd ${my_dir}/server  && ./build-image.sh ${app_dir}
+cd ${my_dir}/client  && ./build-image.sh ${app_dir}
 
 docker images | grep differ
