@@ -27,15 +27,17 @@ class GitDiffParser
   end
 
   def parse_one
-    one =
-    {
+    one = {
       prefix_lines: parse_prefix_lines,
       was_filename: parse_was_filename,
       now_filename: parse_now_filename,
             chunks: parse_chunk_all
     }
+    # 3 kinds of entries have prefix_lines *only* and
+    # need to set was/now filenames from prefix_lines
     check_for_unchanged_rename_or_copy(one)
-    check_for_deleted_file(one)
+    check_for_deleted_empty_file(one)
+    check_for_new_empty_file(one)
     one
   end
 
@@ -52,9 +54,11 @@ class GitDiffParser
 
   DIFF_GIT_RE = /^diff --git (.*)/
 
-  def check_for_deleted_file(one)
+  def check_for_deleted_empty_file(one)
     prefix = one[:prefix_lines]
-    if prefix.length == 3 and prefix[1] == 'deleted file mode 100644'
+    was_nil = one[:was_filename].nil?
+    now_nil = one[:now_filename].nil?
+    if was_nil && now_nil && prefix[1] == 'deleted file mode 100644'
       re = DIFF_GIT_RE.match(prefix[0])
       if re
         both = re[1]
@@ -66,6 +70,23 @@ class GitDiffParser
       end
     end
     one
+  end
+
+  def check_for_new_empty_file(one)
+    prefix = one[:prefix_lines]
+    was_nil = one[:was_filename].nil?
+    now_nil = one[:now_filename].nil?
+    if was_nil && now_nil && prefix[1] == 'new file mode 100644'
+      re = DIFF_GIT_RE.match(prefix[0])
+      if re
+        both = re[1]
+        # e.g. both = "a/xx b/xx"
+        # -1 (space in middle) / 2 (to get one filename)
+        was = both[0..both.length/2 - 1]
+        one[:was_filename] = '/dev/null'
+        one[:now_filename] = unescaped(was)
+      end
+    end
   end
 
   def parse_chunk_all

@@ -28,6 +28,8 @@ class DifferTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+  # delete
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '51A',
   'deleted empty file shows as delete file' do
@@ -40,8 +42,6 @@ class DifferTest < LibTestBase
     ]
   end
 
-  # - - - - - - - - - - - - - - - - - - - -
-  # delete
   # - - - - - - - - - - - - - - - - - - - -
 
   test '369',

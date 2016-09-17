@@ -87,10 +87,10 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '95F',
-  'added empty file shows as one empty line' do
+  'added empty file shows as one empty file' do
     @was_files = { }
     @now_files = { 'diamond.h' => '' }
-    assert_diff 'diamond.h', [ same(1, '') ]
+    assert_diff 'diamond.h', []
   end
 
   # - - - - - - - - - - - - - - - - - - - -

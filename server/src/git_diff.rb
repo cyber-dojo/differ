@@ -12,7 +12,6 @@ module GitDiff # mix-in
     view = {}
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |path, diff|
-      next if empty_file_created?(path)
       md = %r{^(.)/(.*)}.match(path)
       filename = md[2]
       if deleted_file?(md[1])
@@ -36,10 +35,6 @@ module GitDiff # mix-in
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -
-
-  def empty_file_created?(path)
-    path.nil?
-  end
 
   def empty_file?(diff)
     diff[:chunks] == []

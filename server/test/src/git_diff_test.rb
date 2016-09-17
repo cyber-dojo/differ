@@ -125,7 +125,7 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      nil =>  ####??????
+      'a/empty.h' =>
       {
         :prefix_lines =>
         [
@@ -133,15 +133,15 @@ class GitDiffTest < LibTestBase
           'new file mode 100644',
           'index 0000000..e69de29'
         ],
-        :was_filename => nil,
-        :now_filename => nil,
+        :was_filename => '/dev/null',
+        :now_filename => 'a/empty.h',
         :chunks => [ ]
       }
     }
     assert_equal expected_diffs, actual_diffs
 
     visible_files = { }
-    expected_view = { }
+    expected_view = { 'empty.h' => [] }
 
     actual_view = git_diff(diff_lines, visible_files)
     assert_equal expected_view, actual_view
