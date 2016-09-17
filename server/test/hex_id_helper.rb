@@ -18,7 +18,7 @@
 #
 #    end
 
-module TestHexIdHelpers # mix-in
+module TestHexIdHelper # mix-in
 
   def self.included(base)
     base.extend(ClassMethods)
