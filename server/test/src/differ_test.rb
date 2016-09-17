@@ -21,19 +21,23 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '38A',
-  'empty was_files and empty now_files is benign no-op' do
+  'empty was_files and empty now_files shows as benign nothing' do
     @was_files = {}
     @now_files = {}
-    assert_equal({}, diff)
+    assert_diff []
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '51A',
-  'deleted empty file shows as empty array' do
+  'deleted empty file shows as delete file' do
     @was_files = { 'hiker.h' => '' }
     @now_files = { }
-    assert_diff 'hiker.h', []
+    assert_diff [
+      'diff --git a/hiker.h b/hiker.h',
+      'deleted file mode 100644',
+      'index e69de29..0000000'
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -41,31 +45,39 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '369',
-  'deleted non-empty file shows as all lines deleted' do
+  'deleted non-empty file shows as delete file and all -deleted lines' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { }
-    assert_diff 'hiker.h', [
-      deleted(1, 'a'),
-      deleted(2, 'b'),
-      deleted(3, 'c'),
-      deleted(4, 'd')
+    assert_diff [
+      'diff --git a/hiker.h b/hiker.h',
+      'deleted file mode 100644',
+      'index d68dd40..0000000',
+      '--- a/hiker.h',
+      '+++ /dev/null',
+      '@@ -1,4 +0,0 @@',
+      '-a',
+      '-b',
+      '-c',
+      '-d'
     ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '194',
-  'all lines deleted but file not deleted',
-  'shows as all lines deleted plus one empty line' do
+  'all lines deleted but file not deleted shows as all -deleted lines' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { 'hiker.h' => '' }
-    assert_diff 'hiker.h', [
-      section(0),
-      deleted(1, 'a'),
-      deleted(2, 'b'),
-      deleted(3, 'c'),
-      deleted(4, 'd'),
-      same(1, '')
+    assert_diff [
+      'diff --git a/hiker.h b/hiker.h',
+      'index d68dd40..e69de29 100644',
+      '--- a/hiker.h',
+      '+++ b/hiker.h',
+      '@@ -1,4 +0,0 @@',
+      '-a',
+      '-b',
+      '-c',
+      '-d'
     ]
   end
 
@@ -74,24 +86,34 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '45F',
-  'added empty file shows as one empty line' do
+  'added empty file shows as new file' do
     @was_files = { }
     @now_files = { 'diamond.h' => '' }
-    assert_diff 'diamond.h', [ same(1, '') ]
+    assert_diff [
+      'diff --git a/diamond.h b/diamond.h',
+      'new file mode 100644',
+      'index 0000000..e69de29'
+    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '991',
-  'added non-empty file shows as all lines added' do
+  'added non-empty file shows as all +added lines' do
     @was_files = { }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_diff 'diamond.h', [
-      section(0),
-      added(1, 'a'),
-      added(2, 'b'),
-      added(3, 'c'),
-      added(4, 'd')
+    assert_diff [
+      'diff --git a/diamond.h b/diamond.h',
+      'new file mode 100644',
+      'index 0000000..27a7ea6',
+      '--- /dev/null',
+      '+++ b/diamond.h',
+      '@@ -0,0 +1,4 @@',
+      '+a',
+      '+b',
+      '+c',
+      '+d',
+      '\\ No newline at end of file'
     ]
   end
 
@@ -100,26 +122,21 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '518',
-  'unchanged empty-file shows as one empty line' do
+  'unchanged empty-file has no diff' do
     # same as adding an empty file except in this case
     # the filename exists in was_files
     @was_files = { 'diamond.h' => '' }
     @now_files = { 'diamond.h' => '' }
-    assert_diff 'diamond.h', [ same(1, '') ]
+    assert_diff []
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '1DD',
-  'unchanged non-empty file shows as all lines same' do
+  'unchanged non-empty file has no diff' do
     @was_files = { 'diamond.h' => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_diff 'diamond.h', [
-      same(1, 'a'),
-      same(2, 'b'),
-      same(3, 'c'),
-      same(4, 'd')
-    ]
+    assert_diff []
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -127,20 +144,26 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'F9F',
-  'changed non-empty file shows as deleted and added lines' do
+  'change in non-empty file shows as +added and -deleted lines' do
     @was_files = { 'diamond.h' => 'a' }
     @now_files = { 'diamond.h' => 'b' }
-    assert_diff 'diamond.h', [
-      section(0),
-      deleted(1, 'a'),
-      added(  1, 'b')
+    assert_diff [
+      'diff --git a/diamond.h b/diamond.h',
+      'index 2e65efe..63d8dbd 100644',
+      '--- a/diamond.h',
+      '+++ b/diamond.h',
+      '@@ -1 +1 @@',
+      '-a',
+      '\\ No newline at end of file',
+      '+b',
+      '\\ No newline at end of file'
     ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '6D7',
-  'changed non-empty file shows as deleted and added lines',
+  'change in non-empty file shows as +added and -deleted lines',
   'with each chunk in its own indexed section' do
     @was_files = {
       'diamond.h' =>
@@ -168,21 +191,23 @@ class DifferTest < LibTestBase
         '#endif',
         ].join("\n")
     }
-    assert_diff 'diamond.h', [
-      same(   1, '#ifndef DIAMOND'),
-      same(   2, '#define DIAMOND'),
-      same(   3, ''),
-
-      section(0),
-      deleted(4, '#include <strin>'),
-      added(  4, '#include <string>'),
-      same(   5, ''),
-
-      section(1),
-      deleted(6, 'void diamond(char)'),
-      added(  6, 'void diamond(char);'),
-      same(   7, ''),
-      same(   8, '#endif'),
+    assert_diff [
+      'diff --git a/diamond.h b/diamond.h',
+      'index a737c21..49a3313 100644',
+      '--- a/diamond.h',
+      '+++ b/diamond.h',
+      '@@ -1,8 +1,8 @@',
+      ' #ifndef DIAMOND',
+      ' #define DIAMOND',
+      ' ',
+      '-#include <strin>',
+      '+#include <string>',
+      ' ',
+      '-void diamond(char)',
+      '+void diamond(char);',
+      ' ',
+      ' #endif',
+      '\\ No newline at end of file'
     ]
   end
 
@@ -191,65 +216,51 @@ class DifferTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'C06',
-  'renamed file shows as all lines same' do
+  'renamed file shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
     # does not exist in was_files
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_diff 'diamond.h', [
-      same(1, 'a'),
-      same(2, 'b'),
-      same(3, 'c'),
-      same(4, 'd')
+    assert_diff [
+      'diff --git a/hiker.h b/diamond.h',
+      'similarity index 100%',
+      'rename from hiker.h',
+      'rename to diamond.h'
     ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '6BE',
-  'renamed and slightly changed file shows as mostly same lines' do
+  'renamed and slightly changed file shows as <100% similarity index' do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }
-    assert_diff 'diamond.h', [
-      same(   1, 'a'),
-      same(   2, 'b'),
-      section(0),
-      deleted(3, 'c'),
-      added(  3, 'X'),
-      same(   4, 'd')
+
+    assert_diff [
+      'diff --git a/hiker.h b/diamond.h',
+      'similarity index 57%',
+      'rename from hiker.h',
+      'rename to diamond.h',
+      'index 27a7ea6..2de4cc6 100644',
+      '--- a/hiker.h',
+      '+++ b/diamond.h',
+      '@@ -1,4 +1,4 @@',
+      ' a',
+      ' b',
+      '-c',
+      '+X',
+      ' d',
+      '\\ No newline at end of file'
     ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  def assert_diff(filename, expected)
-    assert_equal expected, diff[filename]
-  end
-
-  def diff
-    Differ.new(@was_files, @now_files).diff
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def deleted(number, text)
-    line(text, :deleted, number)
-  end
-
-  def same(number, text)
-    line(text, :same, number)
-  end
-
-  def added(number, text)
-    line(text, :added, number)
-  end
-
-  def line(text, type, number)
-    { :line => text, :type => type, :number => number }
-  end
-
-  def section(index)
-    { :type => :section, :index => index }
+  def assert_diff(lines)
+    lines = lines + [''] unless lines == []
+    expected = lines.join("\n")
+    actual = Differ.new(@was_files, @now_files).diff
+    assert_equal expected, actual
   end
 
 end

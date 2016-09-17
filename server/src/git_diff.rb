@@ -45,6 +45,8 @@ module GitDiff # mix-in
     ch == 'a'
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - -
+
   def sameify(source)
     ify(LineSplitter.line_split(source), :same)
   end

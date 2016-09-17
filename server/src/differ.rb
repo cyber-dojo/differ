@@ -1,7 +1,6 @@
 
 require_relative './delta_maker'
 require_relative './externals'
-require_relative './git_diff'
 
 class Differ
 
@@ -25,8 +24,7 @@ class Differ
       overwrite_changed_files_in(git_dir)
       git.commit(git_dir, now_tag)
 
-      diff_lines = git.diff(git_dir, was_tag, now_tag)
-      git_diff(diff_lines, now_files)
+      git.diff(git_dir, was_tag, now_tag)
     end
   end
 
@@ -69,6 +67,5 @@ class Differ
   end
 
   include DeltaMaker
-  include GitDiff
 
 end
