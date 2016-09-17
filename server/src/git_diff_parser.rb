@@ -58,7 +58,7 @@ class GitDiffParser
       re = DIFF_GIT_RE.match(prefix[0])
       if re
         both = re[1]
-        # e.g. both = "a/sandbox/xx b/sandbox/xx"
+        # e.g. both = "a/xx b/xx"
         # -1 (space in middle) / 2 (to get one filename)
         was = both[0..both.length/2 - 1]
         one[:was_filename] = unescaped(was)
@@ -205,12 +205,12 @@ end
 #--------------------------------------------------------------
 # Git diff format notes
 #
-# LINE: --- a/sandbox/gapper.rb
+# LINE: --- a/gapper.rb
 #
 #  The original file is preceded by ---
 #  If this is a new file this is --- /dev/null
 #
-# LINE: +++ b/sandbox/gapper.rb
+# LINE: +++ b/gapper.rb
 #
 #  The new file is preceded by +++
 #  If this is a deleted file this is +++ /dev/null
