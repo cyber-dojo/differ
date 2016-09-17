@@ -4,9 +4,13 @@ require_relative './lib_test_base'
 
 class GitDiffTest < LibTestBase
 
+  def self.hex(suffix)
+    '74C' + suffix
+  end
+
   include GitDiff
 
-  test '74CA5C',
+  test 'A5C',
   'empty file is deleted' do
     diff_lines =
     [
@@ -42,7 +46,7 @@ class GitDiffTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '2DE0C6',
+  test '0C6',
   'non-empty file is deleted' do
     diff_lines =
     [
@@ -110,7 +114,7 @@ class GitDiffTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '70DA2C',
+  test 'A2C',
   'empty file is created' do
     diff_lines =
     [
@@ -146,7 +150,7 @@ class GitDiffTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '76CD09',
+  test 'D09',
   'non-empty file is created' do
     diff_lines =
     [
@@ -212,7 +216,7 @@ class GitDiffTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '3D94D0',
+  test '4D0',
   'existing file is changed' do
     diff_lines =
     [
@@ -278,7 +282,7 @@ class GitDiffTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'AF735C',
+  test '35C',
   'unchanged file' do
     diff_lines = [].join("\n")
     actual_diffs = GitDiffParser.new(diff_lines).parse_all

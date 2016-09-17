@@ -4,15 +4,19 @@ require_relative './lib_test_base'
 
 class NameOfCallerTest < LibTestBase
 
+  def self.hex(suffix)
+    '07A' + suffix
+  end
+
   include NameOfCaller
 
-  test '07ADA9',
+  test 'DA9',
   'name of caller is name of callers method' do
     assert_equal 'helper1', helper1
     assert_equal 'helper2', helper2
   end
 
-  test '3615C2',
+  test '5C2',
   'name of caller is name of callers method' do
   end
 

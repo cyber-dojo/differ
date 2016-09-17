@@ -30,14 +30,18 @@ module TestHexIdHelpers # mix-in
     @@seen_ids = []
 
     def test(id, *lines, &block)
+      if self.respond_to?('hex')
+        id = hex(id)
+      end
       # check hex-id is well-formed
       diagnostic = "'#{id}',#{lines.join}"
       hex_chars = '0123456789ABCDEF'
-      is_hex_id = id.chars.all? { |ch| hex_chars.include? ch }
-      has_empty_line = lines.any? { |line| line.strip == '' }
-      has_space_line = lines.any? { |line| line.strip != line }
+      is_hex_id      = id.chars.all? { |ch|   hex_chars.include? ch }
+      has_empty_line = lines.any?    { |line| line.strip == ''      }
+      has_space_line = lines.any?    { |line| line.strip != line    }
       raise  "no hex-ID: #{diagnostic}" if id == ''
       raise "bad hex-ID: #{diagnostic}" unless is_hex_id
+      raise "bad hex-ID: #{diagnostic}" unless id.length == 6
       raise "empty line: #{diagnostic}" if has_empty_line
       raise "space line: #{diagnostic}" if has_space_line
       # if no hex-id supplied, or test method matches any supplied hex-id

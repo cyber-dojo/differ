@@ -5,6 +5,10 @@ require_relative './spy_sheller'
 
 class ExternalGitterTest < LibTestBase
 
+  def self.hex(suffix)
+    'DC3' + suffix
+  end
+
   class App; include Externals; end
 
   def setup
@@ -18,7 +22,7 @@ class ExternalGitterTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'DC30B4',
+  test '0B4',
   'git.setup' do
     user_name = 'lion'
     user_email = "#{user_name}@cyber-dojo.org"
@@ -32,7 +36,7 @@ class ExternalGitterTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'F2FAD5',
+  test 'AD5',
   'git.add' do
     filename = 'wibble.h'
     git.add(path, filename)
@@ -41,7 +45,7 @@ class ExternalGitterTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '7A3E16',
+  test 'E16',
   'git.rm' do
     filename = 'wibble.c'
     git.rm(path, filename)
@@ -50,7 +54,7 @@ class ExternalGitterTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'F728AB',
+  test '8AB',
   'for git.commit' do
     tag = 6
     git.commit(path, tag)
@@ -62,7 +66,7 @@ class ExternalGitterTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '31A9A2',
+  test '9A2',
   'git.diff' do
     was_tag = 2
     now_tag = 3

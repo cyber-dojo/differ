@@ -6,6 +6,10 @@ require_relative './spy_logger'
 
 class ExternalShellerTest < LibTestBase
 
+  def self.hex(suffix)
+    'C89' + suffix
+  end
+
   class App; include Externals; end
 
   def setup
@@ -21,7 +25,7 @@ class ExternalShellerTest < LibTestBase
   # exec()
   # - - - - - - - - - - - - - - - - -
 
-  test 'C89DBB',
+  test 'DBB',
   'when exec() succeeds:' +
   '(1)output is captured,' +
   '(2)exit-status is success,' +
@@ -38,7 +42,7 @@ class ExternalShellerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '3C3AF6',
+  test 'AF6',
   'when exec() fails:' +
   '(0)exception is raised,' +
   '(1)output is captured,' +
@@ -56,7 +60,7 @@ class ExternalShellerTest < LibTestBase
   # cd_exec()
   # - - - - - - - - - - - - - - - - -
 
-  test '565ACD',
+  test 'ACD',
   "cd_exec(): when the cd fails:" +
   '(0)the command is not executed,' +
   '(1)output is empty,' +
@@ -74,7 +78,7 @@ class ExternalShellerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'E180B8',
+  test '0B8',
   'cd_exec(): when the cd succeeds and the exec succeeds:' +
   '(0)output is captured,'+
   '(1)exit-status is success,' +
@@ -91,7 +95,7 @@ class ExternalShellerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '373995',
+  test '995',
   'cd_exec(): when cd succeeds and the exec fails:' +
   '(0) output is captured and exit-status is not success' do
     shell_cd_exec('.', 'zzzz 2> /dev/null')

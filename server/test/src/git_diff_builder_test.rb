@@ -4,7 +4,11 @@ require_relative './lib_test_base'
 
 class GitDiffBuilderTest < LibTestBase
 
-  test 'A332D7',
+  def self.hex(suffix)
+    'A33' + suffix
+  end
+
+  test '2D7',
   'chunk with a space in its filename' do
 
     @diff_lines =
@@ -35,7 +39,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '45733C',
+  test '33C',
   'chunk with defaulted now line info' do
 
     @diff_lines =
@@ -65,7 +69,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'D19F10',
+  test 'F10',
     'two chunks with leading and trailing',
     'same lines and no newline at eof' do
 
@@ -136,7 +140,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '2191C8',
+  test '1C8',
     'diffs 7 lines apart are not merged',
     'into contiguous sections in one chunk' do
 
@@ -195,7 +199,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '3F8C58',
+  test 'C58',
     'one chunk with two sections',
     'each with one line added and one line deleted' do
 
@@ -251,7 +255,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '50C56A',
+  test '56A',
   'one chunk with one section with only lines added' do
 
     @diff_lines =
@@ -306,7 +310,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '386FA0',
+  test 'FA0',
   'one chunk with one section with only lines deleted' do
 
     @diff_lines =
@@ -358,7 +362,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '970ED0',
+  test 'ED0',
     'one chunk with one section',
     'with more lines deleted than added' do
 
@@ -418,7 +422,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '56BCAD',
+  test 'CAD',
     'one chunk with one section',
     'with more lines added than deleted' do
 
@@ -483,7 +487,7 @@ class GitDiffBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'A42951',
+  test '951',
     'one chunk with one section',
     'with one line deleted and one line added' do
 

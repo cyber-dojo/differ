@@ -4,30 +4,34 @@ require_relative './lib_test_base'
 
 class ExternalsTest < LibTestBase
 
+  def self.hex(suffix)
+    '7A9' + suffix
+  end
+
   include Externals
 
-  test '7A9920',
+  test '920',
   'default file is ExternalFileWriter' do
     assert_equal 'ExternalFileWriter', file.class.name
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'A40C8F',
+  test 'C8F',
   'default git is ExternalGitter' do
     assert_equal 'ExternalGitter', git.class.name
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test '05A3EC',
+  test '3EC',
   'default log is ExternalStdoutLogger' do
     assert_equal 'ExternalStdoutLogger', log.class.name
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test '6591B1',
+  test '1B1',
   'default shell is ExternalSheller' do
     assert_equal 'ExternalSheller', shell.class.name
   end

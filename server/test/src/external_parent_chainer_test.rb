@@ -5,6 +5,10 @@ require_relative './spy_logger'
 
 class ExternalParentChainerTest < LibTestBase
 
+  def self.hex(suffix)
+    '397' + suffix
+  end
+
   def setup
     super
     @edna = GrandMother.new
@@ -16,7 +20,7 @@ class ExternalParentChainerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - - -
 
-  test '397B16',
+  test 'B16',
   'root object has no parent, does not include chainer, has accessible externals (eg log)' do
     edna.log << 'Tay'
     assert_equal ['Tay'], edna.log.spied
@@ -24,7 +28,7 @@ class ExternalParentChainerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - - -
 
-  test '67A467',
+  test '467',
   'objects are chained together using parent and paths use parent property' do
     assert_equal 'Daughter', ellie.class.name
     assert_equal 'Mother', ellie.parent.class.name
@@ -33,7 +37,7 @@ class ExternalParentChainerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - - -
 
-  test '4271A8',
+  test '1A8',
   'method_missing finds first object without a parent and delegates to it' do
     ellie.method(42)
     ellie.method('hello')
@@ -42,7 +46,7 @@ class ExternalParentChainerTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - - -
 
-  test '5BBF52',
+  test 'F52',
   'parent chain is for dot *access* only - passing args raises RuntimeError' do
     assert_equal [], ellie.log.spied
     raised = assert_raises(RuntimeError) { ellie.log(42) }

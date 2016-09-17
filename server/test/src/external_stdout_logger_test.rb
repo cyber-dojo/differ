@@ -4,7 +4,11 @@ require_relative './lib_test_base'
 
 class ExternalStdoutLoggerTest < LibTestBase
 
-  test '1B6962',
+  def self.hex(suffix)
+    '1B6' + suffix
+  end
+
+  test '962',
   '<< writes to stdout with added trailing newline' do
     log = ExternalStdoutLogger.new(nil)
     written = with_captured_stdout { log << "Hello world" }

@@ -9,11 +9,19 @@ require 'rack/test'
 
 class DifferAppTest < LibTestBase
 
+  def self.hex(suffix)
+    '200' + suffix
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   include Rack::Test::Methods  # get
 
   def app
     DifferApp
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   def setup
     super
@@ -24,11 +32,8 @@ class DifferAppTest < LibTestBase
   # corner case
   # - - - - - - - - - - - - - - - - - - - -
 
-  def self.hex(suffix)
-    '200' + suffix
-  end
 
-  test hex('AEC'),
+  test 'AEC',
   'empty was_files and empty now_files is benign no-op' do
     @was_files = {}
     @now_files = {}
@@ -38,7 +43,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('313'),
+  test '313',
   'deleted empty file shows as empty array' do
     @was_files = { 'hiker.h' => '' }
     @now_files = { }
@@ -49,7 +54,7 @@ class DifferAppTest < LibTestBase
   # delete
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('389'),
+  test 'FE9',
   'deleted non-empty file shows as all lines deleted' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { }
@@ -63,7 +68,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('B67'),
+  test 'B67',
   'all lines deleted but file not deleted',
   'shows as all lines deleted plus one empty line' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
@@ -82,7 +87,7 @@ class DifferAppTest < LibTestBase
   # add
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('95F'),
+  test '95F',
   'added empty file shows as one empty line' do
     @was_files = { }
     @now_files = { 'diamond.h' => '' }
@@ -91,7 +96,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('2C3'),
+  test '2C3',
   'added non-empty file shows as all lines added' do
     @was_files = { }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
@@ -108,7 +113,7 @@ class DifferAppTest < LibTestBase
   # no change
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('7FE'),
+  test '7FE',
   'unchanged empty-file shows as one empty line' do
     # same as adding an empty file except in this case
     # the filename exists in was_files
@@ -119,7 +124,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('365'),
+  test '365',
   'unchanged non-empty file shows as all lines same' do
     @was_files = { 'diamond.h' => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
@@ -135,7 +140,7 @@ class DifferAppTest < LibTestBase
   # change
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('E3F'),
+  test 'E3F',
   'changed non-empty file shows as deleted and added lines' do
     @was_files = { 'diamond.h' => 'a' }
     @now_files = { 'diamond.h' => 'b' }
@@ -148,7 +153,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('B9F'),
+  test 'B9F',
   'changed non-empty file shows as deleted and added lines',
   'with each chunk in its own indexed section' do
     @was_files = {
@@ -199,7 +204,7 @@ class DifferAppTest < LibTestBase
   # rename
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('E50'),
+  test 'E50',
   'renamed file shows as all lines same' do
     # same as unchanged non-empty file except the filename
     # does not exist in was_files
@@ -215,7 +220,7 @@ class DifferAppTest < LibTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test hex('FDB'),
+  test 'FDB',
   'renamed and slightly changed file shows as mostly same lines' do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }

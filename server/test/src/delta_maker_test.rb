@@ -4,7 +4,11 @@ require_relative './lib_test_base'
 
 class DeltaMakerTest < LibTestBase
 
-  test '82C46123',
+  def self.hex(suffix)
+    '944' + suffix
+  end
+
+  test '461',
   'make_delta does not alter arguments' do
     @was = { 'wibble.h' => 52674, 'wibble.c' => 3424234, 'fubar.h' => -234 }
     was_clone = @was.clone
@@ -17,7 +21,7 @@ class DeltaMakerTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - -
 
-  test '9E4B3F',
+  test 'B3F',
   'make_delta({},{}) is benign no-op' do
     @was = { }
     @now = { }
@@ -30,7 +34,7 @@ class DeltaMakerTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - -
 
-  test '01827F',
+  test '27F',
   'unchanged files seen as :unchanged' do
     @was = { 'wibble.h' => 3424234 }
     @now = { 'wibble.h' => 3424234 }
@@ -43,7 +47,7 @@ class DeltaMakerTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - -
 
-  test '89F5A4',
+  test '5A4',
   'changed files seen as :changed' do
     @was = { 'wibble.h' => 52674 }
     @now = { 'wibble.h' => 3424234 }
@@ -56,7 +60,7 @@ class DeltaMakerTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - -
 
-  test '344B12',
+  test 'B12',
   'deleted files seen as :deleted' do
     @was = { 'wibble.h' => 52674 }
     @now = {}
@@ -69,7 +73,7 @@ class DeltaMakerTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - -
 
-  test 'D2894B',
+  test '94B',
   'new files seen as :new' do
     @was = {}
     @now = { 'wibble.h' => 52674 }
@@ -82,7 +86,7 @@ class DeltaMakerTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - -
 
-  test '9E8A92',
+  test 'A92',
   'example with :unchanged, :changed, :deleted, and :new' do
     @was = { 'wibble.h' => 52674, 'wibble.c' => 3424234, 'fubar.h' => -234 }
     @now = { 'wibble.h' => 52674, 'wibble.c' => 46532, 'snafu.c' => -345345 }

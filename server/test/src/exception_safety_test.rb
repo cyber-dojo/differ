@@ -6,7 +6,11 @@ require_relative './raising_file_writer'
 
 class ExceptionSafetyTest < LibTestBase
 
-  test '968B9F',
+  def self.hex(suffix)
+    '968' + suffix
+  end
+
+  test 'B9F',
   'tmp dir is deleted if exception is raised' do
     ENV['DIFFER_CLASS_LOG']  = 'NullLogger'
     ENV['DIFFER_CLASS_FILE'] = 'RaisingFileWriter'
