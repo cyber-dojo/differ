@@ -1,4 +1,3 @@
-#!/bin/bash ../shebang_run.sh
 
 require_relative './lib_test_base'
 
