@@ -18,46 +18,46 @@ class GitDiffParserTest < LibTestBase
   # parse_now_filename()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'E14',
-  'parse diff for filename ending in tab removes the tab' do
+  test 'D5F',
+  'parse diff for was_filename with space in its name' do
     was_line =  '--- a/sandbox/ab cd'
-    assert_equal 'a/sandbox/ab cd',
-      GitDiffParser.new(was_line + "\t").parse_was_filename(nil)
+    was_filename,_ = GitDiffParser.new(was_line).parse_was_now_filename(nil)
+    assert_equal 'a/sandbox/ab cd', was_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'D5F',
-  'parse diff for filename with space in its name' do
+  test 'E14',
+  'parse diff for was_filename ending in tab removes the tab' do
     was_line =  '--- a/sandbox/ab cd'
-    assert_equal 'a/sandbox/ab cd',
-      GitDiffParser.new(was_line).parse_was_filename(nil)
+    was_filename,_ = GitDiffParser.new(was_line + "\t").parse_was_now_filename(nil)
+    assert_equal 'a/sandbox/ab cd', was_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',
   'parse diff for deleted file' do
-    was_line =  '--- a/sandbox/xxx'
-    assert_equal 'a/sandbox/xxx',
-      GitDiffParser.new(was_line).parse_was_filename(nil)
-
-    now_line = '+++ /dev/null'
-    assert_equal '/dev/null',
-      GitDiffParser.new(now_line).parse_now_filename(nil)
+    lines =  [
+      '--- a/sandbox/xxx',
+      '+++ /dev/null'
+    ].join("\n")
+    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filename(nil)
+    assert_equal 'a/sandbox/xxx', was_filename
+    assert_equal '/dev/null',     now_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2A9',
   'parse diff for new file' do
-    was_line =  '--- /dev/null'
-    assert_equal '/dev/null',
-      GitDiffParser.new(was_line).parse_was_filename(nil)
-
-    now_line = '+++ b/sandbox/untitled_6TJ'
-    assert_equal 'b/sandbox/untitled_6TJ',
-      GitDiffParser.new(now_line).parse_now_filename(nil)
+    lines = [
+      '--- /dev/null',
+      '+++ b/sandbox/untitled_6TJ'
+    ].join("\n")
+    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filename(nil)
+    assert_equal '/dev/null', was_filename
+    assert_equal 'b/sandbox/untitled_6TJ', now_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -76,7 +76,6 @@ class GitDiffParserTest < LibTestBase
 
   test 'E10',
   'parse diff containing filename with backslash' do
-
     lines =
     [
       'diff --git "a/sandbox/\\\\was_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',

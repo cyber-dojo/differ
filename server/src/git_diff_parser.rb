@@ -134,15 +134,15 @@ class GitDiffParser
     was_filename = parse_filename(WAS_FILENAME_RE)
     now_filename = parse_filename(NOW_FILENAME_RE)
 
-    if prefix[1] == 'deleted file mode 100644' && was_filename.nil?
+    if was_filename.nil? && prefix[1] == 'deleted file mode 100644'
       was_filename = get_filename(prefix)
       now_filename = '/dev/null'
     end
-    if prefix[1] == 'new file mode 100644' && was_filename.nil?
+    if was_filename.nil? && prefix[1] == 'new file mode 100644'
       was_filename = '/dev/null'
       now_filename = get_filename(prefix)
     end
-    if prefix[1] == 'similarity index 100%'
+    if was_filename.nil? && prefix[1] == 'similarity index 100%'
       was_filename = 'a/' + unescaped(RENAME_OR_COPY_FROM_RE.match(prefix[2])[2])
       now_filename = 'b/' + unescaped(RENAME_OR_COPY_TO_RE.match(prefix[3])[2])
     end
@@ -161,48 +161,6 @@ class GitDiffParser
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  # TODO: dead. Tests need updating
-  def parse_was_filename(prefix)
-    was_filename = parse_filename(WAS_FILENAME_RE)
-    if was_filename.nil? && prefix[1] == 'deleted file mode 100644'
-      re = DIFF_GIT_RE.match(prefix[0])
-      both = re[1] # e.g. both = "a/xx b/xx"
-      # -1 (space in middle) / 2 (to get one filename)
-      was = both[0..both.length/2 - 1]
-      was_filename = unescaped(was)
-    end
-    if was_filename.nil? && prefix[1] == 'new file mode 100644'
-      was_filename = '/dev/null'
-    end
-    if was_filename.nil? && prefix[1] == 'similarity index 100%'
-      was_filename = 'a/' + unescaped(RENAME_OR_COPY_FROM_RE.match(prefix[2])[2])
-    end
-
-    was_filename
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  # TODO: dead. Tests need updating
-  def parse_now_filename(prefix)
-    now_filename = parse_filename(NOW_FILENAME_RE)
-    if now_filename.nil? && prefix[1] == 'deleted file mode 100644'
-      now_filename = '/dev/null'
-    end
-    if now_filename.nil? && prefix[1] == 'new file mode 100644'
-      re = DIFF_GIT_RE.match(prefix[0])
-      both = re[1] # e.g. both = "a/xx b/xx"
-      # -1 (space in middle) / 2 (to get one filename)
-      was = both[0..both.length/2 - 1]
-      now_filename = unescaped(was)
-    end
-    if now_filename.nil? && prefix[1] == 'similarity index 100%'
-      now_filename = 'b/' + unescaped(RENAME_OR_COPY_TO_RE.match(prefix[3])[2])
-    end
-
-    now_filename
-  end
 
   def parse_filename(re)
     if md = re.match(@lines[@n])
