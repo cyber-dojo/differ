@@ -42,8 +42,8 @@ class GitDiffParserTest < LibTestBase
       '+++ /dev/null'
     ].join("\n")
     was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filenames(nil)
-    assert_equal 'a/sandbox/xxx', was_filename
-    assert_equal '/dev/null',     now_filename
+    assert_equal 'a/sandbox/xxx', was_filename, 'was_filename'
+    assert_nil now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -55,7 +55,7 @@ class GitDiffParserTest < LibTestBase
       '+++ b/sandbox/untitled_6TJ'
     ].join("\n")
     was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filenames(nil)
-    assert_equal '/dev/null', was_filename
+    assert_nil was_filename
     assert_equal 'b/sandbox/untitled_6TJ', now_filename
   end
 
@@ -69,7 +69,7 @@ class GitDiffParserTest < LibTestBase
       'index 0000000..e69de29'
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    assert_equal '/dev/null', was_filename, 'was_filename'
+    assert_nil was_filename, 'was_filename'
     assert_equal 'a/empty.h', now_filename, 'now_filename'
   end
 
@@ -84,7 +84,7 @@ class GitDiffParserTest < LibTestBase
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
     assert_equal 'a/Deleted.java', was_filename, 'was_filename'
-    assert_equal '/dev/null', now_filename, 'now_filename'
+    assert_nil now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -140,7 +140,7 @@ class GitDiffParserTest < LibTestBase
             'index 21984c7..0000000',
         ],
         :was_filename => 'a/sandbox/\\was_newfile_FIU', # <-- single backslash
-        :now_filename => '/dev/null',
+        :now_filename => nil,
         :chunks       =>
         [
           {
@@ -189,8 +189,8 @@ class GitDiffParserTest < LibTestBase
             'index e69de29..0000000',
         ],
         :was_filename => 'a/sandbox/original',
-        :now_filename => '/dev/null',
-        :chunks       => [ ]
+        :now_filename => nil,
+        :chunks       => []
       }
     }
 
@@ -226,7 +226,7 @@ class GitDiffParserTest < LibTestBase
             'index 5c4b3ab..0000000',
         ],
         :was_filename => 'a/sandbox/untitled.rb',
-        :now_filename => '/dev/null',
+        :now_filename => nil,
         :chunks =>
         [
           {

@@ -30,14 +30,14 @@ class GitDiffTest < LibTestBase
           'index e69de29..0000000'
         ],
         :was_filename => 'a/xx.rb',
-        :now_filename => '/dev/null',
-        :chunks => [ ]
+        :now_filename => nil,
+        :chunks => []
       }
     }
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = { }
-    expected_view = { 'xx.rb' => [ ] }
+    visible_files = {}
+    expected_view = { 'xx.rb' => [] }
 
     actual_view = git_diff(diff_lines, visible_files)
     assert_equal expected_view, actual_view
@@ -71,7 +71,7 @@ class GitDiffTest < LibTestBase
           "index a459bc2..0000000"
         ],
         :was_filename => "a/non-empty.h",
-        :now_filename => "/dev/null",
+        :now_filename => nil,
         :chunks =>
         [
           {
@@ -95,7 +95,7 @@ class GitDiffTest < LibTestBase
     }
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = { }
+    visible_files = {}
     expected_view = {
       'non-empty.h' =>
       [
@@ -133,14 +133,14 @@ class GitDiffTest < LibTestBase
           'new file mode 100644',
           'index 0000000..e69de29'
         ],
-        :was_filename => '/dev/null',
+        :was_filename => nil,
         :now_filename => 'a/empty.h',
-        :chunks => [ ]
+        :chunks => []
       }
     }
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = { }
+    visible_files = {}
     expected_view = { 'empty.h' => [] }
 
     actual_view = git_diff(diff_lines, visible_files)
@@ -174,7 +174,7 @@ class GitDiffTest < LibTestBase
           "new file mode 100644",
           "index 0000000..a459bc2"
         ],
-        :was_filename => "/dev/null",
+        :was_filename => nil,
         :now_filename => "b/non-empty.c",
         :chunks =>
         [
@@ -190,7 +190,7 @@ class GitDiffTest < LibTestBase
               {
                 :deleted_lines => [],
                 :added_lines => [ "something" ],
-                :after_lines => [ ]
+                :after_lines => []
               }
             ]
           }
@@ -200,7 +200,7 @@ class GitDiffTest < LibTestBase
 
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = { }
+    visible_files = {}
     expected_view = {
       'non-empty.c' =>
       [
@@ -264,7 +264,7 @@ class GitDiffTest < LibTestBase
     }
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = { }
+    visible_files = {}
     expected_view = {
       'non-empty.c' =>
       [

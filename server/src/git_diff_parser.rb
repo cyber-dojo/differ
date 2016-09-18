@@ -16,11 +16,7 @@ class GitDiffParser
     all = {}
     while /^diff/.match(@lines[@n]) do
       one = parse_one
-      if one[:now_filename] != '/dev/null'
-        name = one[:now_filename]
-      else
-        name = one[:was_filename]
-      end
+      name = one[:now_filename] || one[:was_filename]
       all[name] = one
     end
     all
@@ -164,6 +160,9 @@ class GitDiffParser
         now_filename = 'b/' + unescaped(to_re.match(prefix[3])[2])
       end
     end
+
+    was_filename = nil if was_filename == '/dev/null'
+    now_filename = nil if now_filename == '/dev/null'
 
     [was_filename, now_filename]
   end

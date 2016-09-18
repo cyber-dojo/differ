@@ -41,11 +41,11 @@ module GitDiff # mix-in
   end
 
   def new_file?(diff)
-    diff[:was_filename] == '/dev/null'
+    diff[:was_filename].nil?
   end
 
   def deleted_file?(diff)
-    diff[:now_filename] == '/dev/null'
+    diff[:now_filename].nil?
   end
 
   def sameify(source)
