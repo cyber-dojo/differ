@@ -142,18 +142,16 @@ class GitDiffParser
 
     if was_filename.nil?
       if prefix[1] == 'deleted file mode 100644'
-        was_filename = get_filename(prefix[0])
+        was_filename = get_was_filename(prefix[0])
         now_filename = '/dev/null'
       end
       if prefix[1] == 'new file mode 100644'
         was_filename = '/dev/null'
-        now_filename = get_filename(prefix[0])
+        now_filename = get_now_filename(prefix[0])
       end
       if prefix[1] == 'similarity index 100%'
-        from_re = /^(rename|copy) from (.*)/
-        to_re = /^(rename|copy) to (.*)/
-        was_filename = 'a/' + unescaped(from_re.match(prefix[2])[2])
-        now_filename = 'b/' + unescaped(to_re.match(prefix[3])[2])
+        was_filename = get_was_filename(prefix[0])
+        now_filename = get_now_filename(prefix[0])
       end
     end
 
@@ -161,6 +159,30 @@ class GitDiffParser
     now_filename = nil if now_filename == '/dev/null'
 
     [was_filename, now_filename]
+  end
+
+  def get_was_filename(line)
+    # eg 'diff --git "a/em pty.h" "b/empty.h"'
+    re = /^diff --git (\".*?\") (\".*?\")/
+    if md = re.match(line)
+      return unescaped(md[1])
+    end
+    # eg 'diff --git a/empty.h b/empty.h'
+    re = /^diff --git ([^ ]*) ([^ ]*)/
+    md = re.match(line)
+    return  unescaped(md[1])
+  end
+
+  def get_now_filename(line)
+    # eg 'diff --git "a/em pty.h" "b/empty.h"'
+    re = /^diff --git (\".*?\") (\".*?\")/
+    if md = re.match(line)
+      return unescaped(md[2])
+    end
+    # eg 'diff --git a/empty.h b/empty.h'
+    re = /^diff --git ([^ ]*) ([^ ]*)/
+    md = re.match(line)
+    return  unescaped(md[2])
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -176,16 +198,6 @@ class GitDiffParser
       filename = unescaped(filename)
     end
     filename
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def get_filename(line)
-    re = /^diff --git (.*)/.match(line)
-    both = re[1] # e.g. both = "a/xx b/xx"
-    # -1 (space in middle) / 2 (to get one filename)
-    was = both[0..both.length/2 - 1]
-    unescaped(was)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -125,7 +125,7 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      'a/empty.h' =>
+      'b/empty.h' =>
       {
         :prefix_lines =>
         [
@@ -134,7 +134,7 @@ class GitDiffTest < LibTestBase
           'index 0000000..e69de29'
         ],
         :was_filename => nil,
-        :now_filename => 'a/empty.h',
+        :now_filename => 'b/empty.h',
         :chunks => []
       }
     }

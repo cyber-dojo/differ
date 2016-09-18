@@ -13,6 +13,20 @@ class GitDiffParserTest < LibTestBase
     assert_equal lines, GitDiffParser.new(lines.join("\n")).lines
   end
 
+  test '7F6',
+  'get_was_now_filename not quoted' do
+    prefix = 'diff --git a/empty.h b/empty.h'
+    assert_equal 'a/empty.h', GitDiffParser.new(nil).get_was_filename(prefix)
+    assert_equal 'b/empty.h', GitDiffParser.new(nil).get_now_filename(prefix)
+  end
+
+  test 'E84',
+  'get_was_now_filename quoted as it contains a space' do
+    prefix = 'diff --git "a/was file" "b/newname"'
+    assert_equal 'a/was file', GitDiffParser.new(nil).get_was_filename(prefix)
+    assert_equal 'b/newname', GitDiffParser.new(nil).get_now_filename(prefix)
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_was_now_filenames()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -70,7 +84,7 @@ class GitDiffParserTest < LibTestBase
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
     assert_nil was_filename, 'was_filename'
-    assert_equal 'a/empty.h', now_filename, 'now_filename'
+    assert_equal 'b/empty.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
