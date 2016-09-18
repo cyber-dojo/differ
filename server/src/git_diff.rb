@@ -11,10 +11,7 @@ module GitDiff # mix-in
   def git_diff(diff_lines, visible_files)
     view = {}
     diffs = GitDiffParser.new(diff_lines).parse_all
-    diffs.each do |path, diff|
-      md = %r{^(.)/(.*)}.match(path)
-      filename = md[2]
-
+    diffs.each do |filename, diff|
       if new_file?(diff)
         file_content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
         view[filename] = newify(file_content)

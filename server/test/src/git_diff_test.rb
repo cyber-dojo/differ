@@ -21,7 +21,7 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      'a/xx.rb' =>
+      'xx.rb' =>
       {
         :prefix_lines =>
         [
@@ -29,7 +29,7 @@ class GitDiffTest < LibTestBase
           'deleted file mode 100644',
           'index e69de29..0000000'
         ],
-        :was_filename => 'a/xx.rb',
+        :was_filename => 'xx.rb',
         :now_filename => nil,
         :chunks => []
       }
@@ -62,7 +62,7 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      "a/non-empty.h"=>
+      "non-empty.h"=>
       {
         :prefix_lines=>
         [
@@ -70,7 +70,7 @@ class GitDiffTest < LibTestBase
           "deleted file mode 100644",
           "index a459bc2..0000000"
         ],
-        :was_filename => "a/non-empty.h",
+        :was_filename => "non-empty.h",
         :now_filename => nil,
         :chunks =>
         [
@@ -125,7 +125,7 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      'b/empty.h' =>
+      'empty.h' =>
       {
         :prefix_lines =>
         [
@@ -134,7 +134,7 @@ class GitDiffTest < LibTestBase
           'index 0000000..e69de29'
         ],
         :was_filename => nil,
-        :now_filename => 'b/empty.h',
+        :now_filename => 'empty.h',
         :chunks => []
       }
     }
@@ -166,7 +166,7 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      "b/non-empty.c" =>
+      "non-empty.c" =>
       {
         :prefix_lines =>
         [
@@ -175,7 +175,7 @@ class GitDiffTest < LibTestBase
           "index 0000000..a459bc2"
         ],
         :was_filename => nil,
-        :now_filename => "b/non-empty.c",
+        :now_filename => "non-empty.c",
         :chunks =>
         [
           {
@@ -232,15 +232,15 @@ class GitDiffTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
-      "b/non-empty.c" =>
+      "non-empty.c" =>
       {
         :prefix_lines =>
         [
           "diff --git a/non-empty.c b/non-empty.c",
           "index a459bc2..605f7ff 100644"
         ],
-        :was_filename => "a/non-empty.c",
-        :now_filename => "b/non-empty.c",
+        :was_filename => "non-empty.c",
+        :now_filename => "non-empty.c",
         :chunks =>
         [
           {

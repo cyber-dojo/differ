@@ -163,7 +163,7 @@ class GitDiffParser
     # If the filename contains a backslash, then the 'git diff'
     # command will escape the filename
     filename = eval(filename) if filename[0].chr == '"'
-    filename
+    filename[2..-1]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
