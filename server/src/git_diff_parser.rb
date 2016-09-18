@@ -52,10 +52,9 @@ class GitDiffParser
     end
   end
 
-  RANGE_RE = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
-
   def parse_range
-    if range = RANGE_RE.match(@lines[@n])
+    re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
+    if range = re.match(@lines[@n])
       @n += 1
       was = { start_line: range[1].to_i,
                     size: size_or_default(range[2])
@@ -75,12 +74,13 @@ class GitDiffParser
     size != nil ? size.to_i : 1
   end
 
-  DELETED_LINE_OR_ADDED_LINE_OR_COMMON_LINE_RE = /^[\+\- ]/
-
   def parse_sections
     parse_newline_at_eof
     sections = []
-    while DELETED_LINE_OR_ADDED_LINE_OR_COMMON_LINE_RE.match(@lines[@n])
+    # lines starting '+' are added lines
+    # lines starting '-' are deleted lines
+    # lines starting ' ' are common lines
+    while /^[\+\- ]/.match(@lines[@n])
       deleted_lines = parse_deleted_lines
       parse_newline_at_eof
 
@@ -99,40 +99,27 @@ class GitDiffParser
     sections
   end
 
-  DELETED_LINE_RE = /^\-(.*)/
-
   def parse_deleted_lines
-    parse_lines(DELETED_LINE_RE)
+    parse_lines(/^\-(.*)/)
   end
-
-  ADDED_LINE_RE   = /^\+(.*)/
 
   def parse_added_lines
-    parse_lines(ADDED_LINE_RE)
+    parse_lines(/^\+(.*)/)
   end
-
-  COMMON_LINE_RE = %r|^ (.*)|
 
   def parse_common_lines
-    parse_lines(COMMON_LINE_RE)
+    parse_lines(%r|^ (.*)|)
   end
 
-  PREFIX_RE = %r|^([^-+].*)|
-
   def parse_prefix_lines
-    parse_lines(PREFIX_RE)
+    parse_lines(%r|^([^-+].*)|)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  WAS_FILENAME_RE = %r|^\-\-\- (.*)|
-  NOW_FILENAME_RE = %r|^\+\+\+ (.*)|
-  RENAME_OR_COPY_FROM_RE = /^(rename|copy) from (.*)/
-  RENAME_OR_COPY_TO_RE   = /^(rename|copy) to (.*)/
-
   def parse_was_now_filenames(prefix)
-    was_filename = parse_filename(WAS_FILENAME_RE)
-    now_filename = parse_filename(NOW_FILENAME_RE)
+    was_filename = parse_filename(%r|^\-\-\- (.*)|)
+    now_filename = parse_filename(%r|^\+\+\+ (.*)|)
 
     if was_filename.nil?
       if prefix[1] == 'deleted file mode 100644'
@@ -144,8 +131,12 @@ class GitDiffParser
         now_filename = get_filename(prefix[0])
       end
       if prefix[1] == 'similarity index 100%'
-        was_filename = 'a/' + unescaped(RENAME_OR_COPY_FROM_RE.match(prefix[2])[2])
-        now_filename = 'b/' + unescaped(RENAME_OR_COPY_TO_RE.match(prefix[3])[2])
+        # prefix[2] == 'rename from old_name.h'
+        from_re = /^(rename|copy) from (.*)/
+        was_filename = 'a/' + unescaped(from_re.match(prefix[2])[2])
+        # prefix[3] == 'rename to new_name.h'
+        to_re = /^(rename|copy) to (.*)/
+        now_filename = 'b/' + unescaped(to_re.match(prefix[3])[2])
       end
     end
 
@@ -167,10 +158,8 @@ class GitDiffParser
     filename
   end
 
-  DIFF_GIT_RE = /^diff --git (.*)/
-
   def get_filename(line)
-    re = DIFF_GIT_RE.match(line)
+    re = /^diff --git (.*)/.match(line)
     both = re[1] # e.g. both = "a/xx b/xx"
     # -1 (space in middle) / 2 (to get one filename)
     was = both[0..both.length/2 - 1]
@@ -195,10 +184,8 @@ class GitDiffParser
     lines
   end
 
-  NEWLINE_AT_EOF_RE = /^\\ No newline at end of file/
-
   def parse_newline_at_eof
-    @n += 1 if NEWLINE_AT_EOF_RE.match(@lines[@n])
+    @n += 1 if /^\\ No newline at end of file/.match(@lines[@n])
   end
 
 end
