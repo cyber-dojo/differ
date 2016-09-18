@@ -153,21 +153,27 @@ class GitDiffParser
     quoted = '("(\\"|[^"])+")'
     # eg 'diff --git "a/emb ed\"ed.h" "b/emb ed\"ed.h"'
     if md = %r[#{"#{diff_git} #{quoted} #{quoted}"}].match(line)
-      return [ unescaped(md[1]), unescaped(md[3]) ]
-    end
-    # eg 'diff --git a/plain "b/em bed\"ded"'
-    if md = %r[#{"#{diff_git} #{plain} #{quoted}"}].match(line)
-      return [ unescaped(md[1]), unescaped(md[2]) ]
+      return was_now(md, 1, 3)
     end
     # eg 'diff --git "b/em bed\"ded" a/plain'
     if md = %r[#{"#{diff_git} #{quoted} #{plain}"}].match(line)
-      return [ unescaped(md[1]), unescaped(md[3]) ]
+      return was_now(md, 1, 3)
+    end
+    # eg 'diff --git a/plain "b/em bed\"ded"'
+    if md = %r[#{"#{diff_git} #{plain} #{quoted}"}].match(line)
+      return was_now(md, 1, 2)
     end
     # eg 'diff --git a/empty.h b/empty.h'
     if md = %r[#{"#{diff_git} #{plain} #{plain}"}].match(line)
-      return [ unescaped(md[1]), unescaped(md[2]) ]
+      return was_now(md, 1, 2)
     end
     # should never get here
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def was_now(md, was_index, now_index)
+    return [ unescaped(md[was_index]), unescaped(md[now_index]) ]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
