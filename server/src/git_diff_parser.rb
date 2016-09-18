@@ -151,12 +151,12 @@ class GitDiffParser
     # eg 'diff --git "a/em pty.h" "b/empty.h"'
     re = /^diff --git (\".*?\") (\".*?\")/
     if md = re.match(line)
-      return [ unescaped(md[1]), unescaped(md[2])]
+      return [ unescaped(md[1]), unescaped(md[2]) ]
     end
     # eg 'diff --git a/empty.h b/empty.h'
     re = /^diff --git ([^ ]*) ([^ ]*)/
     md = re.match(line)
-    return [unescaped(md[1]), unescaped(md[2])]
+    return [ unescaped(md[1]), unescaped(md[2]) ]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -164,14 +164,7 @@ class GitDiffParser
   def parse_filename(re)
     if md = re.match(@lines[@n])
       @n += 1
-      filename = md[1]
-      # If you have filenames with spaces in them then the 'git diff'
-      # command used in git_diff_view() sometimes generates
-      # --- and +++ lines with a tab appended to the filename!!!
-      filename.rstrip!
-      filename = unescaped(filename)
     end
-    filename
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
