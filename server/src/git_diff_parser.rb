@@ -179,11 +179,25 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def unescaped(filename)
-    # If the filename contains a backslash, then the 'git diff'
-    # command will escape the filename
-    filename = eval(filename) if filename[0].chr == '"'
+    # filename[1..-2] to lose the opening and closing "
+    # then unescape without using eval
+    filename = unescape(filename[1..-2]) if filename[0].chr == '"'
     # drop leading a/ or b/
     filename[2..-1]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def unescape(str)
+    # http://stackoverflow.com/questions/8639642/best-way-to-escape-and-unescape-strings-in-ruby
+    unescapes = {
+        "\\\\" => "\x5c",
+        '"'    => "\x22",
+        "'"    => "\x27"
+    }
+    str.gsub(/\\(?:([#{unescapes.keys.join}]))/) {
+      $1 == '\\' ? '\\' : unescapes[$1]
+    }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
