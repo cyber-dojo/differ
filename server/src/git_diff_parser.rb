@@ -155,6 +155,10 @@ class GitDiffParser
     # eg 'diff --git a/empty.h b/empty.h'
     md = /^diff --git ([^ ]*) ([^ ]*)/.match(line)
     return [ unescaped(md[1]), unescaped(md[2]) ]
+    # Linux also allows " as a character in a filename
+    # This would create a diff first line such as
+    # diff --git "a/o\"dd" "b/o\"dd"
+    # which the above regexs would not capture.
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
