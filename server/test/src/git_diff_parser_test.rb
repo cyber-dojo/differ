@@ -118,8 +118,7 @@ class GitDiffParserTest < LibTestBase
 
   test 'E10',
   'parse diff containing filename with backslash' do
-    lines =
-    [
+    lines = [
       'diff --git "a/sandbox/\\\\was_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',
       'deleted file mode 100644',
       'index 21984c7..0000000',
@@ -167,16 +166,13 @@ class GitDiffParserTest < LibTestBase
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
     assert_equal expected, actual
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '196',
   'parse diff deleted file' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/original b/sandbox/original',
       'deleted file mode 100644',
       'index e69de29..0000000'
@@ -201,16 +197,13 @@ class GitDiffParserTest < LibTestBase
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
     assert_equal expected, actual
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '0FE',
   'parse another diff-form of a deleted file' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/untitled.rb b/sandbox/untitled.rb',
       'deleted file mode 100644',
       'index 5c4b3ab..0000000',
@@ -268,16 +261,13 @@ class GitDiffParserTest < LibTestBase
     assert_equal 'a', md[1]
     filename = md[2]
     assert_equal 'untitled.rb', filename
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D91',
   'parse diff for renamed but unchanged file and newname is quoted' do
-
-    lines =
-    [
+    lines = [
       'diff --git "a/sandbox/was_\\\\wa s_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',
       'similarity index 100%',
       'rename from "sandbox/was_\\\\wa s_newfile_FIU"',
@@ -304,16 +294,13 @@ class GitDiffParserTest < LibTestBase
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
     assert_equal expected, actual
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E38',
   'parse diff for renamed but unchanged file' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/oldname b/sandbox/newname',
       'similarity index 100%',
       'rename from sandbox/oldname',
@@ -340,16 +327,13 @@ class GitDiffParserTest < LibTestBase
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
     assert_equal expected, actual
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A61',
   "parse diff for renamed and changed file" do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/instructions b/sandbox/instructions_new',
       'similarity index 87%',
       'rename from sandbox/instructions',
@@ -407,16 +391,13 @@ class GitDiffParserTest < LibTestBase
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
     assert_equal expected, actual
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '91D',
   'parse diffs for two files' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 896ddd8..2c8d1b8 100644',
       '--- a/sandbox/lines',
@@ -514,7 +495,6 @@ class GitDiffParserTest < LibTestBase
 
     parser = GitDiffParser.new(lines)
     assert_equal expected, parser.parse_all
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -575,7 +555,6 @@ class GitDiffParserTest < LibTestBase
   'parse no-newline-at-eof without leading backslash' do
     lines = ' No newline at eof'
     parser = GitDiffParser.new(lines)
-
     assert_equal 0, parser.n
     parser.parse_newline_at_eof
     assert_equal 0, parser.n
@@ -587,7 +566,6 @@ class GitDiffParserTest < LibTestBase
   'parse no-newline-at-eof with leading backslash' do
     lines = '\\ No newline at end of file'
     parser = GitDiffParser.new(lines)
-
     assert_equal 0, parser.n
     parser.parse_newline_at_eof
     assert_equal 1, parser.n
@@ -597,9 +575,7 @@ class GitDiffParserTest < LibTestBase
 
   test '1BC',
   'two chunks with no newline at end of file' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index b1a30d9..7fa9727 100644',
       '--- a/sandbox/lines',
@@ -667,18 +643,14 @@ class GitDiffParserTest < LibTestBase
             }
           ] # chunks
     } # expected
-
     assert_equal expected, GitDiffParser.new(lines).parse_one
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B2C',
   'diff one chunk one section' do
-
-    lines =
-    [
+    lines = [
       '@@ -1,4 +1,4 @@',
       '-AAA',
       '+BBB',
@@ -688,34 +660,31 @@ class GitDiffParserTest < LibTestBase
     ].join("\n")
 
     expected =
+    {
+      :range =>
       {
-        :range =>
+        :was => { :start_line => 1, :size => 4 },
+        :now => { :start_line => 1, :size => 4 },
+      },
+      :before_lines => [ ],
+      :sections     =>
+      [
         {
-          :was => { :start_line => 1, :size => 4 },
-          :now => { :start_line => 1, :size => 4 },
-        },
-        :before_lines => [ ],
-        :sections     =>
-        [
-          {
-            :deleted_lines => [ 'AAA' ],
-            :added_lines   => [ 'BBB' ],
-            :after_lines   => [ 'CCC', 'DDD', 'EEE' ]
-          }, # section
-        ] # sections
-      } # chunk
+          :deleted_lines => [ 'AAA' ],
+          :added_lines   => [ 'BBB' ],
+          :after_lines   => [ 'CCC', 'DDD', 'EEE' ]
+        }, # section
+      ] # sections
+    } # chunk
 
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_chunk_one
+    assert_equal expected, GitDiffParser.new(lines).parse_chunk_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E9F',
   'diff one chunk two sections' do
-
-    lines =
-    [
+    lines = [
       '@@ -1,8 +1,8 @@',
       ' AAA',
       ' BBB',
@@ -754,16 +723,13 @@ class GitDiffParserTest < LibTestBase
         } # chunk
       ] # chunks
     assert_equal expected, GitDiffParser.new(lines).parse_chunk_all
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A8A',
   'standard diff' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/gapper.rb b/sandbox/gapper.rb',
       'index 26bc41b..8a5b0b7 100644',
       '--- a/sandbox/gapper.rb',
@@ -809,224 +775,164 @@ class GitDiffParserTest < LibTestBase
       ]
     }
     assert_equal expected, GitDiffParser.new(lines).parse_one
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+=begin
+  # the diff lines in this test are not realistic, they are missing the diff!
   test '3B5',
   'find copies harder finds a rename' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/oldname b/sandbox/newname',
       'similarity index 99%',
       'rename from sandbox/oldname',
       'rename to sandbox/newname',
       'index afcb4df..c0f407c 100644'
     ]
-
-    assert_equal lines,
-      GitDiffParser.new(lines.join("\n")).parse_prefix_lines
+    assert_equal lines, GitDiffParser.new(lines.join("\n")).parse_prefix_lines
   end
+=end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2B9',
   'not an deleted line' do
-
-    lines =
-    [
+    lines = [
       '+p Timw.now',
       '+p Time.now'
     ].join("\n")
-
-    expected = [ ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_deleted_lines
+    expected = []
+    assert_equal expected, GitDiffParser.new(lines).parse_deleted_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '7A5',
   'not an added line' do
-
-    lines =
-    [
+    lines = [
       ' p Timw.now',
       ' p Time.now'
     ].join("\n")
-
-    expected = [ ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_added_lines
+    expected = []
+    assert_equal expected, GitDiffParser.new(lines).parse_added_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6EE',
   'single deleted line' do
-
-    lines =
-    [
+    lines = [
       '-p Timw.now',
       '+p Time.now'
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now'
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_deleted_lines
+    expected = [ 'p Timw.now' ]
+    assert_equal expected, GitDiffParser.new(lines).parse_deleted_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B75',
   'single added line' do
-
-    lines =
-    [
+    lines = [
     '+p Time.now',
     ' common line'
     ].join("\n")
-
-    expected =
-      [
-        'p Time.now'
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_added_lines
+    expected = [ 'p Time.now' ]
+    assert_equal expected, GitDiffParser.new(lines).parse_added_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '66D',
   'single deleted line with trailing newline-at-eof' do
-
-    lines =
-    [
+    lines = [
       '-p Timw.now',
       "\\ No newline at end of file'"
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now',
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_deleted_lines
+    expected = [ 'p Timw.now' ]
+    assert_equal expected, GitDiffParser.new(lines).parse_deleted_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '439',
   'single added line with trailing newline-at-eof' do
-
-    lines =
-    [
+    lines = [
       '+p Timw.now',
       "\\ No newline at end of file'"
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now',
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_added_lines
+    expected = [ 'p Timw.now' ]
+    assert_equal expected, GitDiffParser.new(lines).parse_added_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '956',
   'two deleted lines' do
-
-    lines =
-    [
+    lines = [
       '-p Timw.now',
       '-p Time.now'
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now',
-        'p Time.now'
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_deleted_lines
+    expected = [
+      'p Timw.now',
+      'p Time.now'
+    ]
+    assert_equal expected, GitDiffParser.new(lines).parse_deleted_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '08A',
   'two added lines' do
-
-    lines =
-    [
+    lines = [
       '+p Timw.now',
       '+p Time.now'
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now',
-        'p Time.now'
-      ]
-    assert_equal expected,
-    GitDiffParser.new(lines).parse_added_lines
+    expected = [
+      'p Timw.now',
+      'p Time.now'
+    ]
+    assert_equal expected, GitDiffParser.new(lines).parse_added_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '788',
   'two deleted lines with trailing newline-at-eof' do
-
-    lines =
-    [
+    lines = [
       '-p Timw.now',
       '-p Time.now',
       "\\ No newline at end of file"
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now',
-        'p Time.now'
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_deleted_lines
+    expected = [
+      'p Timw.now',
+      'p Time.now'
+    ]
+    assert_equal expected, GitDiffParser.new(lines).parse_deleted_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'FD8',
   'two added lines with trailing newline-at-eof' do
-
-    lines =
-    [
+    lines = [
       '+p Timw.now',
       '+p Time.now',
       "\\ No newline at end of file"
     ].join("\n")
-
-    expected =
-      [
-        'p Timw.now',
-        'p Time.now'
-      ]
-    assert_equal expected,
-      GitDiffParser.new(lines).parse_added_lines
+    expected = [
+      'p Timw.now',
+      'p Time.now'
+    ]
+    assert_equal expected, GitDiffParser.new(lines).parse_added_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'C10',
   'diff two chunks' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/test_gapper.rb b/sandbox/test_gapper.rb',
       'index 4d3ca1b..61e88f0 100644',
       '--- a/sandbox/test_gapper.rb',
@@ -1085,16 +991,13 @@ class GitDiffParserTest < LibTestBase
           ]
     }
     assert_equal expected, GitDiffParser.new(lines).parse_one
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD3',
   'when diffs are one line apart' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 5ed4618..c47ec44 100644',
       '--- a/sandbox/lines',
@@ -1148,16 +1051,13 @@ class GitDiffParserTest < LibTestBase
           ] # chunks
     } # expected
     assert_equal expected, GitDiffParser.new(lines).parse_one
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D3C',
   'when diffs are 2 lines apart' do
-
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 5ed4618..aad3f67 100644',
       '--- a/sandbox/lines',
@@ -1212,7 +1112,6 @@ class GitDiffParserTest < LibTestBase
           ] # chunks
     } # expected
     assert_equal expected, GitDiffParser.new(lines).parse_one
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1222,8 +1121,7 @@ class GitDiffParserTest < LibTestBase
     'between 2 changed lines',
     'they are merged into one chunk' do
 
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 5ed4618..33d0e05 100644',
       '--- a/sandbox/lines',
@@ -1289,8 +1187,7 @@ class GitDiffParserTest < LibTestBase
     '7 unchanged lines between two changed lines',
     'creates two chunks' do
 
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 5ed4618..e78c888 100644',
       '--- a/sandbox/lines',
@@ -1361,7 +1258,6 @@ class GitDiffParserTest < LibTestBase
           ] # chunks
     } # expected
     assert_equal expected, GitDiffParser.new(lines).parse_one
-
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1370,7 +1266,7 @@ class GitDiffParserTest < LibTestBase
     'no-newline-at-end-of-file line at end of',
     'common section is gobbled' do
 
-    # James Grenning has built his own cyber-dojo server
+    # James Grenning built his own cyber-dojo server
     # which he uses for training. He noticed that a file
     # called CircularBufferTests.cpp
     # changed between two traffic-lights but the diff-view
@@ -1379,8 +1275,7 @@ class GitDiffParserTest < LibTestBase
     #   git diff 8 9 sandbox/CircularBufferTests.cpp
     # produced the following output
 
-    lines =
-    [
+    lines = [
       'diff --git a/sandbox/CircularBufferTest.cpp b/sandbox/CircularBufferTest.cpp',
       'index 0ddb952..a397f48 100644',
       '--- a/sandbox/CircularBufferTest.cpp',
@@ -1439,7 +1334,6 @@ class GitDiffParserTest < LibTestBase
             }
           ] # chunks
     } # expected
-
     assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 

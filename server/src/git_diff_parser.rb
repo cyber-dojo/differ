@@ -27,7 +27,7 @@ class GitDiffParser
   end
 
   def parse_one
-    prefix_lines = parse_prefix_lines
+    prefix_lines = parse_lines(%r|^([^-+].*)|)
     was_filename, now_filename = parse_was_now_filenames(prefix_lines)
     chunks = parse_chunk_all
     {
@@ -77,9 +77,6 @@ class GitDiffParser
   def parse_sections
     parse_newline_at_eof
     sections = []
-    # lines starting '+' are added lines
-    # lines starting '-' are deleted lines
-    # lines starting ' ' are common lines
     while /^[\+\- ]/.match(@lines[@n])
       deleted_lines = parse_deleted_lines
       parse_newline_at_eof
@@ -100,19 +97,18 @@ class GitDiffParser
   end
 
   def parse_deleted_lines
+    # start with a '-'
     parse_lines(/^\-(.*)/)
   end
 
   def parse_added_lines
+    # start with a '+'
     parse_lines(/^\+(.*)/)
   end
 
   def parse_common_lines
+    # start with a space
     parse_lines(%r|^ (.*)|)
-  end
-
-  def parse_prefix_lines
-    parse_lines(%r|^([^-+].*)|)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
