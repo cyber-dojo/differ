@@ -33,30 +33,27 @@ class GitDiffParserTest < LibTestBase
 
   test 'D5F',
   'parse was_now_filenames with space in filename' do
-    was_line =  '--- a/sandbox/ab cd'
-    was_filename,_ = GitDiffParser.new(was_line).parse_was_now_filenames(nil)
-    assert_equal 'a/sandbox/ab cd', was_filename
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'E14',
-  'parse was_now_filenames with embedded space in filename and line ends tab' do
-    was_line =  '--- a/sandbox/ab cd'
-    was_filename,_ = GitDiffParser.new(was_line + "\t").parse_was_now_filenames(nil)
-    assert_equal 'a/sandbox/ab cd', was_filename
+    prefix = [
+       'diff --git "a/e mpty.h" "b/e mpty.h"',
+       'new file mode 100644',
+       'index 0000000..e69de29'
+    ]
+    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
+    assert_nil was_filename, 'was_filename'
+    assert_equal 'b/e mpty.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',
   'parse was_now_filenames for deleted file' do
-    lines =  [
-      '--- a/sandbox/xxx',
-      '+++ /dev/null'
-    ].join("\n")
-    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filenames(nil)
-    assert_equal 'a/sandbox/xxx', was_filename, 'was_filename'
+    prefix = [
+      'diff --git a/Deleted.java b/Deleted.java',
+      'deleted file mode 100644',
+      'index e69de29..0000000'
+    ]
+    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
+    assert_equal 'a/Deleted.java', was_filename, 'was_filename'
     assert_nil now_filename, 'now_filename'
   end
 
@@ -64,13 +61,14 @@ class GitDiffParserTest < LibTestBase
 
   test '2A9',
   'parse was_now_filenames for new file' do
-    lines = [
-      '--- /dev/null',
-      '+++ b/sandbox/untitled_6TJ'
-    ].join("\n")
-    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filenames(nil)
-    assert_nil was_filename
-    assert_equal 'b/sandbox/untitled_6TJ', now_filename
+    prefix = [
+       'diff --git a/empty.h b/empty.h',
+       'new file mode 100644',
+       'index 0000000..e69de29'
+    ]
+    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
+    assert_nil was_filename, 'was_filename'
+    assert_equal 'b/empty.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -137,26 +137,18 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_was_now_filenames(prefix)
-    was_filename = parse_filename(%r|^\-\-\- (.*)|)
-    now_filename = parse_filename(%r|^\+\+\+ (.*)|)
+    parse_filename(%r|^\-\-\- (.*)|)
+    parse_filename(%r|^\+\+\+ (.*)|)
 
-    if was_filename.nil?
-      if prefix[1] == 'deleted file mode 100644'
-        was_filename = get_was_filename(prefix[0])
-        now_filename = '/dev/null'
-      end
-      if prefix[1] == 'new file mode 100644'
-        was_filename = '/dev/null'
-        now_filename = get_now_filename(prefix[0])
-      end
-      if prefix[1] == 'similarity index 100%'
-        was_filename = get_was_filename(prefix[0])
-        now_filename = get_now_filename(prefix[0])
-      end
+    was_filename = get_was_filename(prefix[0])
+    now_filename = get_now_filename(prefix[0])
+
+    if prefix[1] == 'deleted file mode 100644'
+      now_filename = nil
     end
-
-    was_filename = nil if was_filename == '/dev/null'
-    now_filename = nil if now_filename == '/dev/null'
+    if prefix[1] == 'new file mode 100644'
+      was_filename = nil
+    end
 
     [was_filename, now_filename]
   end
