@@ -148,21 +148,26 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def get_was_now_filenames(line)
+    diff_git = '^diff --git'
+    plain = '([^ ]*)'
+    quoted = '("(\\"|[^"])+")'
     # eg 'diff --git "a/emb ed\"ed.h" "b/emb ed\"ed.h"'
-    if md = /^diff --git ("(\\"|[^"])+") ("(\\"|[^"])+")/.match(line)
+    if md = %r[#{"#{diff_git} #{quoted} #{quoted}"}].match(line)
       return [ unescaped(md[1]), unescaped(md[3]) ]
     end
     # eg 'diff --git a/plain "b/em bed\"ded"'
-    if md = /^diff --git ([^ ]*) ("(\\"|[^"])+")/.match(line)
+    if md = %r[#{"#{diff_git} #{plain} #{quoted}"}].match(line)
       return [ unescaped(md[1]), unescaped(md[2]) ]
     end
     # eg 'diff --git "b/em bed\"ded" a/plain'
-    if md = /^diff --git ("(\\"|[^"])+") ([^ ]*)/.match(line)
+    if md = %r[#{"#{diff_git} #{quoted} #{plain}"}].match(line)
       return [ unescaped(md[1]), unescaped(md[3]) ]
     end
     # eg 'diff --git a/empty.h b/empty.h'
-    md = /^diff --git ([^ ]*) ([^ ]*)/.match(line)
-    return [ unescaped(md[1]), unescaped(md[2]) ]
+    if md = %r[#{"#{diff_git} #{plain} #{plain}"}].match(line)
+      return [ unescaped(md[1]), unescaped(md[2]) ]
+    end
+    # should never get here
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -171,6 +176,7 @@ class GitDiffParser
     # If the filename contains a backslash, then the 'git diff'
     # command will escape the filename
     filename = eval(filename) if filename[0].chr == '"'
+    # drop leading a/ or b/
     filename[2..-1]
   end
 
