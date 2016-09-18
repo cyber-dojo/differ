@@ -137,9 +137,9 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_was_now_filenames(prefix)
-    parse_filename(%r|^\-\-\- (.*)|)
-    parse_filename(%r|^\+\+\+ (.*)|)
-    was,now = get_was_now_filenames(prefix[0])
+    @n += 1 if %r|^\-\-\- (.*)|.match(@lines[@n])
+    @n += 1 if %r|^\+\+\+ (.*)|.match(@lines[@n])
+    was, now = get_was_now_filenames(prefix[0])
     now = nil if prefix[1] == 'deleted file mode 100644'
     was = nil if prefix[1] == 'new file mode 100644'
     [was, now]
@@ -149,22 +149,12 @@ class GitDiffParser
 
   def get_was_now_filenames(line)
     # eg 'diff --git "a/em pty.h" "b/empty.h"'
-    re = /^diff --git (\".*?\") (\".*?\")/
-    if md = re.match(line)
+    if md = /^diff --git (\".*?\") (\".*?\")/.match(line)
       return [ unescaped(md[1]), unescaped(md[2]) ]
     end
     # eg 'diff --git a/empty.h b/empty.h'
-    re = /^diff --git ([^ ]*) ([^ ]*)/
-    md = re.match(line)
+    md = /^diff --git ([^ ]*) ([^ ]*)/.match(line)
     return [ unescaped(md[1]), unescaped(md[2]) ]
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_filename(re)
-    if md = re.match(@lines[@n])
-      @n += 1
-    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
