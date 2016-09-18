@@ -27,7 +27,7 @@ class GitDiffParser
   end
 
   def parse_one
-    prefix_lines = parse_lines(%r|^([^-+].*)|)
+    prefix_lines = parse_prefix_lines
     was_filename, now_filename = parse_was_now_filenames(prefix_lines)
     chunks = parse_chunk_all
     {
@@ -94,6 +94,10 @@ class GitDiffParser
       }
     end
     sections
+  end
+
+  def parse_prefix_lines
+    parse_lines(%r|^([^-+].*)|)
   end
 
   def parse_deleted_lines

@@ -779,20 +779,23 @@ class GitDiffParserTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-=begin
   # the diff lines in this test are not realistic, they are missing the diff!
   test '3B5',
   'find copies harder finds a rename' do
     lines = [
-      'diff --git a/sandbox/oldname b/sandbox/newname',
+      'diff --git a/hiker.h b/diamond.h',
       'similarity index 99%',
-      'rename from sandbox/oldname',
-      'rename to sandbox/newname',
+      'rename from hiker.h',
+      'rename to diamond.h',
       'index afcb4df..c0f407c 100644'
     ]
-    assert_equal lines, GitDiffParser.new(lines.join("\n")).parse_prefix_lines
+    trailing = [
+      '--- a/hiker.h',
+      '+++ b/diamond.h'
+    ]
+    all_lines = (lines + trailing).join("\n")
+    assert_equal lines, GitDiffParser.new(all_lines).parse_prefix_lines
   end
-=end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1117,10 +1120,9 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '922',
-    'when there is less than 7 unchanged lines',
-    'between 2 changed lines',
-    'they are merged into one chunk' do
-
+  'when there is less than 7 unchanged lines',
+  'between 2 changed lines',
+  'they are merged into one chunk' do
     lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 5ed4618..33d0e05 100644',
@@ -1184,9 +1186,8 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '274',
-    '7 unchanged lines between two changed lines',
-    'creates two chunks' do
-
+  '7 unchanged lines between two changed lines',
+  'creates two chunks' do
     lines = [
       'diff --git a/sandbox/lines b/sandbox/lines',
       'index 5ed4618..e78c888 100644',
@@ -1263,9 +1264,8 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '8E3',
-    'no-newline-at-end-of-file line at end of',
-    'common section is gobbled' do
-
+  'no-newline-at-end-of-file line at end of',
+  'common section is gobbled' do
     # James Grenning built his own cyber-dojo server
     # which he uses for training. He noticed that a file
     # called CircularBufferTests.cpp
@@ -1274,7 +1274,6 @@ class GitDiffParserTest < LibTestBase
     # avatars git repository and I confirmed that
     #   git diff 8 9 sandbox/CircularBufferTests.cpp
     # produced the following output
-
     lines = [
       'diff --git a/sandbox/CircularBufferTest.cpp b/sandbox/CircularBufferTest.cpp',
       'index 0ddb952..a397f48 100644',
