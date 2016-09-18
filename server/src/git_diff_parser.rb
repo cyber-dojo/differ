@@ -110,23 +110,19 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - -
 
   def parse_prefix_lines
-    # don't start with '-' or '+'
-    parse_lines(%r|^([^-+].*)|)
+    parse_lines(%r|^([^-+].*)|) # don't start with - or +
   end
 
   def parse_deleted_lines
-    # start with a '-'
-    parse_lines(/^\-(.*)/)
+    parse_lines(/^\-(.*)/) # start with a -
   end
 
   def parse_added_lines
-    # start with a '+'
-    parse_lines(/^\+(.*)/)
+    parse_lines(/^\+(.*)/) # start with a +
   end
 
   def parse_common_lines
-    # start with a space
-    parse_lines(%r|^ (.*)|)
+    parse_lines(%r|^ (.*)|) # start with a space
   end
 
   def parse_lines(re)
