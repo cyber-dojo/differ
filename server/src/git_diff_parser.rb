@@ -158,11 +158,9 @@ class GitDiffParser
         now_filename = get_filename(prefix[0])
       end
       if prefix[1] == 'similarity index 100%'
-        # prefix[2] == 'rename from old_name.h'
         from_re = /^(rename|copy) from (.*)/
-        was_filename = 'a/' + unescaped(from_re.match(prefix[2])[2])
-        # prefix[3] == 'rename to new_name.h'
         to_re = /^(rename|copy) to (.*)/
+        was_filename = 'a/' + unescaped(from_re.match(prefix[2])[2])
         now_filename = 'b/' + unescaped(to_re.match(prefix[3])[2])
       end
     end
@@ -185,6 +183,8 @@ class GitDiffParser
     filename
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   def get_filename(line)
     re = /^diff --git (.*)/.match(line)
     both = re[1] # e.g. both = "a/xx b/xx"
@@ -192,6 +192,8 @@ class GitDiffParser
     was = both[0..both.length/2 - 1]
     unescaped(was)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def unescaped(filename)
     # If the filename contains a backslash, then the 'git diff'
