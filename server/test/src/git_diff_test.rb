@@ -204,7 +204,6 @@ class GitDiffTest < LibTestBase
     expected_view = {
       'non-empty.c' =>
       [
-        { :type => :section, :index => 0 },
         { :type => :added, :line => "something", :number => 1 }
       ]
     }

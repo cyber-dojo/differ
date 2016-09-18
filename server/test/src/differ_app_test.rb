@@ -100,7 +100,6 @@ class DifferAppTest < LibTestBase
     @was_files = { }
     @now_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff 'diamond.h', [
-      section(0),
       added(1, 'a'),
       added(2, 'b'),
       added(3, 'c'),

@@ -14,12 +14,12 @@ module GitDiff # mix-in
     diffs.each do |path, diff|
       md = %r{^(.)/(.*)}.match(path)
       filename = md[2]
-      if deleted_file?(md[1])
-        if empty_file?(diff)
-          file_content = []
-        else
-          file_content = diff[:chunks][0][:sections][0][:deleted_lines]
-        end
+
+      if new_file?(diff)
+        file_content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
+        view[filename] = newify(file_content)
+      elsif deleted_file?(diff)
+        file_content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
         view[filename] = deleteify(file_content)
       else
         file_content = visible_files[filename]
@@ -40,16 +40,20 @@ module GitDiff # mix-in
     diff[:chunks] == []
   end
 
-  def deleted_file?(ch)
-    # GitDiffParser uses names beginning with
-    # a/... to indicate a deleted file
-    # b/... to indicate a new/modified file
-    # This mirrors the git diff command output
-    ch == 'a'
+  def new_file?(diff)
+    diff[:was_filename] == '/dev/null'
+  end
+
+  def deleted_file?(diff)
+    diff[:now_filename] == '/dev/null'
   end
 
   def sameify(source)
     ify(LineSplitter.line_split(source), :same)
+  end
+
+  def newify(lines)
+    ify(lines, :added)
   end
 
   def deleteify(lines)
