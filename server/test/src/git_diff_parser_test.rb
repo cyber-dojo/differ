@@ -14,14 +14,13 @@ class GitDiffParserTest < LibTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # parse_was_filename()
-  # parse_now_filename()
+  # parse_was_now_filenames()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D5F',
   'parse diff for was_filename with space in its name' do
     was_line =  '--- a/sandbox/ab cd'
-    was_filename,_ = GitDiffParser.new(was_line).parse_was_now_filename(nil)
+    was_filename,_ = GitDiffParser.new(was_line).parse_was_now_filenames(nil)
     assert_equal 'a/sandbox/ab cd', was_filename
   end
 
@@ -30,7 +29,7 @@ class GitDiffParserTest < LibTestBase
   test 'E14',
   'parse diff for was_filename ending in tab removes the tab' do
     was_line =  '--- a/sandbox/ab cd'
-    was_filename,_ = GitDiffParser.new(was_line + "\t").parse_was_now_filename(nil)
+    was_filename,_ = GitDiffParser.new(was_line + "\t").parse_was_now_filenames(nil)
     assert_equal 'a/sandbox/ab cd', was_filename
   end
 
@@ -42,7 +41,7 @@ class GitDiffParserTest < LibTestBase
       '--- a/sandbox/xxx',
       '+++ /dev/null'
     ].join("\n")
-    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filename(nil)
+    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filenames(nil)
     assert_equal 'a/sandbox/xxx', was_filename
     assert_equal '/dev/null',     now_filename
   end
@@ -55,7 +54,7 @@ class GitDiffParserTest < LibTestBase
       '--- /dev/null',
       '+++ b/sandbox/untitled_6TJ'
     ].join("\n")
-    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filename(nil)
+    was_filename, now_filename = GitDiffParser.new(lines).parse_was_now_filenames(nil)
     assert_equal '/dev/null', was_filename
     assert_equal 'b/sandbox/untitled_6TJ', now_filename
   end

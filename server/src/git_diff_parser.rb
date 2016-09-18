@@ -28,7 +28,7 @@ class GitDiffParser
 
   def parse_one
     prefix_lines = parse_prefix_lines
-    was_filename, now_filename = parse_was_now_filename(prefix_lines)
+    was_filename, now_filename = parse_was_now_filenames(prefix_lines)
     chunks = parse_chunk_all
     {
       prefix_lines: prefix_lines,
@@ -130,18 +130,18 @@ class GitDiffParser
   RENAME_OR_COPY_FROM_RE = /^(rename|copy) from (.*)/
   RENAME_OR_COPY_TO_RE   = /^(rename|copy) to (.*)/
 
-  def parse_was_now_filename(prefix)
+  def parse_was_now_filenames(prefix)
     was_filename = parse_filename(WAS_FILENAME_RE)
     now_filename = parse_filename(NOW_FILENAME_RE)
 
     if was_filename.nil?
       if prefix[1] == 'deleted file mode 100644'
-        was_filename = get_filename(prefix)
+        was_filename = get_filename(prefix[0])
         now_filename = '/dev/null'
       end
       if prefix[1] == 'new file mode 100644'
         was_filename = '/dev/null'
-        now_filename = get_filename(prefix)
+        now_filename = get_filename(prefix[0])
       end
       if prefix[1] == 'similarity index 100%'
         was_filename = 'a/' + unescaped(RENAME_OR_COPY_FROM_RE.match(prefix[2])[2])
@@ -150,16 +150,6 @@ class GitDiffParser
     end
 
     [was_filename, now_filename]
-  end
-
-  DIFF_GIT_RE = /^diff --git (.*)/
-
-  def get_filename(prefix)
-    re = DIFF_GIT_RE.match(prefix[0])
-    both = re[1] # e.g. both = "a/xx b/xx"
-    # -1 (space in middle) / 2 (to get one filename)
-    was = both[0..both.length/2 - 1]
-    unescaped(was)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -175,6 +165,16 @@ class GitDiffParser
       filename = unescaped(filename)
     end
     filename
+  end
+
+  DIFF_GIT_RE = /^diff --git (.*)/
+
+  def get_filename(line)
+    re = DIFF_GIT_RE.match(line)
+    both = re[1] # e.g. both = "a/xx b/xx"
+    # -1 (space in middle) / 2 (to get one filename)
+    was = both[0..both.length/2 - 1]
+    unescaped(was)
   end
 
   def unescaped(filename)
