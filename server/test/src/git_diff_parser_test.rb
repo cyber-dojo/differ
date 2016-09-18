@@ -21,14 +21,42 @@ class GitDiffParserTest < LibTestBase
   'parse was_now_filenames with space in filename' do
     prefix = [
        'diff --git "a/e mpty.h" "b/e mpty.h"',
-       'new file mode 100644',
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_nil was_filename, 'was_filename'
+    assert_equal 'e mpty.h', was_filename, 'was_filename'
     assert_equal 'e mpty.h', now_filename, 'now_filename'
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '50A',
+  'parse was_now_filenames with double-quote in was filename' do
+    # " is a legal character in a linux filename"
+    prefix = [
+       'diff --git "a/plain" "b/embed\"ded"',
+       'index 0000000..e69de29'
+    ]
+    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
+    assert_equal "plain", was_filename, 'was_filename'
+    assert_equal "embed\"ded", now_filename, 'now_filename'
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '4D8',
+  'parse was_now_filenames with double-quote in now filename' do
+    # " is a legal character in a linux filename"
+    prefix = [
+       'diff --git "a/embed\"ded" "b/plain"',
+       'index 0000000..e69de29'
+    ]
+    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
+    assert_equal "embed\"ded", was_filename, 'was_filename'
+    assert_equal "plain", now_filename, 'now_filename'
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',

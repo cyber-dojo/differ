@@ -148,17 +148,14 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def get_was_now_filenames(line)
-    # eg 'diff --git "a/em pty.h" "b/empty.h"'
-    if md = /^diff --git (\".*?\") (\".*?\")/.match(line)
-      return [ unescaped(md[1]), unescaped(md[2]) ]
+    # eg 'diff --git "a/sp ace.h" "b/sp ace.h"'
+    # eg 'diff --git "a/emd\"ed.h" "b/emb\"ed.h"'
+    if md = /^diff --git ("(\\"|[^"])+") ("(\\"|[^"])+")/.match(line)
+      return [ unescaped(md[1]), unescaped(md[3]) ]
     end
     # eg 'diff --git a/empty.h b/empty.h'
     md = /^diff --git ([^ ]*) ([^ ]*)/.match(line)
     return [ unescaped(md[1]), unescaped(md[2]) ]
-    # Linux also allows " as a character in a filename
-    # This would create a diff first line such as
-    # diff --git "a/o\"dd" "b/o\"dd"
-    # which the above regexs would not capture.
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
