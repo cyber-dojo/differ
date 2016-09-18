@@ -26,6 +26,8 @@ class GitDiffParser
     all
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def parse_one
     prefix_lines = parse_prefix_lines
     was_filename, now_filename = parse_was_now_filenames(prefix_lines)
@@ -38,6 +40,8 @@ class GitDiffParser
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def parse_chunk_all
     chunks = []
     while chunk = parse_chunk_one
@@ -46,11 +50,18 @@ class GitDiffParser
     chunks
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def parse_chunk_one
     if range = parse_range
-      { range: range, before_lines: parse_common_lines, sections: parse_sections }
+      {        range: range,
+        before_lines: parse_common_lines,
+            sections: parse_sections
+      }
     end
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def parse_range
     re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
@@ -66,6 +77,8 @@ class GitDiffParser
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def size_or_default(size)
     # http://www.artima.com/weblogs/viewpost.jsp?thread=164293
     # Is a blog entry by Guido van Rossum.
@@ -73,6 +86,8 @@ class GitDiffParser
     # S is 1. So -3 is the same as -3,1
     size != nil ? size.to_i : 1
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def parse_sections
     parse_newline_at_eof
@@ -89,14 +104,17 @@ class GitDiffParser
 
       sections << {
         deleted_lines: deleted_lines,
-        added_lines: added_lines,
-        after_lines: after_lines
+          added_lines: added_lines,
+          after_lines: after_lines
       }
     end
     sections
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def parse_prefix_lines
+    # don't start with '-' or '+'
     parse_lines(%r|^([^-+].*)|)
   end
 
@@ -113,6 +131,15 @@ class GitDiffParser
   def parse_common_lines
     # start with a space
     parse_lines(%r|^ (.*)|)
+  end
+
+  def parse_lines(re)
+    lines = []
+    while md = re.match(@lines[@n])
+      lines << md[1]
+      @n += 1
+    end
+    lines
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -174,15 +201,6 @@ class GitDiffParser
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_lines(re)
-    lines = []
-    while md = re.match(@lines[@n])
-      lines << md[1]
-      @n += 1
-    end
-    lines
-  end
 
   def parse_newline_at_eof
     @n += 1 if /^\\ No newline at end of file/.match(@lines[@n])
