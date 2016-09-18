@@ -148,9 +148,16 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def get_was_now_filenames(line)
-    # eg 'diff --git "a/sp ace.h" "b/sp ace.h"'
-    # eg 'diff --git "a/emd\"ed.h" "b/emb\"ed.h"'
+    # eg 'diff --git "a/emb ed\"ed.h" "b/emb ed\"ed.h"'
     if md = /^diff --git ("(\\"|[^"])+") ("(\\"|[^"])+")/.match(line)
+      return [ unescaped(md[1]), unescaped(md[3]) ]
+    end
+    # eg 'diff --git a/plain "b/em bed\"ded"'
+    if md = /^diff --git ([^ ]*) ("(\\"|[^"])+")/.match(line)
+      return [ unescaped(md[1]), unescaped(md[2]) ]
+    end
+    # eg 'diff --git "b/em bed\"ded" a/plain'
+    if md = /^diff --git ("(\\"|[^"])+") ([^ ]*)/.match(line)
       return [ unescaped(md[1]), unescaped(md[3]) ]
     end
     # eg 'diff --git a/empty.h b/empty.h'

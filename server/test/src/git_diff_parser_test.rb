@@ -18,7 +18,7 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D5F',
-  'parse was_now_filenames with space in both filenames' do
+  'parse was & now filenames with space in both filenames' do
     prefix = [
        'diff --git "a/e mpty.h" "b/e mpty.h"',
        'index 0000000..e69de29'
@@ -31,7 +31,7 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1B5',
-  'parse was&now_filenames with double-quote and space in both filename' do
+  'parse was & now filenames with double-quote and space in both filenames' do
     # " is a legal character in a linux filename"
     prefix = [
        'diff --git "a/li n\"ux" "b/em bed\"ded"',
@@ -45,7 +45,7 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '50A',
-  'parse was&now_filenames with double-quote and space only in now filename' do
+  'parse was & now filenames with double-quote and space only in now filename' do
     # git diff only double quotes filenames if it has to
     prefix = [
        'diff --git a/plain "b/em bed\"ded"',
@@ -59,22 +59,21 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D8',
-  'parse was_now_filenames with double-quote in was filename' do
+  'parse was & now filenames with double-quote and space only in was filename' do
     # " is a legal character in a linux filename"
     prefix = [
-       'diff --git "a/embed\"ded" "b/plain"',
+       'diff --git "a/emb ed\"ded" b/plain',
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal "embed\"ded", was_filename, 'was_filename'
+    assert_equal "emb ed\"ded", was_filename, 'was_filename'
     assert_equal "plain", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',
-  'parse was_now_filenames for deleted file' do
+  'now_filename is nil for for deleted file' do
     prefix = [
       'diff --git a/Deleted.java b/Deleted.java',
       'deleted file mode 100644',
@@ -88,7 +87,7 @@ class GitDiffParserTest < LibTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2A9',
-  'parse was_now_filenames for new file' do
+  'was_filename is nil for new file' do
     prefix = [
        'diff --git a/empty.h b/empty.h',
        'new file mode 100644',
@@ -101,55 +100,17 @@ class GitDiffParserTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'BEE',
-  'parse was_now_filenames for new empty file which has prefix-lines only' do
-    diff_lines = [
-      'diff --git a/empty.h b/empty.h',
-      'new file mode 100644',
-      'index 0000000..e69de29'
-    ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    assert_nil was_filename, 'was_filename'
-    assert_equal 'empty.h', now_filename, 'now_filename'
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'BB1',
-  'parse was_now_filenames for deleted empy file which has prefix-lines only' do
-    diff_lines = [
-      'diff --git a/Deleted.java b/Deleted.java',
-      'deleted file mode 100644',
-      'index e69de29..0000000'
-    ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    assert_equal 'Deleted.java', was_filename, 'was_filename'
-    assert_nil now_filename, 'now_filename'
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test 'A90',
-  'parse was_now_filenames for renamed file which has prefix-lines only' do
+  'parse was & now filenames for renamed file' do
     diff_lines = [
-      'diff --git a/old_name.h b/new_name.h',
+      'diff --git a/old_name.h "b/new \"name.h"',
       'similarity index 100%',
       'rename from old_name.h',
       'rename to new_name.h'
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
     assert_equal 'old_name.h', was_filename, 'was_filename'
-    assert_equal 'new_name.h', now_filename, 'now_filename'
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '808',
-  'parse diff containing quoted filename with backslash' do
-    filename = '"a/\\\\was"'
-    expected = '\\was'
-    actual = GitDiffParser.new('').unescaped(filename)
-    assert_equal expected, actual
+    assert_equal "new \"name.h", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
