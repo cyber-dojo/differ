@@ -779,7 +779,6 @@ class GitDiffParserTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  # the diff lines in this test are not realistic, they are missing the diff!
   test '3B5',
   'find copies harder finds a rename' do
     lines = [
