@@ -8,4 +8,3 @@ gem 'thin'
 # for testing
 gem 'simplecov'
 gem 'minitest'
-gem 'rack-test'
