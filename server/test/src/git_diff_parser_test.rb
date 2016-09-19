@@ -154,11 +154,11 @@ class GitDiffParserTest < LibTestBase
             [
               {
                 :deleted_lines => [ 'Please rename me!' ],
-                :added_lines   => [ ],
-                :after_lines   => [ ]
+                :added_lines   => [],
+                :after_lines   => []
               }
             ],
-            :before_lines => [ ]
+            :before_lines => []
           }
         ]
       }
@@ -236,13 +236,13 @@ class GitDiffParserTest < LibTestBase
               :was => { :start_line => 1, :size       => 3 },
               :now => { :start_line => 0, :size       => 0 }
             },
-            :before_lines => [ ],
+            :before_lines => [],
             :sections     =>
             [
               {
               :deleted_lines => [ 'def answer', '  42', 'end'],
-              :added_lines   => [ ],
-              :after_lines   => [ ]
+              :added_lines   => [],
+              :after_lines   => []
               }
             ]
           }
@@ -279,7 +279,7 @@ class GitDiffParserTest < LibTestBase
         ],
         :was_filename => 'sandbox/was_\\wa s_newfile_FIU', # <-- single backslash
         :now_filename => 'sandbox/\\was_newfile_FIU', # <-- single backslash
-        :chunks       => [ ]
+        :chunks       => []
       }
     }
 
@@ -312,7 +312,7 @@ class GitDiffParserTest < LibTestBase
         ],
         :was_filename => 'sandbox/oldname',
         :now_filename => 'sandbox/newname',
-        :chunks       => [ ]
+        :chunks       => []
       }
     }
 
@@ -372,7 +372,7 @@ class GitDiffParserTest < LibTestBase
                 {
                   :deleted_lines => [ 'obir obri oibr oirb orbi orib' ],
                   :added_lines   => [ 'obir obri oibr oirb orbi oribx' ],
-                  :after_lines   => [ ]
+                  :after_lines   => []
                 }, # section
               ] # sections
             } # chunk
@@ -658,7 +658,7 @@ class GitDiffParserTest < LibTestBase
         :was => { :start_line => 1, :size => 4 },
         :now => { :start_line => 1, :size => 4 },
       },
-      :before_lines => [ ],
+      :before_lines => [],
       :sections     =>
       [
         {
@@ -823,12 +823,12 @@ class GitDiffParserTest < LibTestBase
                 :was => { :start_line => 9, :size => 4 },
                 :now => { :start_line => 9, :size => 3 },
               },
-              :before_lines => [ ],
+              :before_lines => [],
               :sections     =>
               [
                 { :deleted_lines => [ 'p Timw.now' ],
                   :added_lines   => [ 'p Time.now' ],
-                  :after_lines   => [ ]
+                  :after_lines   => []
                 }
               ]
             },
@@ -838,13 +838,13 @@ class GitDiffParserTest < LibTestBase
                 :was => { :start_line => 19, :size => 4 },
                 :now => { :start_line => 19, :size => 3 },
               },
-              :before_lines => [ ],
+              :before_lines => [],
               :sections     =>
               [
                 {
                   :deleted_lines => [ 'q Timw.now' ],
                   :added_lines   => [ 'q Time.now' ],
-                  :after_lines   => [ ]
+                  :after_lines   => []
                 }
               ]
             }
@@ -1175,7 +1175,7 @@ class GitDiffParserTest < LibTestBase
               :sections =>
               [
                 {
-                  :deleted_lines => [ ],
+                  :deleted_lines => [],
                   :added_lines   =>
                   [
                     '',
@@ -1184,7 +1184,7 @@ class GitDiffParserTest < LibTestBase
                     '    CHECK_FALSE(CircularBuffer_IsFull(buffer));',
                     '}'
                   ],
-                  :after_lines => [ ]
+                  :after_lines => []
                 }
               ]
             }

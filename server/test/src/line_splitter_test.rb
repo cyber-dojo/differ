@@ -11,7 +11,7 @@ class LineSplitterTest < LibTestBase
 
   test 'CCA',
   'splitting nil is an empty array' do
-    assert_equal [ ], line_split(nil)
+    assert_equal [], line_split(nil)
   end
 
   #- - - - - - - - - - - - - - - -
@@ -33,7 +33,7 @@ class LineSplitterTest < LibTestBase
   test 'D41',
   'retains empty lines between newlines' do
     # regular split doesn't do what I need...
-    assert_equal [ ], "\n\n".split("\n")
+    assert_equal [], "\n\n".split("\n")
     # So I have to roll my own...
     assert_equal [ '', '' ], line_split("\n"+"\n")
     assert_equal ['a','b',''], line_split('a'+"\n"+'b'+"\n"+"\n")
