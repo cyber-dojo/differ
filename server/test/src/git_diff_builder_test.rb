@@ -12,11 +12,11 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/file with_space b/sandbox/file with_space',
+      'diff --git a/file with_space b/file with_space',
       'new file mode 100644',
       'index 0000000..21984c7',
       '--- /dev/null',
-      '+++ b/sandbox/file with_space',
+      '+++ b/file with_space',
       '@@ -0,0 +1 @@',
       '+Please rename me!',
       '\\ No newline at end of file'
@@ -43,10 +43,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/untitled_5G3 b/sandbox/untitled_5G3',
+      'diff --git a/untitled_5G3 b/untitled_5G3',
       'index e69de29..2e65efe 100644',
-      '--- a/sandbox/untitled_5G3',
-      '+++ b/sandbox/untitled_5G3',
+      '--- a/untitled_5G3',
+      '+++ b/untitled_5G3',
       '@@ -0,0 +1 @@',
       '+aaa',
       '\\ No newline at end of file'
@@ -74,10 +74,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index b1a30d9..7fa9727 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -1,5 +1,5 @@',
       ' aaa',
       '-bbb',
@@ -145,10 +145,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 0719398..2943489 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -1,4 +1,4 @@',
       '-aaa',
       '+bbb',
@@ -204,10 +204,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 535d2b0..a173ef1 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -1,8 +1,8 @@',
       ' aaa',
       ' bbb',
@@ -259,10 +259,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 06e567b..59e88aa 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -1,6 +1,9 @@',
       ' aaa',
       ' bbb',
@@ -314,10 +314,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 0b669b6..a972632 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -2,8 +2,6 @@',
       ' bbb',
       ' ccc',
@@ -367,10 +367,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 08fe19c..1f8695e 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -3,9 +3,7 @@',
       ' ddd',
       ' eee',
@@ -427,10 +427,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 8e435da..a787223 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -3,7 +3,8 @@',
       ' ccc',
       ' ddd',
@@ -492,10 +492,10 @@ class GitDiffBuilderTest < LibTestBase
 
     @diff_lines =
     [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 5ed4618..aad3f67 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -5,7 +5,7 @@',
       ' aaa',
       ' bbb',

@@ -120,10 +120,10 @@ class GitDiffParserTest < LibTestBase
   test 'E10',
   'parse diff containing filename with backslash' do
     lines = [
-      'diff --git "a/sandbox/\\\\was_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',
+      'diff --git "a/\\\\was_newfile_FIU" "b/\\\\was_newfile_FIU"',
       'deleted file mode 100644',
       'index 21984c7..0000000',
-      '--- "a/sandbox/\\\\was_newfile_FIU"',
+      '--- "a/\\\\was_newfile_FIU"',
       '+++ /dev/null',
       '@@ -1 +0,0 @@',
       '-Please rename me!',
@@ -132,15 +132,15 @@ class GitDiffParserTest < LibTestBase
 
     expected =
     {
-      'sandbox/\\was_newfile_FIU' => # <-- single backslash
+      '\\was_newfile_FIU' => # <-- single backslash
       {
         :prefix_lines =>
         [
-            'diff --git "a/sandbox/\\\\was_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',
+            'diff --git "a/\\\\was_newfile_FIU" "b/\\\\was_newfile_FIU"',
             'deleted file mode 100644',
             'index 21984c7..0000000',
         ],
-        :was_filename => 'sandbox/\\was_newfile_FIU', # <-- single backslash
+        :was_filename => '\\was_newfile_FIU', # <-- single backslash
         :now_filename => nil,
         :chunks       =>
         [
@@ -174,22 +174,22 @@ class GitDiffParserTest < LibTestBase
   test '196',
   'parse diff deleted file' do
     lines = [
-      'diff --git a/sandbox/original b/sandbox/original',
+      'diff --git a/original b/original',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ].join("\n")
 
     expected =
     {
-      'sandbox/original' =>
+      'original' =>
       {
         :prefix_lines =>
         [
-            'diff --git a/sandbox/original b/sandbox/original',
+            'diff --git a/original b/original',
             'deleted file mode 100644',
             'index e69de29..0000000',
         ],
-        :was_filename => 'sandbox/original',
+        :was_filename => 'original',
         :now_filename => nil,
         :chunks       => []
       }
@@ -205,10 +205,10 @@ class GitDiffParserTest < LibTestBase
   test '0FE',
   'parse another diff-form of a deleted file' do
     lines = [
-      'diff --git a/sandbox/untitled.rb b/sandbox/untitled.rb',
+      'diff --git a/untitled.rb b/untitled.rb',
       'deleted file mode 100644',
       'index 5c4b3ab..0000000',
-      '--- a/sandbox/untitled.rb',
+      '--- a/untitled.rb',
       '+++ /dev/null',
       '@@ -1,3 +0,0 @@',
       '-def answer',
@@ -218,15 +218,15 @@ class GitDiffParserTest < LibTestBase
 
     expected =
     {
-      'sandbox/untitled.rb' =>
+      'untitled.rb' =>
       {
         :prefix_lines =>
         [
-            'diff --git a/sandbox/untitled.rb b/sandbox/untitled.rb',
+            'diff --git a/untitled.rb b/untitled.rb',
             'deleted file mode 100644',
             'index 5c4b3ab..0000000',
         ],
-        :was_filename => 'sandbox/untitled.rb',
+        :was_filename => 'untitled.rb',
         :now_filename => nil,
         :chunks =>
         [
@@ -260,25 +260,25 @@ class GitDiffParserTest < LibTestBase
   test 'D91',
   'parse diff for renamed but unchanged file and newname is quoted' do
     lines = [
-      'diff --git "a/sandbox/was_\\\\wa s_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',
+      'diff --git "a/was_\\\\wa s_newfile_FIU" "b/\\\\was_newfile_FIU"',
       'similarity index 100%',
-      'rename from "sandbox/was_\\\\wa s_newfile_FIU"',
-      'rename to "sandbox/\\\\was_newfile_FIU"'
+      'rename from "was_\\\\wa s_newfile_FIU"',
+      'rename to "\\\\was_newfile_FIU"'
     ].join("\n")
 
     expected =
     {
-      'sandbox/\\was_newfile_FIU' => # <-- single backslash
+      '\\was_newfile_FIU' => # <-- single backslash
       {
         :prefix_lines =>
         [
-            'diff --git "a/sandbox/was_\\\\wa s_newfile_FIU" "b/sandbox/\\\\was_newfile_FIU"',
+            'diff --git "a/was_\\\\wa s_newfile_FIU" "b/\\\\was_newfile_FIU"',
             'similarity index 100%',
-            'rename from "sandbox/was_\\\\wa s_newfile_FIU"',
-            'rename to "sandbox/\\\\was_newfile_FIU"',
+            'rename from "was_\\\\wa s_newfile_FIU"',
+            'rename to "\\\\was_newfile_FIU"',
         ],
-        :was_filename => 'sandbox/was_\\wa s_newfile_FIU', # <-- single backslash
-        :now_filename => 'sandbox/\\was_newfile_FIU', # <-- single backslash
+        :was_filename => 'was_\\wa s_newfile_FIU', # <-- single backslash
+        :now_filename => '\\was_newfile_FIU', # <-- single backslash
         :chunks       => []
       }
     }
@@ -293,25 +293,25 @@ class GitDiffParserTest < LibTestBase
   test 'E38',
   'parse diff for renamed but unchanged file' do
     lines = [
-      'diff --git a/sandbox/oldname b/sandbox/newname',
+      'diff --git a/oldname b/newname',
       'similarity index 100%',
-      'rename from sandbox/oldname',
-      'rename to sandbox/newname'
+      'rename from oldname',
+      'rename to newname'
     ].join("\n")
 
     expected =
     {
-      'sandbox/newname' =>
+      'newname' =>
       {
         :prefix_lines =>
         [
-            'diff --git a/sandbox/oldname b/sandbox/newname',
+            'diff --git a/oldname b/newname',
             'similarity index 100%',
-            'rename from sandbox/oldname',
-            'rename to sandbox/newname',
+            'rename from oldname',
+            'rename to newname',
         ],
-        :was_filename => 'sandbox/oldname',
-        :now_filename => 'sandbox/newname',
+        :was_filename => 'oldname',
+        :now_filename => 'newname',
         :chunks       => []
       }
     }
@@ -326,13 +326,13 @@ class GitDiffParserTest < LibTestBase
   test 'A61',
   "parse diff for renamed and changed file" do
     lines = [
-      'diff --git a/sandbox/instructions b/sandbox/instructions_new',
+      'diff --git a/instructions b/instructions_new',
       'similarity index 87%',
-      'rename from sandbox/instructions',
-      'rename to sandbox/instructions_new',
+      'rename from instructions',
+      'rename to instructions_new',
       'index e747436..83ec100 100644',
-      '--- a/sandbox/instructions',
-      '+++ b/sandbox/instructions_new',
+      '--- a/instructions',
+      '+++ b/instructions_new',
       '@@ -6,4 +6,4 @@ For example, the potential anagrams of "biro" are',
       ' biro bior brio broi boir bori',
       ' ibro ibor irbo irob iobr iorb',
@@ -345,15 +345,15 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/instructions b/sandbox/instructions_new',
+            'diff --git a/instructions b/instructions_new',
             'similarity index 87%',
-            'rename from sandbox/instructions',
-            'rename to sandbox/instructions_new',
+            'rename from instructions',
+            'rename to instructions_new',
             'index e747436..83ec100 100644'
           ],
-          :was_filename => 'sandbox/instructions',
-          :now_filename => 'sandbox/instructions_new',
-        :chunks =>
+          :was_filename => 'instructions',
+          :now_filename => 'instructions_new',
+          :chunks =>
           [
             {
               :range =>
@@ -379,7 +379,7 @@ class GitDiffParserTest < LibTestBase
           ] # chunks
     }
 
-    expected = { 'sandbox/instructions_new' => expected_diff }
+    expected = { 'instructions_new' => expected_diff }
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
     assert_equal expected, actual
@@ -390,10 +390,10 @@ class GitDiffParserTest < LibTestBase
   test '91D',
   'parse diffs for two files' do
     lines = [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 896ddd8..2c8d1b8 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -1,7 +1,7 @@',
       ' aaa',
       ' bbb',
@@ -403,10 +403,10 @@ class GitDiffParserTest < LibTestBase
       ' fff',
       ' ggg',
       ' hhh',
-      'diff --git a/sandbox/other b/sandbox/other',
+      'diff --git a/other b/other',
       'index cf0389a..b28bf03 100644',
-      '--- a/sandbox/other',
-      '+++ b/sandbox/other',
+      '--- a/other',
+      '+++ b/other',
       '@@ -1,6 +1,6 @@',
       ' AAA',
       ' BBB',
@@ -423,11 +423,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/lines b/sandbox/lines',
+            'diff --git a/lines b/lines',
             'index 896ddd8..2c8d1b8 100644'
           ],
-        :was_filename => 'sandbox/lines',
-        :now_filename => 'sandbox/lines',
+        :was_filename => 'lines',
+        :now_filename => 'lines',
         :chunks       =>
           [
             {
@@ -453,11 +453,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/other b/sandbox/other',
+            'diff --git a/other b/other',
             'index cf0389a..b28bf03 100644'
           ],
-        :was_filename => 'sandbox/other',
-        :now_filename => 'sandbox/other',
+        :was_filename => 'other',
+        :now_filename => 'other',
         :chunks =>
           [
             {
@@ -481,8 +481,8 @@ class GitDiffParserTest < LibTestBase
 
     expected =
     {
-      'sandbox/lines' => expected_diff_1,
-      'sandbox/other' => expected_diff_2
+      'lines' => expected_diff_1,
+      'other' => expected_diff_2
     }
 
     parser = GitDiffParser.new(lines)
@@ -568,10 +568,10 @@ class GitDiffParserTest < LibTestBase
   test '1BC',
   'two chunks with no newline at end of file' do
     lines = [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index b1a30d9..7fa9727 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -1,5 +1,5 @@',
       ' AAA',
       '-BBB',
@@ -594,11 +594,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/lines b/sandbox/lines',
+            'diff --git a/lines b/lines',
             'index b1a30d9..7fa9727 100644'
           ],
-        :was_filename => 'sandbox/lines',
-        :now_filename => 'sandbox/lines',
+        :was_filename => 'lines',
+        :now_filename => 'lines',
         :chunks       =>
           [
             {
@@ -722,10 +722,10 @@ class GitDiffParserTest < LibTestBase
   test 'A8A',
   'standard diff' do
     lines = [
-      'diff --git a/sandbox/gapper.rb b/sandbox/gapper.rb',
+      'diff --git a/gapper.rb b/gapper.rb',
       'index 26bc41b..8a5b0b7 100644',
-      '--- a/sandbox/gapper.rb',
-      '+++ b/sandbox/gapper.rb',
+      '--- a/gapper.rb',
+      '+++ b/gapper.rb',
       '@@ -4,7 +5,8 @@ COMMENT',
       ' aaa',
       ' bbb',
@@ -742,11 +742,11 @@ class GitDiffParserTest < LibTestBase
     {
       :prefix_lines =>
       [
-        'diff --git a/sandbox/gapper.rb b/sandbox/gapper.rb',
+        'diff --git a/gapper.rb b/gapper.rb',
         'index 26bc41b..8a5b0b7 100644'
       ],
-      :was_filename => 'sandbox/gapper.rb',
-      :now_filename => 'sandbox/gapper.rb',
+      :was_filename => 'gapper.rb',
+      :now_filename => 'gapper.rb',
       :chunks       =>
       [
         {
@@ -793,10 +793,10 @@ class GitDiffParserTest < LibTestBase
   test 'C10',
   'diff two chunks' do
     lines = [
-      'diff --git a/sandbox/test_gapper.rb b/sandbox/test_gapper.rb',
+      'diff --git a/test_gapper.rb b/test_gapper.rb',
       'index 4d3ca1b..61e88f0 100644',
-      '--- a/sandbox/test_gapper.rb',
-      '+++ b/sandbox/test_gapper.rb',
+      '--- a/test_gapper.rb',
+      '+++ b/test_gapper.rb',
       '@@ -9,4 +9,3 @@ class TestGapper < Test::Unit::TestCase',
       '-p Timw.now',
       '+p Time.now',
@@ -810,11 +810,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/test_gapper.rb b/sandbox/test_gapper.rb',
+            'diff --git a/test_gapper.rb b/test_gapper.rb',
             'index 4d3ca1b..61e88f0 100644'
           ],
-        :was_filename => 'sandbox/test_gapper.rb',
-        :now_filename => 'sandbox/test_gapper.rb',
+        :was_filename => 'test_gapper.rb',
+        :now_filename => 'test_gapper.rb',
         :chunks       =>
           [
             {
@@ -858,10 +858,10 @@ class GitDiffParserTest < LibTestBase
   test 'AD3',
   'when diffs are one line apart' do
     lines = [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 5ed4618..c47ec44 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -5,9 +5,9 @@',
       ' AAA',
       ' BBB',
@@ -880,11 +880,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/lines b/sandbox/lines',
+            'diff --git a/lines b/lines',
             'index 5ed4618..c47ec44 100644'
           ],
-        :was_filename => 'sandbox/lines',
-        :now_filename => 'sandbox/lines',
+        :was_filename => 'lines',
+        :now_filename => 'lines',
         :chunks       =>
           [
             {
@@ -918,10 +918,10 @@ class GitDiffParserTest < LibTestBase
   test 'D3C',
   'when diffs are 2 lines apart' do
     lines = [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 5ed4618..aad3f67 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -5,10 +5,10 @@',
       ' AAA',
       ' BBB',
@@ -941,11 +941,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/lines b/sandbox/lines',
+            'diff --git a/lines b/lines',
             'index 5ed4618..aad3f67 100644'
           ],
-        :was_filename => 'sandbox/lines',
-        :now_filename => 'sandbox/lines',
+        :was_filename => 'lines',
+        :now_filename => 'lines',
         :chunks       =>
           [
             {
@@ -981,10 +981,10 @@ class GitDiffParserTest < LibTestBase
   'between 2 changed lines',
   'they are merged into one chunk' do
     lines = [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 5ed4618..33d0e05 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -5,14 +5,14 @@',
       ' AAA',
       ' BBB',
@@ -1007,11 +1007,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            "diff --git a/sandbox/lines b/sandbox/lines",
+            "diff --git a/lines b/lines",
             "index 5ed4618..33d0e05 100644"
           ],
-        :was_filename => 'sandbox/lines',
-        :now_filename => 'sandbox/lines',
+        :was_filename => 'lines',
+        :now_filename => 'lines',
         :chunks       =>
           [
             {
@@ -1046,10 +1046,10 @@ class GitDiffParserTest < LibTestBase
   '7 unchanged lines between two changed lines',
   'creates two chunks' do
     lines = [
-      'diff --git a/sandbox/lines b/sandbox/lines',
+      'diff --git a/lines b/lines',
       'index 5ed4618..e78c888 100644',
-      '--- a/sandbox/lines',
-      '+++ b/sandbox/lines',
+      '--- a/lines',
+      '+++ b/lines',
       '@@ -5,7 +5,7 @@',
       ' AAA',
       ' BBB',
@@ -1074,11 +1074,11 @@ class GitDiffParserTest < LibTestBase
     {
         :prefix_lines =>
           [
-            'diff --git a/sandbox/lines b/sandbox/lines',
+            'diff --git a/lines b/lines',
             'index 5ed4618..e78c888 100644'
           ],
-        :was_filename => 'sandbox/lines',
-        :now_filename => 'sandbox/lines',
+        :was_filename => 'lines',
+        :now_filename => 'lines',
         :chunks       =>
           [
             {
