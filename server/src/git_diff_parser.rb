@@ -153,19 +153,17 @@ class GitDiffParser
     qf = '("(\\"|[^"])+")' # quoted filename
     # eg 'diff --git a/empty.h b/empty.h'
 
-    if md = was_now_re(:uf, :uf).match(first_line)
+    if md = was_now_match(:uf, :uf, first_line)
       return was_now(md, 1, 2)
     end
     # eg 'diff --git a/plain "b/em bed\"ded"'
-    if md = was_now_re(:uf, :qf).match(first_line)
-      return was_now(md, 1, 2)
-    end
+    return was_now(md, 1, 2) if md = was_now_match(:uf, :qf, first_line)
     # eg 'diff --git "a/emb ed\"ed.h" "b/emb ed\"ed.h"'
-    if md = was_now_re(:qf, :qf).match(first_line)
+    if md = was_now_match(:qf, :qf, first_line)
       return was_now(md, 1, 3)
     end
     # eg 'diff --git "b/em bed\"ded" a/plain'
-    if md = was_now_re(:qf, :uf).match(first_line)
+    if md = was_now_match(:qf, :uf, first_line)
       return was_now(md, 1, 3)
     end
     # should never get here
@@ -173,12 +171,12 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def was_now_re(was, now)
+  def was_now_match(was, now, first_line)
     filename = {
       :qf => '("(\\"|[^"])+")', # quoted
       :uf => '([^ ]*)',         # unquoted
     }
-    %r[^diff --git #{filename[was]} #{filename[now]}$]
+    %r[^diff --git #{filename[was]} #{filename[now]}$].match(first_line)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
