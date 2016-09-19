@@ -1,7 +1,6 @@
 
 # NB: if you call this file app_test.rb then SimpleCov fails to see it?!
 
-ENV['RACK_ENV'] = 'test'
 require_relative './lib_test_base'
 require_relative './null_logger'
 
