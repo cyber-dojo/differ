@@ -8,9 +8,9 @@ differ_client:
     - -d
     - ${APP_DIR}
   links:
-    - "differ"
+    - differ
   ports:
-    - "4568:4568"
+    - 4568:4568
 
 
 differ:
@@ -23,5 +23,5 @@ differ:
     - -d
     - ${APP_DIR}
   ports:
-    - "4567:4567"
+    - 4567:4567
 
