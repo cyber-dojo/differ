@@ -14,7 +14,7 @@ class GitDiffParser
 
   def parse_all
     all = {}
-    while /^diff/.match(@lines[@n]) do
+    while /^diff --git/.match(line) do
       one = parse_one
       name = one[:now_filename] || one[:was_filename]
       all[name] = one
@@ -61,7 +61,7 @@ class GitDiffParser
 
   def parse_range
     re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
-    if range = re.match(@lines[@n])
+    if range = re.match(line)
       @n += 1
       was = { start_line: range[1].to_i,
                     size: size_or_default(range[2])
@@ -88,7 +88,7 @@ class GitDiffParser
   def parse_sections
     parse_newline_at_eof
     sections = []
-    while /^[\+\- ]/.match(@lines[@n])
+    while /^[\+\- ]/.match(line)
       deleted_lines = parse_deleted_lines
       parse_newline_at_eof
 
@@ -127,7 +127,7 @@ class GitDiffParser
 
   def parse_lines(re)
     lines = []
-    while md = re.match(@lines[@n])
+    while md = re.match(line)
       lines << md[1]
       @n += 1
     end
@@ -137,8 +137,8 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_was_now_filenames(prefix)
-    @n += 1 if %r|^\-\-\- (.*)|.match(@lines[@n])
-    @n += 1 if %r|^\+\+\+ (.*)|.match(@lines[@n])
+    @n += 1 if %r|^\-\-\- (.*)|.match(line)
+    @n += 1 if %r|^\+\+\+ (.*)|.match(line)
     was, now = get_was_now_filenames(prefix[0])
     now = nil if prefix[1] == 'deleted file mode 100644'
     was = nil if prefix[1] == 'new file mode 100644'
@@ -147,24 +147,24 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def get_was_now_filenames(line)
+  def get_was_now_filenames(first_line)
     diff_git = '^diff --git'
     plain = '([^ ]*)'
     quoted = '("(\\"|[^"])+")'
     # eg 'diff --git a/empty.h b/empty.h'
-    if md = %r[#{diff_git} #{plain} #{plain}$].match(line)
+    if md = %r[#{diff_git} #{plain} #{plain}$].match(first_line)
       return was_now(md, 1, 2)
     end
     # eg 'diff --git a/plain "b/em bed\"ded"'
-    if md = %r[#{diff_git} #{plain} #{quoted}$].match(line)
+    if md = %r[#{diff_git} #{plain} #{quoted}$].match(first_line)
       return was_now(md, 1, 2)
     end
     # eg 'diff --git "a/emb ed\"ed.h" "b/emb ed\"ed.h"'
-    if md = %r[#{diff_git} #{quoted} #{quoted}$].match(line)
+    if md = %r[#{diff_git} #{quoted} #{quoted}$].match(first_line)
       return was_now(md, 1, 3)
     end
     # eg 'diff --git "b/em bed\"ded" a/plain'
-    if md = %r[#{diff_git} #{quoted} #{plain}$].match(line)
+    if md = %r[#{diff_git} #{quoted} #{plain}$].match(first_line)
       return was_now(md, 1, 3)
     end
     # should never get here
@@ -203,7 +203,13 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_newline_at_eof
-    @n += 1 if /^\\ No newline at end of file/.match(@lines[@n])
+    @n += 1 if /^\\ No newline at end of file/.match(line)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def line
+    @lines[@n]
   end
 
 end
