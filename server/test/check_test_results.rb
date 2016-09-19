@@ -97,7 +97,7 @@ done =
     [ 'skips',                  skip_count,         '== 0',    skip_count == 0          ],
     [ 'test duration',          test_duration,      '< 1',     test_duration < 1        ],
     [ 'assertions per sec',     assertions_per_sec, '> 200',   assertions_per_sec > 200 ],
-    [ 'coverage(src)',          src_coverage,       '== 100%', src_coverage == '100.00' ],
+    [ 'coverage(src)',          src_coverage,       '> 95%',   src_coverage > '95.00'   ],
     [ 'coverage(test)',         test_coverage,      '== 100%', test_coverage == '100.00'],
     [ 'hits_per_line(src)',     hits_per_line_src,  '< 60',    hits_per_line_src < 60   ],
     [ 'hits_per_line(test)',    hits_per_line_test, '< 2',     hits_per_line_test < 2   ],

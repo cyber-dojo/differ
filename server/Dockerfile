@@ -1,13 +1,7 @@
-FROM alpine:edge
+FROM cyberdojo/differ_base
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
 ARG app_dir
-
-WORKDIR ${app_dir}/
-
-COPY Gemfile        ${app_dir}/
-COPY prepare.sh     ${app_dir}/
-RUN [ "./prepare.sh" ]
 
 COPY Procfile       ${app_dir}/
 COPY config.ru      ${app_dir}/

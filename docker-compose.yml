@@ -1,27 +1,26 @@
+version: '2'
+services:
+  differ_client:
+    image: cyberdojo/differ_client
+    container_name: differ_client
+    entrypoint:
+      - foreman
+      - start
+      - -d
+      - ${APP_DIR}
+    links:
+      - differ_server
+    ports:
+      - "4568:4568"
 
-differ_client:
-  image: differ_client
-  container_name: differ_client
-  entrypoint:
-    - foreman
-    - start
-    - -d
-    - ${APP_DIR}
-  links:
-    - differ
-  ports:
-    - 4568:4568
-
-
-differ:
-  user: nobody
-  image: cyberdojo/differ
-  container_name: differ
-  entrypoint:
-    - foreman
-    - start
-    - -d
-    - ${APP_DIR}
-  ports:
-    - 4567:4567
+  differ_server:
+    image: cyberdojo/differ_server
+    container_name: differ_server
+    entrypoint:
+      - foreman
+      - start
+      - -d
+      - ${APP_DIR}
+    ports:
+      - "4567:4567"
 

@@ -18,12 +18,27 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-docker run --rm cyberdojo/differ sh -c 'cat Gemfile.lock'
-docker run cyberdojo/differ sh -c "cd test && ./run.sh ${*}"
-status=$?
-cid=`docker ps --latest --quiet`
-docker cp ${cid}:/tmp/coverage ${my_dir}
-docker rm ${cid} > /dev/null
+export APP_DIR=/app
+docker-compose down
+docker-compose up -d
+
+#docker ps -a
+
+server_cid=`docker ps --all --quiet --filter "name=differ_server"`
+docker exec ${server_cid} sh -c "cat Gemfile.lock"
+docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
+server_status=$?
+docker cp ${server_cid}:/tmp/coverage ${my_dir}
 echo "coverage written to ${my_dir}/coverage"
 cat ${my_dir}/coverage/done.txt
-exit ${status}
+
+client_cid=`docker ps --all --quiet --filter "name=differ_client"`
+docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
+client_status=$?
+
+echo "SERVER_CID=${server_cid}"
+echo "CLIENT_CID=${client_cid}"
+echo "SERVER_STATUS=${server_status}"
+echo "CLIENT_STATUS=${client_status}"
+
+exit ${client_status} && ${server_status}

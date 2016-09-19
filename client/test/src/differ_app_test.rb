@@ -1,30 +1,13 @@
 
 # NB: if you call this file app_test.rb then SimpleCov fails to see it?!
 
-ENV['RACK_ENV'] = 'test'
 require_relative './lib_test_base'
-require_relative './null_logger'
-require 'rack/test'
+require 'net/http'
 
 class DifferAppTest < LibTestBase
 
   def self.hex(suffix)
     '200' + suffix
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  include Rack::Test::Methods  # get
-
-  def app
-    DifferApp
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def setup
-    super
-    ENV['DIFFER_CLASS_LOG'] = 'NullLogger'
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -245,8 +228,16 @@ class DifferAppTest < LibTestBase
       :was_files => @was_files.to_json,
       :now_files => @now_files.to_json
     }
-    get '/diff', params
-    JSON.parse(last_response.body)
+    uri = URI.parse('http://differ_server:4567/diff')
+    uri.query = URI.encode_www_form(params)
+    response = Net::HTTP.get_response(uri)
+    JSON.parse(response.body)
+
+    #http = Net::HTTP.new(uri.host, uri.port)
+    #request = Net::HTTP::Post.new(uri.request_uri)
+    #request.content_type = 'application/json'
+    #request.body = params.to_json
+    #response = http.request(request)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -260,15 +251,15 @@ class DifferAppTest < LibTestBase
   end
 
   def added(number, text)
-    line(text,'added', number)
+    line(text, 'added', number)
   end
 
   def line(text, type, number)
-    { 'line'=>text, 'type'=>type, 'number'=>number }
+    { 'line' => text, 'type' => type, 'number' => number }
   end
 
   def section(index)
-    { 'type'=>'section', 'index'=>index }
+    { 'type' => 'section', 'index' => index }
   end
 
 end

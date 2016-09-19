@@ -12,7 +12,8 @@ fi
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
-cd ${my_dir}/server  && ./build-image.sh ${app_dir}
+cd ${my_dir}/base    && ./build-image.sh ${app_dir}
 cd ${my_dir}/client  && ./build-image.sh ${app_dir}
+cd ${my_dir}/server  && ./build-image.sh ${app_dir}
 
 docker images | grep differ

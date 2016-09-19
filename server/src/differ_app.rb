@@ -12,6 +12,7 @@ require_relative './git_diff'
 class DifferApp < Sinatra::Base
 
   get '/diff' do
+    content_type :json
     was_files = JSON.parse(params['was_files'])
     now_files = JSON.parse(params['now_files'])
     diff = Differ.new(was_files, now_files).diff
