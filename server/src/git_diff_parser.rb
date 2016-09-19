@@ -22,7 +22,7 @@ class GitDiffParser
     all
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_one
     prefix_lines = parse_prefix_lines
@@ -36,7 +36,7 @@ class GitDiffParser
     }
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_chunk_all
     chunks = []
@@ -46,7 +46,7 @@ class GitDiffParser
     chunks
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_chunk_one
     if range = parse_range
@@ -57,7 +57,7 @@ class GitDiffParser
     end
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_range
     re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
@@ -73,26 +73,22 @@ class GitDiffParser
     end
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def size_or_default(size)
-    # http://www.artima.com/weblogs/viewpost.jsp?thread=164293
-    # Is a blog entry by Guido van Rossum.
-    # He says that in L,S the ,S can be omitted if the chunk size
-    # S is 1. So -3 is the same as -3,1
     size != nil ? size.to_i : 1
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_sections
     parse_newline_at_eof
     sections = []
     while /^[\+\- ]/.match(line)
-      deleted_lines = parse_lines(/^\-(.*)/) # start with a -
+      deleted_lines = parse_lines(/^\-(.*)/)
       parse_newline_at_eof
 
-      added_lines = parse_lines(/^\+(.*)/) # start with a +
+      added_lines = parse_lines(/^\+(.*)/)
       parse_newline_at_eof
 
       after_lines = parse_common_lines
@@ -107,23 +103,16 @@ class GitDiffParser
     sections
   end
 
-  # - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_prefix_lines
-    parse_lines(%r|^([^-+].*)|) # don't start with - or +
+    parse_lines(%r|^([^-+].*)|)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_common_lines
-    parse_lines(%r|^ (.*)|) # start with a space
-  end
-
-  def parse_lines(re)
-    lines = []
-    while md = re.match(line)
-      lines << md[1]
-      @n += 1
-    end
-    lines
+    parse_lines(%r|^ (.*)|)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -188,6 +177,17 @@ class GitDiffParser
 
   def parse_newline_at_eof
     @n += 1 if /^\\ No newline at end of file/.match(line)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def parse_lines(re)
+    lines = []
+    while md = re.match(line)
+      lines << md[1]
+      @n += 1
+    end
+    lines
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
