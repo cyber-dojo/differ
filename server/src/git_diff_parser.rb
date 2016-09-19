@@ -89,10 +89,10 @@ class GitDiffParser
     parse_newline_at_eof
     sections = []
     while /^[\+\- ]/.match(line)
-      deleted_lines = parse_deleted_lines
+      deleted_lines = parse_lines(/^\-(.*)/) # start with a -
       parse_newline_at_eof
 
-      added_lines = parse_added_lines
+      added_lines = parse_lines(/^\+(.*)/) # start with a +
       parse_newline_at_eof
 
       after_lines = parse_common_lines
@@ -111,14 +111,6 @@ class GitDiffParser
 
   def parse_prefix_lines
     parse_lines(%r|^([^-+].*)|) # don't start with - or +
-  end
-
-  def parse_deleted_lines
-    parse_lines(/^\-(.*)/) # start with a -
-  end
-
-  def parse_added_lines
-    parse_lines(/^\+(.*)/) # start with a +
   end
 
   def parse_common_lines
