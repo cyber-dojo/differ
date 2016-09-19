@@ -148,16 +148,14 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def get_was_now_filenames(first_line)
-    diff_git = 'diff --git'
-    uf = '([^ ]*)' # unquoted filename
-    qf = '("(\\"|[^"])+")' # quoted filename
     # eg 'diff --git a/empty.h b/empty.h'
-
     if md = was_now_match(:uf, :uf, first_line)
       return was_now(md, 1, 2)
     end
     # eg 'diff --git a/plain "b/em bed\"ded"'
-    return was_now(md, 1, 2) if md = was_now_match(:uf, :qf, first_line)
+    if md = was_now_match(:uf, :qf, first_line)
+      return was_now(md, 1, 2)
+    end
     # eg 'diff --git "a/emb ed\"ed.h" "b/emb ed\"ed.h"'
     if md = was_now_match(:qf, :qf, first_line)
       return was_now(md, 1, 3)
