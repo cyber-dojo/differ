@@ -36,7 +36,7 @@ class ExternalGitter
   def commit(path, tag)
     shell.cd_exec(path,
       "git commit --allow-empty --all --message #{tag} --quiet",
-      "git tag -m '#{tag}' #{tag} HEAD"
+      "git tag #{tag} HEAD"
     )
   end
 

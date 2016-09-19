@@ -59,7 +59,7 @@ class ExternalGitterTest < LibTestBase
     git.commit(path, tag)
     expect_shell(
       "git commit --allow-empty --all --message #{tag} --quiet",
-      "git tag -m '#{tag}' #{tag} HEAD"
+      "git tag #{tag} HEAD"
     )
   end
 
