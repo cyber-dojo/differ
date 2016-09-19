@@ -157,6 +157,9 @@ class GitDiffParser
     filename = unescape(filename[1..-2]) if filename[0].chr == '"'
     # drop leading a/ or b/
     filename[2..-1]
+    # Note: there is a [git diff] option --no-prefix which removes
+    # the leading a/ b/ from the output. Using that option would
+    # require removing a/ b/ from a lot of test code.
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
