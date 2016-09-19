@@ -200,14 +200,53 @@ class GitDiffTest < LibTestBase
 
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = {}
     expected_view = {
       'non-empty.c' =>
       [
         { :type => :added, :line => "something", :number => 1 }
       ]
     }
+    visible_files = {}
+    actual_view = git_diff(diff_lines, visible_files)
+    assert_equal expected_view, actual_view
+  end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'AA7',
+  'non-empty file is copied' do
+    diff_lines =
+    [
+      'diff --git a/plain b/copy',
+      'similarity index 100%',
+      'copy from plain',
+      'copy to copy'
+    ].join("\n")
+
+    expected_diffs =
+    {
+      'copy' =>
+      {
+        :prefix_lines =>
+        [
+          'diff --git a/plain b/copy',
+          'similarity index 100%',
+          'copy from plain',
+          'copy to copy'
+        ],
+        :was_filename => 'plain',
+        :now_filename => 'copy',
+        :chunks => []
+      }
+    }
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
+    assert_equal expected_diffs, actual_diffs
+
+    expected_view =
+    {
+      'copy' => []
+    }
+    visible_files = {}
     actual_view = git_diff(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
