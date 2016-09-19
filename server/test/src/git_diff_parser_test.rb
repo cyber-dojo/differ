@@ -490,6 +490,8 @@ class GitDiffParserTest < LibTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # parse_range
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D56',
   'parse range was-size and now-size defaulted' do

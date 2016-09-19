@@ -11,21 +11,21 @@ class LineSplitterTest < LibTestBase
 
   test 'CCA',
   'splitting nil is an empty array' do
-    assert_equal [], line_split(nil)
+    assert_line_split [], nil
   end
 
   #- - - - - - - - - - - - - - - -
 
   test 'C3D',
   'splitting empty string is empty string in array' do
-    assert_equal [ '' ], line_split('')
+    assert_line_split [ '' ], ''
   end
 
   #- - - - - - - - - - - - - - - -
 
   test 'E21',
   'splitting solitary newline is empty string in array' do
-    assert_equal [''], line_split("\n")
+    assert_line_split [''], "\n"
   end
 
   #- - - - - - - - - - - - - - - -
@@ -35,19 +35,25 @@ class LineSplitterTest < LibTestBase
     # regular split doesn't do what I need...
     assert_equal [], "\n\n".split("\n")
     # So I have to roll my own...
-    assert_equal [ '', '' ], line_split("\n"+"\n")
-    assert_equal ['a','b',''], line_split('a'+"\n"+'b'+"\n"+"\n")
-    assert_equal ['a','b','',''], line_split('a'+"\n"+'b'+"\n"+"\n"+"\n")
+    assert_line_split [ '', '' ], "\n"+"\n"
+    assert_line_split ['a','b',''], 'a'+"\n"+'b'+"\n"+"\n"
+    assert_line_split ['a','b','',''], 'a'+"\n"+'b'+"\n"+"\n"+"\n"
   end
 
   #- - - - - - - - - - - - - - - -
 
   test 'AEB',
   'doesnt add extra empty line if string ends in newline' do
-    assert_equal ['a'], line_split('a')
-    assert_equal ['a'], line_split('a'+"\n")
-    assert_equal ['a','b'], line_split('a'+"\n"+'b')
-    assert_equal ['a','b'], line_split('a'+"\n"+'b'+"\n")
+    assert_line_split ['a'], 'a'
+    assert_line_split ['a'], 'a'+"\n"
+    assert_line_split ['a','b'], 'a'+"\n"+'b'
+    assert_line_split ['a','b'], 'a'+"\n"+'b'+"\n"
+  end
+
+  #- - - - - - - - - - - - - - - -
+
+  def assert_line_split expected, line
+    assert_equal expected, line_split(line)
   end
 
 end
