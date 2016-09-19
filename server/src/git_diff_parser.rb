@@ -148,21 +148,23 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def get_was_now_filenames(first_line)
-    return was_now_match(:uf, :uf, first_line, 1, 2) ||
-           was_now_match(:uf, :qf, first_line, 1, 2) ||
-           was_now_match(:qf, :qf, first_line, 1, 3) ||
-           was_now_match(:qf, :uf, first_line, 1, 3)
+    return was_now_match(:uf, :uf, first_line) ||
+           was_now_match(:uf, :qf, first_line) ||
+           was_now_match(:qf, :qf, first_line) ||
+           was_now_match(:qf, :uf, first_line)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def was_now_match(was, now, first_line, was_index, now_index)
+  def was_now_match(was, now, first_line)
     filename = {
       :qf => '("(\\"|[^"])+")', # quoted,   eg "b/emb ed\"ed.h"
       :uf => '([^ ]*)',         # unquoted, eg a/plain
     }
     md = %r[^diff --git #{filename[was]} #{filename[now]}$].match(first_line)
     return nil if md.nil?
+    was_index = 1
+    now_index = (was == :uf) ? 2 : 3
     return [ unescaped(md[was_index]), unescaped(md[now_index]) ]
   end
 
