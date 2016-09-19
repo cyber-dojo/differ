@@ -31,7 +31,6 @@ class DifferAppTest < LibTestBase
   # corner case
   # - - - - - - - - - - - - - - - - - - - -
 
-
   test 'AEC',
   'empty was_files and empty now_files is benign no-op' do
     @was_files = {}
@@ -41,6 +40,8 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+  # delete
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '313',
   'deleted empty file shows as empty array' do
@@ -49,8 +50,6 @@ class DifferAppTest < LibTestBase
     assert_diff 'hiker.h', []
   end
 
-  # - - - - - - - - - - - - - - - - - - - -
-  # delete
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'FE9',
