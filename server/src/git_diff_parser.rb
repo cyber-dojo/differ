@@ -132,8 +132,8 @@ class GitDiffParser
     @n += 1 if %r|^\-\-\- (.*)|.match(line)
     @n += 1 if %r|^\+\+\+ (.*)|.match(line)
     was, now = get_was_now_filenames(prefix[0])
-    now = nil if prefix[1] == 'deleted file mode 100644'
-    was = nil if prefix[1] == 'new file mode 100644'
+    now = nil if prefix[1].start_with? 'deleted file mode'
+    was = nil if prefix[1].start_with? 'new file mode'
     [was, now]
   end
 
