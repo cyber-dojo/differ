@@ -7,8 +7,6 @@ module GitDiffView # mix-in
 
   module_function
 
-  # Creates data structure containing diffs for all files.
-
   def git_diff_view(diff_lines, visible_files)
     view = {}
     filenames = visible_files.keys
@@ -26,7 +24,6 @@ module GitDiffView # mix-in
       end
       filenames.delete(filename)
     end
-    # other files have not changed...
     filenames.each do |filename|
       lines = line_split(visible_files[filename])
       view[filename] = all(lines, :same)
