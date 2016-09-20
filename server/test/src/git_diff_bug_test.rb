@@ -3,7 +3,7 @@ require_relative './lib_test_base'
 
 class GitDiffBugTest < LibTestBase
 
-  include GitDiffBuilder
+  include GitDiffViewBuilder
 
   def self.hex(suffix)
     '922' + suffix
@@ -184,7 +184,7 @@ class GitDiffBugTest < LibTestBase
 
     source_lines = visible_files[filename]
     split_up = source_lines.split("\n")
-    view = git_diff_builder(diff, split_up)
+    view = git_diff_view_builder(diff, split_up)
     nils = view.select { |one| one[:line].nil? }
     refute_equal [], nils
 
@@ -199,7 +199,7 @@ class GitDiffBugTest < LibTestBase
     # And to double check...
 
     split_up = source_lines.split(/(\n)/).select { |line| line != "\n"}
-    view = git_diff_builder(diff, split_up)
+    view = git_diff_view_builder(diff, split_up)
     nils = view.select { |one| one[:line] == "\n" }
     assert_equal [], nils
   end

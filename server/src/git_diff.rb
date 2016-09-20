@@ -1,6 +1,6 @@
 
 require_relative './git_diff_parser'
-require_relative './git_diff_builder'
+require_relative './git_diff_view_builder'
 require_relative './line_splitter'
 
 module GitDiff # mix-in
@@ -22,7 +22,7 @@ module GitDiff # mix-in
         view[filename] = all(lines, :deleted)
       else
         lines = line_split(visible_files[filename])
-        view[filename] = git_diff_builder(diff, lines)
+        view[filename] = git_diff_view_builder(diff, lines)
       end
       filenames.delete(filename)
     end
@@ -55,6 +55,6 @@ module GitDiff # mix-in
   end
 
   include LineSplitter
-  include GitDiffBuilder
+  include GitDiffViewBuilder
 
 end
