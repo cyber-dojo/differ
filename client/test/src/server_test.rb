@@ -14,13 +14,12 @@ class DifferAppTest < LibTestBase
   # corner cases
   # - - - - - - - - - - - - - - - - - - - -
 
-=begin
   test '347',
-  '>10K query is reject by thin' do
-    @was_files['wibble.h'] = 'X'*25000
+  '>10K query is not reject by thin' do
+    @now_files = {}
+    @was_files = { 'wibble.h' => 'X'*45*1024 }
     json = get_diff
   end
-=end
 
   test 'AEC',
   'empty was_files and empty now_files is benign no-op' do
@@ -232,20 +231,22 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    params = {
-      :was_files => @was_files.to_json,
-      :now_files => @now_files.to_json
-    }
     uri = URI.parse('http://differ_server:4567/diff')
-    uri.query = URI.encode_www_form(params)
-    response = Net::HTTP.get_response(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    response = http.request(diff_request(uri))
     JSON.parse(response.body)
+  end
 
-    #http = Net::HTTP.new(uri.host, uri.port)
-    #request = Net::HTTP::Post.new(uri.request_uri)
-    #request.content_type = 'application/json'
-    #request.body = params.to_json
-    #response = http.request(request)
+  def diff_request(uri)
+    # thin has a default query limit of 10K
+    # so put params into the request body as json
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request.content_type = 'application/json'
+    request.body = {
+      :was_files => @was_files,
+      :now_files => @now_files
+    }.to_json
+    request
   end
 
   # - - - - - - - - - - - - - - - - - - - -

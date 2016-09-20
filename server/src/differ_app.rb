@@ -13,8 +13,10 @@ class DifferApp < Sinatra::Base
 
   get '/diff' do
     content_type :json
-    was_files = JSON.parse(params['was_files'])
-    now_files = JSON.parse(params['now_files'])
+    request.body.rewind
+    @args = JSON.parse(request.body.read)
+    was_files = @args['was_files']
+    now_files = @args['now_files']
     diff = Differ.new(was_files, now_files).diff
     git_diff(diff, now_files).to_json
   end
