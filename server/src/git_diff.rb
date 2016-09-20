@@ -1,6 +1,7 @@
 
 require_relative './git_diff_parser'
 require_relative './git_diff_builder'
+require_relative './line_splitter'
 
 module GitDiff # mix-in
 
@@ -13,14 +14,14 @@ module GitDiff # mix-in
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |filename, diff|
       if new_file?(diff)
-        file_content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
-        view[filename] = newify(file_content)
+        content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
+        view[filename] = newify(content)
       elsif deleted_file?(diff)
-        file_content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
-        view[filename] = deleteify(file_content)
+        content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
+        view[filename] = deleteify(content)
       else
-        file_content = visible_files[filename]
-        view[filename] = GitDiffBuilder.new.build(diff, LineSplitter.line_split(file_content))
+        content = visible_files[filename]
+        view[filename] = GitDiffBuilder.new.build(diff, LineSplitter.line_split(content))
       end
       visible_files.delete(filename)
     end
