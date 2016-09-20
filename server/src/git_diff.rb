@@ -15,21 +15,21 @@ module GitDiff # mix-in
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |filename, diff|
       if new_file?(diff)
-        content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
-        view[filename] = newified(content)
+        lines = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
+        view[filename] = all(lines, :added)
       elsif deleted_file?(diff)
-        content = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
-        view[filename] = deleteified(content)
+        lines = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
+        view[filename] = all(lines, :deleted)
       else
-        content = visible_files[filename]
-        view[filename] = git_diff_builder(diff, line_split(content))
+        lines = line_split(visible_files[filename])
+        view[filename] = git_diff_builder(diff, lines)
       end
       filenames.delete(filename)
     end
     # other files have not changed...
     filenames.each do |filename|
-      content = visible_files[filename]
-      view[filename] = sameified(content)
+      lines = line_split(visible_files[filename])
+      view[filename] = all(lines, :same)
     end
     view
   end
@@ -48,19 +48,7 @@ module GitDiff # mix-in
     diff[:chunks] == []
   end
 
-  def sameified(source)
-    ified(line_split(source), :same)
-  end
-
-  def newified(lines)
-    ified(lines, :added)
-  end
-
-  def deleteified(lines)
-    ified(lines, :deleted)
-  end
-
-  def ified(lines, type)
+  def all(lines, type)
     lines.collect.each_with_index do |line, number|
       { line: line, type: type, number: number + 1 }
     end
