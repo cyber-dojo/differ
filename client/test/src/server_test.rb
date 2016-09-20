@@ -11,8 +11,16 @@ class DifferAppTest < LibTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-  # corner case
+  # corner cases
   # - - - - - - - - - - - - - - - - - - - -
+
+=begin
+  test '347',
+  '>10K query is reject by thin' do
+    @was_files['wibble.h'] = 'X'*25000
+    json = get_diff
+  end
+=end
 
   test 'AEC',
   'empty was_files and empty now_files is benign no-op' do
