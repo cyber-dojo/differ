@@ -36,6 +36,7 @@ client_cid=`docker ps --all --quiet --filter "name=differ_client"`
 docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
 client_status=$?
 docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
+
 # Client Coverage is broken. Simplecov is not seeing the *_test.rb files
 #echo "client coverage written to ${my_dir}/client/coverage"
 #cat ${my_dir}/client/coverage/done.txt
