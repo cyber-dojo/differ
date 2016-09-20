@@ -4,6 +4,7 @@ require_relative './snake_case'
 # - - - - - - - - - - - - - - - - - - - - - - - -
 # set defauls ENV-vars for all externals
 # unit-tests can set/reset these
+# see test/external_helper.rb
 
 def env_root(suffix = '')
   'DIFFER_CLASS_' + suffix
