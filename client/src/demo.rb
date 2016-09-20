@@ -3,7 +3,7 @@ require 'sinatra/base'
 require 'json'
 require 'net/http'
 
-class App < Sinatra::Base
+class Demo < Sinatra::Base
 
   get '/diff' do
 

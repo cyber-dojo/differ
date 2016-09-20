@@ -9,7 +9,7 @@ require 'json'
 require_relative './differ'
 require_relative './git_diff'
 
-class DifferApp < Sinatra::Base
+class MicroService < Sinatra::Base
 
   get '/diff' do
     content_type :json

@@ -4,4 +4,4 @@ require_relative './coverage'
 
 require 'json'
 require_relative './base'
-require_relative '../src/differ_app'
+require_relative '../src/micro_service'

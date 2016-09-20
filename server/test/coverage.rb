@@ -6,7 +6,7 @@ SimpleCov.start do
 
   #add_group('debug') { |src| print src.filename+"\n"; false }
 
-  add_filter 'src/differ_app.rb' # done from client container
+  add_filter 'src/micro_service.rb' # done from client container
 
   add_group 'src',      "#{cov_root}/src"
   add_group 'test/src', "#{cov_root}/test/src"

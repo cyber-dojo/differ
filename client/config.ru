@@ -1,4 +1,3 @@
-$:.unshift(File.dirname(__FILE__))
 
-require 'src/app'
-run App
+require_relative './src/demo'
+run Demo
