@@ -1,6 +1,4 @@
 
-The repo for the cyber-dojo/differ docker image.
-
 ```
 ./demo.sh
 ```
@@ -18,4 +16,4 @@ If the diff-client's IP address is 192.168.99.100 then put
 ./test.sh
 ```
 
-Rebuild the images and runs the tests inside the differ server/client containers
+Rebuilds the images and runs the tests inside the differ server/client containers
