@@ -92,26 +92,28 @@ line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
 
 done =
   [
-    [ 'failures',               failure_count,      '== 0',    failure_count == 0       ],
-    [ 'errors',                 error_count,        '== 0',    error_count == 0         ],
-    [ 'skips',                  skip_count,         '== 0',    skip_count == 0          ],
-    [ 'test duration',          test_duration,      '< 1',     test_duration < 1        ],
-    [ 'assertions per sec',     assertions_per_sec, '> 200',   assertions_per_sec > 200 ],
-    [ 'coverage(src)%',         src_coverage,       '== 100',  src_coverage == 100      ],
-    [ 'coverage(test)%',        test_coverage,      '== 100',  test_coverage == 100     ],
-    [ 'hits_per_line(src)',     hits_per_line_src,  '< 60',    hits_per_line_src < 60   ],
-    [ 'hits_per_line(test)',    hits_per_line_test, '< 2',     hits_per_line_test < 2   ],
-    [ 'lines(test)/lines(src)', f2(line_ratio),     '> 2',     line_ratio > 2           ],
+    [ 'failures',               failure_count,      '==',   0 ],
+    [ 'errors',                 error_count,        '==',   0 ],
+    [ 'skips',                  skip_count,         '==',   0 ],
+    [ 'test duration',          test_duration,      '<=',   1 ],
+    [ 'assertions per sec',     assertions_per_sec, '>=', 200 ],
+    [ 'coverage(src)%',         src_coverage,       '==', 100 ],
+    [ 'coverage(test)%',        test_coverage,      '==', 100 ],
+    [ 'hits_per_line(src)',     hits_per_line_src,  '<=',  60 ],
+    [ 'hits_per_line(test)',    hits_per_line_test, '<=',   2 ],
+    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=',   2 ],
   ]
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
 print "\n"
-done.each do |name,value,predicate,result|
-  puts "%s | %s | %s | %s" % [
+done.each do |name,value,op,limit|
+  result = eval("#{value} #{op} #{limit}")
+  puts "%s | %s %s %s | %s" % [
     name.rjust(25),
     value.to_s.rjust(7),
-    predicate.ljust(8),
+    op,
+    limit.to_s.rjust(3),
     result.to_s
   ]
 end
