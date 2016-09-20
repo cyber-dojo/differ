@@ -18,10 +18,6 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-export APP_DIR=/app
-export CLIENT_PORT=4568
-export SERVER_PORT=4567
-
 docker-compose down
 docker-compose up -d
 
