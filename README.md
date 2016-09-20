@@ -1,4 +1,7 @@
 
+[![Build Status](https://travis-ci.org/cyber-dojo/differ.svg?branch=master)](https://travis-ci.org/cyber-dojo/differ)
+
+
 ```
 ./demo.sh
 ```
