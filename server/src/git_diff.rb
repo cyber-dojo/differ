@@ -22,7 +22,7 @@ module GitDiff # mix-in
         view[filename] = deleteified(content)
       else
         content = visible_files[filename]
-        view[filename] = GitDiffBuilder.new.build(diff, LineSplitter.line_split(content))
+        view[filename] = git_diff_builder(diff, line_split(content))
       end
       filenames.delete(filename)
     end
@@ -34,7 +34,7 @@ module GitDiff # mix-in
     view
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - -
+  private
 
   def new_file?(diff)
     diff[:was_filename].nil?
@@ -49,7 +49,7 @@ module GitDiff # mix-in
   end
 
   def sameified(source)
-    ified(LineSplitter.line_split(source), :same)
+    ified(line_split(source), :same)
   end
 
   def newified(lines)
@@ -65,5 +65,8 @@ module GitDiff # mix-in
       { line: line, type: type, number: number + 1 }
     end
   end
+
+  include LineSplitter
+  include GitDiffBuilder
 
 end

@@ -550,9 +550,11 @@ class GitDiffBuilderTest < LibTestBase
 
   private
 
+  include GitDiffBuilder
+
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
-    actual = GitDiffBuilder.new().build(diff, @source_lines)
+    actual = git_diff_builder(diff, @source_lines)
     assert_equal @expected, actual
   end
 

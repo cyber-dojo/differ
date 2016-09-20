@@ -11,9 +11,11 @@
 # lines: an array containing the current content of the
 #        diffed file.
 
-class GitDiffBuilder
+module GitDiffBuilder # mix-in
 
-  def build(diff, lines)
+  module_function
+
+  def git_diff_builder(diff, lines)
     result = []
     line_number = 1
     from = 0
