@@ -19,6 +19,9 @@ if [ $? != 0 ]; then
 fi
 
 export APP_DIR=/app
+export CLIENT_PORT=4568
+export SERVER_PORT=4567
+
 docker-compose down
 docker-compose up -d
 
@@ -27,14 +30,14 @@ docker-compose up -d
 server_cid=`docker ps --all --quiet --filter "name=differ_server"`
 docker exec ${server_cid} sh -c "cat Gemfile.lock"
 docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
-server_status=$?
+server_exit_status=$?
 docker cp ${server_cid}:/tmp/coverage ${my_dir}/server
 echo "server coverage written to ${my_dir}/server/coverage"
 cat ${my_dir}/server/coverage/done.txt
 
 client_cid=`docker ps --all --quiet --filter "name=differ_client"`
 docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
-client_status=$?
+client_exit_status=$?
 docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
 
 # Client Coverage is broken. Simplecov is not seeing the *_test.rb files
@@ -42,10 +45,10 @@ docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
 #cat ${my_dir}/client/coverage/done.txt
 
 echo
-echo "SERVER_CID = ${server_cid}"
-echo "CLIENT_CID = ${client_cid}"
+echo "server_cid = ${server_cid}"
+echo "client_cid = ${client_cid}"
 echo
-echo "SERVER_STATUS = ${server_status}"
-echo "CLIENT_STATUS = ${client_status}"
+echo "server_exit_status = ${server_exit_status}"
+echo "client_exit_status = ${client_exit_status}"
 
-exit ${client_status} && ${server_status}
+exit ${client_exit_status} && ${server_exit_status}
