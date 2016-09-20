@@ -231,6 +231,8 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
+    # in docker-compose.yml the differ service is called differ_server
+    # the port number is in docker-compose.yml and Procfile and Dockerfile
     uri = URI.parse('http://differ_server:4567/diff')
     http = Net::HTTP.new(uri.host, uri.port)
     response = http.request(diff_request(uri))
@@ -239,7 +241,7 @@ class DifferAppTest < LibTestBase
 
   def diff_request(uri)
     # thin has a default query limit of 10K
-    # so put params into the request body as json
+    # so put args into the request body as json
     request = Net::HTTP::Get.new(uri.request_uri)
     request.content_type = 'application/json'
     request.body = {

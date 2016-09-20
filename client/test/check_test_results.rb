@@ -81,8 +81,8 @@ skip_count    = log_stats[:skip_count]
 test_duration = log_stats[:time].to_f
 assertions_per_sec = log_stats[:assertions_per_sec].to_i
 
-src_coverage = src_stats[:coverage]
-test_coverage = test_stats[:coverage]
+src_coverage = src_stats[:coverage].to_f
+test_coverage = test_stats[:coverage].to_f
 
 hits_per_line_src = src_stats[:hits_per_line].to_f
 hits_per_line_test = test_stats[:hits_per_line].to_f
@@ -97,8 +97,8 @@ done =
     [ 'skips',                  skip_count,         '== 0',    skip_count == 0          ],
     [ 'test duration',          test_duration,      '< 1',     test_duration < 1        ],
     [ 'assertions per sec',     assertions_per_sec, '> 200',   assertions_per_sec > 200 ],
-    [ 'coverage(src)',          src_coverage,       '> 95%',   src_coverage > '95.00'   ],
-    [ 'coverage(test)',         test_coverage,      '== 100%', test_coverage == '100.00'],
+    [ 'coverage(src)%',         src_coverage,       '== 100',  src_coverage == 100      ],
+    [ 'coverage(test)%',        test_coverage,      '== 100',  test_coverage == 100     ],
     [ 'hits_per_line(src)',     hits_per_line_src,  '< 60',    hits_per_line_src < 60   ],
     [ 'hits_per_line(test)',    hits_per_line_test, '< 2',     hits_per_line_test < 2   ],
     [ 'lines(test)/lines(src)', f2(line_ratio),     '> 2',     line_ratio > 2           ],
