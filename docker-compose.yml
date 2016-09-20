@@ -15,7 +15,7 @@ services:
       - "4568:4568"
 
   differ_server:
-    image: cyberdojo/differ_server
+    image: cyberdojo/differ
     container_name: differ_server
     entrypoint:
       - foreman
