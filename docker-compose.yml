@@ -6,15 +6,12 @@ services:
     image: cyberdojo/differ_client
     container_name: differ_client
     command: [ "foreman", "start", "-d", "${APP_DIR}" ]
-    links:
-      - differ_server
-    ports:
-      - "4568:4568"
+    ports: [ "4568:4568" ]
+    links: [ differ_server ]
 
   differ_server:
     image: cyberdojo/differ
     container_name: differ_server
+    ports: [ "4567:4567" ]
     command: [ "foreman", "start", "-d", "${APP_DIR}" ]
-    ports:
-      - "4567:4567"
 
