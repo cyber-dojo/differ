@@ -1,13 +1,13 @@
 
 require_relative './lib_test_base'
 
-class GitDiffTest < LibTestBase
+class GitDiffViewTest < LibTestBase
 
   def self.hex(suffix)
     '74C' + suffix
   end
 
-  include GitDiff
+  include GitDiffView
 
   test 'A5C',
   'empty file is deleted' do
@@ -39,7 +39,7 @@ class GitDiffTest < LibTestBase
     visible_files = {}
     expected_view = { 'xx.rb' => [] }
 
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 
@@ -107,7 +107,7 @@ class GitDiffTest < LibTestBase
       ]
     }
 
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 
@@ -143,7 +143,7 @@ class GitDiffTest < LibTestBase
     visible_files = {}
     expected_view = { 'empty.h' => [] }
 
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 
@@ -207,7 +207,7 @@ class GitDiffTest < LibTestBase
       ]
     }
     visible_files = {}
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 
@@ -247,7 +247,7 @@ class GitDiffTest < LibTestBase
       'copy' => []
     }
     visible_files = {}
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 
@@ -313,7 +313,7 @@ class GitDiffTest < LibTestBase
       ]
     }
 
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 
@@ -334,7 +334,7 @@ class GitDiffTest < LibTestBase
         { :type => :same, :line => 'content', :number => 1}
       ]
     }
-    actual_view = git_diff(diff_lines, visible_files)
+    actual_view = git_diff_view(diff_lines, visible_files)
     assert_equal expected_view, actual_view
   end
 

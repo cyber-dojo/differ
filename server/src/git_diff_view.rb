@@ -3,13 +3,13 @@ require_relative './git_diff_parser'
 require_relative './git_diff_view_builder'
 require_relative './line_splitter'
 
-module GitDiff # mix-in
+module GitDiffView # mix-in
 
   module_function
 
   # Creates data structure containing diffs for all files.
 
-  def git_diff(diff_lines, visible_files)
+  def git_diff_view(diff_lines, visible_files)
     view = {}
     filenames = visible_files.keys
     diffs = GitDiffParser.new(diff_lines).parse_all

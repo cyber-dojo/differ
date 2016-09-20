@@ -7,7 +7,7 @@ require 'sinatra/base'
 require 'json'
 
 require_relative './differ'
-require_relative './git_diff'
+require_relative './git_diff_view'
 
 class MicroService < Sinatra::Base
 
@@ -18,12 +18,12 @@ class MicroService < Sinatra::Base
     was_files = @args['was_files']
     now_files = @args['now_files']
     diff = Differ.new(was_files, now_files).diff
-    git_diff(diff, now_files).to_json
+    git_diff_view(diff, now_files).to_json
   end
 
   private
 
-  include GitDiff
+  include GitDiffView
 
 end
 
