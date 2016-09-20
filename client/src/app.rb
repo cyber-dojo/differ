@@ -40,17 +40,17 @@ class App < Sinatra::Base
         ].join("\n")
     }
 
-    params = {
-      :was_files => was_files.to_json,
-      :now_files => now_files.to_json
-    }
-
-    uri = URI.parse(ENV['DIFFER_PORT'].sub('tcp', 'http') + '/diff')
-    uri.query = URI.encode_www_form(params)
-    response = Net::HTTP.get_response(uri)
+    uri = URI.parse('http://differ_server:4567/diff')
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request.content_type = 'application/json'
+    request.body = {
+      :was_files => was_files,
+      :now_files => now_files
+    }.to_json
+    response = http.request(request)
     json = JSON.parse(response.body)
     '<pre>' + JSON.pretty_unparse(json) + '</pre>'
-
   end
 
 end
