@@ -4,13 +4,16 @@ require_relative './externals'
 
 class GitDiffer
 
-  def initialize(was_files, now_files)
+  def X_initialize(was_files, now_files)
     @was_files = was_files
     @now_files = now_files
     @delta = make_delta(was_files, now_files)
   end
 
-  def diff
+  def diff(was_files, now_files)
+    @was_files = was_files
+    @now_files = now_files
+    @delta = make_delta(was_files, now_files)
     Dir.mktmpdir('differ') do |git_dir|
       make_empty_git_repo_in(git_dir)
 

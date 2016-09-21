@@ -258,7 +258,7 @@ class GitDifferTest < LibTestBase
   def assert_diff(lines)
     lines = lines + [''] unless lines == []
     expected = lines.join("\n")
-    actual = GitDiffer.new(@was_files, @now_files).diff
+    actual = GitDiffer.new.diff(@was_files, @now_files)
     assert_equal expected, actual
   end
 

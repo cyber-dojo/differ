@@ -16,7 +16,7 @@ class MicroService < Sinatra::Base
     @args = JSON.parse(request.body.read)
     was_files = @args['was_files']
     now_files = @args['now_files']
-    diff = GitDiffer.new(was_files, now_files).diff
+    diff = GitDiffer.new.diff(was_files, now_files)
     git_diff_view(diff, now_files).to_json
   end
 

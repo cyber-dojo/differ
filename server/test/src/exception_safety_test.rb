@@ -15,8 +15,8 @@ class ExceptionSafetyTest < LibTestBase
     ENV['DIFFER_CLASS_FILE'] = 'RaisingFileWriter'
     was_files = { 'diamond.h' => 'a' } # ensure something to write
     now_files = {}
-    differ = GitDiffer.new(was_files, now_files)
-    raised = assert_raises(RuntimeError) { differ.diff }
+    differ = GitDiffer.new
+    raised = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
     assert_equal 'raising', raised.message
     dir = File.dirname(differ.file.pathed_filename)
     refute Dir.exists?(dir)
