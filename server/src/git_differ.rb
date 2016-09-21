@@ -2,7 +2,7 @@
 require_relative './delta_maker'
 require_relative './externals'
 
-class Differ
+class GitDiffer
 
   def initialize(was_files, now_files)
     @was_files = was_files

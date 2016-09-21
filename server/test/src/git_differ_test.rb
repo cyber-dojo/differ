@@ -4,7 +4,7 @@
 require_relative './lib_test_base'
 require_relative './null_logger'
 
-class DifferTest < LibTestBase
+class GitDifferTest < LibTestBase
 
   def self.hex(suffix)
     '100' + suffix
@@ -258,7 +258,7 @@ class DifferTest < LibTestBase
   def assert_diff(lines)
     lines = lines + [''] unless lines == []
     expected = lines.join("\n")
-    actual = Differ.new(@was_files, @now_files).diff
+    actual = GitDiffer.new(@was_files, @now_files).diff
     assert_equal expected, actual
   end
 
