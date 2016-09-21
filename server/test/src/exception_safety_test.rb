@@ -5,6 +5,8 @@ require_relative './raising_file_writer'
 
 class ExceptionSafetyTest < LibTestBase
 
+  include Externals
+
   def self.hex(suffix)
     '968' + suffix
   end
@@ -15,7 +17,7 @@ class ExceptionSafetyTest < LibTestBase
     ENV['DIFFER_CLASS_FILE'] = 'RaisingFileWriter'
     was_files = { 'diamond.h' => 'a' } # ensure something to write
     now_files = {}
-    differ = GitDiffer.new
+    differ = GitDiffer.new(self)
     raised = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
     assert_equal 'raising', raised.message
     dir = File.dirname(differ.file.pathed_filename)

@@ -1,14 +1,14 @@
 
 require_relative './delta_maker'
-require_relative './externals'
+require_relative './external_parent_chainer'
 
 class GitDiffer
 
-  def X_initialize(was_files, now_files)
-    @was_files = was_files
-    @now_files = now_files
-    @delta = make_delta(was_files, now_files)
+  def initialize(parent)
+    @parent = parent
   end
+
+  attr_reader :parent
 
   def diff(was_files, now_files)
     @was_files = was_files
@@ -30,8 +30,6 @@ class GitDiffer
       git.diff(git_dir, was_tag, now_tag)
     end
   end
-
-  include Externals
 
   private
 
@@ -70,5 +68,6 @@ class GitDiffer
   end
 
   include DeltaMaker
+  include ExternalParentChainer
 
 end
