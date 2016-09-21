@@ -10,7 +10,7 @@ require_relative './git_diff_view'
 
 class MicroService < Sinatra::Base
 
-  get '/diff' do
+  get '/' do
     content_type :json
     request.body.rewind
     @args = JSON.parse(request.body.read)
