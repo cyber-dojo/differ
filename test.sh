@@ -28,7 +28,7 @@ docker exec ${server_cid} sh -c "cat Gemfile.lock"
 docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
 server_exit_status=$?
 docker cp ${server_cid}:/tmp/coverage ${my_dir}/server
-echo "server coverage written to ${my_dir}/server/coverage"
+echo "Coverage report copied to ${my_dir}/server/coverage"
 cat ${my_dir}/server/coverage/done.txt
 
 client_cid=`docker ps --all --quiet --filter "name=differ_client"`
@@ -37,7 +37,7 @@ client_exit_status=$?
 docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
 
 # Client Coverage is broken. Simplecov is not seeing the *_test.rb files
-#echo "client coverage written to ${my_dir}/client/coverage"
+#echo "Coverage report copied to ${my_dir}/client/coverage"
 #cat ${my_dir}/client/coverage/done.txt
 
 echo

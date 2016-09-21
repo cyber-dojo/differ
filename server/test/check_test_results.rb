@@ -9,12 +9,15 @@ def f2(s)
   result
 end
 
+def cleaned(s)
+  # guard against invalid byte sequence
+  s = s.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+  s = s.encode('UTF-8', 'UTF-16')
+end
+
 def get_index_stats(flat, name)
   html = `cat #{ARGV[1]}`
-  # guard against invalid byte sequence
-  html = html.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
-  html = html.encode('UTF-8', 'UTF-16')
-
+  html = cleaned(html)
   # It would be nice if simplecov saved the raw data to a json file
   # and created the html from that, but alas it does not.
   pattern = /<div class=\"file_list_container\" id=\"#{flat}\">
@@ -44,11 +47,10 @@ end
 
 def get_test_log_stats
   test_log = `cat #{ARGV[0]}`
-  # guard against invalid byte sequence
-  test_log = test_log.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
-  test_log = test_log.encode('UTF-8', 'UTF-16')
+  test_log = cleaned(test_log)
 
   stats = {}
+
   finished_pattern = "Finished in (#{number})s, (#{number}) runs/s, (#{number}) assertions/s"
   m = test_log.match(Regexp.new(finished_pattern))
   stats[:time]               = f2(m[1])
@@ -95,10 +97,10 @@ done =
     [ 'failures',               failure_count,      '==',   0 ],
     [ 'errors',                 error_count,        '==',   0 ],
     [ 'skips',                  skip_count,         '==',   0 ],
-    [ 'test duration',          test_duration,      '<=',   1 ],
-    [ 'assertions per sec',     assertions_per_sec, '>=', 200 ],
-    [ 'coverage(src)%',         src_coverage,       '==', 100 ],
-    [ 'coverage(test)%',        test_coverage,      '==', 100 ],
+    [ 'assertions/s',           assertions_per_sec, '>=', 200 ],
+    [ 'duration(test)[s]',      test_duration,      '<=',   1 ],
+    [ 'coverage(src)[%]',       src_coverage,       '==', 100 ],
+    [ 'coverage(test)[%]',      test_coverage,      '==', 100 ],
     [ 'hits_per_line(src)',     hits_per_line_src,  '<=',  60 ],
     [ 'hits_per_line(test)',    hits_per_line_test, '<=',   2 ],
     [ 'lines(test)/lines(src)', f2(line_ratio),     '>=',   2 ],
@@ -110,11 +112,7 @@ print "\n"
 done.each do |name,value,op,limit|
   result = eval("#{value} #{op} #{limit}")
   puts "%s | %s %s %s | %s" % [
-    name.rjust(25),
-    value.to_s.rjust(7),
-    op,
-    limit.to_s.rjust(3),
-    result.to_s
+    name.rjust(25), value.to_s.rjust(7), op, limit.to_s.rjust(3), result.to_s
   ]
 end
 
