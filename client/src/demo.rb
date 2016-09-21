@@ -5,7 +5,7 @@ require 'net/http'
 
 class Demo < Sinatra::Base
 
-  get '/diff' do
+  get '/' do
 
     was_files = {
       'cyber-dojo.sh': "blah blah",
@@ -40,7 +40,7 @@ class Demo < Sinatra::Base
         ].join("\n")
     }
 
-    uri = URI.parse('http://differ_server:4567/diff')
+    uri = URI.parse('http://differ_server:4567')
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     request.content_type = 'application/json'

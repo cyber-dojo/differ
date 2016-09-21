@@ -233,7 +233,7 @@ class DifferAppTest < LibTestBase
   def get_diff
     # in docker-compose.yml the differ service is called differ_server
     # the port number is in docker-compose.yml and Procfile and Dockerfile
-    uri = URI.parse('http://differ_server:4567/')
+    uri = URI.parse('http://differ_server:4567')
     http = Net::HTTP.new(uri.host, uri.port)
     response = http.request(diff_request(uri))
     JSON.parse(response.body)
