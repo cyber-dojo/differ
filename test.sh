@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Don't do [set -e] because if [docker run ... && ./run.sh] fails
+# Don't do [set -e] because if
+# [docker exec ... cd test && ./run.sh ${*}] fails
 # I want the [docker cp] command to extract the coverage info
 
 # Use 1: ./test.sh
