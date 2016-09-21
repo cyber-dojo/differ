@@ -2,9 +2,9 @@
 
 app_dir=${1:-/app}
 
-IMAGE_NAME=cyberdojo/differ_client
-docker build --build-arg app_dir=${app_dir} --tag ${IMAGE_NAME} .
+image_name=cyberdojo/differ_client
+docker build --build-arg app_dir=${app_dir} --tag ${image_name} .
 if [ $? != 0 ]; then
-  echo "FAILED TO BUILD ${IMAGE_NAME}"
+  echo "FAILED TO BUILD ${image_name}"
   exit 1
 fi
