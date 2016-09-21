@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/base'
-require 'json'
-require 'net/http'
+
+require_relative './git_diff'
 
 class Demo < Sinatra::Base
 
@@ -40,18 +40,11 @@ class Demo < Sinatra::Base
         ].join("\n")
     }
 
-    uri = URI.parse('http://differ_server:4567')
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    request.content_type = 'application/json'
-    request.body = {
-      :was_files => was_files,
-      :now_files => now_files
-    }.to_json
-    response = http.request(request)
-    json = JSON.parse(response.body)
+    json = git_diff(was_files, now_files)
     '<pre>' + JSON.pretty_unparse(json) + '</pre>'
   end
+
+  include GitDiff
 
 end
 

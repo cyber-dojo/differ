@@ -19,6 +19,7 @@ class DifferAppTest < LibTestBase
     @now_files = {}
     @was_files = { 'wibble.h' => 'X'*45*1024 }
     json = get_diff
+    refute_nil json['wibble.h']
   end
 
   test 'AEC',
@@ -231,24 +232,7 @@ class DifferAppTest < LibTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    # in docker-compose.yml the differ service is called differ_server
-    # the port number is in docker-compose.yml and Procfile and Dockerfile
-    uri = URI.parse('http://differ_server:4567')
-    http = Net::HTTP.new(uri.host, uri.port)
-    response = http.request(diff_request(uri))
-    JSON.parse(response.body)
-  end
-
-  def diff_request(uri)
-    # thin has a default query limit of 10K
-    # so put args into the request body as json
-    request = Net::HTTP::Get.new(uri.request_uri)
-    request.content_type = 'application/json'
-    request.body = {
-      :was_files => @was_files,
-      :now_files => @now_files
-    }.to_json
-    request
+    GitDiff::git_diff(@was_files, @now_files)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
