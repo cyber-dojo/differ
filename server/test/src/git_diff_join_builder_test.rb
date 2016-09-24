@@ -560,16 +560,20 @@ class GitDiffJoinBuilderTest < LibTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  def same_line(line,number)
-    { :line => line, :type => :same, :number => number }
+  def same_line(text, number)
+    line(text, :same, number)
   end
 
-  def deleted_line(line,number)
-    { :line => line, :type => :deleted, :number => number }
+  def deleted_line(text, number)
+    line(text, :deleted, number)
   end
 
-  def added_line(line,number)
-    { :line => line, :type => :added, :number => number }
+  def added_line(text, number)
+    line(text, :added, number)
+  end
+
+  def line(text, type, number)
+    { :line => text, :type => type, :number => number }
   end
 
   def section(index)
