@@ -18,7 +18,6 @@ class GitDiffJoinTest < LibTestBase
       'index e69de29..0000000'
     ].join("\n")
 
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
       'xx.rb' =>
@@ -34,13 +33,11 @@ class GitDiffJoinTest < LibTestBase
         :chunks => []
       }
     }
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = {}
-    expected_join = { 'xx.rb' => [] }
-
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    expected = { 'xx.rb' => [] }
+    assert_join(expected, diff_lines, visible_files = {})
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -59,7 +56,6 @@ class GitDiffJoinTest < LibTestBase
       '\\ No newline at end of file'
     ].join("\n")
 
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
       "non-empty.h"=>
@@ -93,10 +89,11 @@ class GitDiffJoinTest < LibTestBase
         ]
       }
     }
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = {}
-    expected_join = {
+    expected =
+    {
       'non-empty.h' =>
       [
         {
@@ -106,9 +103,7 @@ class GitDiffJoinTest < LibTestBase
         }
       ]
     }
-
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    assert_join(expected, diff_lines, visible_files = {})
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -122,7 +117,6 @@ class GitDiffJoinTest < LibTestBase
       'index 0000000..e69de29'
     ].join("\n")
 
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
       'empty.h' =>
@@ -138,13 +132,11 @@ class GitDiffJoinTest < LibTestBase
         :chunks => []
       }
     }
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = {}
-    expected_join = { 'empty.h' => [] }
-
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    expected = { 'empty.h' => [] }
+    assert_join(expected, diff_lines, visible_files = {})
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -163,7 +155,6 @@ class GitDiffJoinTest < LibTestBase
       "\\ No newline at end of file"
     ].join("\n")
 
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
       "non-empty.c" =>
@@ -197,19 +188,17 @@ class GitDiffJoinTest < LibTestBase
         ]
       }
     }
-
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    expected_join =
+    expected =
     {
       'non-empty.c' =>
       [
         { :type => :added, :line => "something", :number => 1 }
       ]
     }
-    visible_files = {}
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    assert_join(expected, diff_lines, visible_files = {})
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -243,13 +232,8 @@ class GitDiffJoinTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    expected_join =
-    {
-      'copy' => []
-    }
-    visible_files = {}
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    expected = { 'copy' => [] }
+    assert_join(expected, diff_lines, visible_files = {})
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -269,7 +253,6 @@ class GitDiffJoinTest < LibTestBase
       "\\ No newline at end of file",
     ].join("\n")
 
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     {
       "non-empty.c" =>
@@ -302,10 +285,10 @@ class GitDiffJoinTest < LibTestBase
         ]
       }
     }
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = {}
-    expected_join =
+    expected =
     {
       'non-empty.c' =>
       [
@@ -314,9 +297,7 @@ class GitDiffJoinTest < LibTestBase
         { :type => :added, :line => "something changed", :number => 1 }
       ]
     }
-
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    assert_join(expected, diff_lines, visible_files = {})
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -324,21 +305,26 @@ class GitDiffJoinTest < LibTestBase
   test '35C',
   'unchanged file' do
     diff_lines = [].join("\n")
+    expected_diffs = {}
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
-    expected_diffs =
-    {
-    }
     assert_equal expected_diffs, actual_diffs
+
     visible_files = { 'wibble.txt' => 'content' }
-    expected_join =
+    expected =
     {
       'wibble.txt' =>
       [
         { :type => :same, :line => 'content', :number => 1}
       ]
     }
-    actual_join = git_diff_join(diff_lines, visible_files)
-    assert_equal expected_join, actual_join
+    assert_join(expected, diff_lines, visible_files)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_join(expected, diff_lines, visible_files)
+    actual = git_diff_join(diff_lines, visible_files)
+    assert_equal expected, actual
   end
 
 end
