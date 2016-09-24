@@ -1,34 +1,34 @@
 
 require_relative './git_diff_parser'
-require_relative './git_diff_view_builder'
+require_relative './git_diff_join_builder'
 require_relative './line_splitter'
 
-module GitDiffView # mix-in
+module GitDiffJoin # mix-in
 
   module_function
 
-  def git_diff_view(diff_lines, visible_files)
-    view = {}
+  def git_diff_join(diff_lines, visible_files)
+    join = {}
     filenames = visible_files.keys
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |filename, diff|
       if new_file?(diff)
         lines = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
-        view[filename] = all(lines, :added)
+        join[filename] = all(lines, :added)
       elsif deleted_file?(diff)
         lines = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
-        view[filename] = all(lines, :deleted)
+        join[filename] = all(lines, :deleted)
       else
         lines = line_split(visible_files[filename])
-        view[filename] = git_diff_view_builder(diff, lines)
+        join[filename] = git_diff_join_builder(diff, lines)
       end
       filenames.delete(filename)
     end
     filenames.each do |filename|
       lines = line_split(visible_files[filename])
-      view[filename] = all(lines, :same)
+      join[filename] = all(lines, :same)
     end
-    view
+    join
   end
 
   private
@@ -52,6 +52,6 @@ module GitDiffView # mix-in
   end
 
   include LineSplitter
-  include GitDiffViewBuilder
+  include GitDiffJoinBuilder
 
 end

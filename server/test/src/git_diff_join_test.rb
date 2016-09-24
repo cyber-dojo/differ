@@ -1,13 +1,13 @@
 
 require_relative './lib_test_base'
 
-class GitDiffViewTest < LibTestBase
+class GitDiffJoinTest < LibTestBase
 
   def self.hex(suffix)
     '74C' + suffix
   end
 
-  include GitDiffView
+  include GitDiffJoin
 
   test 'A5C',
   'empty file is deleted' do
@@ -37,10 +37,10 @@ class GitDiffViewTest < LibTestBase
     assert_equal expected_diffs, actual_diffs
 
     visible_files = {}
-    expected_view = { 'xx.rb' => [] }
+    expected_join = { 'xx.rb' => [] }
 
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -96,7 +96,7 @@ class GitDiffViewTest < LibTestBase
     assert_equal expected_diffs, actual_diffs
 
     visible_files = {}
-    expected_view = {
+    expected_join = {
       'non-empty.h' =>
       [
         {
@@ -107,8 +107,8 @@ class GitDiffViewTest < LibTestBase
       ]
     }
 
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -141,10 +141,10 @@ class GitDiffViewTest < LibTestBase
     assert_equal expected_diffs, actual_diffs
 
     visible_files = {}
-    expected_view = { 'empty.h' => [] }
+    expected_join = { 'empty.h' => [] }
 
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -200,15 +200,16 @@ class GitDiffViewTest < LibTestBase
 
     assert_equal expected_diffs, actual_diffs
 
-    expected_view = {
+    expected_join =
+    {
       'non-empty.c' =>
       [
         { :type => :added, :line => "something", :number => 1 }
       ]
     }
     visible_files = {}
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -242,13 +243,13 @@ class GitDiffViewTest < LibTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    expected_view =
+    expected_join =
     {
       'copy' => []
     }
     visible_files = {}
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -304,7 +305,8 @@ class GitDiffViewTest < LibTestBase
     assert_equal expected_diffs, actual_diffs
 
     visible_files = {}
-    expected_view = {
+    expected_join =
+    {
       'non-empty.c' =>
       [
         { :type => :section, :index => 0 },
@@ -313,8 +315,8 @@ class GitDiffViewTest < LibTestBase
       ]
     }
 
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -328,14 +330,15 @@ class GitDiffViewTest < LibTestBase
     }
     assert_equal expected_diffs, actual_diffs
     visible_files = { 'wibble.txt' => 'content' }
-    expected_view = {
+    expected_join =
+    {
       'wibble.txt' =>
       [
         { :type => :same, :line => 'content', :number => 1}
       ]
     }
-    actual_view = git_diff_view(diff_lines, visible_files)
-    assert_equal expected_view, actual_view
+    actual_join = git_diff_join(diff_lines, visible_files)
+    assert_equal expected_join, actual_join
   end
 
 end

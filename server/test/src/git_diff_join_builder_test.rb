@@ -1,7 +1,9 @@
 
 require_relative './lib_test_base'
 
-class GitDiffViewBuilderTest < LibTestBase
+class GitDiffJoinBuilderTest < LibTestBase
+
+  include GitDiffJoinBuilder
 
   def self.hex(suffix)
     'A33' + suffix
@@ -550,11 +552,9 @@ class GitDiffViewBuilderTest < LibTestBase
 
   private
 
-  include GitDiffViewBuilder
-
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
-    actual = git_diff_view_builder(diff, @source_lines)
+    actual = git_diff_join_builder(diff, @source_lines)
     assert_equal @expected, actual
   end
 
