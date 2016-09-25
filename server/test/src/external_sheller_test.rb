@@ -13,7 +13,7 @@ class ExternalShellerTest < LibTestBase
 
   def setup
     super
-    ENV['DIFFER_CLASS_LOG'] = 'SpyLogger'
+    ENV[env_name('log')] = 'SpyLogger'
     @app = App.new
   end
 

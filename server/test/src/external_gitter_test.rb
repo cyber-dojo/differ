@@ -12,7 +12,7 @@ class ExternalGitterTest < LibTestBase
 
   def setup
     super
-    ENV['DIFFER_CLASS_SHELL'] = 'SpySheller'
+    ENV[env_name('shell')] = 'SpySheller'
     @app = App.new
   end
 

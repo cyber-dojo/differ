@@ -7,9 +7,12 @@ class ExternalDiskWriterTest < LibTestBase
     'FDF' + suffix
   end
 
+  class App; include Externals; end
+
+  def disk; App.new.disk; end
+
   test 'D4C',
   'what gets written is read back' do
-    disk = ExternalDiskWriter.new(nil)
     Dir.mktmpdir('file_writer') do |tmp_dir|
       pathed_filename = tmp_dir + '/limerick.txt'
       content = 'the boy stood on the burning deck'
