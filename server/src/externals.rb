@@ -38,7 +38,7 @@ module Externals # mix-in
   private
 
   def external
-    name = env_name(name_of(caller).upcase)
+    name = env_name(name_of(caller))
     var = ENV[name] || fail("ENV[#{name}] not set")
     Object.const_get(var).new(self)
   end
