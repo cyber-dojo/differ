@@ -10,8 +10,8 @@ class ExternalsTest < LibTestBase
   include Externals
 
   test '920',
-  'default file is ExternalFileWriter' do
-    assert_equal 'ExternalFileWriter', disk.class.name
+  'default file is ExternalDiskWriter' do
+    assert_equal 'ExternalDiskWriter', disk.class.name
   end
 
   # - - - - - - - - - - - - - - - - -

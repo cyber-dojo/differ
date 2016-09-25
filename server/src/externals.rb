@@ -12,7 +12,7 @@ end
 
 def env_map
   {
-    env_name('disk')  => 'ExternalFileWriter',
+    env_name('disk')  => 'ExternalDiskWriter',
     env_name('git')   => 'ExternalGitter',
     env_name('log')   => 'ExternalStdoutLogger',
     env_name('shell') => 'ExternalSheller'

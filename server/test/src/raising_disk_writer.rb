@@ -1,5 +1,5 @@
 
-class RaisingFileWriter
+class RaisingDiskWriter
 
   def initialize(_parent)
   end
