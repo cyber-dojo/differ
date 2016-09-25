@@ -43,14 +43,14 @@ class GitDiffer
 
   def write_was_files_into(git_dir)
     was_files.each do |filename, content|
-      file.write(git_dir + '/' + filename, content)
+      disk.write(git_dir + '/' + filename, content)
       git.add(git_dir, filename)
     end
   end
 
   def write_new_files_to(git_dir)
     delta[:new].each do |filename|
-      file.write(git_dir + '/' + filename, now_files[filename])
+      disk.write(git_dir + '/' + filename, now_files[filename])
       git.add(git_dir, filename)
     end
   end
@@ -63,7 +63,7 @@ class GitDiffer
 
   def overwrite_changed_files_in(git_dir)
     delta[:changed].each do |filename|
-      file.write(git_dir + '/' + filename, now_files[filename])
+      disk.write(git_dir + '/' + filename, now_files[filename])
     end
   end
 

@@ -92,7 +92,7 @@ line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
-done =
+table =
   [
     [ 'failures',               failure_count,      '==',   0 ],
     [ 'errors',                 error_count,        '==',   0 ],
@@ -108,12 +108,14 @@ done =
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
+done = []
 print "\n"
-done.each do |name,value,op,limit|
+table.each do |name,value,op,limit|
   result = eval("#{value} #{op} #{limit}")
   puts "%s | %s %s %s | %s" % [
     name.rjust(25), value.to_s.rjust(7), op, limit.to_s.rjust(3), result.to_s
   ]
+  done << result
 end
 
-exit done.all?{ |entry| entry[3] }
+exit done.all?

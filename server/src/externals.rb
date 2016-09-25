@@ -6,16 +6,16 @@ require_relative './snake_case'
 # unit-tests can set/reset these
 # see test/external_helper.rb
 
-def env_root(suffix = '')
-  'DIFFER_CLASS_' + suffix
+def env_name(suffix)
+  'DIFFER_CLASS_' + suffix.upcase
 end
 
 def env_map
   {
-    env_root('FILE')  => 'ExternalFileWriter',
-    env_root('GIT')   => 'ExternalGitter',
-    env_root('LOG')   => 'ExternalStdoutLogger',
-    env_root('SHELL') => 'ExternalSheller'
+    env_name('disk')  => 'ExternalFileWriter',
+    env_name('git')   => 'ExternalGitter',
+    env_name('log')   => 'ExternalStdoutLogger',
+    env_name('shell') => 'ExternalSheller'
   }
 end
 
@@ -30,7 +30,7 @@ require_relative './name_of_caller'
 
 module Externals # mix-in
 
-  def file ; @file  ||= external; end
+  def disk ; @disk  ||= external; end
   def git  ; @git   ||= external; end
   def log  ; @log   ||= external; end
   def shell; @shell ||= external; end
@@ -38,7 +38,7 @@ module Externals # mix-in
   private
 
   def external
-    name = env_root(name_of(caller).upcase)
+    name = env_name(name_of(caller).upcase)
     var = ENV[name] || fail("ENV[#{name}] not set")
     Object.const_get(var).new(self)
   end
