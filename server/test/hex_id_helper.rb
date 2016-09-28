@@ -20,6 +20,12 @@
 
 module TestHexIdHelper # mix-in
 
+  def setup_id(_hex)
+  end
+
+  def teardown_id(_hex)
+  end
+
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -30,7 +36,7 @@ module TestHexIdHelper # mix-in
     @@seen_ids = []
 
     def test(id, *lines, &block)
-      raise "missing hex()" unless self.respond_to?('hex')
+      fail "missing hex()" unless self.respond_to?('hex')
       id = hex(id)
       # check hex-id is well-formed
       diagnostic = "'#{id}',#{lines.join}"
@@ -38,23 +44,23 @@ module TestHexIdHelper # mix-in
       is_hex_id      = id.chars.all? { |ch|   hex_chars.include? ch }
       has_empty_line = lines.any?    { |line| line.strip == ''      }
       has_space_line = lines.any?    { |line| line.strip != line    }
-      raise  "no hex-ID: #{diagnostic}" if id == ''
-      raise "bad hex-ID: #{diagnostic}" unless is_hex_id
-      raise "empty line: #{diagnostic}" if has_empty_line
-      raise "space line: #{diagnostic}" if has_space_line
+      fail  "no hex-ID: #{diagnostic}" if id == ''
+      fail "bad hex-ID: #{diagnostic}" unless is_hex_id
+      fail "empty line: #{diagnostic}" if has_empty_line
+      fail "space line: #{diagnostic}" if has_space_line
       # if no hex-id supplied, or test method matches any supplied hex-id
       # then define a mini_test method using the hex-id
       no_args = @@args == []
       any_arg_is_part_of_id = @@args.any?{ |arg| id.include?(arg) }
       if no_args || any_arg_is_part_of_id
-        raise "duplicate hex_ID: #{diagnostic}" if @@seen_ids.include?(id)
+        fail "duplicate hex_ID: #{diagnostic}" if @@seen_ids.include?(id)
         @@seen_ids << id
         name = lines.join(' ')
         # make test_id attribute available inside defined method
         block_with_test_id = lambda {
-          self.instance_eval { class << self; self end }.send(:attr_accessor, 'test_id')
-          self.test_id = id
+          self.setup_id(id)
           self.instance_eval &block
+          self.teardown_id(id)
         }
         define_method("test_'#{id}',\n #{name}\n".to_sym, &block_with_test_id)
       end
