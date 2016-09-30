@@ -20,12 +20,6 @@
 
 module TestHexIdHelper # mix-in
 
-  def setup_id(_hex)
-  end
-
-  def teardown_id(_hex)
-  end
-
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -56,11 +50,10 @@ module TestHexIdHelper # mix-in
         fail "duplicate hex_ID: #{diagnostic}" if @@seen_ids.include?(id)
         @@seen_ids << id
         name = lines.join(' ')
-        # make test_id attribute available inside defined method
+        # make test's hex id available inside test method
         block_with_test_id = lambda {
-          self.setup_id(id)
+          ENV['CYBER_DOJO_DIFFER_TEST_ID'] = id
           self.instance_eval &block
-          self.teardown_id(id)
         }
         define_method("test_'#{id}',\n #{name}\n".to_sym, &block_with_test_id)
       end
