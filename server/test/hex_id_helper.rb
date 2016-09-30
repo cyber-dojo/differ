@@ -30,7 +30,7 @@ module TestHexIdHelper # mix-in
     @@seen_ids = []
 
     def test(id, *lines, &block)
-      fail "missing hex()" unless self.respond_to?('hex')
+      fail 'missing hex()' unless self.respond_to?(:hex)
       id = hex(id)
       # check hex-id is well-formed
       diagnostic = "'#{id}',#{lines.join}"
