@@ -52,7 +52,7 @@ module TestHexIdHelper # mix-in
         name = lines.join(' ')
         # make test's hex id available inside test method
         block_with_test_id = lambda {
-          ENV['CYBER_DOJO_DIFFER_TEST_ID'] = id
+          ENV['DIFFER_TEST_ID'] = id
           self.instance_eval &block
         }
         define_method("test_'#{id}',\n #{name}\n".to_sym, &block_with_test_id)
