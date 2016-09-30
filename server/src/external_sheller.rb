@@ -1,5 +1,5 @@
 
-require_relative './external_parent_chainer'
+require_relative './nearest_ancestors'
 require_relative './string_cleaner'
 
 class ExternalSheller
@@ -39,7 +39,9 @@ class ExternalSheller
 
   private
 
-  include ExternalParentChainer
+  include NearestAncestors
   include StringCleaner
+
+  def log; nearest_ancestors(:log); end
 
 end

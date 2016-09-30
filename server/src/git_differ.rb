@@ -1,6 +1,6 @@
 
 require_relative './delta_maker'
-require_relative './external_parent_chainer'
+require_relative './nearest_ancestors'
 
 class GitDiffer
 
@@ -68,6 +68,9 @@ class GitDiffer
   end
 
   include DeltaMaker
-  include ExternalParentChainer
+  include NearestAncestors
+
+  def disk; nearest_ancestors(:disk); end
+  def git; nearest_ancestors(:git); end
 
 end

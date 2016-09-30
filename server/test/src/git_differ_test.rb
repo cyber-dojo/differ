@@ -30,7 +30,7 @@ class GitDifferTest < LibTestBase
     differ = GitDiffer.new(self)
     raised = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
     assert_equal 'raising', raised.message
-    dir = File.dirname(differ.disk.pathed_filename)
+    dir = File.dirname(disk.pathed_filename)
     refute Dir.exists?(dir)
   end
 

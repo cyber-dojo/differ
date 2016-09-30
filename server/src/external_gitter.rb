@@ -1,5 +1,5 @@
 
-require_relative './external_parent_chainer'
+require_relative './nearest_ancestors'
 
 class ExternalGitter
 
@@ -55,7 +55,7 @@ class ExternalGitter
 
   private
 
-  include ExternalParentChainer
+  include NearestAncestors
 
   def quoted(s)
     "'" + s + "'"
@@ -68,5 +68,7 @@ class ExternalGitter
   def output_of(args)
     args[0]
   end
+
+  def shell; nearest_ancestors(:shell); end
 
 end
