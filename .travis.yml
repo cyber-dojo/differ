@@ -9,6 +9,10 @@ env:
     global:
         - DOCKER_ENGINE_VERSION=1.12.1
 
+after_success:
+    - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+    - docker push cyberdojo/differ:${DOCKER_ENGINE_VERSION}
+
 before_install:
     # list docker-engine versions
     - apt-cache madison docker-engine
