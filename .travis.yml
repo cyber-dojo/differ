@@ -11,7 +11,7 @@ env:
 
 after_success:
     - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
-    - docker push cyberdojo/differ:${DOCKER_ENGINE_VERSION}
+    - docker push cyberdojo/differ
 
 before_install:
     # list docker-engine versions
