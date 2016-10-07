@@ -10,6 +10,7 @@ services:
     links: [ differ_server ]
 
   differ_server:
+    user: nobody
     image: cyberdojo/differ
     container_name: differ_server
     command: [ "foreman", "start", "-d", "/app" ]
