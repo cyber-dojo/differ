@@ -13,8 +13,6 @@ class MicroService < Sinatra::Base
 
   get '/' do
     content_type :json
-    request.body.rewind
-    args = JSON.parse(request.body.read)
     was_files = args['was_files']
     now_files = args['now_files']
     diff = GitDiffer.new(self).diff(was_files, now_files)
@@ -25,6 +23,15 @@ class MicroService < Sinatra::Base
 
   include Externals
   include GitDiffJoin
+
+  def args
+    @args ||= request_body_args
+  end
+
+  def request_body_args
+    request.body.rewind
+    JSON.parse(request.body.read)
+  end
 
 end
 
