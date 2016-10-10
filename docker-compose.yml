@@ -3,6 +3,7 @@ version: '2'
 
 services:
   differ_client:
+    user: nobody
     image: cyberdojo/differ_client
     container_name: differ_client
     command: [ "foreman", "start", "-d", "/app" ]
