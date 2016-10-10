@@ -1,6 +1,6 @@
 #!/bin/sh
 
-app_dir=${1:-/app}
+app_dir=${1}
 
 image_name=cyberdojo/differ_base
 docker build --build-arg app_dir=${app_dir} --tag ${image_name} .

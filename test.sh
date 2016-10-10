@@ -12,7 +12,8 @@
 #   Use the tests individual hex-id to run just that one test
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
-${my_dir}/build.sh
+app_dir=/app
+${my_dir}/build.sh ${app_dir}
 if [ $? != 0 ]; then
   echo
   echo "./build.sh FAILED"

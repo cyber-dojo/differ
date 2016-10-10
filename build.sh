@@ -1,7 +1,6 @@
 #!/bin/sh
-set -e
 
-app_dir=${1:-/app}
+app_dir=${1}
 
 hash docker 2> /dev/null
 if [ $? != 0 ]; then
