@@ -13,13 +13,18 @@
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 app_dir=/app
-${my_dir}/build.sh ${app_dir}
+client_port=4568
+server_port=4567
+
+${my_dir}/build.sh ${app_dir} ${client_port} ${server_port}
 if [ $? != 0 ]; then
   echo
   echo "./build.sh FAILED"
   exit 1
 fi
 
+export CLIENT_PORT=${client_port}
+export SERVER_PORT=${server_port}
 docker-compose down
 docker-compose up -d
 

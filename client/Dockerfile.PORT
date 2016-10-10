@@ -1,0 +1,6 @@
+FROM cyberdojo/differ_base
+MAINTAINER Jon Jagger <jon@jaggersoft.com>
+
+ARG app_dir
+COPY . ${app_dir}
+EXPOSE PORT
