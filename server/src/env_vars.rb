@@ -1,5 +1,5 @@
 
-require_relative './snake_case'
+require_relative './snake_caser'
 
 # set defauls ENV-vars for all externals
 # unit-tests can set/reset these
@@ -20,5 +20,5 @@ end
 
 env_map.each do |key,name|
   ENV[key] = name
-  require_relative "./#{name.snake_case}"
+  require_relative "./#{name.snake_cased}"
 end
