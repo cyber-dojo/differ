@@ -7,7 +7,7 @@ language: ruby
 
 env:
     global:
-        - DOCKER_ENGINE_VERSION=1.12.1
+        - DOCKER_ENGINE_VERSION=1.12.2
 
 after_success:
     - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
