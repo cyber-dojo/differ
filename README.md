@@ -3,6 +3,10 @@
 
 <img src="https://raw.githubusercontent.com/cyber-dojo/nginx/master/images/home_page_logo.png" alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
+cyberdojo/differ is the image that [cyber-dojo](http://cyber-dojo.org) uses to obtain the diff between the visible files
+of two traffic-lights.
+
+
 ```
 ./demo.sh
 ```
