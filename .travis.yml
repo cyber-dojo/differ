@@ -3,6 +3,8 @@ sudo: required
 services:
   - docker
 
+language: generic
+
 env:
     global:
         - DOCKER_ENGINE_VERSION=1.12.2
