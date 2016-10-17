@@ -22,8 +22,8 @@ class GitDiffer
       git.commit(git_dir, was_tag)
 
       now_tag = 1
-      write_new_files_to(git_dir)
       delete_deleted_files_from(git_dir)
+      write_new_files_to(git_dir)
       overwrite_changed_files_in(git_dir)
       git.commit(git_dir, now_tag)
 
@@ -48,16 +48,16 @@ class GitDiffer
     end
   end
 
+  def delete_deleted_files_from(git_dir)
+    delta[:deleted].each do |filename|
+      git.rm(git_dir, filename)
+    end
+  end
+
   def write_new_files_to(git_dir)
     delta[:new].each do |filename|
       disk.write(git_dir + '/' + filename, now_files[filename])
       git.add(git_dir, filename)
-    end
-  end
-
-  def delete_deleted_files_from(git_dir)
-    delta[:deleted].each do |filename|
-      git.rm(git_dir, filename)
     end
   end
 
