@@ -3,15 +3,9 @@ sudo: required
 services:
   - docker
 
-language: ruby
-
 env:
     global:
         - DOCKER_ENGINE_VERSION=1.12.2
-
-after_success:
-    - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
-    - docker push cyberdojo/differ
 
 before_install:
     # list docker-engine versions
@@ -27,3 +21,8 @@ before_install:
 
 script:
     - cd ${TRAVIS_BUILD_DIR} && ./test.sh
+
+after_success:
+    - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+    - docker push cyberdojo/differ
+
