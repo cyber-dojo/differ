@@ -18,7 +18,7 @@ on port 4567. If the diff-client's IP address is 192.168.99.100 then put
 192.168.99.100:4568 into your browser to see the processed diff.
 
 ```
-./test.sh
+./build_and_test.sh
 ```
 
 Rebuilds the images and runs the tests inside the differ server/client containers
