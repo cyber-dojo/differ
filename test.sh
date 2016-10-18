@@ -28,8 +28,6 @@ export SERVER_PORT=${server_port}
 docker-compose down
 docker-compose up -d
 
-#docker ps -a
-
 server_cid=`docker ps --all --quiet --filter "name=differ_server"`
 docker exec ${server_cid} sh -c "cat Gemfile.lock"
 docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
