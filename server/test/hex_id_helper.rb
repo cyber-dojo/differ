@@ -59,6 +59,7 @@ module TestHexIdHelper # mix-in
       end
     end
 
+=begin
     # complain about any unfound hex-id args
     ObjectSpace.define_finalizer(self, proc {
       unseen_arg = lambda { |arg| @@seen_ids.none? { |id| id.include?(arg) } }
@@ -71,6 +72,7 @@ module TestHexIdHelper # mix-in
         lines.each { |line| STDERR.puts line }
       end
     })
+=end
 
   end
 

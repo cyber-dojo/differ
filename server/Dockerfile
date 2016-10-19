@@ -22,12 +22,13 @@ RUN apk --update add --virtual build-dependencies build-base \
   && rm -vrf /var/cache/apk/*
 
 # - - - - - - - - - - - - - - - - - - - - - -
+# alpine:edge has git 2.10 with --compaction-heuristic
+
+RUN apk --update add git
+
+# - - - - - - - - - - - - - - - - - - - - - -
 
 COPY . ${app_dir}/
 RUN export RACK_ENV='production'
 EXPOSE 4567
 
-# - - - - - - - - - - - - - - - - - - - - - -
-# alpine:edge has git 2.10 with --compaction-heuristic
-
-RUN apk --update add git

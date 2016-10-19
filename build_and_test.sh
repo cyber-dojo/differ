@@ -47,7 +47,7 @@ docker-compose down
 docker-compose up -d
 
 server_cid=`docker ps --all --quiet --filter "name=differ_server"`
-docker exec ${server_cid} sh -c "cat Gemfile.lock"
+#docker exec ${server_cid} sh -c "cat Gemfile.lock"
 docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
 server_exit_status=$?
 docker cp ${server_cid}:/tmp/coverage ${my_dir}/server
@@ -55,11 +55,12 @@ echo "Coverage report copied to ${my_dir}/server/coverage"
 cat ${my_dir}/server/coverage/done.txt
 
 client_cid=`docker ps --all --quiet --filter "name=differ_client"`
+#docker exec ${client_cid} sh -c "cat Gemfile.lock"
 docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
 client_exit_status=$?
 docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
-
-# Client Coverage is broken. Simplecov is not seeing the *_test.rb files
+# Client Coverage is broken.
+# Simplecov is not seeing the client/test/src/server_test.rb file
 #echo "Coverage report copied to ${my_dir}/client/coverage"
 #cat ${my_dir}/client/coverage/done.txt
 

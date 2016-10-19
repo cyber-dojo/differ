@@ -19,4 +19,8 @@ cd ${my_dir}/src
 files=(*_test.rb)
 args=(${*})
 ruby -e "%w( ${files[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${args[@]} | tee ${test_log}
+
+# Client Coverage is broken.
+# Simplecov is not seeing the client/test/src/server_test.rb file
+
 #cd ${my_dir} && ruby ./check_test_results.rb ${test_log} ${cov_dir}/index.html > ${cov_dir}/done.txt
