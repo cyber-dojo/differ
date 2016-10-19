@@ -71,4 +71,9 @@ echo
 echo "server_exit_status = ${server_exit_status}"
 echo "client_exit_status = ${client_exit_status}"
 
-exit ${client_exit_status} && ${server_exit_status}
+if [ ${client_exit_status} != 0 ]; then
+  exit 1
+fi
+if [ ${server_exit_status} != 0 ]; then
+  exit 1
+fi
