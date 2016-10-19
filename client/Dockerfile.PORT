@@ -1,8 +1,6 @@
 FROM alpine:edge
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-# server/test/src/run.sh needs bash
-# alpine:edge has git 2.10 with --compaction-heuristic
 RUN apk --update \
   add \
     ruby ruby-io-console bash \
