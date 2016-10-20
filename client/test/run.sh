@@ -18,7 +18,7 @@ my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 cd ${my_dir}/src
 files=(*_test.rb)
 args=(${*})
-ruby -e "%w( ${files[*]} ).map{ |file| './'+file }.each { |file| require file }" -- ${args[@]} | tee ${test_log}
+ruby -e "%w( ${files[*]} ).shuffle.map{ |file| './'+file }.each { |file| require file }" -- ${args[@]} | tee ${test_log}
 
 # Client Coverage is broken.
 # Simplecov is not seeing the client/test/src/server_test.rb file
