@@ -87,5 +87,5 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 echo
-echo "All passed. Removing runner containers..."
+echo "All passed. Removing differ containers..."
 docker-compose down 2>/dev/null
