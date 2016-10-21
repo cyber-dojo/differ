@@ -13,4 +13,3 @@ services:
     image: cyberdojo/differ
     container_name: differ_server
     command: [ "foreman", "start", "-d", "/app" ]
-
