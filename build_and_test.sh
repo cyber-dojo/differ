@@ -37,12 +37,6 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-# there is no envsubst in Docker-Toolbox
-cat ${my_dir}/docker-compose.yml.PORT \
-  | sed "s/CLIENT_PORT/${client_port}/g" \
-  | sed "s/SERVER_PORT/${server_port}/g" \
-  > ${my_dir}/docker-compose.yml
-
 docker-compose down
 docker-compose up -d
 
