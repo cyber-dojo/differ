@@ -8,7 +8,6 @@ services:
     container_name: differ_client
     command: [ "foreman", "start", "-d", "/app" ]
     ports: [ "CLIENT_PORT:CLIENT_PORT" ]
-    links: [ differ_server ]
 
   differ_server:
     user: nobody
