@@ -22,3 +22,5 @@ on port 4567. If the diff-client's IP address is 192.168.99.100 then put
 ```
 
 Rebuilds the images and runs the tests inside the differ server/client containers
+
+...
