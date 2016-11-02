@@ -1,8 +1,6 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-# server/test/src/run.sh needs bash
-# alpine:edge has git 2.10 with --compaction-heuristic
 RUN apk --update \
   add \
     ruby ruby-io-console bash \
@@ -21,14 +19,14 @@ RUN apk --update add --virtual build-dependencies build-base \
   && apk del build-dependencies \
   && rm -vrf /var/cache/apk/*
 
-# - - - - - - - - - - - - - - - - - - - - - -
-# alpine:edge has git 2.10 with --compaction-heuristic
-
-RUN apk --update add git
-
-# - - - - - - - - - - - - - - - - - - - - - -
+# install git 2.10 from edge (it has --compaction-heuristic)
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories \
+  && apk update \
+  && apk add git==2.10.1-r0
 
 COPY . ${app_dir}/
 RUN export RACK_ENV='production'
 EXPOSE 4567
+
+
 
