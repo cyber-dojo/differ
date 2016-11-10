@@ -28,5 +28,5 @@ COPY . ${app_dir}/
 RUN export RACK_ENV='production'
 EXPOSE 4567
 
-
+CMD [ "foreman", "start", "-d", "/app" ]
 
