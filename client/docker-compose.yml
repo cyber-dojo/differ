@@ -1,0 +1,10 @@
+
+version: '2'
+
+services:
+  differ_client:
+    image: cyberdojo/differ_client
+    build:
+      context: .
+      args:
+        PORT: 4568

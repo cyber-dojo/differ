@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
 RUN apk --update \
@@ -9,9 +9,8 @@ RUN apk --update \
 # http://stackoverflow.com/questions/1381725
 RUN echo 'gem: --no-document' > ~/.gemrc
 
-ARG app_dir
-COPY Gemfile ${app_dir}/
-WORKDIR ${app_dir}/
+COPY Gemfile /app/
+WORKDIR /app
 
 RUN apk --update add --virtual build-dependencies build-base \
   && apk add --no-cache openssl ca-certificates \
@@ -21,6 +20,9 @@ RUN apk --update add --virtual build-dependencies build-base \
 
 # - - - - - - - - - - - - - - - - - - - - - -
 
-COPY . ${app_dir}/
+COPY . /app/
 RUN export RACK_ENV='production'
-EXPOSE 4568
+
+ARG PORT
+ENV PORT=${PORT}
+EXPOSE ${PORT}

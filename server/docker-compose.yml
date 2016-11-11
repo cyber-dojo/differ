@@ -1,0 +1,10 @@
+
+version: '2'
+
+services:
+  differ_server:
+    image: cyberdojo/differ
+    build:
+      context: .
+      args:
+        PORT: 4567
