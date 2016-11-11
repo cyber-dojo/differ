@@ -6,13 +6,8 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositori
   && apk update \
   && apk add git==2.10.2-r0
 
-RUN export RACK_ENV='production'
-
 ARG PORT
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-CMD [ "foreman", "start", "-d", "/app" ]
-
-WORKDIR /app
 COPY . /app
