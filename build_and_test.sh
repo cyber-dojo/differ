@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
