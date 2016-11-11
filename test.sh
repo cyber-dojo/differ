@@ -2,37 +2,6 @@
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
-# Don't [set -e] because if
-# [docker exec ... cd test && ./run.sh ${*}] fails
-# I want the [docker cp] command to extract the coverage info
-
-hash docker 2> /dev/null
-if [ $? != 0 ]; then
-  echo
-  echo "docker is not installed!"
-  exit 1
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-docker-compose -f ${my_dir}/client/docker-compose.yml build
-if [ $? != 0 ]; then
-  echo
-  echo 'failed to build differ_client'
-  exit 1
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-docker-compose -f ${my_dir}/server/docker-compose.yml build
-if [ $? != 0 ]; then
-  echo
-  echo 'failed to build differ_server'
-  exit 1
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 docker-compose down
 docker-compose up -d
 

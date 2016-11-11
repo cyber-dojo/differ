@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # remove images
 docker images --quiet --filter dangling=true | xargs docker rmi --force
