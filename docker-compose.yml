@@ -12,4 +12,3 @@ services:
     user: nobody
     image: cyberdojo/differ
     container_name: differ_server
-    ports: [ "4567:4567" ]
