@@ -34,5 +34,3 @@ class MicroService < Sinatra::Base
   end
 
 end
-
-

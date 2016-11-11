@@ -6,12 +6,10 @@ services:
     user: nobody
     image: cyberdojo/differ_client
     container_name: differ_client
-    command: [ "foreman", "start", "-d", "/app" ]
     ports: [ "4568:4568" ]
 
   differ_server:
     user: nobody
     image: cyberdojo/differ
     container_name: differ_server
-    command: [ "foreman", "start", "-d", "/app" ]
     ports: [ "4567:4567" ]
