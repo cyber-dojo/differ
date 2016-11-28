@@ -3,9 +3,14 @@
 
 <img src="https://raw.githubusercontent.com/cyber-dojo/nginx/master/images/home_page_logo.png" alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
-cyberdojo/differ is the image that [cyber-dojo](http://cyber-dojo.org) uses to obtain the diff between the visible files
-of two traffic-lights.
+# cyberdojo/differ docker image
 
+A micro-service for [cyber-dojo](http://cyber-dojo.org).
+A **cyberdojo/differ** docker container runs sinatra on port 4567.
+[cyberdojo/web](https://github.cim/cyber-dojo/web) uses cyberdojo/differ to obtain the diff between the
+visible files of two traffic-lights.
+
+- - - -
 
 ```
 ./demo.sh
