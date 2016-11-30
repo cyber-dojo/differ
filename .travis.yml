@@ -13,10 +13,6 @@ before_install:
 script:
     - ./build.sh
     - ./test.sh
-
-after_success:
-    - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-    - if [ "${BRANCH}" == "master" ]; then
-        docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}";
-        docker push cyberdojo/differ;
-      fi
+    - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/push.sh
+    - chmod +x push.sh
+    - ./push.sh
