@@ -47,6 +47,7 @@ class ExternalGitter
       '--ignore-space-at-eol',
       '--find-copies-harder',
       '--compaction-heuristic',
+      '--indent-heuristic',
       "#{n}",
       "#{m}"
     ].join(space)

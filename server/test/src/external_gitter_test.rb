@@ -73,6 +73,7 @@ class ExternalGitterTest < LibTestBase
       '--ignore-space-at-eol',
       '--find-copies-harder',
       '--compaction-heuristic',
+      '--indent-heuristic',
       "#{was_tag}",
       "#{now_tag}"
     ].join(space)
