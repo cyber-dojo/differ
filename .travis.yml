@@ -1,6 +1,9 @@
 sudo: required
 services: docker
-language: generic
+#language: generic
+language: node_js
+node_js:
+  - "6"
 
 env:
     global:
