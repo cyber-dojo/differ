@@ -1,7 +1,5 @@
 #!/bin/bash
 
-my_dir="$( cd "$( dirname "${0}" )" && pwd )"
-
 server_cid=`docker ps --all --quiet --filter "name=differ_server"`
 server_status=0
 
@@ -9,6 +7,8 @@ client_cid=`docker ps --all --quiet --filter "name=differ_client"`
 client_status=0
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
 run_server_tests()
 {
@@ -28,10 +28,8 @@ run_client_tests()
   docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
   client_status=$?
   docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
-  # Client Coverage is broken.
-  # Simplecov is not seeing the client/test/src/server_test.rb file
-  #echo "Coverage report copied to ${my_dir}/client/coverage"
-  #cat ${my_dir}/client/coverage/done.txt
+  echo "Coverage report copied to ${my_dir}/client/coverage"
+  cat ${my_dir}/client/coverage/done.txt
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -

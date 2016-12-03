@@ -97,13 +97,13 @@ table =
     [ 'failures',               failure_count,      '==',   0 ],
     [ 'errors',                 error_count,        '==',   0 ],
     [ 'skips',                  skip_count,         '==',   0 ],
-    [ 'assertions/s',           assertions_per_sec, '>=', 200 ],
+    [ 'assertions/s',           assertions_per_sec, '>=',  20 ],
     [ 'duration(test)[s]',      test_duration,      '<=',   1 ],
     [ 'coverage(src)[%]',       src_coverage,       '==', 100 ],
     [ 'coverage(test)[%]',      test_coverage,      '==', 100 ],
-    [ 'hits_per_line(src)',     hits_per_line_src,  '<=',  60 ],
-    [ 'hits_per_line(test)',    hits_per_line_test, '<=',   2 ],
-    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=',   2 ],
+    [ 'hits_per_line(src)',     hits_per_line_src,  '<=',  10 ],
+    [ 'hits_per_line(test)',    hits_per_line_test, '<=',   3 ],
+    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=',   5 ],
   ]
 
 # - - - - - - - - - - - - - - - - - - - - - - -
