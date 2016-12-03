@@ -2,14 +2,11 @@
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
-docker-compose down
-docker-compose up -d
-
-server_status=0
 server_cid=`docker ps --all --quiet --filter "name=differ_server"`
+server_status=0
 
-client_status=0
 client_cid=`docker ps --all --quiet --filter "name=differ_client"`
+client_status=0
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
