@@ -1,8 +1,8 @@
 
-require_relative './lib_test_base'
-require 'net/http'
+require_relative './client_test_base'
+require_relative './../../src/git_diff'
 
-class DifferAppTest < LibTestBase
+class DifferAppTest < ClientTestBase
 
   def self.hex(suffix)
     '200' + suffix
