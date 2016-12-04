@@ -3,9 +3,7 @@ require_relative './differ_test_base'
 
 class ExternalStdoutLoggerTest < DifferTestBase
 
-  def self.hex(suffix)
-    '1B6' + suffix
-  end
+  def self.hex_prefix; '1B6'; end
 
   test '962',
   '<< writes to stdout with added trailing newline' do

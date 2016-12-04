@@ -4,9 +4,7 @@ require_relative '../../src/snake_caser'
 
 class SnakeCaserTest < DifferTestBase
 
-  def self.hex(suffix)
-    '59B' + suffix
-  end
+  def self.hex_prefix; '59B'; end
 
   test 'A70',
   'hissssss' do

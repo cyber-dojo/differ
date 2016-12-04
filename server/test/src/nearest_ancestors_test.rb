@@ -4,12 +4,9 @@ require_relative './../../src/nearest_ancestors'
 
 class TestNearestAncestors < DifferTestBase
 
-  def self.hex(suffix)
-    '9D4' + suffix
-  end
+  def self.hex_prefix; '9D4'; end
 
-  def setup
-    super
+  def hex_setup
     anna = Anna.new
     natalie = Natalie.new(anna)
     @ellie = Ellie.new(natalie)

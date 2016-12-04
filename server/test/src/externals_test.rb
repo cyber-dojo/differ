@@ -1,14 +1,9 @@
 
 require_relative './differ_test_base'
-require_relative '../../src/externals'
 
 class ExternalsTest < DifferTestBase
 
-  def self.hex(suffix)
-    '7A9' + suffix
-  end
-
-  include Externals
+  def self.hex_prefix; '7A9'; end
 
   test '920',
   'default file is ExternalDiskWriter' do

@@ -1,16 +1,12 @@
 
 require_relative './differ_test_base'
 require_relative './spy_sheller'
-require_relative './../../src/externals'
 
 class ExternalGitterTest < DifferTestBase
 
-  def self.hex(suffix)
-    'DC3' + suffix
-  end
+  def self.hex_prefix; 'DC3'; end
 
-  include Externals
-  def setup
+  def hex_setup
     @shell = SpySheller.new(self)
   end
 

@@ -1,16 +1,9 @@
 
 require_relative './differ_test_base'
-require_relative './../../src/externals'
 
 class ExternalDiskWriterTest < DifferTestBase
 
-  def self.hex(suffix)
-    'FDF' + suffix
-  end
-
-  class App; include Externals; end
-
-  def disk; App.new.disk; end
+  def self.hex_prefix; 'FDF'; end
 
   test 'D4C',
   'what gets written gets read back' do

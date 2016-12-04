@@ -2,19 +2,13 @@
 require_relative './differ_test_base'
 require_relative './null_logger'
 require_relative './raising_disk_writer'
-require_relative './../../src/externals'
 require_relative './../../src/git_differ'
 
 class GitDifferTest < DifferTestBase
 
-  include Externals
+  def self.hex_prefix; '100'; end
 
-  def self.hex(suffix)
-    '100' + suffix
-  end
-
-  include Externals
-  def setup
+  def hex_setup
     @log = NullLogger.new(self)
   end
 

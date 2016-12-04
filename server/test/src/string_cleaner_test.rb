@@ -4,9 +4,7 @@ require_relative './../../src/string_cleaner'
 
 class StringCleanerTest < DifferTestBase
 
-  def self.hex(suffix)
-    '3D9' + suffix
-  end
+  def self.hex_prefix; '3D9'; end
 
   include StringCleaner
 

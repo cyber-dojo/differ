@@ -1,9 +1,9 @@
 
-require 'minitest/autorun'
-require_relative '../hex_id_helper'
+require_relative '../hex_mini_test'
+require_relative './../../src/externals'
 
-class DifferTestBase < MiniTest::Test
+class DifferTestBase < HexMiniTest
 
-  include TestHexIdHelper
+  include Externals
 
 end

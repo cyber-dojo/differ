@@ -1,17 +1,12 @@
 
 require_relative './differ_test_base'
 require_relative './spy_logger'
-require_relative '../../src/externals'
 
 class ExternalShellerTest < DifferTestBase
 
-  def self.hex(suffix)
-    'C89' + suffix
-  end
+  def self.hex_prefix; 'C89'; end
 
-  include Externals
-  def setup
-    super
+  def hex_setup
     @log = SpyLogger.new(self)
   end
 
