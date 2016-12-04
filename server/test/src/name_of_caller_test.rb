@@ -1,5 +1,6 @@
 
 require_relative './differ_test_base'
+require_relative './../../src/name_of_caller'
 
 class NameOfCallerTest < DifferTestBase
 

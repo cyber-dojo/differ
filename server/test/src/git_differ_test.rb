@@ -2,6 +2,9 @@
 require_relative './differ_test_base'
 require_relative './null_logger'
 require_relative './raising_disk_writer'
+require_relative './../../src/externals'
+require_relative './../../src/git_differ'
+
 
 class GitDifferTest < DifferTestBase
 

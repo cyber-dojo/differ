@@ -1,5 +1,6 @@
 
 require_relative './differ_test_base'
+require_relative './../../src/delta_maker'
 
 class DeltaMakerTest < DifferTestBase
 
