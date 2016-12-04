@@ -5,7 +5,5 @@ language: generic
 script:
     - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/push.sh
     - chmod +x push.sh
-    - ./build.sh
-    - ./up.sh
-    - ./test.sh
+    - ./pipe_build_up_test.sh
     - ./push.sh
