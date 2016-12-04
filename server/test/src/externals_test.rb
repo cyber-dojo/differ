@@ -1,5 +1,6 @@
 
 require_relative './differ_test_base'
+require_relative '../../src/externals'
 
 class ExternalsTest < DifferTestBase
 

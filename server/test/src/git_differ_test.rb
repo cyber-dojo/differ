@@ -5,7 +5,6 @@ require_relative './raising_disk_writer'
 require_relative './../../src/externals'
 require_relative './../../src/git_differ'
 
-
 class GitDifferTest < DifferTestBase
 
   include Externals
@@ -14,9 +13,9 @@ class GitDifferTest < DifferTestBase
     '100' + suffix
   end
 
+  include Externals
   def setup
-    super
-    ENV[env_name('log')]  = 'NullLogger'
+    @log = NullLogger.new(self)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -25,7 +24,7 @@ class GitDifferTest < DifferTestBase
 
   test 'B9F',
   'tmp dir is deleted if exception is raised' do
-    ENV[env_name('disk')] = 'RaisingDiskWriter'
+    @disk = RaisingDiskWriter.new(self)
     was_files = { 'diamond.h' => 'a' } # ensure something to write
     now_files = {}
     differ = GitDiffer.new(self)

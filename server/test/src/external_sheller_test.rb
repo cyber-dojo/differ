@@ -1,7 +1,7 @@
 
 require_relative './differ_test_base'
 require_relative './spy_logger'
-
+require_relative '../../src/externals'
 
 class ExternalShellerTest < DifferTestBase
 
@@ -9,16 +9,11 @@ class ExternalShellerTest < DifferTestBase
     'C89' + suffix
   end
 
-  class App; include Externals; end
-
+  include Externals
   def setup
     super
-    ENV[env_name('log')] = 'SpyLogger'
-    @app = App.new
+    @log = SpyLogger.new(self)
   end
-
-  def shell; @app.shell; end
-  def log  ; @app.log  ; end
 
   # - - - - - - - - - - - - - - - - -
   # exec()

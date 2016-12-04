@@ -1,5 +1,6 @@
 
 require_relative './differ_test_base'
+require_relative '../../src/snake_caser'
 
 class SnakeCaserTest < DifferTestBase
 

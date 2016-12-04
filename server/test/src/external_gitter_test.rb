@@ -9,16 +9,10 @@ class ExternalGitterTest < DifferTestBase
     'DC3' + suffix
   end
 
-  class App; include Externals; end
-
+  include Externals
   def setup
-    super
-    ENV[env_name('shell')] = 'SpySheller'
-    @app = App.new
+    @shell = SpySheller.new(self)
   end
-
-  def shell; @app.shell; end
-  def git  ; @app.git  ; end
 
   # - - - - - - - - - - - - - - - - -
 
