@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class NameOfCallerTest < LibTestBase
+class NameOfCallerTest < DifferTestBase
 
   def self.hex(suffix)
     '07A' + suffix

@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class GitDiffParserTest < LibTestBase
+class GitDiffParserTest < DifferTestBase
 
   def self.hex(suffix)
     'B56' + suffix

@@ -1,4 +1,35 @@
 
+require_relative './differ_test_base'
+
+class TestNearestAncestors < DifferTestBase
+
+  def self.hex(suffix)
+    '9D4' + suffix
+  end
+
+  def setup
+    super
+    anna = Anna.new
+    natalie = Natalie.new(anna)
+    @ellie = Ellie.new(natalie)
+  end
+
+  test 'BF1542',
+  'finds_nearest_ancestor_when_there_is_one' do
+    assert_equal 'hello world:anna', @ellie.uses_disk # 2 up
+    assert_equal 'natalie:42', @ellie.uses_store # 1 up
+  end
+
+  test 'A1EF80',
+  'raises_when_parent_chain_runs_out' do
+    raised = assert_raises(RuntimeError) { @ellie.uses_log }
+    assert_equal 'Anna does not have a parent', raised.to_s
+  end
+
+end
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+
 class DummyDisk
   def initialize(who); @who = who; end
   def read; 'hello world:' + @who; end
@@ -31,35 +62,4 @@ class Ellie
   def disk; nearest_ancestors(:disk); end
   def store; nearest_ancestors(:store); end
   def log; nearest_ancestors(:log); end
-end
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-
-require_relative './lib_test_base'
-
-class TestNearestAncestors < LibTestBase
-
-  def self.hex(suffix)
-    '9D4' + suffix
-  end
-
-  def setup
-    super
-    anna = Anna.new
-    natalie = Natalie.new(anna)
-    @ellie = Ellie.new(natalie)
-  end
-
-  test 'BF1542',
-  'finds_nearest_ancestor_when_there_is_one' do
-    assert_equal 'hello world:anna', @ellie.uses_disk # 2 up
-    assert_equal 'natalie:42', @ellie.uses_store # 1 up
-  end
-
-  test 'A1EF80',
-  'raises_when_parent_chain_runs_out' do
-    raised = assert_raises(RuntimeError) { @ellie.uses_log }
-    assert_equal 'Anna does not have a parent', raised.to_s
-  end
-
 end

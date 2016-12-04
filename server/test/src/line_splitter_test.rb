@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class LineSplitterTest < LibTestBase
+class LineSplitterTest < DifferTestBase
 
   def self.hex(suffix)
     'B2B' + suffix

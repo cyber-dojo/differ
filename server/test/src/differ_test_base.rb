@@ -1,6 +1,6 @@
 
 require_relative '../all'
 
-class LibTestBase < TestBase
+class DifferTestBase < TestBase
 
 end

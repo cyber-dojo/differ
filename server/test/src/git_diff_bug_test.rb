@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class GitDiffBugTest < LibTestBase
+class GitDiffBugTest < DifferTestBase
 
   include GitDiffJoinBuilder
 

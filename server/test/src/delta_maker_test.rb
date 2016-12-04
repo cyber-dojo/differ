@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class DeltaMakerTest < LibTestBase
+class DeltaMakerTest < DifferTestBase
 
   def self.hex(suffix)
     '944' + suffix

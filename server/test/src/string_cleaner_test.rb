@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class StringCleanerTest < LibTestBase
+class StringCleanerTest < DifferTestBase
 
   def self.hex(suffix)
     '3D9' + suffix

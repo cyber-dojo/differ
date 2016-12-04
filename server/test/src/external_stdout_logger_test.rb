@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class ExternalStdoutLoggerTest < LibTestBase
+class ExternalStdoutLoggerTest < DifferTestBase
 
   def self.hex(suffix)
     '1B6' + suffix

@@ -1,8 +1,8 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 require_relative './spy_sheller'
 
-class ExternalGitterTest < LibTestBase
+class ExternalGitterTest < DifferTestBase
 
   def self.hex(suffix)
     'DC3' + suffix

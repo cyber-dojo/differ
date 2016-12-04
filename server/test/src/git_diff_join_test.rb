@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class GitDiffJoinTest < LibTestBase
+class GitDiffJoinTest < DifferTestBase
 
   def self.hex(suffix)
     '74C' + suffix

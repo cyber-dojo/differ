@@ -1,7 +1,7 @@
 
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 
-class SnakeCaserTest < LibTestBase
+class SnakeCaserTest < DifferTestBase
 
   def self.hex(suffix)
     '59B' + suffix

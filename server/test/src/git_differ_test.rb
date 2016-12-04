@@ -1,11 +1,9 @@
 
-# NB: if you call this file app_test.rb then SimpleCov fails to see it?!
-
-require_relative './lib_test_base'
+require_relative './differ_test_base'
 require_relative './null_logger'
 require_relative './raising_disk_writer'
 
-class GitDifferTest < LibTestBase
+class GitDifferTest < DifferTestBase
 
   include Externals
 
