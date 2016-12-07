@@ -12,7 +12,7 @@ services:
         PORT: 4568
     ports: [ "4568:4568" ]
 
-  differ_server:
+  differ:
     user: nobody
     image: cyberdojo/differ
     container_name: differ_server
