@@ -16,6 +16,8 @@ services:
     user: nobody
     image: cyberdojo/differ
     container_name: differ_server
+    read_only: true
+    tmpfs: /tmp
     build:
       context: server
       args:
