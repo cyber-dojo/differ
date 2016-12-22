@@ -19,9 +19,9 @@ class MicroService < Sinatra::Base
   def differ
     diff = GitDiffer.new(self).diff(was_files, now_files)
     { 'diff' => git_diff_join(diff, now_files) }.to_json
-  rescue
+  rescue Exception => e
     log << "EXCEPTION: #{e.class.name} #{e.to_s}"
-    { 'exception' => e.message }.to_json
+    { 'exception' => e.class.name }.to_json
   end
 
   def self.request_args(*names)
