@@ -6,7 +6,7 @@ module GitDiff # mix-in
   module_function
 
   def git_diff(was_files, now_files)
-    uri = URI.parse('http://differ:4567')
+    uri = URI.parse('http://differ:4567/diff')
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     request.content_type = 'application/json'

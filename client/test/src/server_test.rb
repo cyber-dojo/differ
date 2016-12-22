@@ -228,7 +228,7 @@ class DifferAppTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    GitDiff::git_diff(@was_files, @now_files)
+    GitDiff::git_diff(@was_files, @now_files)['diff']
   end
 
   # - - - - - - - - - - - - - - - - - - - -

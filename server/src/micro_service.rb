@@ -1,28 +1,36 @@
-
-# NB: if you call this file app.rb then SimpleCov fails to see it?!
-#     or rather, it botches its appearance in the html view
-
 require 'sinatra/base'
 require 'json'
 
+require_relative './externals'
 require_relative './git_differ'
 require_relative './git_diff_join'
-require_relative './externals'
 
 class MicroService < Sinatra::Base
 
-  get '/' do
-    content_type :json
-    was_files = args['was_files']
-    now_files = args['now_files']
-    diff = GitDiffer.new(self).diff(was_files, now_files)
-    git_diff_join(diff, now_files).to_json
+  get '/diff' do
+    differ
   end
 
   private
 
   include Externals
   include GitDiffJoin
+
+  def differ
+    diff = GitDiffer.new(self).diff(was_files, now_files)
+    { 'diff' => git_diff_join(diff, now_files) }.to_json
+  rescue
+    log << "EXCEPTION: #{e.class.name} #{e.to_s}"
+    { 'exception' => e.message }.to_json
+  end
+
+  def self.request_args(*names)
+    names.each { |name|
+      define_method name, &lambda { args[name.to_s] }
+    }
+  end
+
+  request_args :was_files, :now_files
 
   def args
     @args ||= request_body_args

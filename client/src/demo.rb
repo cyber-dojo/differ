@@ -5,7 +5,7 @@ require_relative './git_diff'
 
 class Demo < Sinatra::Base
 
-  get '/' do
+  get '/diff' do
 
     was_files = {
       'cyber-dojo.sh': "blah blah",
