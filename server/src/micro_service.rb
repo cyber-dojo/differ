@@ -38,7 +38,7 @@ class MicroService < Sinatra::Base
 
   def request_body_args
     request.body.rewind
-    parse(request.body.read
+    request.body.read
   end
 
 end
