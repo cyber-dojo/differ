@@ -33,12 +33,12 @@ class MicroService < Sinatra::Base
   request_args :was_files, :now_files
 
   def args
-    @args ||= request_body_args
+    @args ||= JSON.parse(request_body_args)
   end
 
   def request_body_args
     request.body.rewind
-    JSON.parse(request.body.read)
+    parse(request.body.read
   end
 
 end
