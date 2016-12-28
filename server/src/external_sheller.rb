@@ -1,6 +1,5 @@
-
-require_relative './nearest_ancestors'
-require_relative './string_cleaner'
+require_relative 'nearest_ancestors'
+require_relative 'string_cleaner'
 
 class ExternalSheller
 

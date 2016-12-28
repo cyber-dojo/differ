@@ -1,9 +1,6 @@
+require_relative 'line_splitter'
 
-# Parses the output of 'git diff' command.
-
-require_relative './line_splitter'
-
-class GitDiffParser
+class GitDiffParser # Parses the output of 'git diff' command.
 
   def initialize(diff_text)
     @lines = LineSplitter.line_split(diff_text)

@@ -1,5 +1,4 @@
-
-require_relative './differ_test_base'
+require_relative 'differ_test_base'
 
 class ExternalStdoutLoggerTest < DifferTestBase
 

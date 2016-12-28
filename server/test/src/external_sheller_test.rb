@@ -1,6 +1,5 @@
-
-require_relative './differ_test_base'
-require_relative './spy_logger'
+require_relative 'differ_test_base'
+require_relative 'spy_logger'
 
 class ExternalShellerTest < DifferTestBase
 

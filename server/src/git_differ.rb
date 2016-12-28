@@ -1,6 +1,5 @@
-
-require_relative './delta_maker'
-require_relative './nearest_ancestors'
+require_relative 'delta_maker'
+require_relative 'nearest_ancestors'
 
 class GitDiffer
 

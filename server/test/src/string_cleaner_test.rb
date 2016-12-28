@@ -1,6 +1,5 @@
-
-require_relative './differ_test_base'
-require_relative './../../src/string_cleaner'
+require_relative 'differ_test_base'
+require_relative '../../src/string_cleaner'
 
 class StringCleanerTest < DifferTestBase
 

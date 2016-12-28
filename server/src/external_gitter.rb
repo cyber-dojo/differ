@@ -1,5 +1,4 @@
-
-require_relative './nearest_ancestors'
+require_relative 'nearest_ancestors'
 
 class ExternalGitter
 

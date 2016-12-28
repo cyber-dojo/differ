@@ -1,6 +1,5 @@
-
-require_relative './differ_test_base'
-require_relative './../../src/nearest_ancestors'
+require_relative 'differ_test_base'
+require_relative '../../src/nearest_ancestors'
 
 class TestNearestAncestors < DifferTestBase
 

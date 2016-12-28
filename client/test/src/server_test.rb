@@ -1,6 +1,5 @@
-
-require_relative './client_test_base'
-require_relative './../../src/git_diff'
+require_relative 'client_test_base'
+require_relative '../../src/git_diff'
 
 class DifferAppTest < ClientTestBase
 

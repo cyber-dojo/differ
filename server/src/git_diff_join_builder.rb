@@ -1,4 +1,3 @@
-
 # Combines diff and lines to build a data structure that
 # containes a complete diff-view of a joined back up file;
 #    the lines that were deleted

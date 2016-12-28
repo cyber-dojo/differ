@@ -1,7 +1,6 @@
-
-require_relative './git_diff_parser'
-require_relative './git_diff_join_builder'
-require_relative './line_splitter'
+require_relative 'git_diff_parser'
+require_relative 'git_diff_join_builder'
+require_relative 'line_splitter'
 
 module GitDiffJoin # mix-in
 

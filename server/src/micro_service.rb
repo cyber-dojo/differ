@@ -1,9 +1,9 @@
 require 'sinatra/base'
 require 'json'
 
-require_relative './externals'
-require_relative './git_differ'
-require_relative './git_diff_join'
+require_relative 'externals'
+require_relative 'git_differ'
+require_relative 'git_diff_join'
 
 class MicroService < Sinatra::Base
 
