@@ -48,6 +48,7 @@ on port 4567. If the diff-client's IP address is 192.168.99.100 then put
 ./pipe_build_up_test.sh
 ```
 
-Rebuilds the images and runs the tests inside the differ server/client containers
+Rebuilds the images and runs the tests inside the
+differ-server and differ-client containers.
 
 ...
