@@ -1,16 +1,35 @@
 
-[![Build Status](https://travis-ci.org/cyber-dojo/differ.svg?branch=master)](https://travis-ci.org/cyber-dojo/differ)
+[![Build Status](https://travis-ci.org/cyber-dojo/differ.svg?branch=master)]
+(https://travis-ci.org/cyber-dojo/differ)
 
-<img src="https://raw.githubusercontent.com/cyber-dojo/nginx/master/images/home_page_logo.png" alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
+<img src="https://raw.githubusercontent.com/cyber-dojo/nginx/master/images/home_page_logo.png"
+alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 # cyberdojo/differ docker image
 
-A micro-service for [cyber-dojo](http://cyber-dojo.org).
-A **cyberdojo/differ** docker container runs sinatra on port 4567.
-[cyberdojo/web](https://github.cim/cyber-dojo/web) uses cyberdojo/differ to obtain the diff between the
-visible files of two traffic-lights.
+- A micro-service for [cyber-dojo](http://cyber-dojo.org).
 
 - - - -
+
+## diff
+Asks for the diff between two sets of files.
+- parameters
+  * was_files, eg
+```
+  { "hiker.h": "#ifndef HIKER_INCLUDED...",
+    "hiker.c": "#include <stdio.h>...",
+    ...
+  }
+```
+  * now_files, eg
+  { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
+    "hiker.c": "#include <stdio.h>...",
+    ...
+  }
+```
+
+- - - -
+
 
 ```
 ./demo.sh
