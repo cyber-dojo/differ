@@ -18,12 +18,15 @@ Asks for the diff between two sets of files.
 ```
   { "hiker.h": "#ifndef HIKER_INCLUDED...",
     "hiker.c": "#include <stdio.h>...",
+    "hiker.tests.c": "#include <assert.h>..."
     ...
   }
 ```
   * now_files, eg
+```
   { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
     "hiker.c": "#include <stdio.h>...",
+    "hiker.tests.c": "#include <assert.h>..."
     ...
   }
 ```
