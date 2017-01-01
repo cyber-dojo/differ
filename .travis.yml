@@ -2,11 +2,10 @@ sudo: required
 services: docker
 language: node_js
 
+before_script:
+    - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/push_and_trigger.sh
+    - chmod +x push_and_trigger.sh
+
 script:
-    - npm install travis-ci
-    - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/trigger-build.js
-    - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/push.sh
-    - chmod +x push.sh
-    - ./pipe_build_up_test.sh
-    - ./push.sh
-    - node trigger-build.js cyber-dojo/web
+    - ./pipe_build_up_test.sh \
+        && ./push_and_trigger.sh cyber-dojo/web
