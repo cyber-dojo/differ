@@ -1,7 +1,7 @@
 #!/bin/bash
 
-my_dir="${PWD}"
-my_name="${PWD##*/}"
+my_dir="$( cd "$( dirname "${0}" )" && pwd )"
+my_name="${my_dir##*/}"
 
 server_cid=`docker ps --all --quiet --filter "name=${my_name}_server"`
 server_status=0
@@ -13,7 +13,6 @@ client_status=0
 
 run_server_tests()
 {
-  #docker exec ${server_cid} sh -c "cat Gemfile.lock"
   docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
   server_status=$?
   docker cp ${server_cid}:/tmp/coverage ${my_dir}/server
@@ -25,7 +24,6 @@ run_server_tests()
 
 run_client_tests()
 {
-  #docker exec ${client_cid} sh -c "cat Gemfile.lock"
   docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
   client_status=$?
   docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
