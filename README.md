@@ -1,4 +1,6 @@
 
+If you're a developer wanting to build your own cyber-dojo server from source [start here](https://github.com/cyber-dojo/home/tree/master/dev).
+
 [![Build Status](https://travis-ci.org/cyber-dojo/differ.svg?branch=master)]
 (https://travis-ci.org/cyber-dojo/differ)
 
