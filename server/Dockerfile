@@ -6,6 +6,12 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositori
   && apk update \
   && apk add git==2.11.1-r0
 
+RUN echo "gem 'prometheus-client'" >> /app/Gemfile
+RUN apk --update add --virtual build-dependencies build-base \
+    && bundle install && gem clean \
+    && apk del build-dependencies \
+    && rm -vrf /var/cache/apk/*
+
 COPY . /app
 
 ARG PORT
