@@ -1270,4 +1270,81 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '124',%w(
+    renamed but unchanged file has no trailing
+    --- or +++ lines and must not consume diff
+    of following file as its prefix_lines
+  ) do
+
+    diff_lines = [
+      'diff --git a/hiker.h b/hiker.txt',
+      'similarity index 100%',
+      'rename from hiker.h',
+      'rename to hiker.txt',
+      'diff --git a/wibble.c b/wibble.c',
+      'index eff4ff4..2ca787d 100644',
+      '--- a/wibble.c',
+      '+++ b/wibble.c',
+      '@@ -1,2 +1,3 @@',
+      ' 123',
+      ' xyz',
+      '+4',
+      '\\ No newline at end of file'
+    ].join("\n")
+
+    expected_diff_1 =
+    {
+      :prefix_lines =>
+      [
+        "diff --git a/hiker.h b/hiker.txt",
+        "similarity index 100%",
+        "rename from hiker.h",
+        "rename to hiker.txt",
+      ],
+      :was_filename => "hiker.h",
+      :now_filename => "hiker.txt",
+      :chunks => []
+    }
+    expected_diff_2 =
+    {
+      :prefix_lines =>
+      [
+        "diff --git a/wibble.c b/wibble.c",
+        "index eff4ff4..2ca787d 100644"
+      ],
+      :was_filename => "wibble.c",
+      :now_filename => "wibble.c",
+      :chunks =>
+      [
+        {
+          :range =>
+          {
+            :was => { :start_line => 1, :size => 2 },
+            :now => { :start_line => 1, :size => 3 }
+          },
+          :before_lines => ["123", "xyz"],
+          :sections =>
+          [
+            {
+              :deleted_lines => [],
+              :added_lines   => ["4"],
+              :after_lines   => []
+            }
+          ]
+        }
+      ]
+    }
+
+    expected_diffs =
+    {
+      'hiker.txt' => expected_diff_1,
+      'wibble.c'  => expected_diff_2
+    }
+
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
+    assert_equal expected_diffs, actual_diffs
+  end
+
 end
