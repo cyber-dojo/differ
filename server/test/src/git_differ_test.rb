@@ -85,8 +85,10 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '369',
-  'deleted non-empty file shows as delete file and all -deleted lines' do
+  test '369', %w(
+    deleted non-empty file
+    shows as deleted file and all -deleted lines
+  ) do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { }
     assert_diff [
@@ -105,8 +107,54 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '194',
-  'all lines deleted but file not deleted shows as all -deleted lines' do
+  test '3C8', %w(
+    deleted non-empty file in sub-dir
+    shows as deleted file and all -deleted lines
+  ) do
+    @was_files = { 'dir/hiker.h' => "a\nb\nc\nd\n" }
+    @now_files = { }
+    assert_diff [
+      'diff --git a/dir/hiker.h b/dir/hiker.h',
+      'deleted file mode 100644',
+      'index d68dd40..0000000',
+      '--- a/dir/hiker.h',
+      '+++ /dev/null',
+      '@@ -1,4 +0,0 @@',
+      '-a',
+      '-b',
+      '-c',
+      '-d'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '97E', %w(
+    deleted non-empty file in nested sub-dir
+    shows as deleted file and all -deleted lines
+  ) do
+    @was_files = { '1/2/3/4/hiker.h' => "a\nb\nc\nd\n" }
+    @now_files = { }
+    assert_diff [
+      'diff --git a/1/2/3/4/hiker.h b/1/2/3/4/hiker.h',
+      'deleted file mode 100644',
+      'index d68dd40..0000000',
+      '--- a/1/2/3/4/hiker.h',
+      '+++ /dev/null',
+      '@@ -1,4 +0,0 @@',
+      '-a',
+      '-b',
+      '-c',
+      '-d'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '194', %w(
+    all lines deleted but file not deleted
+    shows as all -deleted lines
+  ) do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @now_files = { 'hiker.h' => '' }
     assert_diff [
@@ -114,6 +162,48 @@ class GitDifferTest < DifferTestBase
       'index d68dd40..e69de29 100644',
       '--- a/hiker.h',
       '+++ b/hiker.h',
+      '@@ -1,4 +0,0 @@',
+      '-a',
+      '-b',
+      '-c',
+      '-d'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'E80', %w(
+    all lines deleted but file in nested sub-dir not deleted
+    shows as all -deleted lines
+  ) do
+    @was_files = { '3/2/1/hiker.h' => "a\nb\nc\nd\n" }
+    @now_files = { '3/2/1/hiker.h' => '' }
+    assert_diff [
+      'diff --git a/3/2/1/hiker.h b/3/2/1/hiker.h',
+      'index d68dd40..e69de29 100644',
+      '--- a/3/2/1/hiker.h',
+      '+++ b/3/2/1/hiker.h',
+      '@@ -1,4 +0,0 @@',
+      '-a',
+      '-b',
+      '-c',
+      '-d'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '804', %w(
+    all lines deleted but file in sub-dir not deleted
+    shows as all -deleted lines
+  ) do
+    @was_files = { '1/hiker.h' => "a\nb\nc\nd\n" }
+    @now_files = { '1/hiker.h' => '' }
+    assert_diff [
+      'diff --git a/1/hiker.h b/1/hiker.h',
+      'index d68dd40..e69de29 100644',
+      '--- a/1/hiker.h',
+      '+++ b/1/hiker.h',
       '@@ -1,4 +0,0 @@',
       '-a',
       '-b',
@@ -179,6 +269,52 @@ class GitDifferTest < DifferTestBase
       'index 0000000..27a7ea6',
       '--- /dev/null',
       '+++ b/diamond.h',
+      '@@ -0,0 +1,4 @@',
+      '+a',
+      '+b',
+      '+c',
+      '+d',
+      '\\ No newline at end of file'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'C91', %w(
+    added non-empty file in sub-dir
+    shows as all +added lines
+  ) do
+    @was_files = { }
+    @now_files = { '4/diamond.h' => "a\nb\nc\nd" }
+    assert_diff [
+      'diff --git a/4/diamond.h b/4/diamond.h',
+      'new file mode 100644',
+      'index 0000000..27a7ea6',
+      '--- /dev/null',
+      '+++ b/4/diamond.h',
+      '@@ -0,0 +1,4 @@',
+      '+a',
+      '+b',
+      '+c',
+      '+d',
+      '\\ No newline at end of file'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'B9B', %w(
+    added non-empty file in nested sub-dir
+    shows as all +added lines
+  ) do
+    @was_files = { }
+    @now_files = { '1/2/3/4/diamond.h' => "a\nb\nc\nd" }
+    assert_diff [
+      'diff --git a/1/2/3/4/diamond.h b/1/2/3/4/diamond.h',
+      'new file mode 100644',
+      'index 0000000..27a7ea6',
+      '--- /dev/null',
+      '+++ b/1/2/3/4/diamond.h',
       '@@ -0,0 +1,4 @@',
       '+a',
       '+b',
