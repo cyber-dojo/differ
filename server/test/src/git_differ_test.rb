@@ -339,6 +339,28 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test '519',
+  'unchanged empty-file in sub-dir has no diff' do
+    # same as adding an empty file except in this case
+    # the filename exists in was_files
+    @was_files = { 'x/diamond.h' => '' }
+    @now_files = { 'x/diamond.h' => '' }
+    assert_diff []
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '520',
+  'unchanged empty-file in nested sub-dir has no diff' do
+    # same as adding an empty file except in this case
+    # the filename exists in was_files
+    @was_files = { 'x/y/z/diamond.h' => '' }
+    @now_files = { 'x/y/z/diamond.h' => '' }
+    assert_diff []
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   test '1DD',
   'unchanged non-empty file has no diff' do
     @was_files = { 'diamond.h' => "a\nb\nc\nd" }
