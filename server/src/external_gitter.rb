@@ -48,7 +48,8 @@ class ExternalGitter
       '--compaction-heuristic',
       '--indent-heuristic',
       "#{n}",
-      "#{m}"
+      "#{m}",
+      '--'     # specifies to git that n,m are revisions and not filenames
     ].join(space)
     output_of(shell.cd_exec(path, "git diff #{options}"))
   end

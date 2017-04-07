@@ -65,7 +65,8 @@ class ExternalGitterTest < DifferTestBase
       '--compaction-heuristic',
       '--indent-heuristic',
       "#{was_tag}",
-      "#{now_tag}"
+      "#{now_tag}",
+      '--'
     ].join(space)
     git.diff(path, was_tag, now_tag)
     expect_shell("git diff #{options}")

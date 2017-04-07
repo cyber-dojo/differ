@@ -159,9 +159,9 @@ class GitDifferTest < DifferTestBase
     shows as new file in nested sub-dir
   ) do
     @was_files = { }
-    @now_files = { 'd1/d2/d3/d4/diamond.h' => '' }
+    @now_files = { '1/2/3/4/diamond.h' => '' }
     assert_diff [
-      'diff --git a/d1/d2/d3/d4/diamond.h b/d1/d2/d3/d4/diamond.h',
+      'diff --git a/1/2/3/4/diamond.h b/1/2/3/4/diamond.h',
       'new file mode 100644',
       'index 0000000..e69de29'
     ]
