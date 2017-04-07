@@ -41,9 +41,12 @@ class GitDiffer
   end
 
   def write_was_files_into(git_dir)
-    was_files.each do |filename, content|
-      disk.write(git_dir + '/' + filename, content)
-      git.add(git_dir, filename)
+    was_files.each do |pathed_filename, content|
+      path = File.dirname(pathed_filename)
+      src_dir = git_dir + '/' + path
+      shell.exec("mkdir -vp #{src_dir}") if path != '.'
+      disk.write(git_dir + '/' + pathed_filename, content)
+      git.add(git_dir, pathed_filename)
     end
   end
 
@@ -54,9 +57,12 @@ class GitDiffer
   end
 
   def write_new_files_to(git_dir)
-    delta[:new].each do |filename|
-      disk.write(git_dir + '/' + filename, now_files[filename])
-      git.add(git_dir, filename)
+    delta[:new].each do |pathed_filename|
+      path = File.dirname(pathed_filename)
+      src_dir = git_dir + '/' + path
+      shell.exec("mkdir -vp #{src_dir}") if path != '.'
+      disk.write(git_dir + '/' + pathed_filename, now_files[pathed_filename])
+      git.add(git_dir, pathed_filename)
     end
   end
 
@@ -69,6 +75,7 @@ class GitDiffer
   include DeltaMaker
   include NearestAncestors
 
+  def shell; nearest_ancestors(:shell); end
   def disk; nearest_ancestors(:disk); end
   def git; nearest_ancestors(:git); end
 

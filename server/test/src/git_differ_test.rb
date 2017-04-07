@@ -55,6 +55,19 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test '68F',
+  'deleted empty file in sub-dir shows as empty file in sub-dir' do
+    @was_files = { 'sub-dir/hiker.h' => '' }
+    @now_files = { }
+    assert_diff [
+      'diff --git a/sub-dir/hiker.h b/sub-dir/hiker.h',
+      'deleted file mode 100644',
+      'index e69de29..0000000'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   test '369',
   'deleted non-empty file shows as delete file and all -deleted lines' do
     @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
@@ -102,6 +115,19 @@ class GitDifferTest < DifferTestBase
     @now_files = { 'diamond.h' => '' }
     assert_diff [
       'diff --git a/diamond.h b/diamond.h',
+      'new file mode 100644',
+      'index 0000000..e69de29'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '41F',
+  'added empty file in sub-dir shows as new file in sub-dir' do
+    @was_files = { }
+    @now_files = { 'sub-dir/diamond.h' => '' }
+    assert_diff [
+      'diff --git a/sub-dir/diamond.h b/sub-dir/diamond.h',
       'new file mode 100644',
       'index 0000000..e69de29'
     ]
