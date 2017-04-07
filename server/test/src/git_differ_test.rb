@@ -403,6 +403,23 @@ class GitDifferTest < DifferTestBase
     ]
   end
 
+  test 'FA0',
+  'change in non-empty file in sub-dir shows as +added and -deleted lines' do
+    @was_files = { 'x/diamond.h' => 'a' }
+    @now_files = { 'x/diamond.h' => 'b' }
+    assert_diff [
+      'diff --git a/x/diamond.h b/x/diamond.h',
+      'index 2e65efe..63d8dbd 100644',
+      '--- a/x/diamond.h',
+      '+++ b/x/diamond.h',
+      '@@ -1 +1 @@',
+      '-a',
+      '\\ No newline at end of file',
+      '+b',
+      '\\ No newline at end of file'
+    ]
+  end
+
   # - - - - - - - - - - - - - - - - - - - -
 
   test '6D7',
@@ -455,6 +472,59 @@ class GitDifferTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+
+  test '6D8', %w(
+    change in non-empty file in sub-dir
+    shows as +added and -deleted lines
+    with each chunk in its own indexed section
+  ) do
+    @was_files = {
+      'p/diamond.h' =>
+        [
+          '#ifndef DIAMOND',
+          '#define DIAMOND',
+          '',
+          '#include <strin>', # no g
+          '',
+          'void diamond(char)', # no ;
+          '',
+          '#endif',
+        ].join("\n")
+    }
+    @now_files = {
+      'p/diamond.h' =>
+        [
+        '#ifndef DIAMOND',
+        '#define DIAMOND',
+        '',
+        '#include <string>',
+        '',
+        'void diamond(char);',
+        '',
+        '#endif',
+        ].join("\n")
+    }
+    assert_diff [
+      'diff --git a/p/diamond.h b/p/diamond.h',
+      'index a737c21..49a3313 100644',
+      '--- a/p/diamond.h',
+      '+++ b/p/diamond.h',
+      '@@ -1,8 +1,8 @@',
+      ' #ifndef DIAMOND',
+      ' #define DIAMOND',
+      ' ',
+      '-#include <strin>',
+      '+#include <string>',
+      ' ',
+      '-void diamond(char)',
+      '+void diamond(char);',
+      ' ',
+      ' #endif',
+      '\\ No newline at end of file'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
   # rename
   # - - - - - - - - - - - - - - - - - - - -
 
@@ -469,6 +539,48 @@ class GitDifferTest < DifferTestBase
       'similarity index 100%',
       'rename from hiker.h',
       'rename to diamond.h'
+    ]
+  end
+
+  test 'C07',
+  'renamed file in sub-dir shows as similarity 100%' do
+    # same as unchanged non-empty file except the filename
+    # does not exist in was_files
+    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'x/diamond.h' => "a\nb\nc\nd" }
+    assert_diff [
+      'diff --git a/hiker.h b/x/diamond.h',
+      'similarity index 100%',
+      'rename from hiker.h',
+      'rename to x/diamond.h'
+    ]
+  end
+
+  test 'C08',
+  'renamed file in nested sub-dir shows as similarity 100%' do
+    # same as unchanged non-empty file except the filename
+    # does not exist in was_files
+    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'x/y/z/diamond.h' => "a\nb\nc\nd" }
+    assert_diff [
+      'diff --git a/hiker.h b/x/y/z/diamond.h',
+      'similarity index 100%',
+      'rename from hiker.h',
+      'rename to x/y/z/diamond.h'
+    ]
+  end
+
+  test 'C09',
+  'renamed file across nested sub-dirs shows as similarity 100%' do
+    # same as unchanged non-empty file except the filename
+    # does not exist in was_files
+    @was_files = { '1/2/3/hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'x/y/z/diamond.h' => "a\nb\nc\nd" }
+    assert_diff [
+      'diff --git a/1/2/3/hiker.h b/x/y/z/diamond.h',
+      'similarity index 100%',
+      'rename from 1/2/3/hiker.h',
+      'rename to x/y/z/diamond.h'
     ]
   end
 
@@ -487,6 +599,31 @@ class GitDifferTest < DifferTestBase
       'index 27a7ea6..2de4cc6 100644',
       '--- a/hiker.h',
       '+++ b/diamond.h',
+      '@@ -1,4 +1,4 @@',
+      ' a',
+      ' b',
+      '-c',
+      '+X',
+      ' d',
+      '\\ No newline at end of file'
+    ]
+  end
+
+  test '6BF',%w(
+    renamed and slightly changed file
+    across nested sub-dirs shows as <100% similarity index
+  ) do
+    @was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'x/y/diamond.h' => "a\nb\nX\nd" }
+
+    assert_diff [
+      'diff --git a/1/2/hiker.h b/x/y/diamond.h',
+      'similarity index 57%',
+      'rename from 1/2/hiker.h',
+      'rename to x/y/diamond.h',
+      'index 27a7ea6..2de4cc6 100644',
+      '--- a/1/2/hiker.h',
+      '+++ b/x/y/diamond.h',
       '@@ -1,4 +1,4 @@',
       ' a',
       ' b',
