@@ -636,6 +636,38 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test '6C0',%w(
+    renamed and unchanged file in sub-dir and
+    changed file in base-dir
+  ) do
+    @was_files = {
+      'a/hiker.h'   => "a\nb\nc\nd",
+      'wibble.c'    => "123\nxyz\n"
+    }
+    @now_files = {
+      'a/hiker.txt' => "a\nb\nc\nd",
+      'wibble.c'    => "123\nxyz\n4"
+    }
+
+    assert_diff [
+      'diff --git a/a/hiker.h b/a/hiker.txt',
+      'similarity index 100%',
+      'rename from a/hiker.h',
+      'rename to a/hiker.txt',
+      'diff --git a/wibble.c b/wibble.c',
+      'index eff4ff4..2ca787d 100644',
+      '--- a/wibble.c',
+      '+++ b/wibble.c',
+      '@@ -1,2 +1,3 @@',
+      ' 123',
+      ' xyz',
+      '+4',
+      '\\ No newline at end of file'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   def assert_diff(lines)
     lines += [''] unless lines == []
     expected = lines.join("\n")

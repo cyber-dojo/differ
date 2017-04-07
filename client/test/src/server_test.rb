@@ -386,6 +386,14 @@ class DifferAppTest < ClientTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+=begin
+  test '925', %w(
+    renamed
+  ) do
+  end
+=end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff(filename, expected)
     json = get_diff
