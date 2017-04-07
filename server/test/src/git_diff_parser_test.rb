@@ -171,6 +171,24 @@ class GitDiffParserTest < DifferTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'AD1', %w(
+    parse was & now nested sub-dir filenames
+    with double-quote and space in both filenames
+    and where first sub-dir is 'a' or 'b' which could clash
+    with git-diff output which uses a/ and b/
+  ) do
+    # double-quote " is a legal character in a linux filename
+    prefix = [
+       'diff --git "a/a/d/f/li n\"ux" "b/b/u/i/o/em bed\"ded"',
+       'index 0000000..e69de29'
+    ]
+    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
+    assert_equal "a/d/f/li n\"ux", was_filename, 'was_filename'
+    assert_equal "b/u/i/o/em bed\"ded", now_filename, 'now_filename'
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_all
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
