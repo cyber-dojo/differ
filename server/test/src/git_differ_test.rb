@@ -55,12 +55,29 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '68F',
-  'deleted empty file in sub-dir shows as empty file in sub-dir' do
+  test '68F', %w(
+    deleted empty file in sub-dir
+    shows as empty file in sub-dir
+  ) do
     @was_files = { 'sub-dir/hiker.h' => '' }
     @now_files = { }
     assert_diff [
       'diff --git a/sub-dir/hiker.h b/sub-dir/hiker.h',
+      'deleted file mode 100644',
+      'index e69de29..0000000'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '505', %w(
+    deleted empty-file in nested sub-dir
+    shows as empty file in nested sub-dir
+  ) do
+    @was_files = { 'd1/d2/d3/d4/hiker.h' => '' }
+    @now_files = { }
+    assert_diff [
+      'diff --git a/d1/d2/d3/d4/hiker.h b/d1/d2/d3/d4/hiker.h',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
@@ -122,12 +139,29 @@ class GitDifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '41F',
-  'added empty file in sub-dir shows as new file in sub-dir' do
+  test '41F', %w(
+    added empty file in sub-dir
+    shows as new file in sub-dir
+  ) do
     @was_files = { }
     @now_files = { 'sub-dir/diamond.h' => '' }
     assert_diff [
       'diff --git a/sub-dir/diamond.h b/sub-dir/diamond.h',
+      'new file mode 100644',
+      'index 0000000..e69de29'
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '886', %w(
+    added empty file in nested sub-dir
+    shows as new file in nested sub-dir
+  ) do
+    @was_files = { }
+    @now_files = { 'd1/d2/d3/d4/diamond.h' => '' }
+    assert_diff [
+      'diff --git a/d1/d2/d3/d4/diamond.h b/d1/d2/d3/d4/diamond.h',
       'new file mode 100644',
       'index 0000000..e69de29'
     ]
