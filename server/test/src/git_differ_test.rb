@@ -368,6 +368,20 @@ class GitDifferTest < DifferTestBase
     assert_diff []
   end
 
+  test '1DE',
+  'unchanged non-empty file in sub-dir has no diff' do
+    @was_files = { 'd/diamond.h' => "a\nb\nc\nd" }
+    @now_files = { 'd/diamond.h' => "a\nb\nc\nd" }
+    assert_diff []
+  end
+
+  test '1DF',
+  'unchanged non-empty file in nested sub-dir has no diff' do
+    @was_files = { 'w/e/r/diamond.h' => "a\nb\nc\nd" }
+    @now_files = { 'w/e/r/diamond.h' => "a\nb\nc\nd" }
+    assert_diff []
+  end
+
   # - - - - - - - - - - - - - - - - - - - -
   # change
   # - - - - - - - - - - - - - - - - - - - -
