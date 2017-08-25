@@ -1,22 +1,19 @@
 #!/bin/bash
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-my_name="${ROOT_DIR##*/}"
+readonly MY_NAME="${ROOT_DIR##*/}"
 
-readonly server_cid=`docker ps --all --quiet --filter "name=${my_name}_server"`
-server_status=0
-
-readonly client_cid=`docker ps --all --quiet --filter "name=${my_name}_client"`
-client_status=0
+readonly SERVER_CID=`docker ps --all --quiet --filter "name=${MY_NAME}_server"`
+readonly CLIENT_CID=`docker ps --all --quiet --filter "name=${MY_NAME}_client"`
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 run_server_tests()
 {
-  docker exec ${server_cid} sh -c "cd test && ./run.sh ${*}"
+  docker exec ${SERVER_CID} sh -c "cd test && ./run.sh ${*}"
   server_status=$?
-  docker cp ${server_cid}:/tmp/coverage ${ROOT_DIR}/server
-  echo "Coverage report copied to ${my_name}/server/coverage"
+  docker cp ${SERVER_CID}:/tmp/coverage ${ROOT_DIR}/server
+  echo "Coverage report copied to ${MY_NAME}/server/coverage"
   cat ${ROOT_DIR}/server/coverage/done.txt
 }
 
@@ -24,32 +21,34 @@ run_server_tests()
 
 run_client_tests()
 {
-  docker exec ${client_cid} sh -c "cd test && ./run.sh ${*}"
+  docker exec ${CLIENT_CID} sh -c "cd test && ./run.sh ${*}"
   client_status=$?
-  docker cp ${client_cid}:/tmp/coverage ${ROOT_DIR}/client
-  echo "Coverage report copied to ${my_name}/client/coverage"
+  docker cp ${CLIENT_CID}:/tmp/coverage ${ROOT_DIR}/client
+  echo "Coverage report copied to ${MY_NAME}/client/coverage"
   cat ${ROOT_DIR}/client/coverage/done.txt
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+server_status=0
+client_status=0
 run_server_tests ${*}
 run_client_tests ${*}
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]];  then
-  ${ROOT_DIR}/sh/docker_containers_down.sh
   echo "------------------------------------------------------"
   echo "All passed"
+  ${ROOT_DIR}/sh/docker_containers_down.sh
   exit 0
 else
   echo
-  echo "server: cid = ${server_cid}, status = ${server_status}"
-  if [ "${server_cid}" != "0" ]; then
-    docker logs ${my_name}_server
+  echo "server: cid = ${SERVER_CID}, status = ${server_status}"
+  if [ "${SERVER_CID}" != "0" ]; then
+    docker logs ${MY_NAME}_server
   fi
-  echo "client: cid = ${client_cid}, status = ${client_status}"
-  if [ "${client_cid}" != "0" ]; then
-    docker logs ${my_name}_client
+  echo "client: cid = ${CLIENT_SID}, status = ${client_status}"
+  if [ "${CLIENT_SID}" != "0" ]; then
+    docker logs ${MY_NAME}_client
   fi
   echo
   exit 1
