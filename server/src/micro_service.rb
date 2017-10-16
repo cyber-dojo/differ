@@ -9,7 +9,7 @@ class MicroService
   def call(env)
     request = Rack::Request.new(env)
     @args = JSON.parse(request.body.read)
-    [ 200, { 'Content-Type' => 'application/json' }, [ json ] ]
+    [ 200, { 'Content-Type' => 'application/json' }, [ diff.to_json ] ]
   end
 
   private
@@ -17,12 +17,12 @@ class MicroService
   include Externals
   include GitDiffJoin
 
-  def json
-    diff = GitDiffer.new(self).diff(was_files, now_files)
-    { 'diff' => git_diff_join(diff, now_files) }.to_json
+  def diff
+    git_diff = GitDiffer.new(self).diff(was_files, now_files)
+    { 'diff' => git_diff_join(git_diff, now_files) }
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name} #{e.to_s}"
-    { 'exception' => e.class.name }.to_json
+    { 'exception' => e.class.name }
   end
 
   def self.request_args(*names)
