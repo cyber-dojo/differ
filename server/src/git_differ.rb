@@ -1,13 +1,12 @@
 require_relative 'delta_maker'
-require_relative 'nearest_ancestors'
 
 class GitDiffer
 
   def initialize(parent)
-    @parent = parent
+    @disk = parent.disk
+    @git = parent.git
+    @shell = parent.shell
   end
-
-  attr_reader :parent
 
   def diff(was_files, now_files)
     @was_files = was_files
@@ -31,6 +30,8 @@ class GitDiffer
   end
 
   private
+
+  attr_reader :disk, :git, :shell # externals
 
   attr_reader :delta, :was_files, :now_files
 
@@ -73,10 +74,5 @@ class GitDiffer
   end
 
   include DeltaMaker
-  include NearestAncestors
-
-  def shell; nearest_ancestors(:shell); end
-  def disk; nearest_ancestors(:disk); end
-  def git; nearest_ancestors(:git); end
 
 end

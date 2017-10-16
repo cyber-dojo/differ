@@ -1,13 +1,10 @@
-require_relative 'nearest_ancestors'
 require_relative 'string_cleaner'
 
 class ExternalSheller
 
   def initialize(parent)
-    @parent = parent
+    @log = parent.log
   end
-
-  attr_reader :parent
 
   def cd_exec(path, *commands)
     # the [[ -d ]] is to avoid spurious [cd path] failure
@@ -38,9 +35,8 @@ class ExternalSheller
 
   private
 
-  include NearestAncestors
-  include StringCleaner
+  attr_reader :log # external
 
-  def log; nearest_ancestors(:log); end
+  include StringCleaner
 
 end

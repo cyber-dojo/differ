@@ -1,14 +1,11 @@
-require_relative 'nearest_ancestors'
 
 class ExternalGitter
 
   def initialize(parent)
-    @parent = parent
+    @shell = parent.shell
   end
 
   # queries
-
-  attr_reader :parent
 
   def setup(path, user_name, user_email)
     shell.cd_exec(path,
@@ -56,7 +53,7 @@ class ExternalGitter
 
   private
 
-  include NearestAncestors
+  attr_reader :shell # external
 
   def quoted(s)
     "'" + s + "'"
@@ -69,7 +66,5 @@ class ExternalGitter
   def output_of(args)
     args[0]
   end
-
-  def shell; nearest_ancestors(:shell); end
 
 end
