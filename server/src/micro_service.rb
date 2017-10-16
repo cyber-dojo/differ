@@ -1,14 +1,15 @@
-require 'sinatra/base'
 require 'json'
 
 require_relative 'externals'
 require_relative 'git_differ'
 require_relative 'git_diff_join'
 
-class MicroService < Sinatra::Base
+class MicroService
 
-  get '/diff' do
-    differ
+  def call(env)
+    request = Rack::Request.new(env)
+    @args = JSON.parse(request.body.read)
+    [ 200, { 'Content-Type' => 'application/json' }, [ json ] ]
   end
 
   private
@@ -16,7 +17,7 @@ class MicroService < Sinatra::Base
   include Externals
   include GitDiffJoin
 
-  def differ
+  def json
     diff = GitDiffer.new(self).diff(was_files, now_files)
     { 'diff' => git_diff_join(diff, now_files) }.to_json
   rescue Exception => e
@@ -26,14 +27,10 @@ class MicroService < Sinatra::Base
 
   def self.request_args(*names)
     names.each { |name|
-      define_method name, &lambda { args[name.to_s] }
+      define_method name, &lambda { @args[name.to_s] }
     }
   end
 
   request_args :was_files, :now_files
-
-  def args
-    @args ||= JSON.parse(request.body.read)
-  end
 
 end
