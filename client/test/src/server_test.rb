@@ -3,7 +3,9 @@ require_relative '../../src/git_diff'
 
 class DifferAppTest < ClientTestBase
 
-  def self.hex_prefix; '200'; end
+  def self.hex_prefix
+    '200'
+  end
 
   # - - - - - - - - - - - - - - - - - - - -
   # corner cases

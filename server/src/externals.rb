@@ -5,9 +5,20 @@ require_relative 'external_stdout_logger'
 
 module Externals # mix-in
 
-  def shell; @shell ||= ExternalSheller.new(self);      end
-  def disk ;  @disk ||= ExternalDiskWriter.new(self);   end
-  def git  ;   @git ||= ExternalGitter.new(self);       end
-  def log  ;   @log ||= ExternalStdoutLogger.new(self); end
+  def shell
+    @shell ||= ExternalSheller.new(self)
+  end
+
+  def disk
+    @disk ||= ExternalDiskWriter.new(self)
+  end
+
+  def git
+    @git ||= ExternalGitter.new(self)
+  end
+
+  def log
+    @log ||= ExternalStdoutLogger.new(self)
+  end
 
 end
