@@ -1,12 +1,8 @@
-require 'sinatra'
-require 'sinatra/base'
-
 require_relative './git_diff'
 
-class Demo < Sinatra::Base
+class Demo
 
-  get '/diff' do
-
+  def call(_env)
     was_files = {
       'cyber-dojo.sh': "blah blah",
       'hiker.c': '#include <hiker.h>',
@@ -41,7 +37,8 @@ class Demo < Sinatra::Base
     }
 
     json = git_diff(was_files, now_files)
-    '<pre>' + JSON.pretty_unparse(json) + '</pre>'
+    html = '<pre>' + JSON.pretty_unparse(json) + '</pre>'
+    [ 200, { 'Content-Type' => 'text/html' }, [ html ] ]
   end
 
   include GitDiff

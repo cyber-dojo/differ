@@ -3,7 +3,7 @@ set -e
 
 my_dir="$( cd "$( dirname "${0}" )" && pwd )"
 
-${my_dir}/build.sh
+${my_dir}/build_docker_images.sh
 
 docker-compose down
 
