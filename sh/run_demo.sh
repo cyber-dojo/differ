@@ -1,13 +1,9 @@
 #!/bin/bash
-set -e
 
-my_dir="$( cd "$( dirname "${0}" )" && pwd )"
+readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
-${my_dir}/build_docker_images.sh
+${MY_DIR}/build_docker_images.sh
+${MY_DIR}/docker_containers_up.sh
 
-docker-compose down
+echo 'port=4568'
 
-ip=$(docker-machine ip default)
-echo "${ip}:4568"
-
-docker-compose up &
