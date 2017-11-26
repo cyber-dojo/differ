@@ -1,22 +1,25 @@
 #!/bin/bash
 
-# This is the only shell script that needs bash rather than sh
-# It needs it for the (array) handling below.
-# Called from test.sh (from outside the docker-container)
-
 if [ ! -f /.dockerenv ]; then
   echo 'FAILED: run.sh is being executed outside of docker-container.'
-  echo 'Use test.sh which first calls build.sh'
+  echo 'Use pipe_build_up_test.sh'
   exit 1
 fi
 
-cov_dir=/tmp/coverage
-mkdir ${cov_dir}
-test_log=${cov_dir}/test.log
+readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly TEST_LOG=${CYBER_DOJO_COVERAGE_ROOT}/test.log
 
-my_dir="$( cd "$( dirname "${0}" )" && pwd )"
-cd ${my_dir}/src
-files=(*_test.rb)
-args=(${*})
-ruby -e "([ '../coverage.rb' ] + %w(${files[*]}).shuffle).each{ |file| require './'+file }" -- ${args[@]} | tee ${test_log}
-cd ${my_dir} && ruby ./check_test_results.rb ${test_log} ${cov_dir}/index.html > ${cov_dir}/done.txt
+mkdir -p ${CYBER_DOJO_COVERAGE_ROOT}
+cd ${MY_DIR}/src
+
+readonly FILES=(*_test.rb)
+readonly ARGS=(${*})
+
+ruby -e "([ '../coverage.rb' ] + %w(${FILES[*]})).each{ |file| require './'+file }" \
+  -- ${ARGS[@]} | tee ${TEST_LOG}
+
+cd ${MY_DIR} \
+  && ruby ./check_test_results.rb \
+       ${TEST_LOG} \
+       ${CYBER_DOJO_COVERAGE_ROOT}/index.html \
+          > ${CYBER_DOJO_COVERAGE_ROOT}/done.txt

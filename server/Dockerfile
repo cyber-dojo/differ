@@ -28,7 +28,10 @@ RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup server
+# tar is needed to tar-pipe test coverage out of tmpfs.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+RUN apk --update --no-cache add tar
 
 # install git 2.11 (it has --compaction-heuristic)
 # from v3.5 for slightly better diffs.
