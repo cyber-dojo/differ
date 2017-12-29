@@ -6,7 +6,7 @@ services:
     user: nobody
     image: cyberdojo/differ_client
     init: true
-    container_name: differ_client
+    container_name: test_differ_client
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
     build:
@@ -21,7 +21,7 @@ services:
     init: true
     read_only: true
     tmpfs: /tmp
-    container_name: differ_server
+    container_name: test_differ_server
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
     build:

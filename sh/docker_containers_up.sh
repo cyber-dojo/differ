@@ -19,6 +19,10 @@ wait_till_up()
   exit 1
 }
 
-docker-compose --file ${ROOT_DIR}/docker-compose.yml up -d
-wait_till_up 'differ_server'
-wait_till_up 'differ_client'
+docker-compose \
+  --file ${ROOT_DIR}/docker-compose.yml \
+  up -d \
+  --force-recreate
+
+wait_till_up 'test_differ_server'
+wait_till_up 'test_differ_client'
