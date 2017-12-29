@@ -1,10 +1,10 @@
-require 'json'
-
 require_relative 'externals'
 require_relative 'git_differ'
 require_relative 'git_diff_join'
+require 'json'
+require 'rack'
 
-class MicroService
+class RackDispatcher
 
   def call(env)
     request = Rack::Request.new(env)

@@ -5,7 +5,7 @@ class ExternalGitter
     @shell = parent.shell
   end
 
-  # queries
+  # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def setup(path, user_name, user_email)
     shell.cd_exec(path,
