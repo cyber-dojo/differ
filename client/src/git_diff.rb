@@ -6,7 +6,7 @@ module GitDiff # mix-in
   module_function
 
   def git_diff(was_files, now_files)
-    uri = URI.parse('http://differ:4567/diff')
+    uri = URI.parse("http://#{hostname}:#{port}/diff")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     request.content_type = 'application/json'
@@ -16,6 +16,14 @@ module GitDiff # mix-in
     }.to_json
     response = http.request(request)
     JSON.parse(response.body)
+  end
+
+  def hostname
+    'differ'
+  end
+
+  def port
+    ENV['CYBER_DOJO_DIFFER_SERVER_PORT']
   end
 
 end
