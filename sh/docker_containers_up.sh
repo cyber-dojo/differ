@@ -3,6 +3,13 @@ set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
+docker-compose \
+  --file ${ROOT_DIR}/docker-compose.yml \
+  up -d \
+  --force-recreate
+
+# - - - - - - - - - - - - - - - - - - -
+
 wait_till_up()
 {
   local n=10
@@ -18,11 +25,6 @@ wait_till_up()
   docker logs ${1}
   exit 1
 }
-
-docker-compose \
-  --file ${ROOT_DIR}/docker-compose.yml \
-  up -d \
-  --force-recreate
 
 wait_till_up 'test_differ_server'
 wait_till_up 'test_differ_client'
