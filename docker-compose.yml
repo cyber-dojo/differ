@@ -9,8 +9,9 @@ services:
     init: true
     container_name: test_differ_client
     environment:
+      - CYBER_DOJO_DIFFER_SERVICE_NAME
+      - CYBER_DOJO_DIFFER_SERVICE_PORT
       - CYBER_DOJO_COVERAGE_ROOT
-      - CYBER_DOJO_DIFFER_SERVER_PORT
     build:
       context: client
       args:
@@ -29,4 +30,4 @@ services:
     build:
       context: server
       args:
-        PORT: ${CYBER_DOJO_DIFFER_SERVER_PORT}
+        PORT: ${CYBER_DOJO_DIFFER_SERVICE_PORT}
