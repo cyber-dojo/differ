@@ -4,32 +4,40 @@ version: '2.2'
 services:
 
   differ_client:
-    user: nobody
-    image: cyberdojo/differ_client
-    init: true
-    container_name: test_differ_client
-    environment:
-      - CYBER_DOJO_DIFFER_SERVICE_NAME
-      - CYBER_DOJO_DIFFER_SERVICE_PORT
-      - CYBER_DOJO_COVERAGE_ROOT
     build:
       context: client
       args:
         CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
         PORT: ${CYBER_DOJO_DIFFER_CLIENT_PORT}
+    image: cyberdojo/differ_client
+    init: true
+    container_name: test_differ_client
+    user: nobody
+    read_only: true
+    tmpfs: /tmp
+    restart: 'no'
+    volumes:
+      - ./client/test:${CYBER_DOJO_HOME}/test:ro
+    environment:
+      - CYBER_DOJO_DIFFER_SERVICE_NAME
+      - CYBER_DOJO_DIFFER_SERVICE_PORT
+      - CYBER_DOJO_COVERAGE_ROOT
     ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
 
   differ:
-    user: nobody
-    image: cyberdojo/differ
-    init: true
-    read_only: true
-    tmpfs: /tmp
-    container_name: test_differ_server
-    environment:
-      - CYBER_DOJO_COVERAGE_ROOT
     build:
       context: server
       args:
         CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
         PORT: ${CYBER_DOJO_DIFFER_SERVICE_PORT}
+    image: cyberdojo/differ
+    container_name: test_differ_server
+    init: true
+    user: nobody
+    read_only: true
+    tmpfs: /tmp
+    restart: 'no'
+    volumes:
+      - ./server/test:${CYBER_DOJO_HOME}/test:ro
+    environment:
+      - CYBER_DOJO_COVERAGE_ROOT
