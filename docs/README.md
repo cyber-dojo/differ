@@ -1,11 +1,4 @@
 
-* [Take me to cyber-dojo's home github repo](https://github.com/cyber-dojo/cyber-dojo).
-* [Take me to http://cyber-dojo.org](http://cyber-dojo.org).
-
-![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snaphot.png)
-
-- - - -
-
 [![Build Status](https://travis-ci.org/cyber-dojo/differ.svg?branch=master)](https://travis-ci.org/cyber-dojo/differ)
 
 <img src="https://raw.githubusercontent.com/cyber-dojo/nginx/master/images/home_page_logo.png"
@@ -67,3 +60,10 @@ Rebuilds the images and runs the tests inside the
 differ-server and differ-client containers.
 
 ...
+
+- - - -
+
+* [Take me to cyber-dojo's home github repo](https://github.com/cyber-dojo/cyber-dojo).
+* [Take me to http://cyber-dojo.org](http://cyber-dojo.org).
+
+![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snaphot.png)
