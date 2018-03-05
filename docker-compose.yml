@@ -7,7 +7,7 @@ services:
     build:
       context: client
       args:
-        CYBER_DOJO_DIFFER_HOME: ${CYBER_DOJO_DIFFER_HOME}
+        CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
         PORT: ${CYBER_DOJO_DIFFER_CLIENT_PORT}
     image: cyberdojo/differ_client
     init: true
@@ -28,7 +28,7 @@ services:
     build:
       context: server
       args:
-        CYBER_DOJO_DIFFER_HOME: ${CYBER_DOJO_DIFFER_HOME}
+        CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
         PORT: ${CYBER_DOJO_DIFFER_SERVICE_PORT}
     image: cyberdojo/differ
     container_name: test_differ_server
@@ -38,6 +38,6 @@ services:
     tmpfs: /tmp
     restart: 'no'
     volumes:
-      - ./server/test:${CYBER_DOJO_DIFFER_HOME}/test:ro
+      - ./server/test:${CYBER_DOJO_HOME}/test:ro
     environment:
       - CYBER_DOJO_COVERAGE_ROOT

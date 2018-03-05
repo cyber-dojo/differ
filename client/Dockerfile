@@ -8,18 +8,20 @@ LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --no-cache add \
     bash \
-    git \
     ruby-bundler \
     ruby-dev \
     tar
+
+RUN apk --update --no-cache add \
+    git \
 
 # - - - - - - - - - - - - - - - - -
 # install ruby gems
 # - - - - - - - - - - - - - - - - -
 
-ARG             CYBER_DOJO_DIFFER_HOME
-COPY Gemfile  ${CYBER_DOJO_DIFFER_HOME}/
-WORKDIR       ${CYBER_DOJO_DIFFER_HOME}
+ARG             CYBER_DOJO_HOME
+COPY Gemfile  ${CYBER_DOJO_HOME}/
+WORKDIR       ${CYBER_DOJO_HOME}
 
 RUN apk --update add --virtual build-dependencies build-base \
   && bundle config --global silence_root_warning 1 \
@@ -32,8 +34,8 @@ RUN apk --update add --virtual build-dependencies build-base \
 # setup client
 # - - - - - - - - - - - - - - - - -
 
-COPY . ${CYBER_DOJO_DIFFER_HOME}
-RUN  chown -R nobody:nogroup ${CYBER_DOJO_DIFFER_HOME}
+COPY . ${CYBER_DOJO_HOME}
+RUN  chown -R nobody:nogroup ${CYBER_DOJO_HOME}
 USER nobody
 
 ARG PORT
