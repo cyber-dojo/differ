@@ -9,9 +9,9 @@ services:
       args:
         CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
         PORT: ${CYBER_DOJO_DIFFER_CLIENT_PORT}
-    image: cyberdojo/differ_client
+    image: cyberdojo/differ-client
     init: true
-    container_name: test_differ_client
+    container_name: test-differ-client
     user: nobody
     read_only: true
     tmpfs: /tmp
@@ -31,7 +31,7 @@ services:
         CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
         PORT: ${CYBER_DOJO_DIFFER_SERVICE_PORT}
     image: cyberdojo/differ
-    container_name: test_differ_server
+    container_name: test-differ-server
     init: true
     user: nobody
     read_only: true

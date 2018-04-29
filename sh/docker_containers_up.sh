@@ -26,5 +26,5 @@ wait_till_up()
   exit 1
 }
 
-wait_till_up 'test_differ_server'
-wait_till_up 'test_differ_client'
+wait_till_up 'test-differ-server'
+wait_till_up 'test-differ-client'
