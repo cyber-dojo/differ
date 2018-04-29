@@ -4,7 +4,7 @@ set -e
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
 docker-compose \
-  --file ${ROOT_DIR}/docker-compose.yml \
+  --file "${ROOT_DIR}/docker-compose.yml" \
   up -d \
   --force-recreate
 
@@ -22,7 +22,7 @@ wait_till_up()
     fi
   done
   echo "${1} not up after 5 seconds"
-  docker logs ${1}
+  docker logs "${1}"
   exit 1
 }
 
