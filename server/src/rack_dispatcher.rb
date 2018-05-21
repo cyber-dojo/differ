@@ -1,6 +1,5 @@
+require_relative 'differ'
 require_relative 'externals'
-require_relative 'git_differ'
-require_relative 'git_diff_join'
 require 'json'
 require 'rack'
 
@@ -15,11 +14,10 @@ class RackDispatcher
   private
 
   include Externals
-  include GitDiffJoin
 
   def diff
-    git_diff = GitDiffer.new(self).diff(was_files, now_files)
-    { 'diff' => git_diff_join(git_diff, now_files) }
+    differ = Differ.new(self)
+    { 'diff' => differ.diff(was_files, now_files) }
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name} #{e.to_s}"
     { 'exception' => e.class.name }
