@@ -7,6 +7,14 @@ class Differ
     @external = external
   end
 
+  # - - - - - - - - - - -
+
+  def sha
+    IO.read('/app/sha.txt').strip
+  end
+
+  # - - - - - - - - - - -
+
   def diff(was_files, now_files)
     git_diff = GitDiffer.new(@external).diff(was_files, now_files)
     git_diff_join(git_diff, now_files)
