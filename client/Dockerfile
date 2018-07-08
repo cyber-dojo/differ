@@ -17,9 +17,9 @@ RUN apk --update --no-cache add \
 # install ruby gems
 # - - - - - - - - - - - - - - - - -
 
-ARG             CYBER_DOJO_HOME
-COPY Gemfile  ${CYBER_DOJO_HOME}/
-WORKDIR       ${CYBER_DOJO_HOME}
+ARG             DIFFER_HOME
+COPY Gemfile  ${DIFFER_HOME}/
+WORKDIR       ${DIFFER_HOME}
 
 RUN apk --update add --virtual build-dependencies build-base \
   && bundle config --global silence_root_warning 1 \
@@ -39,8 +39,8 @@ RUN apk --update --no-cache add \
 # setup client
 # - - - - - - - - - - - - - - - - -
 
-COPY . ${CYBER_DOJO_HOME}
-RUN  chown -R nobody:nogroup ${CYBER_DOJO_HOME}
+COPY . ${DIFFER_HOME}
+RUN  chown -R nobody:nogroup ${DIFFER_HOME}
 USER nobody
 
 CMD [ "./up.sh" ]
