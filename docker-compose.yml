@@ -7,8 +7,9 @@ services:
     build:
       context: client
       args:
-        CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
-        PORT: ${CYBER_DOJO_DIFFER_CLIENT_PORT}
+        - ALPINE_VERSION=${ALPINE_VERSION}
+        - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
+        - PORT=${CYBER_DOJO_DIFFER_CLIENT_PORT}
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
@@ -28,9 +29,10 @@ services:
     build:
       context: server
       args:
-        CYBER_DOJO_HOME: ${CYBER_DOJO_HOME}
-        PORT: ${CYBER_DOJO_DIFFER_SERVICE_PORT}
-        SHA: ${SHA}
+        - ALPINE_VERSION=${ALPINE_VERSION}
+        - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
+        - PORT=${CYBER_DOJO_DIFFER_SERVICE_PORT}
+        - SHA=${SHA}
     image: cyberdojo/differ
     container_name: test-differ-server
     init: true
