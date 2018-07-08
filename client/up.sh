@@ -5,7 +5,7 @@
 bundle exec rackup \
   --warn \
   --host 0.0.0.0 \
-  --port ${PORT} \
+  --port ${DIFFER_CLIENT_PORT} \
   --server thin \
   --env production \
     config.ru

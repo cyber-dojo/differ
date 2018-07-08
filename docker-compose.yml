@@ -9,10 +9,10 @@ services:
       args:
         - ALPINE_VERSION=${ALPINE_VERSION}
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
-        - PORT=${CYBER_DOJO_DIFFER_CLIENT_PORT}
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
+    expose: [ "${DIFFER_CLIENT_PORT}" ]
     user: nobody
     read_only: true
     tmpfs: /tmp
@@ -20,10 +20,10 @@ services:
     volumes:
       - ./client/test:${CYBER_DOJO_HOME}/test:ro
     environment:
-      - CYBER_DOJO_DIFFER_SERVICE_NAME
-      - CYBER_DOJO_DIFFER_SERVICE_PORT
+      - DIFFER_SERVICE_NAME=differ
+      - DIFFER_CLIENT_PORT
+      - DIFFER_SERVICE_PORT
       - CYBER_DOJO_COVERAGE_ROOT
-    ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
 
   differ:
     build:
@@ -31,10 +31,10 @@ services:
       args:
         - ALPINE_VERSION=${ALPINE_VERSION}
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
-        - PORT=${CYBER_DOJO_DIFFER_SERVICE_PORT}
         - SHA=${SHA}
     image: cyberdojo/differ
     container_name: test-differ-server
+    expose: [ "${DIFFER_SERVICE_PORT}" ]
     init: true
     user: nobody
     read_only: true
@@ -43,4 +43,5 @@ services:
     volumes:
       - ./server/test:${CYBER_DOJO_HOME}/test:ro
     environment:
+      - DIFFER_SERVICE_PORT
       - CYBER_DOJO_COVERAGE_ROOT

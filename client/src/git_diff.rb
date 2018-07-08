@@ -19,11 +19,11 @@ module GitDiff # mix-in
   end
 
   def hostname
-    ENV['CYBER_DOJO_DIFFER_SERVICE_NAME']
+    ENV['DIFFER_SERVICE_NAME']
   end
 
   def port
-    ENV['CYBER_DOJO_DIFFER_SERVICE_PORT']
+    ENV['DIFFER_SERVICE_PORT'].to_i
   end
 
 end
