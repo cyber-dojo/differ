@@ -7,8 +7,8 @@ services:
     build:
       context: client
       args:
-        - ALPINE_VERSION=${ALPINE_VERSION}
-        - DIFFER_HOME=${DIFFER_HOME}
+        - ALPINE_VERSION
+        - DIFFER_HOME
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
@@ -29,9 +29,9 @@ services:
     build:
       context: server
       args:
-        - ALPINE_VERSION=${ALPINE_VERSION}
-        - DIFFER_HOME=${DIFFER_HOME}
-        - SHA=${SHA}
+        - ALPINE_VERSION
+        - DIFFER_HOME
+        - SHA
     image: cyberdojo/differ
     container_name: test-differ-server
     expose: [ "${DIFFER_SERVICE_PORT}" ]
