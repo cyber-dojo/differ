@@ -23,7 +23,7 @@ services:
       - DIFFER_SERVICE_NAME=differ
       - DIFFER_CLIENT_PORT
       - DIFFER_SERVICE_PORT
-      - CYBER_DOJO_COVERAGE_ROOT
+      - DIFFER_COVERAGE_ROOT
 
   differ:
     build:
@@ -44,4 +44,4 @@ services:
       - ./server/test:${CYBER_DOJO_HOME}/test:ro
     environment:
       - DIFFER_SERVICE_PORT
-      - CYBER_DOJO_COVERAGE_ROOT
+      - DIFFER_COVERAGE_ROOT
