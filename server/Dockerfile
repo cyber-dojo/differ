@@ -1,5 +1,4 @@
-ARG   ALPINE_VERSION
-FROM  alpine:${ALPINE_VERSION}
+FROM  alpine:3.7
 LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - - - - -
@@ -17,7 +16,7 @@ RUN apk --update --no-cache add \
 # install ruby gems
 # - - - - - - - - - - - - - - - - -
 
-ARG             DIFFER_HOME
+ARG             DIFFER_HOME=/app
 COPY Gemfile  ${DIFFER_HOME}/
 WORKDIR       ${DIFFER_HOME}
 
@@ -54,4 +53,5 @@ RUN echo ${SHA} > ${DIFFER_HOME}/sha.txt
 # bring it up
 # - - - - - - - - - - - - - - - - -
 
+EXPOSE 4567
 CMD [ "./up.sh" ]

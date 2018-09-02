@@ -3,6 +3,8 @@
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly MY_NAME="${ROOT_DIR##*/}"
 
+readonly DIFFER_COVERAGE_ROOT=/tmp/coverage
+
 readonly SERVER_CID=`docker ps --all --quiet --filter "name=${MY_NAME}-server"`
 readonly CLIENT_CID=`docker ps --all --quiet --filter "name=${MY_NAME}-client"`
 
@@ -10,7 +12,10 @@ readonly CLIENT_CID=`docker ps --all --quiet --filter "name=${MY_NAME}-client"`
 
 run_server_tests()
 {
-  docker exec "${SERVER_CID}" sh -c "cd /app/test && ./run.sh ${*}"
+  docker exec \
+    --env DIFFER_COVERAGE_ROOT=${DIFFER_COVERAGE_ROOT} \
+    "${SERVER_CID}" \
+      sh -c "cd /app/test && ./run.sh ${*}"
   server_status=$?
 
   # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
@@ -28,7 +33,10 @@ run_server_tests()
 
 run_client_tests()
 {
-  docker exec "${CLIENT_CID}" sh -c "cd /app/test && ./run.sh ${*}"
+  docker exec \
+    --env DIFFER_COVERAGE_ROOT=${DIFFER_COVERAGE_ROOT} \
+    "${CLIENT_CID}" \
+      sh -c "cd /app/test && ./run.sh ${*}"
   client_status=$?
 
   # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
@@ -46,7 +54,7 @@ run_client_tests()
 
 server_status=0
 client_status=0
-. "${ROOT_DIR}/.env"
+
 run_server_tests ${*}
 run_client_tests ${*}
 

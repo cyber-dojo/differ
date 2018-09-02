@@ -6,42 +6,24 @@ services:
   differ_client:
     build:
       context: client
-      args:
-        - ALPINE_VERSION
-        - DIFFER_HOME
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
-    expose: [ "${DIFFER_CLIENT_PORT}" ]
     user: nobody
     read_only: true
     tmpfs: /tmp
     restart: 'no'
-    volumes:
-      - ./client/test:${DIFFER_HOME}/test:ro
-    environment:
-      - DIFFER_SERVICE_NAME=differ
-      - DIFFER_CLIENT_PORT
-      - DIFFER_SERVICE_PORT
-      - DIFFER_COVERAGE_ROOT
+
 
   differ:
     build:
       context: server
       args:
-        - ALPINE_VERSION
-        - DIFFER_HOME
         - SHA
     image: cyberdojo/differ
     container_name: test-differ-server
-    expose: [ "${DIFFER_SERVICE_PORT}" ]
     init: true
     user: nobody
     read_only: true
     tmpfs: /tmp
     restart: 'no'
-    volumes:
-      - ./server/test:${DIFFER_HOME}/test:ro
-    environment:
-      - DIFFER_SERVICE_PORT
-      - DIFFER_COVERAGE_ROOT

@@ -19,11 +19,11 @@ module GitDiff # mix-in
   end
 
   def hostname
-    ENV['DIFFER_SERVICE_NAME']
+    'differ'
   end
 
   def port
-    ENV['DIFFER_SERVICE_PORT'].to_i
+    4567
   end
 
 end

@@ -1,5 +1,4 @@
-ARG   ALPINE_VERSION
-FROM  alpine:${ALPINE_VERSION}
+FROM  alpine:3.7
 LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - - - - -
@@ -17,7 +16,7 @@ RUN apk --update --no-cache add \
 # install ruby gems
 # - - - - - - - - - - - - - - - - -
 
-ARG             DIFFER_HOME
+ARG             DIFFER_HOME=/app
 COPY Gemfile  ${DIFFER_HOME}/
 WORKDIR       ${DIFFER_HOME}
 
@@ -43,4 +42,5 @@ COPY . ${DIFFER_HOME}
 RUN  chown -R nobody:nogroup ${DIFFER_HOME}
 USER nobody
 
+EXPOSE 4568
 CMD [ "./up.sh" ]
