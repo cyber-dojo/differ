@@ -14,11 +14,13 @@ class RackDispatcher
     json_triple(200, { name => result })
   rescue => error
     info = {
+      'class' => error.class.name,
       'exception' => error.message,
       'trace' => error.backtrace,
     }
-    #external.log << to_json(info)
-    json_triple(code_400_500(error), info)
+    $stderr.puts pretty(info)
+    $stderr.flush
+    json_triple(status(error), info)
   end
 
   private
@@ -40,14 +42,14 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def json_triple(code, body)
-    [ code, { 'Content-Type' => 'application/json' }, [ to_json(body) ] ]
+    [ code, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
   end
 
-  def to_json(o)
+  def pretty(o)
     JSON.pretty_generate(o)
   end
 
-  def code_400_500(error)
+  def status(error)
     error.is_a?(ClientError) ? 400 : 500
   end
 
