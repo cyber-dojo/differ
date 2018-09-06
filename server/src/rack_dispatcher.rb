@@ -7,9 +7,9 @@ require 'rack'
 class RackDispatcher
 
   def call(env)
-    request = Rack::Request.new(env)
-    name, args = name_args(request)
     differ = Differ.new(self)
+    request = Rack::Request.new(env)
+    name, args = validated_name_args(request)
     result = differ.send(name, *args)
     json_triple(200, { name => result })
   rescue => error
@@ -27,7 +27,7 @@ class RackDispatcher
 
   include Externals
 
-  def name_args(request)
+  def validated_name_args(request)
     @args = JSON.parse(request.body.read)
     name = request.path_info[1..-1] # lose leading /
     args = case name
