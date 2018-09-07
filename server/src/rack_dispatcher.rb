@@ -15,8 +15,8 @@ class RackDispatcher
   rescue => error
     info = {
       'class' => error.class.name,
-      'exception' => error.message,
-      'trace' => error.backtrace,
+      'message' => error.message,
+      'backtrace' => error.backtrace,
     }
     $stderr.puts pretty(info)
     $stderr.flush
