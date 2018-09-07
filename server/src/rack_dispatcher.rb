@@ -10,8 +10,8 @@ class RackDispatcher
     differ = Differ.new(self)
     request = Rack::Request.new(env)
     name, args = validated_name_args(request)
-    result = differ.send(name, *args)
-    json_triple(200, { name => result })
+    result = differ.public_send(name, *args)
+    json_response(200, { name => result })
   rescue => error
     info = {
       'class' => error.class.name,
@@ -20,7 +20,7 @@ class RackDispatcher
     }
     $stderr.puts pretty(info)
     $stderr.flush
-    json_triple(status(error), info)
+    json_response(status(error), info)
   end
 
   private
@@ -41,8 +41,8 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  def json_triple(code, body)
-    [ code, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
+  def json_response(status, body)
+    [ status, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
   end
 
   def pretty(o)
