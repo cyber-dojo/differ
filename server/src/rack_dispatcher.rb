@@ -6,32 +6,38 @@ require 'rack'
 
 class RackDispatcher
 
+  def initialize
+    @differ = Differ.new(self)
+    @request_class = Rack::Request
+  end
+
   def call(env)
-    differ = Differ.new(self)
-    request = Rack::Request.new(env)
-    name, args = validated_name_args(request)
-    result = differ.public_send(name, *args)
-    json_response(200, { name => result })
+    request = @request_class.new(env)
+    path = request.path_info[1..-1] # lose leading /
+    body = request.body.read
+    name, args = validated_name_args(path, body)
+    result = @differ.public_send(name, *args)
+    json_response(200, plain({ name => result }))
   rescue => error
-    info = {
+    diagnostic = pretty({
       'exception' => {
         'class' => error.class.name,
         'message' => error.message,
+        'args' => body,
         'backtrace' => error.backtrace
       }
-    }
-    $stderr.puts pretty(info)
+    })
+    $stderr.puts(diagnostic)
     $stderr.flush
-    json_response(status(error), info)
+    json_response(status(error), diagnostic)
   end
 
   private
 
   include Externals
 
-  def validated_name_args(request)
-    @args = JSON.parse(request.body.read)
-    name = request.path_info[1..-1] # lose leading /
+  def validated_name_args(name, body)
+    @args = JSON.parse(body)
     args = case name
       when /^sha$/   then []
       when /^diff$/  then [was_files, now_files]
@@ -44,11 +50,18 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def json_response(status, body)
-    [ status, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
+    [ status,
+      { 'Content-Type' => 'application/json' },
+      [ body ]
+    ]
   end
 
-  def pretty(o)
-    JSON.pretty_generate(o)
+  def plain(body)
+    JSON.generate(body)
+  end
+
+  def pretty(body)
+    JSON.pretty_generate(body)
   end
 
   def status(error)
