@@ -1,12 +1,15 @@
 #!/bin/bash
 
+server_status=0
+client_status=0
+
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly MY_NAME="${ROOT_DIR##*/}"
 
-readonly COVERAGE_ROOT=/tmp/coverage
-
 readonly SERVER_CID=`docker ps --all --quiet --filter "name=test-${MY_NAME}-server"`
 readonly CLIENT_CID=`docker ps --all --quiet --filter "name=test-${MY_NAME}-client"`
+
+readonly COVERAGE_ROOT=/tmp/coverage
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -52,11 +55,18 @@ run_client_tests()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-server_status=0
-client_status=0
+if [ "$1" = "server" ]; then
+  shift
+  run_server_tests "$@"
+elif [ "$1" = "client" ]; then
+  shift
+  run_client_tests "$@"
+else
+  run_server_tests "$@"
+  run_client_tests "$@"
+fi
 
-run_server_tests ${*}
-run_client_tests ${*}
+# - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]];  then
   echo "------------------------------------------------------"
