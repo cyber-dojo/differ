@@ -6,7 +6,8 @@ readonly MY_NAME="${ROOT_DIR##*/}"
 
 docker-compose \
   --file "${ROOT_DIR}/docker-compose.yml" \
-  up -d \
+  up \
+  --detach \
   --force-recreate
 
 # - - - - - - - - - - - - - - - - - - -
