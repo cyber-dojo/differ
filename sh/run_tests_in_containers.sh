@@ -1,7 +1,7 @@
 #!/bin/bash
 
-server_status=0
-client_status=0
+declare server_status=0
+declare client_status=0
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly MY_NAME="${ROOT_DIR##*/}"
@@ -16,9 +16,11 @@ readonly COVERAGE_ROOT=/tmp/coverage
 run_server_tests()
 {
   docker exec \
+    --user nobody \
     --env COVERAGE_ROOT=${COVERAGE_ROOT} \
     "${SERVER_CID}" \
       sh -c "cd /app/test && ./run.sh ${*}"
+
   server_status=$?
 
   # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
@@ -37,9 +39,11 @@ run_server_tests()
 run_client_tests()
 {
   docker exec \
+    --user nobody \
     --env COVERAGE_ROOT=${COVERAGE_ROOT} \
     "${CLIENT_CID}" \
       sh -c "cd /app/test && ./run.sh ${*}"
+
   client_status=$?
 
   # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
