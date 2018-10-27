@@ -1,0 +1,9 @@
+
+                 failures |       0 ==     0 | true
+                   errors |       0 ==     0 | true
+                    skips |       0 ==     0 | true
+        duration(test)[s] |    0.65 <=     5 | true
+         coverage(src)[%] |   100.0 ==   100 | true
+        coverage(test)[%] |   100.0 ==   100 | true
+   lines(test)/lines(src) |   10.88 >=    10 | true
+     hits(src)/hits(test) |    1.87 >=   1.5 | true

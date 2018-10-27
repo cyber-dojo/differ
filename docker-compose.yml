@@ -17,7 +17,7 @@ services:
 
   differ:
     build:
-      context: server
+      context: .
       args:
         - SHA
     image: cyberdojo/differ
