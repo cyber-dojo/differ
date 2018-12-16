@@ -1,5 +1,5 @@
 require_relative 'differ_test_base'
-require_relative '../../src/git_diff_join'
+require_relative '../src/git_diff_join'
 
 class GitDiffJoinTest < DifferTestBase
 

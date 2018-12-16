@@ -1,5 +1,5 @@
 require_relative 'differ_test_base'
-require_relative '../../src/line_splitter'
+require_relative '../src/line_splitter'
 
 class LineSplitterTest < DifferTestBase
 
