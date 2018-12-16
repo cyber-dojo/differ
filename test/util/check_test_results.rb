@@ -72,21 +72,18 @@ end
 
 log_stats = get_test_log_stats
 test_stats = get_index_stats('test')
-src_stats = get_index_stats('src')
+ src_stats = get_index_stats('src')
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
 failure_count = log_stats[:failure_count]
 error_count   = log_stats[:error_count]
 skip_count    = log_stats[:skip_count]
-
 test_duration = log_stats[:time].to_f
-
-src_coverage = src_stats[:coverage].to_f
+src_coverage  = src_stats[:coverage].to_f
 test_coverage = test_stats[:coverage].to_f
-
-line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
-hits_ratio = (src_stats[:hits_per_line].to_f / test_stats[:hits_per_line].to_f)
+line_ratio    = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
+hits_ratio    = (src_stats[:hits_per_line].to_f / test_stats[:hits_per_line].to_f)
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
