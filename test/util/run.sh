@@ -2,8 +2,8 @@
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly TEST_FILES=(${MY_DIR}/../*_test.rb)
-readonly TEST_LOG=${COVERAGE_ROOT}/test.log
 readonly TEST_ARGS=(${*})
+readonly TEST_LOG=${COVERAGE_ROOT}/test.log
 
 mkdir -p ${COVERAGE_ROOT}
 
