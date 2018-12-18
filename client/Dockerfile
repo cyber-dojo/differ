@@ -1,9 +1,8 @@
-FROM  cyberdojo/rack-base
+FROM cyberdojo/rack-base
 LABEL maintainer=jon@jaggersoft.com
 
-ARG                            DIFFER_HOME=/app
-COPY .                       ${DIFFER_HOME}
-RUN  chown -R nobody:nogroup ${DIFFER_HOME}
+COPY . /app
+RUN  chown -R nobody:nogroup /app
 
 EXPOSE 4568
 USER nobody
