@@ -18,8 +18,6 @@ services:
   differ:
     build:
       context: .
-      args:
-        - SHA
     image: cyberdojo/differ
     container_name: test-differ-server
     init: true
