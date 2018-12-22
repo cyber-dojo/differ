@@ -13,7 +13,9 @@ jobs:
           name: build differ docker image and push image to docker hub
           command: |
             set -e
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            echo "${DOCKER_PASS}" \
+              | docker login -u "${DOCKER_USER}" --password-stdin
+            #docker login -u $DOCKER_USER -p $DOCKER_PASS
             ./pipe_build_up_test.sh
             docker tag  cyberdojo/differ:latest cyberdojo/differ:${CIRCLE_SHA1:0:7}
             docker tag  cyberdojo/differ:latest cyberdojo/differ:beta
