@@ -1,7 +1,7 @@
 FROM cyberdojo/rack-base
 LABEL maintainer=jon@jaggersoft.com
 
-COPY . /app
+COPY . /app/
 RUN chown -R nobody:nogroup /app
 
 ARG SHA
