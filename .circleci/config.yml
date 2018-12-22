@@ -20,8 +20,8 @@ jobs:
             docker tag  cyberdojo/differ:latest cyberdojo/differ:beta
             docker push cyberdojo/differ:${CIRCLE_SHA1:0:7}
             docker push cyberdojo/differ:beta
-            curl -X POST https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/build?circle-token=:token
-            #curl -X POST https://circleci.com/api/v1.1/project/git/cyber-dojo/saver/build?circle-token=${CCI_TRIGGER}
+            #curl -X POST https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/build?circle-token=:token
+            curl -X POST https://circleci.com/api/v1.1/project/github/cyber-dojo/saver/build?circle-token=${CCI_TRIGGER}
 
   deploy-image-to-beta:
     docker:
