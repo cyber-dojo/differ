@@ -20,6 +20,7 @@ jobs:
             docker tag  cyberdojo/differ:latest cyberdojo/differ:beta
             docker push cyberdojo/differ:${CIRCLE_SHA1:0:7}
             docker push cyberdojo/differ:beta
+            curl -X POST https://circleci.com/api/v1.1/project/git/JonJagger/saver/build?circle-token=${CCI_TRIGGER}
 
   deploy-image-to-beta:
     docker:
