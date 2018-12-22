@@ -5,7 +5,9 @@ require_relative '../src/git_differ'
 
 class GitDifferTest < DifferTestBase
 
-  def self.hex_prefix; '100'; end
+  def self.hex_prefix
+    '100'
+  end
 
   def hex_setup
     @log = NullLogger.new(self)
