@@ -2,7 +2,7 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly MY_NAME=differ
+readonly SERVER_NAME="test-differ-server"
 
 # - - - - - - - - - - - - - - - - - - -
 
@@ -26,9 +26,23 @@ wait_till_ready()
     fi
   done
   echo 'FAIL'
-  echo "${1} not ready after 5 seconds"
+  echo "${1} not ready after 20 tries"
   docker logs ${1}
   exit 1
+}
+
+# - - - - - - - - - - - - - - - - - - -
+
+exit_unless_started_cleanly()
+{
+  local docker_logs=$(docker logs "${SERVER_NAME}")
+  if [[ ! -z "${docker_logs}" ]]; then
+    echo "[docker log] not empty on startup"
+    echo "<docker_log>"
+    echo "${docker_logs}"
+    echo "</docker_log>"
+    exit 1
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -39,4 +53,5 @@ docker-compose \
   -d \
   --force-recreate
 
-wait_till_ready "test-${MY_NAME}-server"
+wait_till_ready
+exit_unless_started_cleanly

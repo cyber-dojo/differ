@@ -13,18 +13,6 @@ readonly COVERAGE_ROOT=/tmp/coverage
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-exit_unless_server_started_cleanly()
-{
-  local docker_logs=$(docker logs "${SERVER_CID}")
-  if [[ ! -z "${docker_logs}" ]]; then
-    echo "[docker log] not empty on startup"
-    echo ":${docker_logs}:"
-    exit 1
-  fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 run_server_tests()
 {
   docker exec \
@@ -70,8 +58,6 @@ run_client_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-exit_unless_server_started_cleanly
 
 if [ "$1" = "server" ]; then
   shift
