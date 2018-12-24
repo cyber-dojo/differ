@@ -8,7 +8,7 @@ readonly MY_NAME=differ
 
 wait_till_ready()
 {
-  local max_tries=10
+  local max_tries=20
   local cmd="curl --silent --fail --data '{}' -X GET http://localhost:4567/sha"
   cmd+=" > /dev/null 2>&1"
 
@@ -22,7 +22,7 @@ wait_till_ready()
       echo 'OK'
       return
     else
-      sleep 0.05
+      sleep 0.1
     fi
   done
   echo 'FAIL'
