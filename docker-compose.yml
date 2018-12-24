@@ -22,6 +22,8 @@ services:
         - SHA
     image: cyberdojo/differ
     container_name: test-differ-server
+    ports:
+      - 4567:4567
     init: true
     user: nobody
     read_only: true
