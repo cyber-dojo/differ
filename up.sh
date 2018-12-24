@@ -6,9 +6,9 @@
 
 HOME=/tmp `#[1]`     \
   bundle exec rackup \
-    --warn           \
+    --env production \
     --host 0.0.0.0   \
     --port 4567      \
     --server thin    \
-    --env production \
+    --warn           \
       config.ru
