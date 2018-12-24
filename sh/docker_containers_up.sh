@@ -9,8 +9,6 @@ readonly MY_NAME=differ
 wait_till_ready()
 {
   local max_tries=10
-  local port="4567"
-
   local cmd="curl --silent --fail --data '{}' -X GET http://localhost:4567/sha"
   cmd+=" > /dev/null 2>&1"
 
