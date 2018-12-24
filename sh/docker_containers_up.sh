@@ -11,7 +11,7 @@ wait_till_ready()
   local max_tries=10
   local port="4567"
 
-  local cmd="curl --silent --fail --data '{}' -X GET http://localhost:${port}/sha"
+  local cmd="curl --silent --fail --data '{}' -X GET http://localhost:4567/sha"
   cmd+=" > /dev/null 2>&1"
 
   if [ ! -z ${DOCKER_MACHINE_NAME} ]; then
@@ -35,24 +35,6 @@ wait_till_ready()
 
 # - - - - - - - - - - - - - - - - - - -
 
-wait_till_up()
-{
-  local n=10
-  while [ $(( n -= 1 )) -ge 0 ]
-  do
-    if docker ps --filter status=running --format '{{.Names}}' | grep -q ^${1}$ ; then
-      return
-    else
-      sleep 0.5
-    fi
-  done
-  echo "${1} not up after 5 seconds"
-  docker logs "${1}"
-  exit 1
-}
-
-# - - - - - - - - - - - - - - - - - - -
-
 docker-compose \
   --file "${ROOT_DIR}/docker-compose.yml" \
   up \
@@ -60,4 +42,3 @@ docker-compose \
   --force-recreate
 
 wait_till_ready "test-${MY_NAME}-server"
-wait_till_up "test-${MY_NAME}-client"
