@@ -23,7 +23,7 @@ wait_until_ready()
     fi
   done
   echo 'FAIL'
-  echo "${name} not ready after 20 tries"
+  echo "${name} not ready after ${max_tries} tries"
   docker logs ${name}
   exit 1
 }
