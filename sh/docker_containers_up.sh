@@ -1,21 +1,18 @@
 #!/bin/bash
 set -e
 
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly SERVER_NAME="test-differ-server"
-
-# - - - - - - - - - - - - - - - - - - -
-
-wait_till_ready()
+wait_until_ready()
 {
+  local name="${1}"
+  local port="${2}"
   local max_tries=20
-  local cmd="curl --silent --fail --data '{}' -X GET http://localhost:4567/sha"
+  local cmd="curl --silent --fail --data '{}' -X GET http://localhost:${port}/sha"
   cmd+=" > /dev/null 2>&1"
 
   if [ ! -z ${DOCKER_MACHINE_NAME} ]; then
     cmd="docker-machine ssh ${DOCKER_MACHINE_NAME} ${cmd}"
   fi
-  echo -n "Checking the service is ready"
+  echo -n "Waiting until ${name} is ready"
   while [ $(( max_tries -= 1 )) -ge 0 ] ; do
     echo -n '.'
     if eval ${cmd} ; then
@@ -26,8 +23,8 @@ wait_till_ready()
     fi
   done
   echo 'FAIL'
-  echo "${1} not ready after 20 tries"
-  docker logs ${1}
+  echo "${name} not ready after 20 tries"
+  docker logs ${name}
   exit 1
 }
 
@@ -35,9 +32,14 @@ wait_till_ready()
 
 exit_unless_started_cleanly()
 {
-  local docker_logs=$(docker logs "${SERVER_NAME}")
-  if [[ ! -z "${docker_logs}" ]]; then
-    echo "[docker log] not empty on startup"
+  local name="${1}"
+  local docker_logs=$(docker logs "${name}")
+  echo -n "Checking ${name} started cleanly..."
+  if [[ -z "${docker_logs}" ]]; then
+    echo 'OK'
+  else
+    echo 'FAIL'
+    echo "[docker logs] not empty on startup"
     echo "<docker_log>"
     echo "${docker_logs}"
     echo "</docker_log>"
@@ -47,11 +49,15 @@ exit_unless_started_cleanly()
 
 # - - - - - - - - - - - - - - - - - - -
 
+readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+
 docker-compose \
   --file "${ROOT_DIR}/docker-compose.yml" \
   up \
   -d \
   --force-recreate
 
-wait_till_ready
-exit_unless_started_cleanly
+readonly MY_NAME="differ"
+
+wait_until_ready "test-${MY_NAME}-server" 4567
+exit_unless_started_cleanly "test-${MY_NAME}-server"
