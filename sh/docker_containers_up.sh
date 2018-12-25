@@ -30,7 +30,7 @@ wait_until_ready()
 
 # - - - - - - - - - - - - - - - - - - -
 
-exit_unless_started_cleanly()
+exit_unless_clean()
 {
   local name="${1}"
   local docker_logs=$(docker logs "${name}")
@@ -57,7 +57,7 @@ docker-compose \
   -d \
   --force-recreate
 
-readonly MY_NAME="differ"
+readonly MY_NAME="test-differ-server"
 
-wait_until_ready "test-${MY_NAME}-server" 4567
-exit_unless_started_cleanly "test-${MY_NAME}-server"
+wait_until_ready  "${MY_NAME}" 4567
+exit_unless_clean "${MY_NAME}"
