@@ -1,60 +1,53 @@
 #!/bin/bash
 
-declare server_status=0
-declare client_status=0
-
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly MY_NAME=differ
 
-readonly SERVER_CID=`docker ps --all --quiet --filter "name=test-${MY_NAME}-server"`
-readonly CLIENT_CID=`docker ps --all --quiet --filter "name=test-${MY_NAME}-client"`
-
-readonly COVERAGE_ROOT=/tmp/coverage
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-run_server_tests()
+run_tests()
 {
+  local COVERAGE_ROOT=/tmp/coverage
+  local user="${1}"
+  local dir="test_${2}"
+  local cid=$(docker ps --all --quiet --filter "name=test-${MY_NAME}-${2}")
   docker exec \
-    --user nobody \
+    --user "${user}" \
     --env COVERAGE_ROOT=${COVERAGE_ROOT} \
-    "${SERVER_CID}" \
-      sh -c "/app/test/util/run.sh ${*}"
+    "${cid}" \
+      sh -c "/app/test/util/run.sh ${@:4}"
 
-  server_status=$?
+  local status=$?
 
   # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
-  docker exec "${SERVER_CID}" \
+  docker exec "${cid}" \
     tar Ccf \
       "$(dirname "${COVERAGE_ROOT}")" \
       - "$(basename "${COVERAGE_ROOT}")" \
-        | tar Cxf "${ROOT_DIR}/test_server/" -
+        | tar Cxf "${ROOT_DIR}/${dir}/" -
 
-  echo "Coverage report copied to ${MY_NAME}/test_server/coverage/"
-  cat "${ROOT_DIR}/test_server/coverage/done.txt"
+  echo "Coverage report copied to ${dir}/coverage/"
+  cat "${ROOT_DIR}/${dir}/coverage/done.txt"
+  return ${status}
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+declare server_status=0
+declare client_status=0
+
+run_server_tests()
+{
+  run_tests "nobody" "server" "${*}"
+  server_status=$?
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 run_client_tests()
 {
-  docker exec \
-    --user nobody \
-    --env COVERAGE_ROOT=${COVERAGE_ROOT} \
-    "${CLIENT_CID}" \
-      sh -c "/app/test/util/run.sh ${*}"
-
+  run_tests "nobody" "client" "${*}"
   client_status=$?
-
-  # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
-  docker exec "${CLIENT_CID}" \
-    tar Ccf \
-      "$(dirname "${COVERAGE_ROOT}")" \
-      - "$(basename "${COVERAGE_ROOT}")" \
-        | tar Cxf "${ROOT_DIR}/test_client/" -
-
-  echo "Coverage report copied to ${MY_NAME}/test_client/coverage/"
-  cat "${ROOT_DIR}/test_client/coverage/done.txt"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -78,8 +71,8 @@ if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]];  then
   exit 0
 else
   echo
-  echo "server: cid = ${SERVER_CID}, status = ${server_status}"
-  echo "client: cid = ${CLIENT_CID}, status = ${client_status}"
+  echo "test-${MY_NAME}-server: status = ${server_status}"
+  echo "test-${MY_NAME}-client: status = ${client_status}"
   echo
   exit 1
 fi
