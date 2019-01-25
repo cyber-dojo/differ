@@ -22,6 +22,8 @@ services:
         - SHA
     image: cyberdojo/differ
     container_name: test-differ-server
+    volumes:
+      - ./test:/app/test:ro
     ports:
       - 4567:4567
     init: true
