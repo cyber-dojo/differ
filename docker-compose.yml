@@ -5,7 +5,7 @@ services:
 
   differ_client:
     build:
-      context: client
+      context: test_client
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
@@ -23,7 +23,7 @@ services:
     image: cyberdojo/differ
     container_name: test-differ-server
     volumes:
-      - ./test:/app/test:ro
+      - ./test_server:/app/test:ro
     ports:
       - 4567:4567
     init: true

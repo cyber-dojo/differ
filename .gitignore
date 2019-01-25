@@ -1,2 +1,2 @@
-/coverage
-client/coverage
+test_server/coverage
+test_client/coverage
