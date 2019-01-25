@@ -1,12 +1,4 @@
-#-----Ignore everything
-
 *
-
--#-----!Except these dirs
-
 !src
-
--#-----!Except these files
-
 !config.ru
 !up.sh
