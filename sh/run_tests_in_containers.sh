@@ -1,19 +1,20 @@
 #!/bin/bash
 
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly MY_NAME=differ
+readonly root_dir="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+readonly my_name=differ
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 run_tests()
 {
-  local COVERAGE_ROOT=/tmp/coverage
+  local coverage_root=/tmp/coverage
   local user="${1}"
-  local dir="test_${2}"
-  local cid=$(docker ps --all --quiet --filter "name=test-${MY_NAME}-${2}")
+  local test_dir="test_${2}"
+  local cid=$(docker ps --all --quiet --filter "name=test-${my_name}-${2}")
+
   docker exec \
     --user "${user}" \
-    --env COVERAGE_ROOT=${COVERAGE_ROOT} \
+    --env COVERAGE_ROOT=${coverage_root} \
     "${cid}" \
       sh -c "/app/test/util/run.sh ${@:4}"
 
@@ -22,12 +23,12 @@ run_tests()
   # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
   docker exec "${cid}" \
     tar Ccf \
-      "$(dirname "${COVERAGE_ROOT}")" \
-      - "$(basename "${COVERAGE_ROOT}")" \
-        | tar Cxf "${ROOT_DIR}/${dir}/" -
+      "$(dirname "${coverage_root}")" \
+      - "$(basename "${coverage_root}")" \
+        | tar Cxf "${root_dir}/${test_dir}/" -
 
-  echo "Coverage report copied to ${dir}/coverage/"
-  cat "${ROOT_DIR}/${dir}/coverage/done.txt"
+  echo "Coverage report copied to ${test_dir}/coverage/"
+  cat "${root_dir}/${test_dir}/coverage/done.txt"
   return ${status}
 }
 
@@ -38,7 +39,7 @@ declare client_status=0
 
 run_server_tests()
 {
-  run_tests "nobody" "server" "${*}"
+  run_tests 'nobody' 'server' "${*}"
   server_status=$?
 }
 
@@ -46,16 +47,16 @@ run_server_tests()
 
 run_client_tests()
 {
-  run_tests "nobody" "client" "${*}"
+  run_tests 'nobody' 'client' "${*}"
   client_status=$?
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ "$1" = "server" ]; then
+if [ "$1" = 'server' ]; then
   shift
   run_server_tests "$@"
-elif [ "$1" = "client" ]; then
+elif [ "$1" = 'client' ]; then
   shift
   run_client_tests "$@"
 else
@@ -66,13 +67,13 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]];  then
-  echo "------------------------------------------------------"
-  echo "All passed"
+  echo '------------------------------------------------------'
+  echo 'All passed'
   exit 0
 else
   echo
-  echo "test-${MY_NAME}-server: status = ${server_status}"
-  echo "test-${MY_NAME}-client: status = ${client_status}"
+  echo "test-${my_name}-server: status = ${server_status}"
+  echo "test-${my_name}-client: status = ${client_status}"
   echo
   exit 1
 fi
