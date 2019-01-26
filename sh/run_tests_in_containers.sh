@@ -20,7 +20,7 @@ run_tests()
 
   local status=$?
 
-  # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
+  # You can't [docker cp] from a tmpfs, so tar-piping coverage out.
   docker exec "${cid}" \
     tar Ccf \
       "$(dirname "${coverage_root}")" \
@@ -53,10 +53,10 @@ run_client_tests()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ "$1" = 'server' ]; then
+if [ "${1}" = 'server' ]; then
   shift
   run_server_tests "$@"
-elif [ "$1" = 'client' ]; then
+elif [ "${1}" = 'client' ]; then
   shift
   run_client_tests "$@"
 else
