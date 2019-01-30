@@ -3,7 +3,9 @@ require_relative '../src/line_splitter'
 
 class LineSplitterTest < DifferTestBase
 
-  def self.hex_prefix; 'B2B'; end
+  def self.hex_prefix
+    'B2B'
+  end
 
   include LineSplitter
 

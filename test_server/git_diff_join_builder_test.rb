@@ -5,7 +5,9 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   include GitDiffJoinBuilder
 
-  def self.hex_prefix; 'A33'; end
+  def self.hex_prefix
+    'A33'
+  end
 
   test '2D7',
   'chunk with a space in its filename' do

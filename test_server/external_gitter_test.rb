@@ -3,7 +3,9 @@ require_relative 'spy_sheller'
 
 class ExternalGitterTest < DifferTestBase
 
-  def self.hex_prefix; 'DC3'; end
+  def self.hex_prefix
+    'DC3'
+  end
 
   def hex_setup
     @shell = SpySheller.new(self)

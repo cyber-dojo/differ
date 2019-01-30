@@ -3,7 +3,9 @@ require_relative '../src/git_diff_join'
 
 class GitDiffJoinTest < DifferTestBase
 
-  def self.hex_prefix; '74C'; end
+  def self.hex_prefix
+    '74C'
+  end
 
   include GitDiffJoin
 

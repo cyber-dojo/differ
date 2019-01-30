@@ -2,7 +2,9 @@ require_relative 'differ_test_base'
 
 class ExternalDiskWriterTest < DifferTestBase
 
-  def self.hex_prefix; 'FDF'; end
+  def self.hex_prefix
+    'FDF'
+  end
 
   test 'D4C',
   'what gets written gets read back' do

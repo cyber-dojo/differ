@@ -5,7 +5,9 @@ class GitDiffBugTest < DifferTestBase
 
   include GitDiffJoinBuilder
 
-  def self.hex_prefix; '922'; end
+  def self.hex_prefix
+    '922'
+  end
 
   test '827',
   'another specific real dojo that once failed a diff' do

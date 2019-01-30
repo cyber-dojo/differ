@@ -2,7 +2,9 @@ require_relative 'differ_test_base'
 
 class GitDiffParserTest < DifferTestBase
 
-  def self.hex_prefix; 'B56'; end
+  def self.hex_prefix
+    'B56'
+  end
 
   test '42B',
   'lines are split' do

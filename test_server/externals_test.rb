@@ -2,7 +2,9 @@ require_relative 'differ_test_base'
 
 class ExternalsTest < DifferTestBase
 
-  def self.hex_prefix; '7A9'; end
+  def self.hex_prefix
+    '7A9'
+  end
 
   test '920',
   'default file is ExternalDiskWriter' do

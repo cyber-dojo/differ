@@ -66,7 +66,7 @@ fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]];  then
+if [ "${server_status}" = "0" ] && [ "${client_status}" = "0" ];  then
   echo '------------------------------------------------------'
   echo 'All passed'
   exit 0

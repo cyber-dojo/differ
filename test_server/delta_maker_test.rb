@@ -3,7 +3,9 @@ require_relative '../src/delta_maker'
 
 class DeltaMakerTest < DifferTestBase
 
-  def self.hex_prefix; '944'; end
+  def self.hex_prefix
+    '944'
+  end
 
   test '461',
   'make_delta does not alter arguments' do
