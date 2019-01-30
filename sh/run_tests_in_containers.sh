@@ -16,7 +16,7 @@ run_tests()
     --user "${user}" \
     --env COVERAGE_ROOT=${coverage_root} \
     "${cid}" \
-      sh -c "/app/test/util/run.sh ${@:4}"
+      sh -c "/app/test/util/run.sh ${@:3}"
 
   local status=$?
 
