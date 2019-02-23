@@ -27,7 +27,7 @@ jobs:
             # old architecture
             docker push cyberdojo/${project}:latest
 
-  deploy-image-to-beta:
+  deploy-to-beta:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
