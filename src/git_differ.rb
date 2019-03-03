@@ -14,7 +14,7 @@ class GitDiffer
     @now_files = now_files
     @delta = make_delta(was_files, now_files)
     id = SecureRandom.hex
-    Dir.mktmpdir('differ') do |git_dir|
+    Dir.mktmpdir(id, '/tmp') do |git_dir|
       make_empty_git_repo_in(git_dir)
 
       was_tag = 0
