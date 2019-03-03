@@ -10,5 +10,5 @@ ARG SHA
 ENV SHA=${SHA}
 
 EXPOSE 4567
-USER nobody
+USER root
 CMD [ "./up.sh" ]
