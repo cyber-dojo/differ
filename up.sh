@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Sticky bit must be set on /tmp otherwise
-# Dir.mktmpdir(nil,'/tmp') complains
+# Dir.mktmpdir(id,'/tmp') complains
 # that it is world writable but not sticky.
 # chmod 1777 /tmp
 
