@@ -1,5 +1,4 @@
 require_relative 'delta_maker'
-require 'securerandom'
 
 class GitDiffer
 
@@ -13,8 +12,7 @@ class GitDiffer
     @was_files = was_files
     @now_files = now_files
     @delta = make_delta(was_files, now_files)
-    id = SecureRandom.hex
-    Dir.mktmpdir(id, '/tmp') do |git_dir|
+    Dir.mktmpdir('differ') do |git_dir|
       make_empty_git_repo_in(git_dir)
 
       was_tag = 0
