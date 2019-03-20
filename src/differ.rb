@@ -7,6 +7,10 @@ class Differ
     @external = external
   end
 
+  def ready?
+    true
+  end
+
   def sha
     ENV['SHA']
   end

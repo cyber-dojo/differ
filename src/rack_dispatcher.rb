@@ -17,9 +17,9 @@ class RackDispatcher
     body = request.body.read
     name, args = validated_name_args(path, body)
     result = @differ.public_send(name, *args)
-    json_response(200, plain({ name => result }))
+    json_response(200, json_plain({ name => result }))
   rescue Exception => error
-    diagnostic = pretty({
+    diagnostic = json_pretty({
       'exception' => {
         'class' => error.class.name,
         'message' => error.message,
@@ -39,15 +39,25 @@ class RackDispatcher
   def validated_name_args(name, body)
     @args = JSON.parse(body)
     args = case name
+      when /^ready$/ then []
       when /^sha$/   then []
       when /^diff$/  then [was_files, now_files]
       else
         raise ClientError, 'json:malformed'
     end
+    name += '?' if query?(name)
     [name, args]
   end
 
   # - - - - - - - - - - - - - - - -
+
+  def json_plain(body)
+    JSON.generate(body)
+  end
+
+  def json_pretty(body)
+    JSON.pretty_generate(body)
+  end
 
   def json_response(status, body)
     [ status,
@@ -56,16 +66,14 @@ class RackDispatcher
     ]
   end
 
-  def plain(body)
-    JSON.generate(body)
-  end
-
-  def pretty(body)
-    JSON.pretty_generate(body)
-  end
-
   def status(error)
     error.is_a?(ClientError) ? 400 : 500
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def query?(name)
+    ['ready'].include?(name)
   end
 
   # - - - - - - - - - - - - - - - -

@@ -17,6 +17,32 @@ API:
 
 - - - -
 
+## GET ready?()
+- parameters, none
+```
+  {}
+```
+- returns true if the service is ready, otherwise false, eg
+```
+  { "ready?": true }
+  { "ready?": false }
+```
+
+- - - -
+
+## GET sha
+Returns the git commit sha used to create the docker image.
+- parameters, none
+```
+  {}
+```
+- returns the sha, eg
+```
+  { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
+```
+
+- - - -
+
 ## diff
 Asks for the diff between two sets of files.
 - parameters

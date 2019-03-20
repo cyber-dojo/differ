@@ -6,6 +6,10 @@ class DifferTestBase < HexMiniTest
 
   include Externals
 
+  def ready?
+    differ.ready?
+  end
+
   def sha
     differ.sha
   end
