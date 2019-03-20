@@ -67,10 +67,10 @@ Asks for the diff between two sets of files.
 
 
 ```
-./demo.sh
+./sh/run_demo.sh
 ```
 
-Creates two docker images; a diff-client and a diff-server (both using sinatra),
+Creates two docker images; a diff-client and a diff-server,
 and creates a container from each image.
 The diff-client container sends two sets of files (in a json body) to the
 diff-server-container which returns their processed diff. The diff-client runs
