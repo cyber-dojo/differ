@@ -41,7 +41,7 @@ jobs:
             helm init --client-only
             helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
             # comment this to reset _all_ services
-            export HELM_REUSE_VALUES=--reuse-values
+            # export HELM_REUSE_VALUES=--reuse-values
             helm upgrade --install --version 0.2.7 ${HELM_REUSE_VALUES} --namespace=beta --set-string image.differ.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
 
 workflows:
