@@ -43,8 +43,7 @@ jobs:
             # comment this to reset _all_ services, uncomment to reset only differ
             # export HELM_REUSE_VALUES=--reuse-values
             # export HELM_VERSION=--version 0.2.7
-            # export HELM_UPGRADE=upgrade
-            helm ${HELM_UPGRADE} --install --debug ${HELM_VERSION} ${HELM_REUSE_VALUES} --namespace=beta --set-string image.differ.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
+            helm upgrade --install --dry-run --debug ${HELM_VERSION} ${HELM_REUSE_VALUES} --namespace=beta --set-string image.differ.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
 
 workflows:
   version: 2
