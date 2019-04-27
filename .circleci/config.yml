@@ -44,7 +44,6 @@ jobs:
             # export HELM_REUSE_VALUES=--reuse-values
             # export HELM_VERSION=--version 0.2.7
             # export HELM_UPGRADE=upgrade
-            helm lint
             helm ${HELM_UPGRADE} --install --debug ${HELM_VERSION} ${HELM_REUSE_VALUES} --namespace=beta --set-string image.differ.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
 
 workflows:
