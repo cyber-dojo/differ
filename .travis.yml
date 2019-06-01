@@ -1,8 +1,0 @@
-sudo: required
-services: docker
-language: node_js
-git:
-  depth: 1
-  quiet: true
-
-script: ./sh/travis.sh
