@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build docker image
+          name: Build tested docker image
           command: |
             set -e
             ./pipe_build_up_test.sh

@@ -3,7 +3,8 @@
 
 # cyberdojo/differ docker image
 
-- A micro-service for [cyber-dojo](http://cyber-dojo.org).
+- The source for the [cyberdojo/differ](https://hub.docker.com/r/cyberdojo/differ/tags) Docker image.
+- A docker-containerized stateless micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
 - Diffs two sets of files.
 
 - - - -
