@@ -40,7 +40,7 @@ Returns the git commit sha used to create the docker image.
 
 - - - -
 ## diff
-Asks for the diff between two sets of files.
+Returns the diff of two sets of files.
 - parameters
   * was_files, eg
 ```json
@@ -83,7 +83,5 @@ Rebuilds the images and runs the tests inside the
 differ-server and differ-client containers.
 
 ...
-
-- - - -
 
 ![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snapshot.png)
