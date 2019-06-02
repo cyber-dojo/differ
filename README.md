@@ -1,14 +1,12 @@
 
 [![CircleCI](https://circleci.com/gh/cyber-dojo/differ.svg?style=svg)](https://circleci.com/gh/cyber-dojo/differ)
 
-<img src="https://raw.githubusercontent.com/cyber-dojo/nginx/master/images/home_page_logo.png"
-alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
-
 # cyberdojo/differ docker image
 
 - A micro-service for [cyber-dojo](http://cyber-dojo.org).
 - Diffs two sets of files.
 
+- - - -
 API:
   * All methods receive their named arguments in a json hash.
   * All methods return a json hash with a single key.
@@ -16,55 +14,53 @@ API:
     * If the method raises an exception, the key equals "exception".
 
 - - - -
-
 ## GET ready?()
 - parameters, none
-```
+```json
   {}
 ```
 - returns true if the service is ready, otherwise false, eg
-```
+```json
   { "ready?": true }
   { "ready?": false }
 ```
 
 - - - -
-
 ## GET sha
 Returns the git commit sha used to create the docker image.
 - parameters, none
-```
+```json
   {}
 ```
 - returns the sha, eg
-```
+```json
   { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
 ```
 
 - - - -
-
 ## diff
 Asks for the diff between two sets of files.
 - parameters
   * was_files, eg
-```
+```json
   { "hiker.h": "#ifndef HIKER_INCLUDED...",
     "hiker.c": "#include <stdio.h>...",
-    "hiker.tests.c": "#include <assert.h>..."
-    ...
+    "hiker.tests.c": "#include <assert.h>...",
+    "cyber-dojo.sh": "make",
+    "makefile": "..."
   }
 ```
   * now_files, eg
-```
+```json
   { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
     "hiker.c": "#include <stdio.h>...",
-    "hiker.tests.c": "#include <assert.h>..."
-    ...
+    "hiker.tests.c": "#include <assert.h>...",
+    "cyber-dojo.sh": "make",
+    "makefile": "...some-edits..."
   }
 ```
 
 - - - -
-
 
 ```
 ./sh/run_demo.sh
@@ -88,8 +84,5 @@ differ-server and differ-client containers.
 ...
 
 - - - -
-
-* [Take me to cyber-dojo's home github repo](https://github.com/cyber-dojo/cyber-dojo).
-* [Take me to http://cyber-dojo.org](http://cyber-dojo.org).
 
 ![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snapshot.png)
