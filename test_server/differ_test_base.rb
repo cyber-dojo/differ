@@ -4,6 +4,10 @@ require_relative '../src/differ'
 
 class DifferTestBase < HexMiniTest
 
+  def initialize(arg)
+    super(arg)
+  end
+
   include Externals
 
   def ready?

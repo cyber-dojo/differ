@@ -26,7 +26,7 @@ class GitDifferTest < DifferTestBase
     raised = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
     assert_equal 'raising', raised.message
     dir = File.dirname(disk.pathed_filename)
-    refute Dir.exists?(dir)
+    refute Dir.exist?(dir)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
