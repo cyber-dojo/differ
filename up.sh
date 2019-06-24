@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Sticky bit must be set on /tmp otherwise
-# Dir.mktmpdir(id,'/tmp') complains
-# that it is world writable but not sticky.
-chmod 1777 /tmp
+export RUBYOPT=-w
 
 rackup  \
   --env production  \

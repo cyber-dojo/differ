@@ -29,5 +29,7 @@ services:
     init: true
     user: nobody
     read_only: true
-    tmpfs: /tmp
+    tmpfs:
+      - /tmp:exec,mode=1777 # Sticky bit must be set on /tmp otherwise
+                            # Dir.mktmpdir(id,'/tmp') complains
     restart: 'no'

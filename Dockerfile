@@ -11,9 +11,5 @@ ENV SHA=${SHA}
 
 EXPOSE 4567
 
-# root user is needed for the [chmod 1777 /tmp]
-# inside up.sh :-( Would like to get back to USER nobody
-USER root
-
-# USER nobody
+USER nobody
 CMD [ "./up.sh" ]
