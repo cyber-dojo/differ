@@ -1,6 +1,6 @@
 require 'simplecov'
 
-cov_root = File.expand_path('../..', File.dirname(__FILE__))
+cov_root = File.expand_path('../..', __dir__)
 SimpleCov.start do
   add_filter('src/demo.rb')
   add_group( 'src') { | src|  src.filename.start_with? "#{cov_root}/src"  }
