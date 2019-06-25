@@ -42,8 +42,12 @@ curl_cmd()
 {
   local -r port="${1}"
   local -r path="${2}"
-  local -r cmd="curl --output /dev/null --silent --fail --data {} -X GET http://${IP_ADDRESS}:${port}/${path}"
-  echo "${cmd}"
+  local -r cmd="curl --output /tmp/curl-probe --silent --fail --data {} -X GET http://${IP_ADDRESS}:${port}/${path}"
+  if ${cmd} && [ "$(cat /tmp/curl-probe)" = '{"ready?":true}' ]; then
+    true
+  else
+    false
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - -
