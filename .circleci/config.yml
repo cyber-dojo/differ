@@ -7,7 +7,6 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      # - setup_remote_docker
       - checkout
       - run:
           name: Build tested docker image
@@ -36,6 +35,7 @@ jobs:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
+      - checkout
       - run:
           name: authenticate with gcloud and deploy with helm
           command: |
