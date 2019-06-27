@@ -2,8 +2,6 @@ version: 2
 jobs:
   build-publish:
 
-    machine: true
-
     working_directory: ~/repo
 
     steps:
