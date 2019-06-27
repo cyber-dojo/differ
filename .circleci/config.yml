@@ -2,6 +2,8 @@ version: 2
 jobs:
   build-publish:
 
+    docker: true
+
     working_directory: ~/repo
 
     steps:
