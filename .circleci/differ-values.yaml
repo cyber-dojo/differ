@@ -1,0 +1,58 @@
+# Default values for cyber-dojo-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# app name
+fullnameOverride: "differ"
+
+# deployment spec
+replicaCount: 1
+
+
+volumes: 
+  - name: differ-tmp-dir
+    emptyDir: 
+      medium: Memory
+      sizeLimit: "64Mi"
+
+
+# containers
+# provide default values that you HAVE to overwrite in your values.yaml file
+containers: 
+  - name: differ
+    image: cyberdojo/differ
+    tag: ""
+    securityContext:
+      readOnlyRootFilesystem: true
+    volumeMounts:
+      - name: differ-tmp-dir
+        mountPath: /tmp
+        readOnly: false
+
+    resources: 
+      limits:
+       memory: 128Mi
+      requests:
+       memory: 128Mi
+    # livenessProbe:
+    #   path: /health
+    #   port: 80
+    # readinessProbe:
+    #   path: /health
+    #   port: 80
+
+envFromSecret: {}
+ 
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+# service
+service: 
+  port: 4567  
+
+  
+  
