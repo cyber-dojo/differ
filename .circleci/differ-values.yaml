@@ -2,23 +2,20 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# app name
 fullnameOverride: "differ"
 
-# deployment spec
 replicaCount: 1
 
-
-volumes: 
+volumes:
   - name: differ-tmp-dir
-    emptyDir: 
+    emptyDir:
       medium: Memory
       sizeLimit: "64Mi"
 
+service:
+  port: 4567
 
-# containers
-# provide default values that you HAVE to overwrite in your values.yaml file
-containers: 
+containers:
   - name: differ
     image: cyberdojo/differ
     tag: ""
@@ -28,8 +25,7 @@ containers:
       - name: differ-tmp-dir
         mountPath: /tmp
         readOnly: false
-
-    resources: 
+    resources:
       limits:
        memory: 128Mi
       requests:
@@ -42,17 +38,9 @@ containers:
     #   port: 80
 
 envFromSecret: {}
- 
 
 nodeSelector: {}
 
 affinity: {}
 
 tolerations: []
-
-# service
-service: 
-  port: 4567  
-
-  
-  
