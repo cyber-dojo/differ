@@ -34,7 +34,7 @@ wait_until_ready()
   echo "${name} not ready after ${max_tries} tries"
   if [ -f /tmp/curl-probe ]; then
     echo "$(cat /tmp/curl-probe)"
-  fi  
+  fi
   docker logs ${name}
   exit 1
 }
@@ -92,7 +92,5 @@ docker-compose \
   -d \
   --force-recreate
 
-readonly MY_NAME="test-differ-server"
-
-wait_until_ready  "${MY_NAME}" 4567
-exit_unless_clean "${MY_NAME}"
+wait_until_ready  test-differ-server 4567
+exit_unless_clean test-differ-server
