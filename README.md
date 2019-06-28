@@ -15,6 +15,29 @@ API:
     * If the method raises an exception, the key equals "exception".
 
 - - - -
+## GET diff
+Returns the diff of two sets of files.
+- parameters
+  * was_files, eg
+```json
+  { "hiker.h": "#ifndef HIKER_INCLUDED...",
+    "hiker.c": "#include <stdio.h>...",
+    "hiker.tests.c": "#include <assert.h>...",
+    "cyber-dojo.sh": "make",
+    "makefile": "..."
+  }
+```
+  * now_files, eg
+```json
+  { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
+    "hiker.c": "#include <stdio.h>...",
+    "hiker.tests.c": "#include <assert.h>...",
+    "cyber-dojo.sh": "make",
+    "makefile": "...some-edits..."
+  }
+```
+
+- - - -
 ## GET ready?()
 - parameters, none
 ```json
@@ -36,29 +59,6 @@ Returns the git commit sha used to create the docker image.
 - returns the sha, eg
 ```json
   { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
-```
-
-- - - -
-## diff
-Returns the diff of two sets of files.
-- parameters
-  * was_files, eg
-```json
-  { "hiker.h": "#ifndef HIKER_INCLUDED...",
-    "hiker.c": "#include <stdio.h>...",
-    "hiker.tests.c": "#include <assert.h>...",
-    "cyber-dojo.sh": "make",
-    "makefile": "..."
-  }
-```
-  * now_files, eg
-```json
-  { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
-    "hiker.c": "#include <stdio.h>...",
-    "hiker.tests.c": "#include <assert.h>...",
-    "cyber-dojo.sh": "make",
-    "makefile": "...some-edits..."
-  }
 ```
 
 - - - -
