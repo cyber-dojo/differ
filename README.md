@@ -8,58 +8,73 @@
 - Diffs two sets of files.
 
 - - - -
-API:
-  * All methods receive their named arguments in a json hash.
-  * All methods return a json hash with a single key.
-    * If the method completes, the key equals the method's name.
-    * If the method raises an exception, the key equals "exception".
+# API
+  * [GET diff(was_files,now_files)](#get-diffwas_filesnow_files)
+  * [GET ready?](#get-ready)
+  * [GET sha](#get-sha)
 
 - - - -
-## GET diff
+# JSON in, JSON out  
+* All methods receive a JSON hash.
+  * The hash contains any method arguments as key-value pairs.
+* All methods return a JSON hash.
+  * If the method completes, a key equals the method's name.
+  * If the method raises an exception, a key equals "exception".
+
+- - - -
+## GET diff(was_files,now_files)
 Returns the diff of two sets of files.
 - parameters
-  * was_files, eg
+  * **was_files:Hash{String=>String}**
+  * **now_files:Hash{String=>String}**
+  * eg
   ```json
-    { "hiker.h": "#ifndef HIKER_INCLUDED...",
+  { "was_files": {
+      "hiker.h": "#ifndef HIKER_INCLUDED...",
       "hiker.c": "#include <stdio.h>...",
       "hiker.tests.c": "#include <assert.h>...",
       "cyber-dojo.sh": "make",
       "makefile": "..."
-    }
-  ```
-  * now_files, eg
-  ```json
-    { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
+    },
+    "now_files": {
+      "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
       "hiker.c": "#include <stdio.h>...",
       "hiker.tests.c": "#include <assert.h>...",
       "cyber-dojo.sh": "make",
       "makefile": "...some-edits..."
     }
+  }
   ```
 
 - - - -
-## GET ready?()
-- parameters, none
-```json
+# GET ready?
+- parameters
+  * none
+  ```json
   {}
-```
-- returns true if the service is ready, otherwise false, eg
-```json
+  ```
+- returns
+  * **true** if the service is ready
+  * **false** if the service is not ready
+  * eg
+  ```json
   { "ready?": true }
   { "ready?": false }
-```
+  ```
 
 - - - -
-## GET sha
-Returns the git commit sha used to create the docker image.
-- parameters, none
-```json
+# GET sha
+- parameters
+  * none
+  ```json
   {}
-```
-- returns the sha, eg
-```json
+  ```
+- returns
+  * the git commit sha used to create the docker image
+  * eg
+  ```json
   { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
-```
+  ```
 
 - - - -
 
