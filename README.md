@@ -19,23 +19,23 @@ API:
 Returns the diff of two sets of files.
 - parameters
   * was_files, eg
-```json
-  { "hiker.h": "#ifndef HIKER_INCLUDED...",
-    "hiker.c": "#include <stdio.h>...",
-    "hiker.tests.c": "#include <assert.h>...",
-    "cyber-dojo.sh": "make",
-    "makefile": "..."
-  }
-```
+  ```json
+    { "hiker.h": "#ifndef HIKER_INCLUDED...",
+      "hiker.c": "#include <stdio.h>...",
+      "hiker.tests.c": "#include <assert.h>...",
+      "cyber-dojo.sh": "make",
+      "makefile": "..."
+    }
+  ```
   * now_files, eg
-```json
-  { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
-    "hiker.c": "#include <stdio.h>...",
-    "hiker.tests.c": "#include <assert.h>...",
-    "cyber-dojo.sh": "make",
-    "makefile": "...some-edits..."
-  }
-```
+  ```json
+    { "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
+      "hiker.c": "#include <stdio.h>...",
+      "hiker.tests.c": "#include <assert.h>...",
+      "cyber-dojo.sh": "make",
+      "makefile": "...some-edits..."
+    }
+  ```
 
 - - - -
 ## GET ready?()
