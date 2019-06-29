@@ -61,7 +61,7 @@ jobs:
             gcloud container clusters get-credentials "$CLUSTER" --zone "$ZONE" --project "$PROJECT"
             helm init --client-only
             helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
-            helm upgrade --install --namespace=prod --set-string containers[0].tag=${CIRCLE_SHA1:0:7} -f .circleci/differ-values.yaml prod-differ praqma/cyber-dojo-service --version 0.2.2         
+            helm upgrade --install --namespace=prod --set-string containers[0].tag=${CIRCLE_SHA1:0:7} -f .circleci/differ-values.yaml prod-differ praqma/cyber-dojo-service --version 0.2.2
 
 workflows:
   version: 2
@@ -80,8 +80,8 @@ workflows:
       - approve-to-prod:
           type: approval
           requires:
-            - deploy-to-beta      
+            - deploy-to-beta
       - deploy-to-prod:
           context: cyberdojo-context
           requires:
-            - approve-to-prod      
+            - approve-to-prod
