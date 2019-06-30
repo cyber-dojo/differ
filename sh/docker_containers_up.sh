@@ -25,7 +25,7 @@ wait_until_ready()
   for _ in $(seq ${max_tries})
   do
     echo -n '.'
-    if ready ${port} ready? ; then
+    if ready ${port} ; then
       echo 'OK'
       return
     else
@@ -46,7 +46,7 @@ wait_until_ready()
 ready()
 {
   local -r port="${1}"
-  local -r path="${2}"
+  local -r path=ready?
   local -r curl_cmd="curl --output ${READY_FILENAME} --silent --fail --data {} -X GET http://${IP_ADDRESS}:${port}/${path}"
   rm -f "${READY_FILENAME}"
   if ${curl_cmd} && [ "$(cat "${READY_FILENAME}")" = '{"ready?":true}' ]; then
