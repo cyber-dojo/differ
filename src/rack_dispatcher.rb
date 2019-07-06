@@ -1,4 +1,5 @@
-require_relative 'client_error'
+require_relative 'http_json/request_error'
+require_relative 'http_json_args'
 require 'json'
 require 'rack'
 
@@ -6,80 +7,48 @@ class RackDispatcher
 
   def initialize(differ)
     @differ = differ
-    @request_class = Rack::Request
   end
 
-  def call(env)
-    request = @request_class.new(env)
-    path = request.path_info[1..-1] # lose leading /
+  def call(env, request_class = Rack::Request)
+    request = request_class.new(env)
+    path = request.path_info
     body = request.body.read
-    name, args = validated_name_args(path, body)
+    name,args = HttpJsonArgs.new(body).get(path)
     result = @differ.public_send(name, *args)
-    json_response(200, json_plain({ name => result }))
-  rescue Exception => error
-    diagnostic = json_pretty({
-      'exception' => {
-        'class' => error.class.name,
-        'message' => error.message,
-        'args' => body,
-        'backtrace' => error.backtrace
-      }
-    })
-    $stderr.puts(diagnostic)
-    $stderr.flush
-    json_response(status(error), diagnostic)
+    json_response(200, { name => result })
+  rescue HttpJson::RequestError => error
+    json_response(400, diagnostic(path, body, error))
+  rescue => error
+    json_response(500, diagnostic(path, body, error))
   end
 
   private
 
-  def validated_name_args(name, body)
-    @args = JSON.parse(body)
-    args = case name
-      when /^ready$/ then []
-      when /^sha$/   then []
-      when /^diff$/  then [was_files, now_files]
-      else
-        raise ClientError, 'json:malformed'
+  def json_response(status, json)
+    if status == 200
+      body = JSON.fast_generate(json)
+    else
+      body = JSON.pretty_generate(json)
+      $stderr.puts(body)
+      $stderr.flush
     end
-    name += '?' if query?(name)
-    [name, args]
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def json_plain(body)
-    JSON.generate(body)
-  end
-
-  def json_pretty(body)
-    JSON.pretty_generate(body)
-  end
-
-  def json_response(status, body)
     [ status,
       { 'Content-Type' => 'application/json' },
       [ body ]
     ]
   end
 
-  def status(error)
-    error.is_a?(ClientError) ? 400 : 500
-  end
-
   # - - - - - - - - - - - - - - - -
 
-  def query?(name)
-    ['ready'].include?(name)
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def self.request_args(*names)
-    names.each { |name|
-      define_method name, &lambda { @args[name.to_s] }
+  def diagnostic(path, body, error)
+    { 'exception' => {
+        'path' => path,
+        'body' => body,
+        'class' => 'DifferService',
+        'message' => error.message,
+        'backtrace' => error.backtrace
+      }
     }
   end
-
-  request_args :was_files, :now_files
 
 end
