@@ -8,7 +8,7 @@ class ExternalGitterTest < DifferTestBase
   end
 
   def hex_setup
-    @shell = SpySheller.new(self)
+    externals.shell = SpySheller.new(externals)
   end
 
   # - - - - - - - - - - - - - - - - -

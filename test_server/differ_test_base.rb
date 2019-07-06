@@ -8,8 +8,6 @@ class DifferTestBase < HexMiniTest
     super(arg)
   end
 
-  include Externals
-
   def ready?
     differ.ready?
   end
@@ -22,11 +20,31 @@ class DifferTestBase < HexMiniTest
     differ.diff(was_files, now_files)
   end
 
-  private
-
   def differ
-    Differ.new(self)
+    @differ ||= Differ.new(externals)
   end
+
+  def externals
+    @externals ||= Externals.new
+  end
+
+  def disk
+    externals.disk
+  end
+
+  def git
+    externals.git
+  end
+
+  def log
+    externals.log
+  end
+
+  def shell
+    externals.shell
+  end
+
+  private
 
   def with_captured_stdout
     result = nil

@@ -1,13 +1,11 @@
 require_relative 'client_error'
-require_relative 'differ'
-require_relative 'externals'
 require 'json'
 require 'rack'
 
 class RackDispatcher
 
-  def initialize
-    @differ = Differ.new(self)
+  def initialize(differ)
+    @differ = differ
     @request_class = Rack::Request
   end
 
@@ -33,8 +31,6 @@ class RackDispatcher
   end
 
   private
-
-  include Externals
 
   def validated_name_args(name, body)
     @args = JSON.parse(body)

@@ -3,14 +3,13 @@ require_relative 'external_gitter'
 require_relative 'external_sheller'
 require_relative 'external_stdout_logger'
 
-module Externals # mix-in
-
-  def shell
-    @shell ||= ExternalSheller.new(self)
-  end
+class Externals
 
   def disk
     @disk ||= ExternalDiskWriter.new(self)
+  end
+  def disk=(obj)
+    @disk = obj
   end
 
   def git
@@ -19,6 +18,16 @@ module Externals # mix-in
 
   def log
     @log ||= ExternalStdoutLogger.new(self)
+  end
+  def log=(obj)
+    @log = obj
+  end
+
+  def shell
+    @shell ||= ExternalSheller.new(self)
+  end
+  def shell=(obj)
+    @shell = obj
   end
 
 end

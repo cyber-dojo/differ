@@ -8,7 +8,7 @@ class ExternalShellerTest < DifferTestBase
   end
 
   def hex_setup
-    @log = SpyLogger.new(self)
+    externals.log = SpyLogger.new(externals)
   end
 
   # - - - - - - - - - - - - - - - - -

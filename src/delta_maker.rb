@@ -5,7 +5,6 @@ module DeltaMaker # mix-in
 
   # make_delta finds out which files are :new, :unchanged, :changed, or :deleted.
   # It ensures files deleted in the browser are correspondingly deleted under katas/
-  # It also allows unchanged files to *not* be (re)saved.
 
   def make_delta(was, now)
     result = {
