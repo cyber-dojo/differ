@@ -47,7 +47,7 @@ class ExternalGitter
       "#{m}",
       '--'     # specifies to git that n,m are revisions and not filenames
     ].join(space)
-    output_of(shell.cd_exec(path, "git diff #{options}"))
+    shell.cd_exec(path, "git diff #{options}")
   end
 
   private
@@ -62,10 +62,6 @@ class ExternalGitter
 
   def space
     ' '
-  end
-
-  def output_of(args)
-    args[0]
   end
 
 end
