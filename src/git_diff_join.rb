@@ -41,7 +41,7 @@ module GitDiffJoin # mix-in
   end
 
   def empty_file?(diff)
-    diff[:chunks] == []
+    diff[:chunks] === []
   end
 
   def all(lines, type)

@@ -153,7 +153,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
     md = %r[^diff --git #{filename[was]} #{filename[now]}$].match(first_line)
     return nil if md.nil?
     was_index = 1
-    now_index = (was == :uf) ? 2 : 3
+    now_index = (was === :uf) ? 2 : 3
     return [ unescaped(md[was_index]), unescaped(md[now_index]) ]
   end
 
@@ -162,7 +162,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
   def unescaped(filename)
     # filename[1..-2] to lose the opening and closing "
     # then unescape without using eval
-    filename = unescape(filename[1..-2]) if filename[0].chr == '"'
+    filename = unescape(filename[1..-2]) if filename[0].chr === '"'
     # drop leading a/ or b/
     filename[2..-1]
     # Note: there is a [git diff] option --no-prefix which removes
@@ -180,7 +180,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
         "'"    => "\x27"
     }
     str.gsub(/\\(?:([#{unescapes.keys.join}]))/) {
-      $1 == '\\' ? '\\' : unescapes[$1]
+      $1 === '\\' ? '\\' : unescapes[$1]
     }
   end
 

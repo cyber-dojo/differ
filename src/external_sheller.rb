@@ -27,7 +27,7 @@ class ExternalSheller
     end
 
     exit_status = $?.exitstatus
-    log << "NO-OUTPUT:" if output == ''
+    log << "NO-OUTPUT:" if output === ''
     log << "OUTPUT:#{output}" if output != ''
     log << "EXITED:#{exit_status}"
     [cleaned(output), exit_status]
@@ -37,7 +37,7 @@ class ExternalSheller
 
   def log
     @externals.log
-  end 
+  end
 
   include StringCleaner
 

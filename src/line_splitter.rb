@@ -6,11 +6,11 @@ module LineSplitter # mix-in
   def line_split(source)
     if source.nil?
       []
-    elsif source == ''
+    elsif source === ''
       ['']
     else
       lines = source.split(/\n/, -1)
-      lines.pop if lines.last == ''
+      lines.pop if lines.last === ''
       lines
     end
   end

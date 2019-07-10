@@ -198,7 +198,7 @@ class GitDiffBugTest < DifferTestBase
 
     split_up = source_lines.split(/(\n)/).select { |line| line != "\n"}
     join = git_diff_join_builder(diff, split_up)
-    nils = join.select { |one| one[:line] == "\n" }
+    nils = join.select { |one| one[:line] === "\n" }
     assert_equal [], nils
   end
 
