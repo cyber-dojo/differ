@@ -10,7 +10,7 @@ class GitDifferTest < DifferTestBase
   end
 
   def hex_setup
-    externals.log = NullLogger.new(self)
+    externals.log = NullLogger.new
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -19,7 +19,7 @@ class GitDifferTest < DifferTestBase
 
   test 'B9F',
   'tmp dir is deleted if exception is raised' do
-    externals.disk = RaisingDiskWriter.new(externals)
+    externals.disk = RaisingDiskWriter.new
     was_files = { 'diamond.h' => 'a' } # ensure something to write
     now_files = {}
     differ = GitDiffer.new(self)

@@ -2,8 +2,8 @@ require_relative 'string_cleaner'
 
 class ExternalSheller
 
-  def initialize(parent)
-    @log = parent.log
+  def initialize(externals)
+    @externals = externals
   end
 
   def cd_exec(path, *commands)
@@ -35,7 +35,9 @@ class ExternalSheller
 
   private
 
-  attr_reader :log # external
+  def log
+    @externals.log
+  end 
 
   include StringCleaner
 

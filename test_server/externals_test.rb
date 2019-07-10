@@ -7,7 +7,7 @@ class ExternalsTest < DifferTestBase
   end
 
   test '920',
-  'default file is ExternalDiskWriter' do
+  'default disk is ExternalDiskWriter' do
     assert_equal 'ExternalDiskWriter', disk.class.name
   end
 

@@ -1,7 +1,7 @@
 
 class SpySheller
 
-  def initialize(_)
+  def initialize
     @spied = []
   end
 

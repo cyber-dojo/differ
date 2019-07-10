@@ -6,7 +6,7 @@ require_relative 'external_stdout_logger'
 class Externals
 
   def disk
-    @disk ||= ExternalDiskWriter.new(self)
+    @disk ||= ExternalDiskWriter.new
   end
   def disk=(doppel)
     @disk = doppel
@@ -17,7 +17,7 @@ class Externals
   end
 
   def log
-    @log ||= ExternalStdoutLogger.new(self)
+    @log ||= ExternalStdoutLogger.new
   end
   def log=(doppel)
     @log = doppel
