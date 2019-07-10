@@ -3,11 +3,11 @@ require 'open3'
 
 class ExternalSheller
 
-  def cd_exec(path, *commands)
-    exec(["cd #{path}"] + commands)
+  def assert_cd_exec(path, *commands)
+    assert_exec(["cd #{path}"] + commands)
   end
 
-  def exec(*commands)
+  def assert_exec(*commands)
     stdout,stderr,r = Open3.capture3('sh -c ' + quoted(commands.join(' && ')))
     stdout = cleaned(stdout)
     stderr = cleaned(stderr)

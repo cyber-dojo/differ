@@ -7,7 +7,7 @@ class SpySheller
 
   attr_reader :spied
 
-  def cd_exec(path, *commands)
+  def assert_cd_exec(path, *commands)
     spied << [path]+[*commands]
   end
 

@@ -47,7 +47,7 @@ class GitDiffer
     was_files.each do |pathed_filename, content|
       path = File.dirname(pathed_filename)
       src_dir = git_dir + '/' + path
-      shell.exec("mkdir -vp #{src_dir}") if path != '.'
+      shell.assert_exec("mkdir -vp #{src_dir}") if path != '.'
       disk.write(git_dir + '/' + pathed_filename, content)
       git.add(git_dir, pathed_filename)
     end
@@ -63,7 +63,7 @@ class GitDiffer
     delta[:new].each do |pathed_filename|
       path = File.dirname(pathed_filename)
       src_dir = git_dir + '/' + path
-      shell.exec("mkdir -vp #{src_dir}") if path != '.'
+      shell.assert_exec("mkdir -vp #{src_dir}") if path != '.'
       disk.write(git_dir + '/' + pathed_filename, now_files[pathed_filename])
       git.add(git_dir, pathed_filename)
     end

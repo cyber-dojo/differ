@@ -8,7 +8,7 @@ class ExternalGitter
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def setup(path, user_name, user_email)
-    shell.cd_exec(path,
+    shell.assert_cd_exec(path,
       'git init --quiet',
       "git config user.name #{quoted(user_name)}",
       "git config user.email #{quoted(user_email)}"
@@ -18,19 +18,19 @@ class ExternalGitter
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def add(path, filename)
-    shell.cd_exec(path, "git add #{quoted(filename)}")
+    shell.assert_cd_exec(path, "git add #{quoted(filename)}")
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def rm(path, filename)
-    shell.cd_exec(path, "git rm #{quoted(filename)}")
+    shell.assert_cd_exec(path, "git rm #{quoted(filename)}")
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def commit(path, tag)
-    shell.cd_exec(path,
+    shell.assert_cd_exec(path,
       "git commit --allow-empty --all --message #{tag} --quiet",
       "git tag #{tag} HEAD"
     )
@@ -47,7 +47,7 @@ class ExternalGitter
       "#{m}",
       '--'     # specifies to git that n,m are revisions and not filenames
     ].join(space)
-    shell.cd_exec(path, "git diff #{options}")
+    shell.assert_cd_exec(path, "git diff #{options}")
   end
 
   private
