@@ -2,10 +2,6 @@ require_relative 'string_cleaner'
 
 class ExternalSheller
 
-  def initialize(externals)
-    @externals = externals
-  end
-
   def cd_exec(path, *commands)
     # the [[ -d ]] is to avoid spurious [cd path] failure
     # output when the tests are running
@@ -14,30 +10,12 @@ class ExternalSheller
   end
 
   def exec(*commands)
-    command = commands.join(' && ')
-    log << '-'*40
-    log << "COMMAND:#{command}"
-
-    begin
-      output = `#{command}`
-    rescue Exception => e
-      log << "RAISED-CLASS:#{e.class.name}"
-      log << "RAISED-TO_S:#{e.to_s}"
-      raise e
-    end
-
+    output = `#{commands.join(' && ')}`
     exit_status = $?.exitstatus
-    log << "NO-OUTPUT:" if output === ''
-    log << "OUTPUT:#{output}" if output != ''
-    log << "EXITED:#{exit_status}"
     [cleaned(output), exit_status]
   end
 
   private
-
-  def log
-    @externals.log
-  end
 
   include StringCleaner
 

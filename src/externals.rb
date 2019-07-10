@@ -24,7 +24,7 @@ class Externals
   end
 
   def shell
-    @shell ||= ExternalSheller.new(self)
+    @shell ||= ExternalSheller.new
   end
   def shell=(doppel)
     @shell = doppel
