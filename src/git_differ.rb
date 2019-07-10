@@ -3,10 +3,8 @@ require 'securerandom'
 
 class GitDiffer
 
-  def initialize(parent)
-    @disk = parent.disk
-    @git = parent.git
-    @shell = parent.shell
+  def initialize(external)
+    @external = external
   end
 
   def diff(was_files, now_files)
@@ -32,8 +30,6 @@ class GitDiffer
   end
 
   private
-
-  attr_reader :disk, :git, :shell # externals
 
   attr_reader :delta, :was_files, :now_files
 
@@ -76,5 +72,17 @@ class GitDiffer
   end
 
   include DeltaMaker
+
+  def disk
+    @external.disk
+  end
+
+  def git
+    @external.git
+  end
+
+  def shell
+    @external.shell
+  end
 
 end
