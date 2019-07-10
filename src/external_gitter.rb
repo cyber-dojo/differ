@@ -1,8 +1,8 @@
 
 class ExternalGitter
 
-  def initialize(parent)
-    @shell = parent.shell
+  def initialize(externals)
+    @externals = externals
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -52,7 +52,9 @@ class ExternalGitter
 
   private
 
-  attr_reader :shell # external
+  def shell
+    @externals.shell
+  end
 
   def quoted(s)
     "'" + s + "'"

@@ -1,7 +1,7 @@
 
 class ExternalDiskWriter
 
-  def initialize(_parent)
+  def initialize(_externals)
   end
 
   def write(pathed_filename, content)

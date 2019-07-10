@@ -8,8 +8,8 @@ class Externals
   def disk
     @disk ||= ExternalDiskWriter.new(self)
   end
-  def disk=(obj)
-    @disk = obj
+  def disk=(doppel)
+    @disk = doppel
   end
 
   def git
@@ -19,15 +19,15 @@ class Externals
   def log
     @log ||= ExternalStdoutLogger.new(self)
   end
-  def log=(obj)
-    @log = obj
+  def log=(doppel)
+    @log = doppel
   end
 
   def shell
     @shell ||= ExternalSheller.new(self)
   end
-  def shell=(obj)
-    @shell = obj
+  def shell=(doppel)
+    @shell = doppel
   end
 
 end
