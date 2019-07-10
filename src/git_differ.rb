@@ -17,12 +17,14 @@ class GitDiffer
 
       was_tag = 0
       write_was_files_into(git_dir)
+      git.add(git_dir, '.')
       git.commit(git_dir, was_tag)
 
       now_tag = 1
       delete_deleted_files_from(git_dir)
       write_new_files_to(git_dir)
       overwrite_changed_files_in(git_dir)
+      git.add(git_dir, '.')
       git.commit(git_dir, now_tag)
 
       git.diff(git_dir, was_tag, now_tag)
@@ -45,7 +47,6 @@ class GitDiffer
       src_dir = git_dir + '/' + path
       shell.assert_exec("mkdir -vp #{src_dir}") if path != '.'
       disk.write(git_dir + '/' + pathed_filename, content)
-      git.add(git_dir, pathed_filename)
     end
   end
 
@@ -61,7 +62,6 @@ class GitDiffer
       src_dir = git_dir + '/' + path
       shell.assert_exec("mkdir -vp #{src_dir}") if path != '.'
       disk.write(git_dir + '/' + pathed_filename, now_files[pathed_filename])
-      git.add(git_dir, pathed_filename)
     end
   end
 
