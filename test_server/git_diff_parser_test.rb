@@ -51,7 +51,7 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal "plain", was_filename, 'was_filename'
+    assert_equal 'plain', was_filename, 'was_filename'
     assert_equal "em bed\"ded", now_filename, 'now_filename'
   end
 
@@ -66,7 +66,7 @@ class GitDiffParserTest < DifferTestBase
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
     assert_equal "emb ed\"ded", was_filename, 'was_filename'
-    assert_equal "plain", now_filename, 'now_filename'
+    assert_equal 'plain', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -211,27 +211,27 @@ class GitDiffParserTest < DifferTestBase
     {
       '\\was_newfile_FIU' => # <-- single backslash
       {
-        :prefix_lines =>
+        prefix_lines:
         [
             'diff --git "a/\\\\was_newfile_FIU" "b/\\\\was_newfile_FIU"',
             'deleted file mode 100644',
             'index 21984c7..0000000',
         ],
-        :was_filename => '\\was_newfile_FIU', # <-- single backslash
-        :now_filename => nil,
-        :chunks =>
+        was_filename: '\\was_newfile_FIU', # <-- single backslash
+        now_filename: nil,
+        chunks:
         [
           {
-            :range =>
+            range:
             {
-              :now => { :size => 0, :start_line => 0 },
-              :was => { :size => 1, :start_line => 1 }
+              now: { start_line:0, size:0 },
+              was: { start_line:1, size:1 }
             },
-            :sections =>
+            sections:
             [
               {
-                :deleted_lines => [ 'Please rename me!' ],
-                :added_lines   => []
+                deleted_lines: [ 'Please rename me!' ],
+                added_lines: []
               }
             ]
           }
@@ -258,15 +258,15 @@ class GitDiffParserTest < DifferTestBase
     {
       'original' =>
       {
-        :prefix_lines =>
+        prefix_lines:
         [
             'diff --git a/original b/original',
             'deleted file mode 100644',
             'index e69de29..0000000',
         ],
-        :was_filename => 'original',
-        :now_filename => nil,
-        :chunks => []
+        was_filename: 'original',
+        now_filename: nil,
+        chunks: []
       }
     }
 
@@ -295,27 +295,27 @@ class GitDiffParserTest < DifferTestBase
     {
       'untitled.rb' =>
       {
-        :prefix_lines =>
+        prefix_lines:
         [
             'diff --git a/untitled.rb b/untitled.rb',
             'deleted file mode 100644',
             'index 5c4b3ab..0000000',
         ],
-        :was_filename => 'untitled.rb',
-        :now_filename => nil,
-        :chunks =>
+        was_filename: 'untitled.rb',
+        now_filename: nil,
+        chunks:
         [
           {
-            :range =>
+            range:
             {
-              :was => { :start_line => 1, :size       => 3 },
-              :now => { :start_line => 0, :size       => 0 }
+              was: { start_line:1, size:3 },
+              now: { start_line:0, size:0 }
             },
-            :sections     =>
+            sections:
             [
               {
-                :deleted_lines => [ 'def answer', '  42', 'end'],
-                :added_lines   => []
+                deleted_lines: [ 'def answer', '  42', 'end'],
+                added_lines: []
               }
             ]
           }
@@ -343,16 +343,16 @@ class GitDiffParserTest < DifferTestBase
     {
       '\\was_newfile_FIU' => # <-- single backslash
       {
-        :prefix_lines =>
+        prefix_lines:
         [
             'diff --git "a/was_\\\\wa s_newfile_FIU" "b/\\\\was_newfile_FIU"',
             'similarity index 100%',
             'rename from "was_\\\\wa s_newfile_FIU"',
             'rename to "\\\\was_newfile_FIU"',
         ],
-        :was_filename => 'was_\\wa s_newfile_FIU', # <-- single backslash
-        :now_filename => '\\was_newfile_FIU', # <-- single backslash
-        :chunks => []
+        was_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
+        now_filename: '\\was_newfile_FIU',      # <-- single backslash
+        chunks: []
       }
     }
 
@@ -376,16 +376,16 @@ class GitDiffParserTest < DifferTestBase
     {
       'newname' =>
       {
-        :prefix_lines =>
+        prefix_lines:
         [
             'diff --git a/oldname b/newname',
             'similarity index 100%',
             'rename from oldname',
             'rename to newname',
         ],
-        :was_filename => 'oldname',
-        :now_filename => 'newname',
-        :chunks => []
+        was_filename: 'oldname',
+        now_filename: 'newname',
+        chunks: []
       }
     }
 
@@ -413,7 +413,7 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/instructions b/instructions_new',
             'similarity index 87%',
@@ -421,21 +421,21 @@ class GitDiffParserTest < DifferTestBase
             'rename to instructions_new',
             'index e747436..83ec100 100644'
           ],
-          :was_filename => 'instructions',
-          :now_filename => 'instructions_new',
-          :chunks =>
+          was_filename: 'instructions',
+          now_filename: 'instructions_new',
+          chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 6, :size => 4 },
-                :now => { :start_line => 6, :size => 4 },
+                was: { start_line:6, size:4 },
+                now: { start_line:6, size:4 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'obir obri oibr oirb orbi orib' ],
-                  :added_lines   => [ 'obir obri oibr oirb orbi oribx' ]
+                  deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
+                  added_lines: [ 'obir obri oibr oirb orbi oribx' ]
                 } # section
               ] # sections
             } # chunk
@@ -474,26 +474,26 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/lines b/lines',
             'index 896ddd8..2c8d1b8 100644'
           ],
-        :was_filename => 'lines',
-        :now_filename => 'lines',
-        :chunks =>
+        was_filename: 'lines',
+        now_filename: 'lines',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 1, :size => 7 },
-                :now => { :start_line => 1, :size => 7 },
+                was: { start_line:1, size:7 },
+                now: { start_line:1, size:7 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'ddd' ],
-                  :added_lines   => [ 'eee' ]
+                  deleted_lines: [ 'ddd' ],
+                  added_lines: [ 'eee' ]
                 } # section
               ] # sections
             } # chunk
@@ -502,26 +502,26 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_2 =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/other b/other',
             'index cf0389a..b28bf03 100644'
           ],
-        :was_filename => 'other',
-        :now_filename => 'other',
-        :chunks =>
+        was_filename: 'other',
+        now_filename: 'other',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 1, :size => 6 },
-                :now => { :start_line => 1, :size => 6 },
+                was: { start_line:1, size:6 },
+                now: { start_line:1, size:6 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'CCC', 'DDD' ],
-                  :added_lines   => [ 'EEE', 'FFF' ]
+                  deleted_lines: [ 'CCC', 'DDD' ],
+                  added_lines: [ 'EEE', 'FFF' ]
                 } # section
               ] # sections
             } # chunk
@@ -547,8 +547,8 @@ class GitDiffParserTest < DifferTestBase
     lines = '@@ -3 +5 @@'
     expected =
     {
-      :was => { :start_line => 3, :size => 1 },
-      :now => { :start_line => 5, :size => 1 },
+      was: { start_line:3, size:1 },
+      now: { start_line:5, size:1 },
     }
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -560,8 +560,8 @@ class GitDiffParserTest < DifferTestBase
     lines = '@@ -3 +5,9 @@'
     expected =
     {
-      :was => { :start_line => 3, :size => 1 },
-      :now => { :start_line => 5, :size => 9 },
+      was: { start_line:3, size:1 },
+      now: { start_line:5, size:9 },
     }
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -573,8 +573,8 @@ class GitDiffParserTest < DifferTestBase
     lines = '@@ -3,4 +5 @@'
     expected =
     {
-      :was => { :start_line => 3, :size => 4 },
-      :now => { :start_line => 5, :size => 1 },
+      was: { start_line:3, size:4 },
+      now: { start_line:5, size:1 },
     }
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -586,8 +586,8 @@ class GitDiffParserTest < DifferTestBase
     lines = '@@ -3,4 +5,6 @@'
     expected =
     {
-      :was => { :start_line => 3, :size => 4 },
-      :now => { :start_line => 5, :size => 6 },
+      was: { start_line:3, size:4 },
+      now: { start_line:5, size:6 },
     }
     assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -634,41 +634,41 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/lines b/lines',
             'index b1a30d9..7fa9727 100644'
           ],
-        :was_filename => 'lines',
-        :now_filename => 'lines',
-        :chunks =>
+        was_filename: 'lines',
+        now_filename: 'lines',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 1, :size => 5 },
-                :now => { :start_line => 1, :size => 5 },
+                was: { start_line:1, size:5 },
+                now: { start_line:1, size:5 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'BBB' ],
-                  :added_lines   => [ 'CCC' ]
+                  deleted_lines: [ 'BBB' ],
+                  added_lines: [ 'CCC' ]
                 } # section
               ] # sections
             }, # chunk
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 8, :size => 6 },
-                :now => { :start_line => 8, :size => 6 },
+                was: { start_line:8, size:6 },
+                now: { start_line:8, size:6 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'SSS' ],
-                  :added_lines   => [ 'TTT' ]
-                }, # section
+                  deleted_lines: [ 'SSS' ],
+                  added_lines: [ 'TTT' ] 
+                } # section
               ] # sections
             }
           ] # chunks
@@ -987,8 +987,8 @@ class GitDiffParserTest < DifferTestBase
     {
         :prefix_lines =>
           [
-            "diff --git a/lines b/lines",
-            "index 5ed4618..33d0e05 100644"
+            'diff --git a/lines b/lines',
+            'index 5ed4618..33d0e05 100644'
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
@@ -1170,10 +1170,10 @@ class GitDiffParserTest < DifferTestBase
     {
       :prefix_lines =>
       [
-        "diff --git a/hiker.h b/hiker.txt",
-        "similarity index 100%",
-        "rename from hiker.h",
-        "rename to hiker.txt",
+        'diff --git a/hiker.h b/hiker.txt',
+        'similarity index 100%',
+        'rename from hiker.h',
+        'rename to hiker.txt',
       ],
       :was_filename => "hiker.h",
       :now_filename => "hiker.txt",

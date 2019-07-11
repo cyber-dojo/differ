@@ -32,9 +32,7 @@ class GitDiffBugTest < DifferTestBase
           ],
         :was_filename => 'recently_used_list.cpp',
         :now_filename => 'was_recently_used_list.test.cpp',
-        :chunks =>
-          [
-          ] # chunks
+        :chunks => []
     }
     expected = { 'was_recently_used_list.test.cpp' => expected_diff }
     assert_equal expected, diff
@@ -173,7 +171,7 @@ class GitDiffBugTest < DifferTestBase
               ],
               :added_lines   => [],
               :after_lines => []
-            }, # section
+            } # section
           ] # sections
         } # chunk
       ] # chunks

@@ -1,6 +1,7 @@
 require_relative 'line_splitter'
 
-class GitDiffParser # Parses the output of 'git diff' command.
+# Parses the output of 'git diff' command.
+class GitDiffParser
 
   def initialize(diff_text)
     @lines = LineSplitter.line_split(diff_text)
@@ -87,13 +88,9 @@ class GitDiffParser # Parses the output of 'git diff' command.
       added_lines = parse_lines(/^\+(.*)/)
       parse_newline_at_eof
 
-      #after_lines = parse_common_lines
-      #parse_newline_at_eof
-
       sections << {
         deleted_lines: deleted_lines,
           added_lines: added_lines,
-          #after_lines: after_lines
       }
     end
     sections
@@ -115,12 +112,6 @@ class GitDiffParser # Parses the output of 'git diff' command.
     end
     [line0] + lines
   end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  #def parse_common_lines
-  #  parse_lines(%r|^ (.*)|)
-  #end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -230,42 +221,27 @@ end
 #  Following this is a change chunk containing the line differences.
 #  A chunk begins with range information. The range information
 #  is surrounded by double-at signs.
-#    So in this example its @@ -4,7 +4,8 @@
-#  The chunk range information contains two chunk ranges.
+#    So in this example its @@ -4,7 +15,8 @@
+#  The chunk range information contains at most two chunk ranges.
+#  @@ -4,7 +15,8 is for added lines (-4,7) and deleted lines (+5,8)
+#  @@ -4,7 @@ is for deleted lines only.
+#  @@ +15,8 @@ is for added lines only.
+#
 #  Each chunk range is of the format L,S where
 #  L is the starting line number and
 #  S is the number of lines the change chunk applies to for
 #  each respective file.
+#
+#  For -deleted lines, L,S refers to the original file.
+#  For   +added lines, L,S refers to the new file.
+#
 #  The ,S is optional and if missing indicates a chunk size of 1.
-#  So -3 is the same as -3,1 and -1 is the same as -1,1
+#  So -3 is the same as -3,1
+#  And -1 is the same as -1,1
+#  And -3 +5 is the same as -3,1 +5,1
 #
-#  The range for the chunk of the original file is preceded by a
-#  minus symbol.
-#    So in this example its -4,7
-#  If this is a new file (--- /dev/null) this is -0,0
-#
-#  The range for the chunk of the new file is preceded by a
-#  plus symbol.
-#    So in this example its +4,8
-#  If this is a deleted file (+++ /dev/null) this is -0,0
-#
-# LINE:   (0..n+1).collect {|i| from + i * seconds_per_gap }
-# LINE: end
-# LINE:
-#
-#  Following this, optionally, are the unchanged, contextual lines,
-#  each preceded by a space character.
-#  These are lines that are common to both the old file and the new file.
-#  So here there are three lines, (the third line is a newline)
-#  So the -4,7 tells us that these three common lines are lines
-#  4,5,6 in the original file.
-#
-# LINE:-def full_gapper(all_incs, gaps)
-#
-#  Following this, optionally, are the deleted lines, each preceded by a
-#  minus sign. This is the first deleted line so it was line 7 (one after 6)
-#  If there were subsequent deleted lines they would having incrementing line
-#  numbers, 8,9 etc.
+#  If this is a     new file (--- /dev/null) the range is -0,0
+#  If this is a deleted file (+++ /dev/null) the range is -0,0
 #
 # LINE:\ No newline at end of file
 #
@@ -273,19 +249,6 @@ end
 #  as above. I wondered if the format of this was that the initial \
 #  means the line is a comment line and that there could be (are) other
 #  comments, but googling does not indicate this.
-#
-# LINE:+def full_gapper(all_incs, created, seconds_per_gap)
-# LINE:+  gaps = time_gaps(created, latest(all_incs), seconds_per_gap)
-#
-#  Following this, optionally, are the added lines, each preceeded by a
-#  + sign. So the +4,8 and the 3 common lines tells us that the first +
-#  line is line 7 in the new file, and the second + line is line 8 in
-#  the new file.
-#
-# LINE:\ No newline at end of file
-#
-#  Following this, optionally, is a single line starting with a \ character
-#  as above.
 #
 # http://www.artima.com/weblogs/viewpost.jsp?thread=164293
 # Is a blog entry by Guido van Rossum.
