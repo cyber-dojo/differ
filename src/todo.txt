@@ -180,3 +180,49 @@ So what does -6 +5 mean?
  -6,1 +5,1
 We deleted 'fff' from line 6 in the old-file
 We added   'ggg' to   line 5 in the new-file
+
+
+
+Delete one line
+  diff --git a/lines b/lines
+  index ebcabec..2dd4903 100644
+  --- a/lines
+  +++ b/lines
+  @@ -11 +10,0 @@ hhxxxxxxxx
+  -jj
+
+
+Add one line
+  diff --git a/lines b/lines
+  index 2dd4903..e43e959 100644
+  --- a/lines
+  +++ b/lines
+  @@ -11,0 +12 @@ kkxxxxxxx
+  +dfgdfgdfg
+
+Delete a file
+  diff --git a/lines b/lines
+  deleted file mode 100644
+  index e43e959..0000000
+  --- a/lines
+  +++ /dev/null
+  @@ -1,27 +0,0 @@
+  -aaa bbIb ccc ddd ee
+  -ddd
+  -eee
+  ...
+
+Add a new file
+  diff --git a/newfile b/newfile
+  new file mode 100644
+  index 0000000..3c5300c
+  --- /dev/null
+  +++ b/newfile
+  @@ -0,0 +1,6 @@
+  +dfgsd
+  +fgs
+  +dfg
+  +dsfg
+  +sdfg
+  +
+  
