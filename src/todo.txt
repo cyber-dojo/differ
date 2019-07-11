@@ -177,6 +177,6 @@ The new file is
 8jjj
 
 So what does -6 +5 mean?
- -6,1 5,1
+ -6,1 +5,1
 We deleted 'fff' from line 6 in the old-file
 We added   'ggg' to   line 5 in the new-file

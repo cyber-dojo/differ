@@ -406,7 +406,7 @@ class GitDiffParserTest < DifferTestBase
       'index e747436..83ec100 100644',
       '--- a/instructions',
       '+++ b/instructions_new',
-      '@@ -6,4 +6,4 @@ For example, the potential anagrams of "biro" are',
+      '@@ -6,1 +6,1 @@ For example, the potential anagrams of "biro" are',
       '-obir obri oibr oirb orbi orib',
       '+obir obri oibr oirb orbi oribx'
     ].join("\n")
@@ -428,8 +428,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:6, size:4 },
-                now: { start_line:6, size:4 },
+                was: { start_line:6, size:1 },
+                now: { start_line:6, size:1 },
               },
               sections:
               [
@@ -457,14 +457,14 @@ class GitDiffParserTest < DifferTestBase
       'index 896ddd8..2c8d1b8 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -1,7 +1,7 @@',
+      '@@ -1,1 +1,1 @@',
       '-ddd',
       '+eee',
       'diff --git a/other b/other',
       'index cf0389a..b28bf03 100644',
       '--- a/other',
       '+++ b/other',
-      '@@ -1,6 +1,6 @@',
+      '@@ -14,2 +14,2 @@',
       '-CCC',
       '-DDD',
       '+EEE',
@@ -486,8 +486,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:1, size:7 },
-                now: { start_line:1, size:7 },
+                was: { start_line:1, size:1 },
+                now: { start_line:1, size:1 },
               },
               sections:
               [
@@ -514,8 +514,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:1, size:6 },
-                now: { start_line:1, size:6 },
+                was: { start_line:14, size:2 },
+                now: { start_line:14, size:2 },
               },
               sections:
               [
@@ -623,10 +623,10 @@ class GitDiffParserTest < DifferTestBase
       'index b1a30d9..7fa9727 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -1,5 +1,5 @@',
+      '@@ -3,1 +3,1 @@',
       '-BBB',
       '+CCC',
-      '@@ -8,6 +8,6 @@',
+      '@@ -8,1 +8,1 @@',
       '-SSS',
       '+TTT',
       "\\ No newline at end of file"
@@ -646,8 +646,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:1, size:5 },
-                now: { start_line:1, size:5 },
+                was: { start_line:3, size:1 },
+                now: { start_line:3, size:1 },
               },
               sections:
               [
@@ -660,8 +660,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:8, size:6 },
-                now: { start_line:8, size:6 },
+                was: { start_line:8, size:1 },
+                now: { start_line:8, size:1 },
               },
               sections:
               [
@@ -681,7 +681,7 @@ class GitDiffParserTest < DifferTestBase
   test 'B2C',
   'diff one chunk one section' do
     lines = [
-      '@@ -1,4 +1,4 @@',
+      '@@ -4,1 +4,1 @@',
       '-AAA',
       '+BBB'
     ].join("\n")
@@ -690,8 +690,8 @@ class GitDiffParserTest < DifferTestBase
     {
       range:
       {
-        was: { start_line:1, size:4 },
-        now: { start_line:1, size:4 },
+        was: { start_line:4, size:1 },
+        now: { start_line:4, size:1 },
       },
       sections:
       [
@@ -710,11 +710,11 @@ class GitDiffParserTest < DifferTestBase
   test 'E9F',
   'diff one chunk two sections' do
     lines = [
-      '@@ -1,8 +1,8 @@',
+      '@@ -17,2 +17,2 @@',
       '-CCC',
-      '+DDD',
-      '-FFF',
-      '+GGG'
+      '-DDD',
+      '+EEE',
+      '+FFF'
     ].join("\n")
 
     expected =
@@ -722,18 +722,14 @@ class GitDiffParserTest < DifferTestBase
         {
           range:
           {
-            was: { start_line:1, size:8 },
-            now: { start_line:1, size:8 },
+            was: { start_line:17, size:2 },
+            now: { start_line:17, size:2 },
           },
           sections:
           [
             {
-              deleted_lines: [ 'CCC' ],
-              added_lines: [ 'DDD' ]
-            }, # section
-            {
-              deleted_lines: [ 'FFF' ],
-              added_lines: [ 'GGG' ]
+              deleted_lines: [ 'CCC','DDD' ],
+              added_lines: [ 'EEE','FFF' ]
             } # section
           ] # sections
         } # chunk
@@ -750,7 +746,7 @@ class GitDiffParserTest < DifferTestBase
       'index 26bc41b..8a5b0b7 100644',
       '--- a/gapper.rb',
       '+++ b/gapper.rb',
-      '@@ -4,7 +5,8 @@ COMMENT',
+      '@@ -4,1 +4,2 @@ COMMENT',
       '-XXX',
       '+YYY',
       '+ZZZ'
@@ -770,8 +766,8 @@ class GitDiffParserTest < DifferTestBase
         {
           range:
           {
-            was: { start_line:4, size:7 },
-            now: { start_line:5, size:8 },
+            was: { start_line:4, size:1 },
+            now: { start_line:4, size:2 },
           },
           sections:
           [
@@ -813,11 +809,11 @@ class GitDiffParserTest < DifferTestBase
       'index 4d3ca1b..61e88f0 100644',
       '--- a/test_gapper.rb',
       '+++ b/test_gapper.rb',
-      '@@ -9,4 +9,3 @@ class TestGapper < Test::Unit::TestCase',
+      '@@ -9,1 +9,1 @@ class TestGapper < Test::Unit::TestCase',
       '-p Timw.now',
       '+p Time.now',
       "\\ No newline at end of file",
-      '@@ -19,4 +19,3 @@ class TestGapper < Test::Unit::TestCase',
+      '@@ -19,1 +19,1 @@ class TestGapper < Test::Unit::TestCase',
       '-q Timw.now',
       '+q Time.now'
     ].join("\n")
@@ -836,8 +832,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:9, size:4 },
-                now: { start_line:9, size:3 },
+                was: { start_line:9, size:1 },
+                now: { start_line:9, size:1 },
               },
               sections:
               [
@@ -849,8 +845,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:19, size:4 },
-                now: { start_line:19, size:3 },
+                was: { start_line:19, size:1 },
+                now: { start_line:19, size:1 },
               },
               sections:
               [
@@ -874,9 +870,10 @@ class GitDiffParserTest < DifferTestBase
       'index 5ed4618..c47ec44 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -5,9 +5,9 @@',
+      '@@ -5,1 +5,1 @@ CCC',
       '-DDD',
       '+EEE',
+      '@@ -9,1 +9,1 @@ FFF',
       '-GGG',
       '+HHH'
     ].join("\n")
@@ -895,15 +892,25 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:5, size:9 },
-                now: { start_line:5, size:9 },
+                was: { start_line:5, size:1 },
+                now: { start_line:5, size:1 },
               },
               sections:
               [
                 {
                   deleted_lines: [ 'DDD' ],
                   added_lines: [ 'EEE' ]
-                },
+                }
+              ]
+            },
+            {
+              range:
+              {
+                was: { start_line:9, size:1 },
+                now: { start_line:9, size:1 },
+              },
+              sections:
+              [
                 {
                   deleted_lines: [ 'GGG' ],
                   added_lines: [ 'HHH' ]
@@ -924,9 +931,10 @@ class GitDiffParserTest < DifferTestBase
       'index 5ed4618..aad3f67 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -5,10 +5,10 @@',
+      '@@ -5,1 +5,1 @@',
       '-DDD',
       '+EEE',
+      '@@ -7,1 +7,1 @@',
       '-HHH',
       '+JJJ'
     ].join("\n")
@@ -945,70 +953,28 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:5, size:10 },
-                now: { start_line:5, size:10 },
+                was: { start_line:5, size:1 },
+                now: { start_line:5, size:1 },
               },
               sections:
               [
                 {
                   deleted_lines: [ 'DDD' ],
                   added_lines: [ 'EEE' ]
-                },
-                {
-                  deleted_lines: [ 'HHH' ],
-                  added_lines: [ 'JJJ' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
-    } # expected
-    assert_equal expected, GitDiffParser.new(lines).parse_one
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '922',
-  'when there is less than 7 unchanged lines',
-  'between 2 changed lines',
-  'they are merged into one chunk' do
-    lines = [
-      'diff --git a/lines b/lines',
-      'index 5ed4618..33d0e05 100644',
-      '--- a/lines',
-      '+++ b/lines',
-      '@@ -5,14 +5,14 @@',
-      '-DDD',
-      '+EEE',
-      '-MMM',
-      '+NNN'
-    ].join("\n")
-
-    expected =
-    {
-        prefix_lines:
-          [
-            'diff --git a/lines b/lines',
-            'index 5ed4618..33d0e05 100644'
-          ],
-        was_filename: 'lines',
-        now_filename: 'lines',
-        chunks:
-          [
+                }
+              ]
+            },
             {
               range:
               {
-                was: { start_line:5, size:14 },
-                now: { start_line:5, size:14 },
+                was: { start_line:7, size:1 },
+                now: { start_line:7, size:1 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  deleted_lines: [ 'DDD' ],
-                  added_lines: [ 'EEE' ]
-                },
-                {
-                  deleted_lines: [ 'MMM' ],
-                  added_lines: [ 'NNN' ]
+                  deleted_lines: [ 'HHH' ],
+                  added_lines: [ 'JJJ' ]
                 } # section
               ] # sections
             } # chunk
@@ -1027,10 +993,10 @@ class GitDiffParserTest < DifferTestBase
       'index 5ed4618..e78c888 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -5,7 +5,7 @@',
+      '@@ -5,1 +5,1 @@',
       '-DDD',
       '+EEE',
-      '@@ -13,7 +13,7 @@',
+      '@@ -13,1 +13,1 @@',
       '-TTT',
       '+UUU'
     ].join("\n")
@@ -1049,8 +1015,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:5, size:7 },
-                now: { start_line:5, size:7 },
+                was: { start_line:5, size:1 },
+                now: { start_line:5, size:1 },
               },
               sections:
               [
@@ -1063,8 +1029,8 @@ class GitDiffParserTest < DifferTestBase
             {
               range:
               {
-                was: { start_line:13, size:7 },
-                now: { start_line:13, size:7 },
+                was: { start_line:13, size:1 },
+                now: { start_line:13, size:1 },
               },
               sections:
               [
@@ -1081,6 +1047,7 @@ class GitDiffParserTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+=begin
   test '8E3',
   'no-newline-at-end-of-file line at end of',
   'common section is gobbled' do
@@ -1143,6 +1110,7 @@ class GitDiffParserTest < DifferTestBase
     } # expected
     assert_equal expected, GitDiffParser.new(lines).parse_one
   end
+=end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
