@@ -1,0 +1,39 @@
+
+1. Look into using git diff option
+  --unified=0
+which will show the diff without any context lines.
+In other words, output like this...
+
+diff --git a/diamond.h b/diamond.h
+index a737c21..49a3313 100644
+--- a/diamond.h
++++ b/diamond.h
+@@ -1,8 +1,8 @@
+ #ifndef DIAMOND
+ #define DIAMOND
+
+-#include <strin>
++#include <string>
+
+-void diamond(char)
++void diamond(char);
+
+ #endif
+\\ No newline at end of file
+
+Would not include lines that start with a single blank space...
+
+diff --git a/diamond.h b/diamond.h
+index a737c21..49a3313 100644
+--- a/diamond.h
++++ b/diamond.h
+@@ -1,2 +1,2 @@
+-#include <strin>
++#include <string>
+-void diamond(char)
++void diamond(char);
+\\ No newline at end of file
+
+
+2. Look into a possible git diff option to remove the last line info message...
+\\ No newline at end of file
