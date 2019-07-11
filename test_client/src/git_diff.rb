@@ -19,7 +19,7 @@ module GitDiff # mix-in
   end
 
   def hostname
-    'differ'
+    'differ-server'
   end
 
   def port
@@ -27,5 +27,3 @@ module GitDiff # mix-in
   end
 
 end
-
-

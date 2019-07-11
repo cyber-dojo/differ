@@ -53,6 +53,7 @@ run_client_tests()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+echo
 if [ "${1}" = 'server' ]; then
   shift
   run_server_tests "$@"
