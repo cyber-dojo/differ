@@ -17,14 +17,14 @@ module GitDiffJoinBuilder # mix-in
     from = 0
     index = 0
     diff[:chunks].each do |chunk|
-      to = chunk[:range][:now][:start_line] + chunk[:before_lines].length - 1
+      to = chunk[:range][:now][:start_line] #+ chunk[:before_lines].length - 1
       line_number = fill(join, :same, lines, from, to, line_number)
       chunk[:sections].each do |section|
         join << { :type => :section, :index => index }
         index += 1
                       fill_all(join, :deleted, section[:deleted_lines], line_number)
         line_number = fill_all(join, :added,   section[:added_lines  ], line_number)
-        line_number = fill_all(join, :same,    section[:after_lines  ], line_number)
+        #line_number = fill_all(join, :same,    section[:after_lines  ], line_number)
       end
       from = line_number - 1
     end

@@ -1,5 +1,83 @@
 
-1. Look into using git diff option
+1. Look into a possible git diff option to remove the last line info message...
+\\ No newline at end of file
+Looked. Found nothing....
+
+2. Look into the --word-diff option
+File was
+1aaa bbb ccc ddd eee
+2ddd
+3eee
+4ggg hhh iii jjj
+5hhh
+6iii
+7jjj
+
+File now
+1aaa bbIb ccc ddd ee
+2ddd
+3eee
+4III
+5ggg hhh iii jjj
+6hhh
+7jjj
+
+Diff with --word-diff
+diff --git a/lines b/lines
+index 1a12f46..4f84352 100644
+--- a/lines
++++ b/lines
+@@ -1 +1 @@
+aaa [-bbb-]{+bbIb+} ccc ddd [-eee-]{+ee+}
+@@ -3,0 +4 @@ eee
+{+III+}
+@@ -6 +6,0 @@ hhh
+[-iii-]
+
+
+
+3. Look into --word-diff-regex=.
+File was
+1aaa bbb ccc ddd eee
+2ddd
+3eee
+4ggg hhh iii jjj
+5hhh
+6iii
+7jjj
+
+File now
+1aaa bbIb ccc ddd ee
+2ddd
+3eee
+4III
+5ggg hhh iii jjj
+6hhh
+7jjj
+
+Diff with --word-diff-regex=.
+diff --git a/lines b/lines
+index 1a12f46..4f84352 100644
+--- a/lines
++++ b/lines
+@@ -1 +1 @@
+aaa bb{+I+}b ccc ddd ee[-e-]
+@@ -3,0 +4 @@ eee
+{+III+}
+@@ -6 +6,0 @@ hhh
+[-iii-]
+
+However..... [git diff --help] has this...
+Show words as [-removed-] and {+added+}.
+Makes no attempts to escape the delimiters
+if they appear in the input, so the output may
+be ambiguous.
+
+
+
+
+
+4. Look into using git diff option
   --unified=0
 which will show the diff without any context lines.
 In other words, output like this...
@@ -35,5 +113,70 @@ index a737c21..49a3313 100644
 \\ No newline at end of file
 
 
-2. Look into a possible git diff option to remove the last line info message...
-\\ No newline at end of file
+
+
+
+
+
+
+
+diff --git a/lines b/lines
+index a884ec4..4ec61a7 100644
+--- a/lines
++++ b/lines
+@@ -3 +3 @@ bbb
+-ccc
++ddd
+@@ -5 +5,2 @@ eee
+-fff
++ggg
++GGG
+
+-3 +3    means -3,1 +3,1
+-5 +5,2  means -5,1 +5,2
+
+with --unified=0 it looks like in S,L the L is redundant since its the same
+as the count of -lines or +lines
+
+
+
+diff --git a/lines b/lines
+index 3fb1e06..dcec4eb 100644
+--- a/lines
++++ b/lines
+@@ -3,2 +3 @@ bbb
+-ccc
+-CCC
++ddd
+@@ -6 +5 @@ eee
+-fff
++ggg
+
+So with this, -3,2 means 'ccc' and 'CCC' were the two lines
+deleted from line numbers 3 and 4. aaa=1 bbb=2
+
+The old file was
+1aaa
+2bbb
+3ccc
+4CCC
+5eee
+6fff
+7hhh
+8iii
+9jjj
+
+The new file is
+1aaa
+2bbb
+3ddd
+4eee
+5ggg
+6hhh
+7iii
+8jjj
+
+So what does -6 +5 mean?
+ -6,1 5,1
+We deleted 'fff' from line 6 in the old-file
+We added   'ggg' to   line 5 in the new-file

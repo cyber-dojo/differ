@@ -40,6 +40,7 @@ class ExternalGitter
 
   def diff(path, n, m)
     options = [
+      '--unified=0',
       '--ignore-space-at-eol',
       '--find-copies-harder',
       '--indent-heuristic',
@@ -47,7 +48,9 @@ class ExternalGitter
       "#{m}",
       '--'     # specifies to git that n,m are revisions and not filenames
     ].join(space)
-    shell.assert_cd_exec(path, "git diff #{options}")
+    o = shell.assert_cd_exec(path, "git diff #{options}")
+    #o.split("\n").each{|line| p line}
+    o
   end
 
   private

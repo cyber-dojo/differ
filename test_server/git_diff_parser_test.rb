@@ -219,7 +219,7 @@ class GitDiffParserTest < DifferTestBase
         ],
         :was_filename => '\\was_newfile_FIU', # <-- single backslash
         :now_filename => nil,
-        :chunks       =>
+        :chunks =>
         [
           {
             :range =>
@@ -231,11 +231,9 @@ class GitDiffParserTest < DifferTestBase
             [
               {
                 :deleted_lines => [ 'Please rename me!' ],
-                :added_lines   => [],
-                :after_lines   => []
+                :added_lines   => []
               }
-            ],
-            :before_lines => []
+            ]
           }
         ]
       }
@@ -268,7 +266,7 @@ class GitDiffParserTest < DifferTestBase
         ],
         :was_filename => 'original',
         :now_filename => nil,
-        :chunks       => []
+        :chunks => []
       }
     }
 
@@ -313,13 +311,11 @@ class GitDiffParserTest < DifferTestBase
               :was => { :start_line => 1, :size       => 3 },
               :now => { :start_line => 0, :size       => 0 }
             },
-            :before_lines => [],
             :sections     =>
             [
               {
-              :deleted_lines => [ 'def answer', '  42', 'end'],
-              :added_lines   => [],
-              :after_lines   => []
+                :deleted_lines => [ 'def answer', '  42', 'end'],
+                :added_lines   => []
               }
             ]
           }
@@ -356,7 +352,7 @@ class GitDiffParserTest < DifferTestBase
         ],
         :was_filename => 'was_\\wa s_newfile_FIU', # <-- single backslash
         :now_filename => '\\was_newfile_FIU', # <-- single backslash
-        :chunks       => []
+        :chunks => []
       }
     }
 
@@ -389,7 +385,7 @@ class GitDiffParserTest < DifferTestBase
         ],
         :was_filename => 'oldname',
         :now_filename => 'newname',
-        :chunks       => []
+        :chunks => []
       }
     }
 
@@ -411,9 +407,6 @@ class GitDiffParserTest < DifferTestBase
       '--- a/instructions',
       '+++ b/instructions_new',
       '@@ -6,4 +6,4 @@ For example, the potential anagrams of "biro" are',
-      ' biro bior brio broi boir bori',
-      ' ibro ibor irbo irob iobr iorb',
-      ' rbio rboi ribo riob roib robi',
       '-obir obri oibr oirb orbi orib',
       '+obir obri oibr oirb orbi oribx'
     ].join("\n")
@@ -438,19 +431,12 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 6, :size => 4 },
                 :now => { :start_line => 6, :size => 4 },
               },
-              :before_lines =>
-                [
-                  'biro bior brio broi boir bori',
-                  'ibro ibor irbo irob iobr iorb',
-                  'rbio rboi ribo riob roib robi'
-                ],
               :sections =>
               [
                 {
                   :deleted_lines => [ 'obir obri oibr oirb orbi orib' ],
-                  :added_lines   => [ 'obir obri oibr oirb orbi oribx' ],
-                  :after_lines   => []
-                }, # section
+                  :added_lines   => [ 'obir obri oibr oirb orbi oribx' ]
+                } # section
               ] # sections
             } # chunk
           ] # chunks
@@ -472,27 +458,17 @@ class GitDiffParserTest < DifferTestBase
       '--- a/lines',
       '+++ b/lines',
       '@@ -1,7 +1,7 @@',
-      ' aaa',
-      ' bbb',
-      ' ccc',
       '-ddd',
       '+eee',
-      ' fff',
-      ' ggg',
-      ' hhh',
       'diff --git a/other b/other',
       'index cf0389a..b28bf03 100644',
       '--- a/other',
       '+++ b/other',
       '@@ -1,6 +1,6 @@',
-      ' AAA',
-      ' BBB',
       '-CCC',
       '-DDD',
       '+EEE',
       '+FFF',
-      ' GGG',
-      ' HHH',
       "\\ No newline at end of file"
     ].join("\n")
 
@@ -505,7 +481,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -513,14 +489,12 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 1, :size => 7 },
                 :now => { :start_line => 1, :size => 7 },
               },
-              :before_lines => [ 'aaa', 'bbb', 'ccc'],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'ddd' ],
-                  :added_lines   => [ 'eee' ],
-                  :after_lines   => [ 'fff', 'ggg', 'hhh' ]
-                }, # section
+                  :added_lines   => [ 'eee' ]
+                } # section
               ] # sections
             } # chunk
           ] # chunks
@@ -543,14 +517,12 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 1, :size => 6 },
                 :now => { :start_line => 1, :size => 6 },
               },
-              :before_lines => [ 'AAA', 'BBB' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'CCC', 'DDD' ],
-                  :added_lines   => [ 'EEE', 'FFF' ],
-                  :after_lines   => [ 'GGG', 'HHH' ]
-                }, # section
+                  :added_lines   => [ 'EEE', 'FFF' ]
+                } # section
               ] # sections
             } # chunk
           ] # chunks
@@ -652,20 +624,11 @@ class GitDiffParserTest < DifferTestBase
       '--- a/lines',
       '+++ b/lines',
       '@@ -1,5 +1,5 @@',
-      ' AAA',
       '-BBB',
       '+CCC',
-      ' DDD',
-      ' EEE',
-      ' FFF',
       '@@ -8,6 +8,6 @@',
-      ' PPP',
-      ' QQQ',
-      ' RRR',
       '-SSS',
       '+TTT',
-      ' UUU',
-      ' VVV',
       "\\ No newline at end of file"
     ].join("\n")
 
@@ -678,7 +641,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -686,14 +649,12 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 1, :size => 5 },
                 :now => { :start_line => 1, :size => 5 },
               },
-              :before_lines => [ 'AAA' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'BBB' ],
-                  :added_lines   => [ 'CCC' ],
-                  :after_lines   => [ 'DDD', 'EEE', 'FFF' ]
-                }, # section
+                  :added_lines   => [ 'CCC' ]
+                } # section
               ] # sections
             }, # chunk
             {
@@ -702,13 +663,11 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 8, :size => 6 },
                 :now => { :start_line => 8, :size => 6 },
               },
-              :before_lines => [ 'PPP', 'QQQ', 'RRR' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'SSS' ],
-                  :added_lines   => [ 'TTT' ],
-                  :after_lines   => [ 'UUU', 'VVV' ]
+                  :added_lines   => [ 'TTT' ]
                 }, # section
               ] # sections
             }
@@ -724,10 +683,7 @@ class GitDiffParserTest < DifferTestBase
     lines = [
       '@@ -1,4 +1,4 @@',
       '-AAA',
-      '+BBB',
-      ' CCC',
-      ' DDD',
-      ' EEE'
+      '+BBB'
     ].join("\n")
 
     expected =
@@ -737,14 +693,12 @@ class GitDiffParserTest < DifferTestBase
         :was => { :start_line => 1, :size => 4 },
         :now => { :start_line => 1, :size => 4 },
       },
-      :before_lines => [],
-      :sections     =>
+      :sections =>
       [
         {
           :deleted_lines => [ 'AAA' ],
-          :added_lines   => [ 'BBB' ],
-          :after_lines   => [ 'CCC', 'DDD', 'EEE' ]
-        }, # section
+          :added_lines   => [ 'BBB' ]
+        } # section
       ] # sections
     } # chunk
 
@@ -757,16 +711,10 @@ class GitDiffParserTest < DifferTestBase
   'diff one chunk two sections' do
     lines = [
       '@@ -1,8 +1,8 @@',
-      ' AAA',
-      ' BBB',
       '-CCC',
       '+DDD',
-      ' EEE',
       '-FFF',
-      '+GGG',
-      ' HHH',
-      ' JJJ',
-      ' KKK'
+      '+GGG'
     ].join("\n")
 
     expected =
@@ -777,19 +725,16 @@ class GitDiffParserTest < DifferTestBase
             :was => { :start_line => 1, :size => 8 },
             :now => { :start_line => 1, :size => 8 },
           },
-          :before_lines => [ 'AAA', 'BBB' ],
-          :sections     =>
+          :sections =>
           [
             {
               :deleted_lines => [ 'CCC' ],
-              :added_lines   => [ 'DDD' ],
-              :after_lines   => [ 'EEE' ]
+              :added_lines   => [ 'DDD' ]
             }, # section
             {
               :deleted_lines => [ 'FFF' ],
-              :added_lines   => [ 'GGG' ],
-              :after_lines   => [ 'HHH', 'JJJ', 'KKK' ]
-            }, # section
+              :added_lines   => [ 'GGG' ]
+            } # section
           ] # sections
         } # chunk
       ] # chunks
@@ -806,15 +751,9 @@ class GitDiffParserTest < DifferTestBase
       '--- a/gapper.rb',
       '+++ b/gapper.rb',
       '@@ -4,7 +5,8 @@ COMMENT',
-      ' aaa',
-      ' bbb',
-      ' ',
       '-XXX',
       '+YYY',
-      '+ZZZ',
-      ' ccc',
-      ' ddd',
-      ' eee'
+      '+ZZZ'
     ].join("\n")
 
     expected =
@@ -826,7 +765,7 @@ class GitDiffParserTest < DifferTestBase
       ],
       :was_filename => 'gapper.rb',
       :now_filename => 'gapper.rb',
-      :chunks       =>
+      :chunks =>
       [
         {
           :range =>
@@ -834,12 +773,10 @@ class GitDiffParserTest < DifferTestBase
             :was => { :start_line => 4, :size => 7 },
             :now => { :start_line => 5, :size => 8 },
           },
-          :before_lines => [ 'aaa', 'bbb', '' ],
           :sections =>
           [
             { :deleted_lines => [ 'XXX' ],
-              :added_lines => [ 'YYY', 'ZZZ' ],
-              :after_lines => [ 'ccc', 'ddd', 'eee' ]
+              :added_lines => [ 'YYY', 'ZZZ' ]
             }
           ]
         }
@@ -894,7 +831,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'test_gapper.rb',
         :now_filename => 'test_gapper.rb',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -902,12 +839,10 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 9, :size => 4 },
                 :now => { :start_line => 9, :size => 3 },
               },
-              :before_lines => [],
-              :sections     =>
+              :sections =>
               [
                 { :deleted_lines => [ 'p Timw.now' ],
-                  :added_lines   => [ 'p Time.now' ],
-                  :after_lines   => []
+                  :added_lines   => [ 'p Time.now' ]
                 }
               ]
             },
@@ -917,13 +852,11 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 19, :size => 4 },
                 :now => { :start_line => 19, :size => 3 },
               },
-              :before_lines => [],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'q Timw.now' ],
-                  :added_lines   => [ 'q Time.now' ],
-                  :after_lines   => []
+                  :added_lines   => [ 'q Time.now' ]
                 }
               ]
             }
@@ -942,17 +875,10 @@ class GitDiffParserTest < DifferTestBase
       '--- a/lines',
       '+++ b/lines',
       '@@ -5,9 +5,9 @@',
-      ' AAA',
-      ' BBB',
-      ' CCC',
       '-DDD',
       '+EEE',
-      ' FFF',
       '-GGG',
-      '+HHH',
-      ' JJJ',
-      ' KKK',
-      ' LLL'
+      '+HHH'
     ].join("\n")
 
     expected =
@@ -964,7 +890,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -972,18 +898,15 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 5, :size => 9 },
                 :now => { :start_line => 5, :size => 9 },
               },
-              :before_lines => [ 'AAA', 'BBB', 'CCC' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ],
-                  :after_lines   => [ 'FFF' ]
+                  :added_lines   => [ 'EEE' ]
                 },
                 {
                   :deleted_lines => [ 'GGG' ],
-                  :added_lines   => [ 'HHH' ],
-                  :after_lines   => [ 'JJJ', 'KKK', 'LLL' ]
+                  :added_lines   => [ 'HHH' ]
                 } # section
               ] # sections
             } # chunk
@@ -1002,18 +925,10 @@ class GitDiffParserTest < DifferTestBase
       '--- a/lines',
       '+++ b/lines',
       '@@ -5,10 +5,10 @@',
-      ' AAA',
-      ' BBB',
-      ' CCC',
       '-DDD',
       '+EEE',
-      ' FFF',
-      ' GGG',
       '-HHH',
-      '+JJJ',
-      ' KKK',
-      ' LLL',
-      ' MMM'
+      '+JJJ'
     ].join("\n")
 
     expected =
@@ -1025,7 +940,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -1033,18 +948,15 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 5, :size => 10 },
                 :now => { :start_line => 5, :size => 10 },
               },
-              :before_lines => [ 'AAA', 'BBB', 'CCC' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ],
-                  :after_lines   => [ 'FFF', 'GGG' ]
+                  :added_lines   => [ 'EEE' ]
                 },
                 {
                   :deleted_lines => [ 'HHH' ],
-                  :added_lines   => [ 'JJJ' ],
-                  :after_lines   => [ 'KKK', 'LLL', 'MMM' ]
+                  :added_lines   => [ 'JJJ' ]
                 } # section
               ] # sections
             } # chunk
@@ -1065,21 +977,10 @@ class GitDiffParserTest < DifferTestBase
       '--- a/lines',
       '+++ b/lines',
       '@@ -5,14 +5,14 @@',
-      ' AAA',
-      ' BBB',
-      ' CCC',
       '-DDD',
       '+EEE',
-      ' FFF',
-      ' GGG',
-      ' HHH',
-      ' JJJ',
-      ' KKK',
-      ' LLL',
       '-MMM',
-      '+NNN',
-      ' OOO',
-      ' PPP'
+      '+NNN'
     ].join("\n")
 
     expected =
@@ -1091,7 +992,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -1099,18 +1000,15 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 5, :size => 14 },
                 :now => { :start_line => 5, :size => 14 },
               },
-              :before_lines => [ 'AAA', 'BBB', 'CCC' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ],
-                  :after_lines   => [ 'FFF', 'GGG', 'HHH', 'JJJ', 'KKK', 'LLL' ]
+                  :added_lines   => [ 'EEE' ]
                 },
                 {
                   :deleted_lines => [ 'MMM' ],
-                  :added_lines   => [ 'NNN' ],
-                  :after_lines   => [ 'OOO', 'PPP' ]
+                  :added_lines   => [ 'NNN' ]
                 } # section
               ] # sections
             } # chunk
@@ -1130,23 +1028,11 @@ class GitDiffParserTest < DifferTestBase
       '--- a/lines',
       '+++ b/lines',
       '@@ -5,7 +5,7 @@',
-      ' AAA',
-      ' BBB',
-      ' CCC',
       '-DDD',
       '+EEE',
-      ' FFF',
-      ' GGG',
-      ' HHH',
       '@@ -13,7 +13,7 @@',
-      ' QQQ',
-      ' RRR',
-      ' SSS',
       '-TTT',
-      '+UUU',
-      ' VVV',
-      ' WWW',
-      ' XXX'
+      '+UUU'
     ].join("\n")
 
     expected =
@@ -1158,7 +1044,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'lines',
         :now_filename => 'lines',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -1166,13 +1052,11 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 5, :size => 7 },
                 :now => { :start_line => 5, :size => 7 },
               },
-              :before_lines => [ 'AAA', 'BBB', 'CCC' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ],
-                  :after_lines   => [ 'FFF', 'GGG', 'HHH' ]
+                  :added_lines   => [ 'EEE' ]
                 }
               ]
             },
@@ -1182,13 +1066,11 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 13, :size => 7 },
                 :now => { :start_line => 13, :size => 7 },
               },
-              :before_lines => [ 'QQQ', 'RRR', 'SSS' ],
-              :sections     =>
+              :sections =>
               [
                 {
                   :deleted_lines => [ 'TTT' ],
-                  :added_lines   => [ 'UUU' ],
-                  :after_lines   => [ 'VVV', 'WWW', 'XXX' ]
+                  :added_lines   => [ 'UUU' ]
                 } # section
               ] # sections
             } # chunk
@@ -1216,9 +1098,6 @@ class GitDiffParserTest < DifferTestBase
       '--- a/sandbox/CircularBufferTest.cpp',
       '+++ b/sandbox/CircularBufferTest.cpp',
       '@@ -35,3 +35,8 @@ TEST(CircularBuffer, EmptyAfterCreation)',
-      ' {',
-      '     CHECK_TRUE(CircularBuffer_IsEmpty(buffer));',
-      ' }',
       '\\ No newline at end of file',
       '+',
       '+TEST(CircularBuffer, NotFullAfterCreation)',
@@ -1237,7 +1116,7 @@ class GitDiffParserTest < DifferTestBase
           ],
         :was_filename => 'sandbox/CircularBufferTest.cpp',
         :now_filename => 'sandbox/CircularBufferTest.cpp',
-        :chunks       =>
+        :chunks =>
           [
             {
               :range =>
@@ -1245,25 +1124,18 @@ class GitDiffParserTest < DifferTestBase
                 :was => { :start_line => 35, :size => 3 },
                 :now => { :start_line => 35, :size => 8 },
               },
-              :before_lines =>
-              [
-                '{',
-                '    CHECK_TRUE(CircularBuffer_IsEmpty(buffer));',
-                '}'
-              ],
               :sections =>
               [
                 {
                   :deleted_lines => [],
-                  :added_lines   =>
+                  :added_lines =>
                   [
                     '',
                     'TEST(CircularBuffer, NotFullAfterCreation)',
                     '{',
                     '    CHECK_FALSE(CircularBuffer_IsFull(buffer));',
                     '}'
-                  ],
-                  :after_lines => []
+                  ]
                 }
               ]
             }
@@ -1290,8 +1162,6 @@ class GitDiffParserTest < DifferTestBase
       '--- a/wibble.c',
       '+++ b/wibble.c',
       '@@ -1,2 +1,3 @@',
-      ' 123',
-      ' xyz',
       '+4',
       '\\ No newline at end of file'
     ].join("\n")
@@ -1313,11 +1183,11 @@ class GitDiffParserTest < DifferTestBase
     {
       :prefix_lines =>
       [
-        "diff --git a/wibble.c b/wibble.c",
-        "index eff4ff4..2ca787d 100644"
+        'diff --git a/wibble.c b/wibble.c',
+        'index eff4ff4..2ca787d 100644'
       ],
-      :was_filename => "wibble.c",
-      :now_filename => "wibble.c",
+      :was_filename => 'wibble.c',
+      :now_filename => 'wibble.c',
       :chunks =>
       [
         {
@@ -1326,13 +1196,11 @@ class GitDiffParserTest < DifferTestBase
             :was => { :start_line => 1, :size => 2 },
             :now => { :start_line => 1, :size => 3 }
           },
-          :before_lines => ["123", "xyz"],
           :sections =>
           [
             {
               :deleted_lines => [],
-              :added_lines   => ["4"],
-              :after_lines   => []
+              :added_lines   => ['4']
             }
           ]
         }

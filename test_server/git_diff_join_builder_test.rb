@@ -210,17 +210,12 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'index 535d2b0..a173ef1 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -1,8 +1,8 @@',
-      ' aaa',
-      ' bbb',
+      '@@ -3 +3 @@ bbb',
       '-ccc',
       '+ddd',
-      ' eee',
+      '@@ -5 +5 @@ eee',
       '-fff',
       '+ggg',
-      ' hhh',
-      ' iii',
-      ' jjj'
     ]
 
     @source_lines =
@@ -313,22 +308,15 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   test 'FA0',
   'one chunk with one section with only lines deleted' do
-
     @diff_lines =
     [
       'diff --git a/lines b/lines',
       'index 0b669b6..a972632 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -2,8 +2,6 @@',
-      ' bbb',
-      ' ccc',
-      ' ddd',
+      '@@ -5,2 +4,0 @@ ddd',
       '-EEE',
-      '-FFF',
-      ' ggg',
-      ' hhh',
-      ' iii'
+      '-FFF'
     ]
 
     @source_lines =
@@ -554,8 +542,11 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
+    #puts diff
     actual = git_diff_join_builder(diff, @source_lines)
-    assert_equal @expected, actual
+    puts "@expected:#{@expected.class.name}:#{@expected}:"
+    puts "   actual:#{actual.class.name}:#{actual}:"
+    assert_equal @expected, actual, "sdsdsd"
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - -

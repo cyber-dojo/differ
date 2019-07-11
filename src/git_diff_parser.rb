@@ -48,7 +48,6 @@ class GitDiffParser # Parses the output of 'git diff' command.
   def parse_chunk_one
     if range = parse_range
       {        range: range,
-        before_lines: parse_common_lines,
             sections: parse_sections
       }
     end
@@ -81,20 +80,20 @@ class GitDiffParser # Parses the output of 'git diff' command.
   def parse_sections
     parse_newline_at_eof
     sections = []
-    while /^[\+\- ]/.match(line)
+    while /^[\+\-]/.match(line)
       deleted_lines = parse_lines(/^\-(.*)/)
       parse_newline_at_eof
 
       added_lines = parse_lines(/^\+(.*)/)
       parse_newline_at_eof
 
-      after_lines = parse_common_lines
-      parse_newline_at_eof
+      #after_lines = parse_common_lines
+      #parse_newline_at_eof
 
       sections << {
         deleted_lines: deleted_lines,
           added_lines: added_lines,
-          after_lines: after_lines
+          #after_lines: after_lines
       }
     end
     sections
@@ -119,9 +118,9 @@ class GitDiffParser # Parses the output of 'git diff' command.
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_common_lines
-    parse_lines(%r|^ (.*)|)
-  end
+  #def parse_common_lines
+  #  parse_lines(%r|^ (.*)|)
+  #end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
