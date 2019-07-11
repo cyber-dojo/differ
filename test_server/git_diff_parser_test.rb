@@ -667,7 +667,7 @@ class GitDiffParserTest < DifferTestBase
               [
                 {
                   deleted_lines: [ 'SSS' ],
-                  added_lines: [ 'TTT' ] 
+                  added_lines: [ 'TTT' ]
                 } # section
               ] # sections
             }
@@ -688,16 +688,16 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      :range =>
+      range:
       {
-        :was => { :start_line => 1, :size => 4 },
-        :now => { :start_line => 1, :size => 4 },
+        was: { start_line:1, size:4 },
+        now: { start_line:1, size:4 },
       },
-      :sections =>
+      sections:
       [
         {
-          :deleted_lines => [ 'AAA' ],
-          :added_lines   => [ 'BBB' ]
+          deleted_lines: [ 'AAA' ],
+          added_lines: [ 'BBB' ]
         } # section
       ] # sections
     } # chunk
@@ -720,20 +720,20 @@ class GitDiffParserTest < DifferTestBase
     expected =
       [
         {
-          :range =>
+          range:
           {
-            :was => { :start_line => 1, :size => 8 },
-            :now => { :start_line => 1, :size => 8 },
+            was: { start_line:1, size:8 },
+            now: { start_line:1, size:8 },
           },
-          :sections =>
+          sections:
           [
             {
-              :deleted_lines => [ 'CCC' ],
-              :added_lines   => [ 'DDD' ]
+              deleted_lines: [ 'CCC' ],
+              added_lines: [ 'DDD' ]
             }, # section
             {
-              :deleted_lines => [ 'FFF' ],
-              :added_lines   => [ 'GGG' ]
+              deleted_lines: [ 'FFF' ],
+              added_lines: [ 'GGG' ]
             } # section
           ] # sections
         } # chunk
@@ -758,25 +758,25 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      :prefix_lines =>
+      prefix_lines:
       [
         'diff --git a/gapper.rb b/gapper.rb',
         'index 26bc41b..8a5b0b7 100644'
       ],
-      :was_filename => 'gapper.rb',
-      :now_filename => 'gapper.rb',
-      :chunks =>
+      was_filename: 'gapper.rb',
+      now_filename: 'gapper.rb',
+      chunks:
       [
         {
-          :range =>
+          range:
           {
-            :was => { :start_line => 4, :size => 7 },
-            :now => { :start_line => 5, :size => 8 },
+            was: { start_line:4, size:7 },
+            now: { start_line:5, size:8 },
           },
-          :sections =>
+          sections:
           [
-            { :deleted_lines => [ 'XXX' ],
-              :added_lines => [ 'YYY', 'ZZZ' ]
+            { deleted_lines: [ 'XXX' ],
+              added_lines: [ 'YYY', 'ZZZ' ]
             }
           ]
         }
@@ -824,39 +824,39 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/test_gapper.rb b/test_gapper.rb',
             'index 4d3ca1b..61e88f0 100644'
           ],
-        :was_filename => 'test_gapper.rb',
-        :now_filename => 'test_gapper.rb',
-        :chunks =>
+        was_filename: 'test_gapper.rb',
+        now_filename: 'test_gapper.rb',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 9, :size => 4 },
-                :now => { :start_line => 9, :size => 3 },
+                was: { start_line:9, size:4 },
+                now: { start_line:9, size:3 },
               },
-              :sections =>
+              sections:
               [
-                { :deleted_lines => [ 'p Timw.now' ],
-                  :added_lines   => [ 'p Time.now' ]
+                { deleted_lines: [ 'p Timw.now' ],
+                  added_lines: [ 'p Time.now' ]
                 }
               ]
             },
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 19, :size => 4 },
-                :now => { :start_line => 19, :size => 3 },
+                was: { start_line:19, size:4 },
+                now: { start_line:19, size:3 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'q Timw.now' ],
-                  :added_lines   => [ 'q Time.now' ]
+                  deleted_lines: [ 'q Timw.now' ],
+                  added_lines: [ 'q Time.now' ]
                 }
               ]
             }
@@ -883,30 +883,30 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/lines b/lines',
             'index 5ed4618..c47ec44 100644'
           ],
-        :was_filename => 'lines',
-        :now_filename => 'lines',
-        :chunks =>
+        was_filename: 'lines',
+        now_filename: 'lines',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 5, :size => 9 },
-                :now => { :start_line => 5, :size => 9 },
+                was: { start_line:5, size:9 },
+                now: { start_line:5, size:9 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ]
+                  deleted_lines: [ 'DDD' ],
+                  added_lines: [ 'EEE' ]
                 },
                 {
-                  :deleted_lines => [ 'GGG' ],
-                  :added_lines   => [ 'HHH' ]
+                  deleted_lines: [ 'GGG' ],
+                  added_lines: [ 'HHH' ]
                 } # section
               ] # sections
             } # chunk
@@ -933,30 +933,30 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/lines b/lines',
             'index 5ed4618..aad3f67 100644'
           ],
-        :was_filename => 'lines',
-        :now_filename => 'lines',
-        :chunks =>
+        was_filename: 'lines',
+        now_filename: 'lines',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 5, :size => 10 },
-                :now => { :start_line => 5, :size => 10 },
+                was: { start_line:5, size:10 },
+                now: { start_line:5, size:10 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ]
+                  deleted_lines: [ 'DDD' ],
+                  added_lines: [ 'EEE' ]
                 },
                 {
-                  :deleted_lines => [ 'HHH' ],
-                  :added_lines   => [ 'JJJ' ]
+                  deleted_lines: [ 'HHH' ],
+                  added_lines: [ 'JJJ' ]
                 } # section
               ] # sections
             } # chunk
@@ -985,30 +985,30 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/lines b/lines',
             'index 5ed4618..33d0e05 100644'
           ],
-        :was_filename => 'lines',
-        :now_filename => 'lines',
-        :chunks =>
+        was_filename: 'lines',
+        now_filename: 'lines',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 5, :size => 14 },
-                :now => { :start_line => 5, :size => 14 },
+                was: { start_line:5, size:14 },
+                now: { start_line:5, size:14 },
               },
               :sections =>
               [
                 {
-                  :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ]
+                  deleted_lines: [ 'DDD' ],
+                  added_lines: [ 'EEE' ]
                 },
                 {
-                  :deleted_lines => [ 'MMM' ],
-                  :added_lines   => [ 'NNN' ]
+                  deleted_lines: [ 'MMM' ],
+                  added_lines: [ 'NNN' ]
                 } # section
               ] # sections
             } # chunk
@@ -1037,40 +1037,40 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/lines b/lines',
             'index 5ed4618..e78c888 100644'
           ],
-        :was_filename => 'lines',
-        :now_filename => 'lines',
-        :chunks =>
+        was_filename: 'lines',
+        now_filename: 'lines',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 5, :size => 7 },
-                :now => { :start_line => 5, :size => 7 },
+                was: { start_line:5, size:7 },
+                now: { start_line:5, size:7 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'DDD' ],
-                  :added_lines   => [ 'EEE' ]
+                  deleted_lines: [ 'DDD' ],
+                  added_lines: [ 'EEE' ]
                 }
               ]
             },
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 13, :size => 7 },
-                :now => { :start_line => 13, :size => 7 },
+                was: { start_line:13, size:7 },
+                now: { start_line:13, size:7 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [ 'TTT' ],
-                  :added_lines   => [ 'UUU' ]
+                  deleted_lines: [ 'TTT' ],
+                  added_lines: [ 'UUU' ]
                 } # section
               ] # sections
             } # chunk
@@ -1109,26 +1109,26 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        :prefix_lines =>
+        prefix_lines:
           [
             'diff --git a/sandbox/CircularBufferTest.cpp b/sandbox/CircularBufferTest.cpp',
             'index 0ddb952..a397f48 100644'
           ],
-        :was_filename => 'sandbox/CircularBufferTest.cpp',
-        :now_filename => 'sandbox/CircularBufferTest.cpp',
-        :chunks =>
+        was_filename: 'sandbox/CircularBufferTest.cpp',
+        now_filename: 'sandbox/CircularBufferTest.cpp',
+        chunks:
           [
             {
-              :range =>
+              range:
               {
-                :was => { :start_line => 35, :size => 3 },
-                :now => { :start_line => 35, :size => 8 },
+                was: { start_line:35, size:3 },
+                now: { start_line:35, size:8 },
               },
-              :sections =>
+              sections:
               [
                 {
-                  :deleted_lines => [],
-                  :added_lines =>
+                  deleted_lines: [],
+                  added_lines:
                   [
                     '',
                     'TEST(CircularBuffer, NotFullAfterCreation)',
@@ -1168,39 +1168,39 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-      :prefix_lines =>
+      prefix_lines:
       [
         'diff --git a/hiker.h b/hiker.txt',
         'similarity index 100%',
         'rename from hiker.h',
         'rename to hiker.txt',
       ],
-      :was_filename => "hiker.h",
-      :now_filename => "hiker.txt",
-      :chunks => []
+      was_filename: "hiker.h",
+      now_filename: "hiker.txt",
+      chunks: []
     }
     expected_diff_2 =
     {
-      :prefix_lines =>
+      prefix_lines:
       [
         'diff --git a/wibble.c b/wibble.c',
         'index eff4ff4..2ca787d 100644'
       ],
-      :was_filename => 'wibble.c',
-      :now_filename => 'wibble.c',
-      :chunks =>
+      was_filename: 'wibble.c',
+      now_filename: 'wibble.c',
+      chunks:
       [
         {
-          :range =>
+          range:
           {
-            :was => { :start_line => 1, :size => 2 },
-            :now => { :start_line => 1, :size => 3 }
+            was: { start_line:1, size:2 },
+            now: { start_line:1, size:3 }
           },
-          :sections =>
+          sections:
           [
             {
-              :deleted_lines => [],
-              :added_lines   => ['4']
+              deleted_lines: [],
+              added_lines: ['4']
             }
           ]
         }
