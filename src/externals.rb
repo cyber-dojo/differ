@@ -1,7 +1,6 @@
 require_relative 'external_disk_writer'
 require_relative 'external_gitter'
 require_relative 'external_sheller'
-require_relative 'external_stdout_logger'
 
 class Externals
 
@@ -14,13 +13,6 @@ class Externals
 
   def git
     @git ||= ExternalGitter.new(self)
-  end
-
-  def log
-    @log ||= ExternalStdoutLogger.new
-  end
-  def log=(doppel)
-    @log = doppel
   end
 
   def shell

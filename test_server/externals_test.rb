@@ -20,13 +20,6 @@ class ExternalsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '3EC',
-  'default log is ExternalStdoutLogger' do
-    assert_equal 'ExternalStdoutLogger', log.class.name
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
   test '1B1',
   'default shell is ExternalSheller' do
     assert_equal 'ExternalSheller', shell.class.name

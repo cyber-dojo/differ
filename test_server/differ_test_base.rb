@@ -28,28 +28,26 @@ class DifferTestBase < HexMiniTest
     externals.git
   end
 
-  def log
-    externals.log
-  end
-
   def shell
     externals.shell
   end
 
-  private
+  # - - - - - - - - - - - - - - - - - - -
 
-  def with_captured_stdout
+=begin
+  def with_captured_stderr
     result = nil
-    @stdout = ''
+    @stderr = ''
     begin
-      old_stdout = $stdout
-      $stdout = StringIO.new('', 'w')
+      old_stderr = $stderr
+      $stderr = StringIO.new('', 'w')
       result = yield
-      @stdout = $stdout.string
+      @stderr = $stderr.string
     ensure
-      $stdout = old_stdout
+      $stderr = old_stderr
     end
     result
   end
+=end
 
 end

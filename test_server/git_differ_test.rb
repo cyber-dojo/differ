@@ -1,5 +1,4 @@
 require_relative 'differ_test_base'
-require_relative 'null_logger'
 require_relative 'raising_disk_writer'
 require_relative '../src/git_differ'
 
@@ -7,10 +6,6 @@ class GitDifferTest < DifferTestBase
 
   def self.hex_prefix
     '100'
-  end
-
-  def hex_setup
-    externals.log = NullLogger.new
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -23,10 +18,11 @@ class GitDifferTest < DifferTestBase
     was_files = { 'diamond.h' => 'a' } # ensure something to write
     now_files = {}
     differ = GitDiffer.new(self)
-    raised = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
-    assert_equal 'raising', raised.message
-    dir = File.dirname(disk.pathed_filename)
-    refute Dir.exist?(dir)
+    error = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
+    assert_equal 'raising', error.message
+    dir_name = File.dirname(disk.pathed_filename)
+    assert dir_name.start_with?('/tmp/')
+    refute Dir.exist?(dir_name)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
