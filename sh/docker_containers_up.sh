@@ -10,9 +10,9 @@ ip_address()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - - - - -
+readonly IP_ADDRESS=$(ip_address)
 
-readonly READY_FILENAME='/tmp/curl-ready-output'
+# - - - - - - - - - - - - - - - - - - - - - -
 
 wait_until_ready()
 {
@@ -23,7 +23,7 @@ wait_until_ready()
   for _ in $(seq ${max_tries})
   do
     echo -n '.'
-    if ready ${port} ; then
+    if ready ${port}; then
       echo 'OK'
       return
     else
@@ -32,8 +32,8 @@ wait_until_ready()
   done
   echo 'FAIL'
   echo "${name} not ready after ${max_tries} tries"
-  if [ -f "${READY_FILENAME}" ]; then
-    echo "$(cat "${READY_FILENAME}")"
+  if [ -f "$(ready_response_filename)" ]; then
+    echo "$(ready_response)"
   fi
   docker logs ${name}
   exit 3
@@ -41,19 +41,29 @@ wait_until_ready()
 
 # - - - - - - - - - - - - - - - - - - -
 
-readonly IP_ADDRESS=$(ip_address)
-
 ready()
 {
   local -r port="${1}"
-  local -r path=ready?
-  local -r curl_cmd="curl --output ${READY_FILENAME} --silent --fail --data {} -X GET http://${IP_ADDRESS}:${port}/${path}"
-  rm -f "${READY_FILENAME}"
-  if ${curl_cmd} && [ "$(cat "${READY_FILENAME}")" = '{"ready?":true}' ]; then
+  local -r path=ready
+  local -r ready_cmd="curl --output $(ready_response_filename) --silent --fail --data {} -X GET http://${IP_ADDRESS}:${port}/${path}"
+  rm -f "$(ready_response_filename)"
+  if ${ready_cmd} && [ "$(ready_response)" = '{"ready?":true}' ]; then
     true
   else
     false
   fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
+
+ready_response()
+{
+  cat "$(ready_response_filename)"
+}
+
+ready_response_filename()
+{
+  echo /tmp/curl-ready-output
 }
 
 # - - - - - - - - - - - - - - - - - - -
