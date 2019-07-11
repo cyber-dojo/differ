@@ -8,14 +8,6 @@ class DifferTestBase < HexMiniTest
     super(arg)
   end
 
-  def ready?
-    differ.ready?
-  end
-
-  def sha
-    differ.sha
-  end
-
   def diff(was_files, now_files)
     differ.diff(was_files, now_files)
   end

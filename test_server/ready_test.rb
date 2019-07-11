@@ -10,7 +10,7 @@ class ReadyTest < DifferTestBase
 
   test '602',
   %w( its ready ) do
-    assert ready?
+    assert differ.ready?
   end
 
 end

@@ -8,12 +8,17 @@ class ShaTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '191', %w(
-  sha of git commit for server image lives in /app/sha.txt ) do
+  test '191', %w( sha is 40-char commit sha of image ) do
     assert_equal 40, sha.size
     sha.each_char do |ch|
       assert "0123456789abcdef".include?(ch)
     end
+  end
+
+  private
+  
+  def sha
+    differ.sha
   end
 
 end
