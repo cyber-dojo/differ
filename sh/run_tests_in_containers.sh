@@ -76,5 +76,5 @@ else
   echo "test-${my_name}-server: status = ${server_status}"
   echo "test-${my_name}-client: status = ${client_status}"
   echo
-  exit 1
+  exit 3
 fi

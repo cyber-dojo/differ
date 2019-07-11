@@ -10,8 +10,6 @@ ip_address()
   fi
 }
 
-readonly IP_ADDRESS=$(ip_address)
-
 # - - - - - - - - - - - - - - - - - - - - - -
 
 readonly READY_FILENAME='/tmp/curl-ready-output'
@@ -38,10 +36,12 @@ wait_until_ready()
     echo "$(cat "${READY_FILENAME}")"
   fi
   docker logs ${name}
-  exit 1
+  exit 3
 }
 
 # - - - - - - - - - - - - - - - - - - -
+
+readonly IP_ADDRESS=$(ip_address)
 
 ready()
 {
@@ -69,7 +69,7 @@ exit_unless_clean()
   else
     echo 'FAIL'
     echo_docker_log "${name}" "${docker_log}"
-    exit 1
+    exit 3
   fi
 }
 
