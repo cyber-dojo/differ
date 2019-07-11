@@ -13,12 +13,12 @@ class ExternalSheller
     stderr = cleaned(stderr)
     exit_status = r.exitstatus
     unless exit_status === 0 && stderr === ''
-      info = {
-        "stdout" => stdout,
-        "stderr" => stderr,
-        "exit_status" => exit_status
+      diagnostic = {
+        stdout:stdout,
+        stderr:stderr,
+        exit_status:exit_status
       }
-      raise info.to_json
+      raise diagnostic.to_json
     end
     stdout
   end
