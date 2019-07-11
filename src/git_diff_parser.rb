@@ -23,7 +23,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
 
   def parse_one
     prefix_lines = parse_prefix_lines
-    was_filename, now_filename = parse_was_now_filenames(prefix_lines)
+    was_filename,now_filename = parse_was_now_filenames(prefix_lines)
     chunks = parse_chunk_all
     {
       prefix_lines: prefix_lines,
@@ -73,7 +73,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def size_or_default(size)
-    size != nil ? size.to_i : 1
+    size ? size.to_i : 1
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -128,9 +128,9 @@ class GitDiffParser # Parses the output of 'git diff' command.
   def parse_was_now_filenames(prefix)
     @n += 1 if %r|^\-\-\- (.*)|.match(line)
     @n += 1 if %r|^\+\+\+ (.*)|.match(line)
-    was, now = get_was_now_filenames(prefix[0])
-    now = nil if prefix[1].start_with? 'deleted file mode'
-    was = nil if prefix[1].start_with? 'new file mode'
+    was,now = get_was_now_filenames(prefix[0])
+    now = nil if prefix[1].start_with?('deleted file mode')
+    was = nil if prefix[1].start_with?('new file mode')
     [was, now]
   end
 
