@@ -59,7 +59,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
   def parse_range
     re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
     if range = re.match(line)
-      @n += 1
+      next_line
       was = { start_line: range[1].to_i,
                     size: size_or_default(range[2])
             }
@@ -104,7 +104,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
 
   def parse_prefix_lines
     line0 = line
-    @n += 1
+    next_line
 
     lines = []
     while (!line.nil?) &&             # still more lines
@@ -112,7 +112,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
           (line !~ /^[-]/) &&         # not in --- filename
           (line !~ /^[+]/)            # not in +++ filename
       lines << line
-      @n += 1
+      next_line
     end
     [line0] + lines
   end
@@ -126,8 +126,8 @@ class GitDiffParser # Parses the output of 'git diff' command.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_was_now_filenames(prefix)
-    @n += 1 if %r|^\-\-\- (.*)|.match(line)
-    @n += 1 if %r|^\+\+\+ (.*)|.match(line)
+    next_line if %r|^\-\-\- (.*)|.match(line)
+    next_line if %r|^\+\+\+ (.*)|.match(line)
     was,now = get_was_now_filenames(prefix[0])
     now = nil if prefix[1].start_with?('deleted file mode')
     was = nil if prefix[1].start_with?('new file mode')
@@ -187,7 +187,7 @@ class GitDiffParser # Parses the output of 'git diff' command.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_newline_at_eof
-    @n += 1 if /^\\ No newline at end of file/.match(line)
+    next_line if /^\\ No newline at end of file/.match(line)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -196,12 +196,16 @@ class GitDiffParser # Parses the output of 'git diff' command.
     lines = []
     while md = re.match(line)
       lines << md[1]
-      @n += 1
+      next_line
     end
     lines
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def next_line
+    @n += 1
+  end
 
   def line
     @lines[@n]
