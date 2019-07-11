@@ -1,9 +1,7 @@
 
-module StringCleaner # mix-in
+module Utf8
 
-  module_function
-
-  def cleaned(s)
+  def self.clean(s)
     # force an encoding change - if encoding is already utf-8
     # then encoding to utf-8 is a no-op and invalid byte
     # sequences are not detected.

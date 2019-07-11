@@ -1,4 +1,4 @@
-require_relative 'string_cleaner'
+require_relative 'utf8_clean'
 require 'open3'
 
 class ExternalSheller
@@ -9,8 +9,8 @@ class ExternalSheller
 
   def assert_exec(*commands)
     stdout,stderr,r = Open3.capture3('sh -c ' + quoted(commands.join(' && ')))
-    stdout = cleaned(stdout)
-    stderr = cleaned(stderr)
+    stdout = Utf8::clean(stdout)
+    stderr = Utf8::clean(stderr)
     exit_status = r.exitstatus
     unless exit_status === 0 && stderr === ''
       diagnostic = {
@@ -24,8 +24,6 @@ class ExternalSheller
   end
 
   private
-
-  include StringCleaner
 
   def quoted(s)
     '"' + s + '"'
