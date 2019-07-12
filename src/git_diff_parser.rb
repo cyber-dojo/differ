@@ -76,9 +76,9 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_section(range)
-    range[:deleted_lines] = parse_lines(/^\-(.*)/)
+    range[:deleted] = parse_lines(/^\-(.*)/)
     parse_newline_at_eof
-    range[:added_lines] = parse_lines(/^\+(.*)/)
+    range[:added] = parse_lines(/^\+(.*)/)
     parse_newline_at_eof
     range
   end

@@ -220,8 +220,8 @@ class GitDiffParserTest < DifferTestBase
           {
             old: { start_line:1, size:1 },
             new: { start_line:0, size:0 },
-            deleted_lines: [ 'Please rename me!' ],
-            added_lines: []
+            deleted: [ 'Please rename me!' ],
+            added: []
           }
         ]
       }
@@ -284,8 +284,8 @@ class GitDiffParserTest < DifferTestBase
           {
             old: { start_line:1, size:3 },
             new: { start_line:0, size:0 },
-            deleted_lines: [ 'def answer', '  42', 'end'],
-            added_lines: []
+            deleted: [ 'def answer', '  42', 'end'],
+            added: []
           }
         ]
       }
@@ -374,8 +374,8 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:6, size:1 },
           new: { start_line:6, size:1 },
-          deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
-          added_lines: [ 'obir obri oibr oirb orbi oribx' ]
+          deleted: [ 'obir obri oibr oirb orbi orib' ],
+          added: [ 'obir obri oibr oirb orbi oribx' ]
         }
       ]
     }
@@ -419,8 +419,8 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:1, size:1 },
           new: { start_line:1, size:1 },
-          deleted_lines: [ 'ddd' ],
-          added_lines: [ 'eee' ]
+          deleted: [ 'ddd' ],
+          added: [ 'eee' ]
         }
       ]
     }
@@ -434,8 +434,8 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:14, size:2 },
           new: { start_line:14, size:2 },
-          deleted_lines: [ 'CCC', 'DDD' ],
-          added_lines: [ 'EEE', 'FFF' ]
+          deleted: [ 'CCC', 'DDD' ],
+          added: [ 'EEE', 'FFF' ]
         }
       ]
     }
@@ -553,14 +553,14 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:3, size:1 },
           new: { start_line:3, size:1 },
-          deleted_lines: [ 'BBB' ],
-          added_lines: [ 'CCC' ]
+          deleted: [ 'BBB' ],
+          added: [ 'CCC' ]
         },
         {
           old: { start_line:8, size:1 },
           new: { start_line:8, size:1 },
-          deleted_lines: [ 'SSS' ],
-          added_lines: [ 'TTT' ]
+          deleted: [ 'SSS' ],
+          added: [ 'TTT' ]
         }
       ]
     }
@@ -582,8 +582,8 @@ class GitDiffParserTest < DifferTestBase
     {
       old: { start_line:4, size:1 },
       new: { start_line:4, size:1 },
-      deleted_lines: [ 'AAA' ],
-      added_lines: [ 'BBB' ]
+      deleted: [ 'AAA' ],
+      added: [ 'BBB' ]
     }
 
     my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_one
@@ -606,8 +606,8 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:17, size:2 },
           new: { start_line:17, size:2 },
-          deleted_lines: [ 'CCC','DDD' ],
-          added_lines: [ 'EEE','FFF' ]
+          deleted: [ 'CCC','DDD' ],
+          added: [ 'EEE','FFF' ]
         }
       ]
     my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_all
@@ -637,8 +637,8 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:4, size:1 },
           new: { start_line:4, size:2 },
-          deleted_lines: [ 'XXX' ],
-          added_lines: [ 'YYY', 'ZZZ' ]
+          deleted: [ 'XXX' ],
+          added: [ 'YYY', 'ZZZ' ]
         }
       ]
     }
@@ -691,14 +691,14 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:9, size:1 },
           new: { start_line:9, size:1 },
-          deleted_lines: [ 'p Timw.now' ],
-          added_lines: [ 'p Time.now' ]
+          deleted: [ 'p Timw.now' ],
+          added: [ 'p Time.now' ]
         },
         {
           old: { start_line:19, size:1 },
           new: { start_line:19, size:1 },
-          deleted_lines: [ 'q Timw.now' ],
-          added_lines: [ 'q Time.now' ]
+          deleted: [ 'q Timw.now' ],
+          added: [ 'q Time.now' ]
         }
       ]
     }
@@ -731,14 +731,14 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:5, size:1 },
           new: { start_line:5, size:1 },
-          deleted_lines: [ 'DDD' ],
-          added_lines: [ 'EEE' ]
+          deleted: [ 'DDD' ],
+          added: [ 'EEE' ]
         },
         {
           old: { start_line:9, size:1 },
           new: { start_line:9, size:1 },
-          deleted_lines: [ 'GGG' ],
-          added_lines: [ 'HHH' ]
+          deleted: [ 'GGG' ],
+          added: [ 'HHH' ]
         }
       ]
     }
@@ -771,14 +771,14 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:5, size:1 },
           new: { start_line:5, size:1 },
-          deleted_lines: [ 'DDD' ],
-          added_lines: [ 'EEE' ]
+          deleted: [ 'DDD' ],
+          added: [ 'EEE' ]
         },
         {
           old: { start_line:7, size:1 },
           new: { start_line:7, size:1 },
-          deleted_lines: [ 'HHH' ],
-          added_lines: [ 'JJJ' ]
+          deleted: [ 'HHH' ],
+          added: [ 'JJJ' ]
         }
       ]
     }
@@ -812,14 +812,14 @@ class GitDiffParserTest < DifferTestBase
          {
            old: { start_line:5, size:1 },
            new: { start_line:5, size:1 },
-           deleted_lines: [ 'DDD' ],
-           added_lines: [ 'EEE' ]
+           deleted: [ 'DDD' ],
+           added: [ 'EEE' ]
          },
          {
            old: { start_line:13, size:1 },
            new: { start_line:13, size:1 },
-           deleted_lines: [ 'TTT' ],
-           added_lines: [ 'UUU' ]
+           deleted: [ 'TTT' ],
+           added: [ 'UUU' ]
         }
       ]
     }
@@ -864,8 +864,8 @@ class GitDiffParserTest < DifferTestBase
         {
           old: { start_line:35, size:3 },
           new: { start_line:35, size:8 },
-          deleted_lines: [],
-          added_lines:
+          deleted: [],
+          added:
           [
             '',
             'TEST(CircularBuffer, NotFullAfterCreation)',
@@ -917,8 +917,8 @@ class GitDiffParserTest < DifferTestBase
          {
            old: { start_line:1, size:2 },
            new: { start_line:1, size:3 },
-           deleted_lines: [],
-           added_lines: ['abc']
+           deleted: [],
+           added: ['abc']
          }
        ]
     }
