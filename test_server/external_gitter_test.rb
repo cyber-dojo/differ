@@ -62,6 +62,7 @@ class ExternalGitterTest < DifferTestBase
     was_tag = 2
     now_tag = 3
     options = [
+      '--unified=0',
       '--ignore-space-at-eol',
       '--find-copies-harder',
       '--indent-heuristic',
@@ -76,7 +77,7 @@ class ExternalGitterTest < DifferTestBase
   private
 
   def expect_shell(*messages)
-    assert_equal [[path]+messages], shell.spied
+    my_assert_equal [[path]+messages], shell.spied
   end
 
   def path
