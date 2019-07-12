@@ -11,14 +11,14 @@ module GitDiffJoinBuilder # mix-in
 
   module_function
 
-  def git_diff_join_builder(diff, was_lines, now_lines)
+  def git_diff_join_builder(diff, old_lines, new_lines)
     join = []
     line_number = 1
     from = 0
     index = 0
     diff[:chunks].each do |chunk|
-      to = chunk[:range][:now][:start_line] #+ chunk[:before_lines].length - 1
-      line_number = fill(join, :same, now_lines, from, to, line_number)
+      to = chunk[:new][:start_line] #+ chunk[:before_lines].length - 1
+      line_number = fill(join, :same, new_lines, from, to, line_number)
       chunk[:sections].each do |section|
         join << { :type => :section, :index => index }
         index += 1

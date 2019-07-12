@@ -15,6 +15,10 @@ class GitDiffJoinTest < DifferTestBase
     # $ rm empty.rb
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+
+    old_files = { 'empty.rb' => '' }
+    new_files = {}
+
     diff_lines =
     [
       'diff --git a/empty.rb b/empty.rb',
@@ -26,8 +30,8 @@ class GitDiffJoinTest < DifferTestBase
     {
       'empty.rb' =>
       {
-        was_filename: 'empty.rb',
-        now_filename: nil,
+        old_filename: 'empty.rb',
+        new_filename: nil,
         chunks: []
       }
     }
@@ -35,7 +39,8 @@ class GitDiffJoinTest < DifferTestBase
     my_assert_equal expected_diffs, actual_diffs
 
     expected = { 'empty.rb' => [] }
-    assert_join(expected, diff_lines, visible_files = {})
+
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,6 +53,9 @@ class GitDiffJoinTest < DifferTestBase
     # $ rm non-empty.h
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    old_files = { 'non-empty.h' => 'something' }
+    new_files = {}
+
     diff_lines =
     [
       'diff --git a/non-empty.h b/non-empty.h',
@@ -62,17 +70,17 @@ class GitDiffJoinTest < DifferTestBase
 
     expected_diffs =
     {
-      "non-empty.h"=>
+      'non-empty.h' =>
       {
-        was_filename: "non-empty.h",
-        now_filename: nil,
+        old_filename: 'non-empty.h',
+        new_filename: nil,
         chunks:
         [
           {
-            was: { start_line:1, size:1 },
-            now: { start_line:0, size:0 },
-            deleted_lines: [ "something" ],
-            added_lines: [],
+            old: { start_line:1, size:1 },
+            new: { start_line:0, size:0 },
+            deleted: [ 'something' ],
+            added: [],
           }
         ]
       }
@@ -91,7 +99,8 @@ class GitDiffJoinTest < DifferTestBase
         }
       ]
     }
-    assert_join(expected, diff_lines, visible_files = {})
+
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -104,6 +113,8 @@ class GitDiffJoinTest < DifferTestBase
     # $ touch empty.h
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    old_files = {}
+    new_files = { 'empty.h' => '' }
     diff_lines =
     [
       'diff --git a/empty.h b/empty.h',
@@ -115,8 +126,8 @@ class GitDiffJoinTest < DifferTestBase
     {
       'empty.h' =>
       {
-        was_filename: nil,
-        now_filename: 'empty.h',
+        old_filename: nil,
+        new_filename: 'empty.h',
         chunks: []
       }
     }
@@ -124,7 +135,7 @@ class GitDiffJoinTest < DifferTestBase
     my_assert_equal expected_diffs, actual_diffs
 
     expected = { 'empty.h' => [] }
-    assert_join(expected, diff_lines, visible_files = {})
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -137,6 +148,8 @@ class GitDiffJoinTest < DifferTestBase
     # $ echo -n 'something' > non-empty.c
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    old_files = {}
+    new_files = { 'non-empty.c' => 'something' }
     diff_lines =
     [
       'diff --git a/non-empty.c b/non-empty.c',
@@ -153,15 +166,15 @@ class GitDiffJoinTest < DifferTestBase
     {
       'non-empty.c' =>
       {
-        was_filename: nil,
-        now_filename: 'non-empty.c',
+        old_filename: nil,
+        new_filename: 'non-empty.c',
         chunks:
         [
           {
-            was: { start_line:0, size:0 },
-            now: { start_line:1, size:1 },
-            deleted_lines: [],
-            added_lines: [ 'something' ],
+            old: { start_line:0, size:0 },
+            new: { start_line:1, size:1 },
+            deleted: [],
+            added: [ 'something' ],
           }
         ]
       }
@@ -176,18 +189,21 @@ class GitDiffJoinTest < DifferTestBase
         { :type => :added, :line => 'something', :number => 1 }
       ]
     }
-    assert_join(expected, diff_lines, visible_files = {})
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA6',
   'empty file is copied' do
+    # $ git init
     # $ touch plain
     # $ git add . && git commit -m "1" && git tag 1 HEAD
     # $ mv plain copy
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    old_files = { 'plain' => '' }
+    new_files = { 'copy'  => '' }
     diff_lines =
     [
       'diff --git a/plain b/copy',
@@ -200,8 +216,8 @@ class GitDiffJoinTest < DifferTestBase
     {
       'copy' =>
       {
-        was_filename: 'plain',
-        now_filename: 'copy',
+        old_filename: 'plain',
+        new_filename: 'copy',
         chunks: []
       }
     }
@@ -209,18 +225,21 @@ class GitDiffJoinTest < DifferTestBase
     my_assert_equal expected_diffs, actual_diffs
 
     expected = { 'copy' => [] }
-    assert_join(expected, diff_lines, visible_files = {})
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA7',
   'non-empty file is copied' do
+    # $ git init
     # $ echo xxx > plain
     # $ git add . && git commit -m "1" && git tag 1 HEAD
     # $ mv plain copy
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    old_files = { 'plain' => 'xxx' }
+    new_files = { 'copy' => 'xxx' }
     diff_lines =
     [
       'diff --git a/plain b/copy',
@@ -233,8 +252,8 @@ class GitDiffJoinTest < DifferTestBase
     {
       'copy' =>
       {
-        was_filename: 'plain',
-        now_filename: 'copy',
+        old_filename: 'plain',
+        new_filename: 'copy',
         chunks: []
       }
     }
@@ -242,7 +261,7 @@ class GitDiffJoinTest < DifferTestBase
     my_assert_equal expected_diffs, actual_diffs
 
     expected = { 'copy' => [] }
-    assert_join(expected, diff_lines, visible_files = {})
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -323,8 +342,8 @@ class GitDiffJoinTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_join(expected, diff_lines, visible_files)
-    actual = git_diff_join(diff_lines, visible_files)
+  def assert_join(expected, diff_lines, old_files, new_files)
+    actual = git_diff_join(diff_lines, old_files, new_files)
     my_assert_equal expected, actual
   end
 
