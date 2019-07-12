@@ -933,25 +933,4 @@ class GitDiffParserTest < DifferTestBase
     my_assert_equal expected_diffs, actual_diffs
   end
 
-  private
-
-  def my_assert_equal(lhs, rhs, message = nil)
-    if lhs != rhs
-      temp_file(:expected, lhs) do |lhs_filename|
-        temp_file(:actual, rhs) do |rhs_filename|
-          puts message unless message.nil?
-          puts `diff #{lhs_filename} #{rhs_filename}`
-        end
-      end
-    end
-  end
-
-  def temp_file(type, obj)
-    Tempfile.create(type.to_s, '/tmp') do |tmpfile|
-      pathed_filename = tmpfile.path
-      IO.write(pathed_filename, JSON.pretty_generate(obj))
-      yield pathed_filename
-    end
-  end
-
 end

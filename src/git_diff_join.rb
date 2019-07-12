@@ -12,10 +12,10 @@ module GitDiffJoin # mix-in
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |filename, diff|
       if new_file?(diff)
-        lines = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:added_lines]
+        lines = empty_file?(diff) ? [] : diff[:chunks][0][:added_lines]
         join[filename] = all(lines, :added)
       elsif deleted_file?(diff)
-        lines = empty_file?(diff) ? [] : diff[:chunks][0][:sections][0][:deleted_lines]
+        lines = empty_file?(diff) ? [] : diff[:chunks][0][:deleted_lines]
         join[filename] = all(lines, :deleted)
       else
         now_lines = line_split(now_files[filename])
