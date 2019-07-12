@@ -47,9 +47,7 @@ class GitDiffParser
 
   def parse_chunk_one
     if range = parse_range
-      {        range: range,
-            sections: parse_sections
-      }
+      parse_section(range)
     end
   end
 
@@ -77,22 +75,12 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_sections
+  def parse_section(range)
+    range[:deleted_lines] = parse_lines(/^\-(.*)/)
     parse_newline_at_eof
-    sections = []
-    while /^[\+\-]/.match(line)
-      deleted_lines = parse_lines(/^\-(.*)/)
-      parse_newline_at_eof
-
-      added_lines = parse_lines(/^\+(.*)/)
-      parse_newline_at_eof
-
-      sections << {
-        deleted_lines: deleted_lines,
-          added_lines: added_lines,
-      }
-    end
-    sections
+    range[:added_lines] = parse_lines(/^\+(.*)/)
+    parse_newline_at_eof
+    range
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -1,4 +1,6 @@
 require_relative 'differ_test_base'
+require 'json'
+require 'tempfile'
 
 class GitDiffParserTest < DifferTestBase
 
@@ -9,7 +11,7 @@ class GitDiffParserTest < DifferTestBase
   test '42B',
   'lines are split' do
     lines = [ 'a', 'b' ]
-    assert_equal lines, GitDiffParser.new(lines.join("\n")).lines
+    my_assert_equal lines, GitDiffParser.new(lines.join("\n")).lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -23,8 +25,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal 'e mpty.h', was_filename, 'was_filename'
-    assert_equal 'e mpty.h', now_filename, 'now_filename'
+    my_assert_equal 'e mpty.h', was_filename, 'was_filename'
+    my_assert_equal 'e mpty.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -37,8 +39,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal "li n\"ux", was_filename, 'was_filename'
-    assert_equal "em bed\"ded", now_filename, 'now_filename'
+    my_assert_equal "li n\"ux", was_filename, 'was_filename'
+    my_assert_equal "em bed\"ded", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,8 +53,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal 'plain', was_filename, 'was_filename'
-    assert_equal "em bed\"ded", now_filename, 'now_filename'
+    my_assert_equal 'plain', was_filename, 'was_filename'
+    my_assert_equal "em bed\"ded", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -65,8 +67,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal "emb ed\"ded", was_filename, 'was_filename'
-    assert_equal 'plain', now_filename, 'now_filename'
+    my_assert_equal "emb ed\"ded", was_filename, 'was_filename'
+    my_assert_equal 'plain', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -79,7 +81,7 @@ class GitDiffParserTest < DifferTestBase
       'index e69de29..0000000'
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal 'Deleted.java', was_filename, 'was_filename'
+    my_assert_equal 'Deleted.java', was_filename, 'was_filename'
     assert_nil now_filename, 'now_filename'
   end
 
@@ -94,7 +96,7 @@ class GitDiffParserTest < DifferTestBase
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
     assert_nil was_filename, 'was_filename'
-    assert_equal 'empty.h', now_filename, 'now_filename'
+    my_assert_equal 'empty.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -108,8 +110,8 @@ class GitDiffParserTest < DifferTestBase
       'rename to new_name.h'
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    assert_equal 'old_name.h', was_filename, 'was_filename'
-    assert_equal "new \"name.h", now_filename, 'now_filename'
+    my_assert_equal 'old_name.h', was_filename, 'was_filename'
+    my_assert_equal "new \"name.h", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -123,7 +125,7 @@ class GitDiffParserTest < DifferTestBase
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
     assert_nil was_filename, 'was_filename'
-    assert_equal '1/2/3/empty.h', now_filename, 'now_filename'
+    my_assert_equal '1/2/3/empty.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -137,8 +139,8 @@ class GitDiffParserTest < DifferTestBase
       'rename to 1/2/3/new_name.h'
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    assert_equal '1/2/3/old_name.h', was_filename, 'was_filename'
-    assert_equal '1/2/3/new_name.h', now_filename, 'now_filename'
+    my_assert_equal '1/2/3/old_name.h', was_filename, 'was_filename'
+    my_assert_equal '1/2/3/new_name.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -152,8 +154,8 @@ class GitDiffParserTest < DifferTestBase
       'rename to 4/5/6/new_name.h'
     ]
     was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    assert_equal '1/2/3/old_name.h', was_filename, 'was_filename'
-    assert_equal '4/5/6/new_name.h', now_filename, 'now_filename'
+    my_assert_equal '1/2/3/old_name.h', was_filename, 'was_filename'
+    my_assert_equal '4/5/6/new_name.h', now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -168,8 +170,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal "s/d/f/li n\"ux", was_filename, 'was_filename'
-    assert_equal "u/i/o/em bed\"ded", now_filename, 'now_filename'
+    my_assert_equal "s/d/f/li n\"ux", was_filename, 'was_filename'
+    my_assert_equal "u/i/o/em bed\"ded", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -186,8 +188,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_equal "a/d/f/li n\"ux", was_filename, 'was_filename'
-    assert_equal "b/u/i/o/em bed\"ded", now_filename, 'now_filename'
+    my_assert_equal "a/d/f/li n\"ux", was_filename, 'was_filename'
+    my_assert_equal "b/u/i/o/em bed\"ded", now_filename, 'now_filename'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -216,18 +218,10 @@ class GitDiffParserTest < DifferTestBase
         chunks:
         [
           {
-            range:
-            {
-              now: { start_line:0, size:0 },
-              was: { start_line:1, size:1 }
-            },
-            sections:
-            [
-              {
-                deleted_lines: [ 'Please rename me!' ],
-                added_lines: []
-              }
-            ]
+            now: { start_line:0, size:0 },
+            was: { start_line:1, size:1 },
+            deleted_lines: [ 'Please rename me!' ],
+            added_lines: []
           }
         ]
       }
@@ -235,7 +229,7 @@ class GitDiffParserTest < DifferTestBase
 
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -260,7 +254,7 @@ class GitDiffParserTest < DifferTestBase
 
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -288,18 +282,10 @@ class GitDiffParserTest < DifferTestBase
         chunks:
         [
           {
-            range:
-            {
-              was: { start_line:1, size:3 },
-              now: { start_line:0, size:0 }
-            },
-            sections:
-            [
-              {
-                deleted_lines: [ 'def answer', '  42', 'end'],
-                added_lines: []
-              }
-            ]
+            was: { start_line:1, size:3 },
+            now: { start_line:0, size:0 },
+            deleted_lines: [ 'def answer', '  42', 'end'],
+            added_lines: []
           }
         ]
       }
@@ -307,7 +293,7 @@ class GitDiffParserTest < DifferTestBase
 
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -333,7 +319,7 @@ class GitDiffParserTest < DifferTestBase
 
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -359,7 +345,7 @@ class GitDiffParserTest < DifferTestBase
 
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -386,26 +372,18 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          range:
-          {
-            was: { start_line:6, size:1 },
-            now: { start_line:6, size:1 },
-          },
-          sections:
-          [
-            {
-              deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
-              added_lines: [ 'obir obri oibr oirb orbi oribx' ]
-            } # section
-          ] # sections
-        } # chunk
-      ] # chunks
+          was: { start_line:6, size:1 },
+          now: { start_line:6, size:1 },
+          deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
+          added_lines: [ 'obir obri oibr oirb orbi oribx' ]
+        }
+      ]
     }
 
     expected = { 'instructions_new' => expected_diff }
     parser = GitDiffParser.new(lines)
     actual = parser.parse_all
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -434,49 +412,33 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-        was_filename: 'lines',
-        now_filename: 'lines',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:1, size:1 },
-                now: { start_line:1, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'ddd' ],
-                  added_lines: [ 'eee' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
-    } # expected
+      was_filename: 'lines',
+      now_filename: 'lines',
+      chunks:
+      [
+        {
+          was: { start_line:1, size:1 },
+          now: { start_line:1, size:1 },
+          deleted_lines: [ 'ddd' ],
+          added_lines: [ 'eee' ]
+        }
+      ]
+    }
 
     expected_diff_2 =
     {
-        was_filename: 'other',
-        now_filename: 'other',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:14, size:2 },
-                now: { start_line:14, size:2 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'CCC', 'DDD' ],
-                  added_lines: [ 'EEE', 'FFF' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
-    } # expected
+      was_filename: 'other',
+      now_filename: 'other',
+      chunks:
+      [
+        {
+          was: { start_line:14, size:2 },
+          now: { start_line:14, size:2 },
+          deleted_lines: [ 'CCC', 'DDD' ],
+          added_lines: [ 'EEE', 'FFF' ]
+        }
+      ]
+    }
 
     expected =
     {
@@ -485,7 +447,7 @@ class GitDiffParserTest < DifferTestBase
     }
 
     parser = GitDiffParser.new(lines)
-    assert_equal expected, parser.parse_all
+    my_assert_equal expected, parser.parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -500,7 +462,7 @@ class GitDiffParserTest < DifferTestBase
       was: { start_line:3, size:1 },
       now: { start_line:5, size:1 },
     }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
+    my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -513,7 +475,7 @@ class GitDiffParserTest < DifferTestBase
       was: { start_line:3, size:1 },
       now: { start_line:5, size:9 },
     }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
+    my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -526,7 +488,7 @@ class GitDiffParserTest < DifferTestBase
       was: { start_line:3, size:4 },
       now: { start_line:5, size:1 },
     }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
+    my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -539,7 +501,7 @@ class GitDiffParserTest < DifferTestBase
       was: { start_line:3, size:4 },
       now: { start_line:5, size:6 },
     }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
+    my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -550,7 +512,7 @@ class GitDiffParserTest < DifferTestBase
     parser = GitDiffParser.new(lines)
     assert_equal 0, parser.n
     parser.parse_newline_at_eof
-    assert_equal 0, parser.n
+    my_assert_equal 0, parser.n
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -561,7 +523,7 @@ class GitDiffParserTest < DifferTestBase
     parser = GitDiffParser.new(lines)
     assert_equal 0, parser.n
     parser.parse_newline_at_eof
-    assert_equal 1, parser.n
+    my_assert_equal 1, parser.n
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -584,47 +546,32 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        was_filename: 'lines',
-        now_filename: 'lines',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:3, size:1 },
-                now: { start_line:3, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'BBB' ],
-                  added_lines: [ 'CCC' ]
-                } # section
-              ] # sections
-            }, # chunk
-            {
-              range:
-              {
-                was: { start_line:8, size:1 },
-                now: { start_line:8, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'SSS' ],
-                  added_lines: [ 'TTT' ]
-                } # section
-              ] # sections
-            }
-          ] # chunks
-    } # expected
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+      was_filename: 'lines',
+      now_filename: 'lines',
+      chunks:
+      [
+        {
+          was: { start_line:3, size:1 },
+          now: { start_line:3, size:1 },
+          deleted_lines: [ 'BBB' ],
+          added_lines: [ 'CCC' ]
+        },
+        {
+          was: { start_line:8, size:1 },
+          now: { start_line:8, size:1 },
+          deleted_lines: [ 'SSS' ],
+          added_lines: [ 'TTT' ]
+        }
+      ]
+    }
+
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B2C',
-  'diff one chunk one section' do
+  'diff one-chunk one-line' do
     lines = [
       '@@ -4,1 +4,1 @@',
       '-AAA',
@@ -633,27 +580,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      range:
-      {
-        was: { start_line:4, size:1 },
-        now: { start_line:4, size:1 },
-      },
-      sections:
-      [
-        {
-          deleted_lines: [ 'AAA' ],
-          added_lines: [ 'BBB' ]
-        } # section
-      ] # sections
-    } # chunk
+      was: { start_line:4, size:1 },
+      now: { start_line:4, size:1 },
+      deleted_lines: [ 'AAA' ],
+      added_lines: [ 'BBB' ]
+    }
 
-    assert_equal expected, GitDiffParser.new(lines).parse_chunk_one
+    my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E9F',
-  'diff one chunk two sections' do
+  'diff one-chunk two-lines' do
     lines = [
       '@@ -17,2 +17,2 @@',
       '-CCC',
@@ -665,21 +604,13 @@ class GitDiffParserTest < DifferTestBase
     expected =
       [
         {
-          range:
-          {
-            was: { start_line:17, size:2 },
-            now: { start_line:17, size:2 },
-          },
-          sections:
-          [
-            {
-              deleted_lines: [ 'CCC','DDD' ],
-              added_lines: [ 'EEE','FFF' ]
-            } # section
-          ] # sections
-        } # chunk
-      ] # chunks
-    assert_equal expected, GitDiffParser.new(lines).parse_chunk_all
+          was: { start_line:17, size:2 },
+          now: { start_line:17, size:2 },
+          deleted_lines: [ 'CCC','DDD' ],
+          added_lines: [ 'EEE','FFF' ]
+        }
+      ]
+    my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -704,21 +635,14 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          range:
-          {
-            was: { start_line:4, size:1 },
-            now: { start_line:4, size:2 },
-          },
-          sections:
-          [
-            { deleted_lines: [ 'XXX' ],
-              added_lines: [ 'YYY', 'ZZZ' ]
-            }
-          ]
+          was: { start_line:4, size:1 },
+          now: { start_line:4, size:2 },
+          deleted_lines: [ 'XXX' ],
+          added_lines: [ 'YYY', 'ZZZ' ]
         }
       ]
     }
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -737,7 +661,7 @@ class GitDiffParserTest < DifferTestBase
       '+++ b/diamond.h'
     ]
     all_lines = (lines + trailing).join("\n")
-    assert_equal lines, GitDiffParser.new(all_lines).parse_prefix_lines
+    my_assert_equal lines, GitDiffParser.new(all_lines).parse_prefix_lines
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -760,40 +684,25 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        was_filename: 'test_gapper.rb',
-        now_filename: 'test_gapper.rb',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:9, size:1 },
-                now: { start_line:9, size:1 },
-              },
-              sections:
-              [
-                { deleted_lines: [ 'p Timw.now' ],
-                  added_lines: [ 'p Time.now' ]
-                }
-              ]
-            },
-            {
-              range:
-              {
-                was: { start_line:19, size:1 },
-                now: { start_line:19, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'q Timw.now' ],
-                  added_lines: [ 'q Time.now' ]
-                }
-              ]
-            }
-          ]
+      was_filename: 'test_gapper.rb',
+      now_filename: 'test_gapper.rb',
+      chunks:
+      [
+        {
+          was: { start_line:9, size:1 },
+          now: { start_line:9, size:1 },
+          deleted_lines: [ 'p Timw.now' ],
+          added_lines: [ 'p Time.now' ]
+        },
+        {
+          was: { start_line:19, size:1 },
+          now: { start_line:19, size:1 },
+          deleted_lines: [ 'q Timw.now' ],
+          added_lines: [ 'q Time.now' ]
+        }
+      ]
     }
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -815,41 +724,25 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        was_filename: 'lines',
-        now_filename: 'lines',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:5, size:1 },
-                now: { start_line:5, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'DDD' ],
-                  added_lines: [ 'EEE' ]
-                }
-              ]
-            },
-            {
-              range:
-              {
-                was: { start_line:9, size:1 },
-                now: { start_line:9, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'GGG' ],
-                  added_lines: [ 'HHH' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
-    } # expected
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+      was_filename: 'lines',
+      now_filename: 'lines',
+      chunks:
+      [
+        {
+          was: { start_line:5, size:1 },
+          now: { start_line:5, size:1 },
+          deleted_lines: [ 'DDD' ],
+          added_lines: [ 'EEE' ]
+        },
+        {
+          was: { start_line:9, size:1 },
+          now: { start_line:9, size:1 },
+          deleted_lines: [ 'GGG' ],
+          added_lines: [ 'HHH' ]
+        }
+      ]
+    }
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -871,41 +764,25 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        was_filename: 'lines',
-        now_filename: 'lines',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:5, size:1 },
-                now: { start_line:5, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'DDD' ],
-                  added_lines: [ 'EEE' ]
-                }
-              ]
-            },
-            {
-              range:
-              {
-                was: { start_line:7, size:1 },
-                now: { start_line:7, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'HHH' ],
-                  added_lines: [ 'JJJ' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
-    } # expected
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+      was_filename: 'lines',
+      now_filename: 'lines',
+      chunks:
+      [
+        {
+          was: { start_line:5, size:1 },
+          now: { start_line:5, size:1 },
+          deleted_lines: [ 'DDD' ],
+          added_lines: [ 'EEE' ]
+        },
+        {
+          was: { start_line:7, size:1 },
+          now: { start_line:7, size:1 },
+          deleted_lines: [ 'HHH' ],
+          added_lines: [ 'JJJ' ]
+        }
+      ]
+    }
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -928,41 +805,25 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        was_filename: 'lines',
-        now_filename: 'lines',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:5, size:1 },
-                now: { start_line:5, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'DDD' ],
-                  added_lines: [ 'EEE' ]
-                }
-              ]
-            },
-            {
-              range:
-              {
-                was: { start_line:13, size:1 },
-                now: { start_line:13, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'TTT' ],
-                  added_lines: [ 'UUU' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
-    } # expected
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+       was_filename: 'lines',
+       now_filename: 'lines',
+       chunks:
+       [
+         {
+           was: { start_line:5, size:1 },
+           now: { start_line:5, size:1 },
+           deleted_lines: [ 'DDD' ],
+           added_lines: [ 'EEE' ]
+         },
+         {
+           was: { start_line:13, size:1 },
+           now: { start_line:13, size:1 },
+           deleted_lines: [ 'TTT' ],
+           added_lines: [ 'UUU' ]
+        }
+      ]
+    }
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -996,39 +857,26 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        prefix_lines:
+      was_filename: 'sandbox/CircularBufferTest.cpp',
+      now_filename: 'sandbox/CircularBufferTest.cpp',
+      chunks:
+      [
+        {
+          was: { start_line:35, size:3 },
+          now: { start_line:35, size:8 },
+          deleted_lines: [],
+          added_lines:
           [
-            'diff --git a/sandbox/CircularBufferTest.cpp b/sandbox/CircularBufferTest.cpp',
-            'index 0ddb952..a397f48 100644'
-          ],
-        was_filename: 'sandbox/CircularBufferTest.cpp',
-        now_filename: 'sandbox/CircularBufferTest.cpp',
-        chunks:
-          [
-            {
-              range:
-              {
-                was: { start_line:35, size:3 },
-                now: { start_line:35, size:8 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [],
-                  added_lines:
-                  [
-                    '',
-                    'TEST(CircularBuffer, NotFullAfterCreation)',
-                    '{',
-                    '    CHECK_FALSE(CircularBuffer_IsFull(buffer));',
-                    '}'
-                  ]
-                }
-              ]
-            }
-          ] # chunks
-    } # expected
-    assert_equal expected, GitDiffParser.new(lines).parse_one
+            '',
+            'TEST(CircularBuffer, NotFullAfterCreation)',
+            '{',
+            '    CHECK_FALSE(CircularBuffer_IsFull(buffer));',
+            '}'
+          ]
+        }
+      ]
+    }
+    my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 =end
 
@@ -1050,7 +898,7 @@ class GitDiffParserTest < DifferTestBase
       '--- a/wibble.c',
       '+++ b/wibble.c',
       '@@ -1,2 +1,3 @@',
-      '+4',
+      '+abc',
       '\\ No newline at end of file'
     ].join("\n")
 
@@ -1062,25 +910,17 @@ class GitDiffParserTest < DifferTestBase
     }
     expected_diff_2 =
     {
-      was_filename: 'wibble.c',
-      now_filename: 'wibble.c',
-      chunks:
-      [
-        {
-          range:
-          {
-            was: { start_line:1, size:2 },
-            now: { start_line:1, size:3 }
-          },
-          sections:
-          [
-            {
-              deleted_lines: [],
-              added_lines: ['4']
-            }
-          ]
-        }
-      ]
+       was_filename: 'wibble.c',
+       now_filename: 'wibble.c',
+       chunks:
+       [
+         {
+           was: { start_line:1, size:2 },
+           now: { start_line:1, size:3 },
+           deleted_lines: [],
+           added_lines: ['abc']
+         }
+       ]
     }
 
     expected_diffs =
@@ -1090,7 +930,28 @@ class GitDiffParserTest < DifferTestBase
     }
 
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
-    assert_equal expected_diffs, actual_diffs
+    my_assert_equal expected_diffs, actual_diffs
+  end
+
+  private
+
+  def my_assert_equal(lhs, rhs, message = nil)
+    if lhs != rhs
+      temp_file(:expected, lhs) do |lhs_filename|
+        temp_file(:actual, rhs) do |rhs_filename|
+          puts message unless message.nil?
+          puts `diff #{lhs_filename} #{rhs_filename}`
+        end
+      end
+    end
+  end
+
+  def temp_file(type, obj)
+    Tempfile.create(type.to_s, '/tmp') do |tmpfile|
+      pathed_filename = tmpfile.path
+      IO.write(pathed_filename, JSON.pretty_generate(obj))
+      yield pathed_filename
+    end
   end
 
 end
