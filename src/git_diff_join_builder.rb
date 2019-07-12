@@ -14,16 +14,11 @@ module GitDiffJoinBuilder # mix-in
   def git_diff_join_builder(diff, old_lines)
 
     diff[:chunks].each.with_index do |chunk,index|
-      section = [ { :type => :section, index:index } ]
       old_start_line = chunk[:old_start_line] # 1-based
-      chunk[:deleted].each.with_index(old_start_line) do |line,old_number|
-        old_lines[old_number-1] = nil
-        section << { :type => :deleted, line:line, number:old_number }
-      end
       new_start_line = chunk[:new_start_line] # 1-based
-      chunk[:added].each.with_index(new_start_line) do |line,new_number|
-        section << { :type => :added, line:line, number:new_number }
-      end
+      section = [ { :type => :section, index:index } ]
+      section += deleted_lines(chunk, old_start_line, old_lines)
+      section +=   added_lines(chunk, new_start_line)
       old_lines[old_start_line-1] = section
     end
 
@@ -36,6 +31,21 @@ module GitDiffJoinBuilder # mix-in
       end
     end
     result
+  end
+
+  private
+
+  def deleted_lines(chunk, old_start_line, old_lines)
+    chunk[:deleted].collect.with_index(old_start_line) do |line,old_number|
+      old_lines[old_number-1] = nil
+      { :type => :deleted, line:line, number:old_number }
+    end
+  end
+
+  def added_lines(chunk, new_start_line)
+    chunk[:added].collect.with_index(new_start_line) do |line,new_number|
+      { :type => :added, line:line, number:new_number }
+    end
   end
 
 end
