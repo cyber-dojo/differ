@@ -48,7 +48,7 @@ module GitDiffJoin # mix-in
 
   def all(lines, type)
     lines.collect.each.with_index(1) do |line,number|
-      { line:line, type:type, number:number }
+      { type:type, line:line, number:number }
     end
   end
 
