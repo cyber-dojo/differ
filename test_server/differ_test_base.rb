@@ -34,12 +34,15 @@ class DifferTestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - -
 
-  def my_assert_equal(lhs, rhs, message = nil)
+  def my_assert_equal(lhs, rhs, message = '')
     if lhs != rhs
       temp_file(:expected, lhs) do |lhs_filename|
         temp_file(:actual, rhs) do |rhs_filename|
-          puts message.to_s unless message.nil?
           puts `diff #{lhs_filename} #{rhs_filename}`
+          message = message.to_s
+          message += "\n" + @_hex_test_id
+          message += "\n" + @_hex_test_name
+          flunk message
         end
       end
     end

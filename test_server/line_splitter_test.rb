@@ -25,7 +25,7 @@ class LineSplitterTest < DifferTestBase
 
   test 'E21',
   'splitting solitary newline is empty string in array' do
-    assert_line_split [''], "\n"
+    assert_line_split [ '' ], "\n"
   end
 
   #- - - - - - - - - - - - - - - -

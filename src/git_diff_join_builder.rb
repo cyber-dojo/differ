@@ -12,40 +12,35 @@ module GitDiffJoinBuilder # mix-in
   module_function
 
   def git_diff_join_builder(diff, old_lines, new_lines)
-    join = []
-    line_number = 1
-    from = 0
-    index = 0
-    diff[:chunks].each do |chunk|
-      to = chunk[:new][:start_line] #+ chunk[:before_lines].length - 1
-      line_number = fill(join, :same, new_lines, from, to, line_number)
-      chunk[:sections].each do |section|
-        join << { :type => :section, :index => index }
-        index += 1
-                      fill_all(join, :deleted, section[:deleted_lines], line_number)
-        line_number = fill_all(join, :added,   section[:added_lines  ], line_number)
-        #line_number = fill_all(join, :same,    section[:after_lines  ], line_number)
+
+    diff[:chunks].each_with_index do |chunk,chunk_index|
+      section = [
+        { :type => :section, :index => chunk_index }
+      ]
+      o = chunk[:old][:start_line] # 1-based
+      chunk[:deleted].each_with_index do |line,index|
+        line_number = o + index
+        old_lines[line_number-1] = nil
+        section << { number:line_number, type: :deleted, line:line }
       end
-      from = line_number - 1
+      n = chunk[:new][:start_line] # 1-based
+      chunk[:added].each_with_index do |line,index|
+        line_number = n + index
+        line = new_lines[line_number-1]
+        section << { number:line_number, type: :added, line:line }
+      end
+      old_lines[o-1] = section
     end
-    last_lines = now_lines[line_number-1..now_lines.length]
-    fill_all(join, :same, last_lines, line_number)
-    join
-  end
 
-  private
-
-  def fill_all(join, type, lines, line_number)
-    lines ||= []
-    fill(join, type, lines, 0, lines.length, line_number)
-  end
-
-  def fill(join, type, lines, from, to, line_number)
-    (from...to).each do |n|
-      join << { type: type, line: lines[n], number: line_number }
-      line_number += 1
+    result = []
+    old_lines.each_with_index do |entry,index|
+      if entry.is_a?(String)
+        result += [ { number:index+1, type: :same, line:entry } ]
+      elsif entry.is_a?(Array)
+        result += entry
+      end
     end
-    line_number
+    result
   end
 
 end

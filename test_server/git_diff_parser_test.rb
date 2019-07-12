@@ -15,7 +15,7 @@ class GitDiffParserTest < DifferTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # parse_was_now_filenames()
+  # parse_old_new_filenames()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D5F',
@@ -46,29 +46,29 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '50A',
-  'parse old & new filenames with double-quote and space only in now filename' do
+  'parse old & new filenames with double-quote and space only in new-filename' do
     # git diff only double quotes filenames if it has to
     prefix = [
        'diff --git a/plain "b/em bed\"ded"',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
-    my_assert_equal 'plain',       old_filename, :was_filename
-    my_assert_equal "em bed\"ded", new_filename, :now_filename
+    my_assert_equal 'plain',       old_filename, :old_filename
+    my_assert_equal "em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D8',
-  'parse old & new filenames with double-quote and space only in was filename' do
+  'parse old & new filenames with double-quote and space only in old-filename' do
     # double-quote " is a legal character in a linux filename
     prefix = [
        'diff --git "a/emb ed\"ded" b/plain',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
-    my_assert_equal "emb ed\"ded", old_filename, :was_filename
-    my_assert_equal 'plain',       new_filename, :now_filename
+    my_assert_equal "emb ed\"ded", old_filename, :old_filename
+    my_assert_equal 'plain',       new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -

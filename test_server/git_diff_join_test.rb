@@ -15,7 +15,6 @@ class GitDiffJoinTest < DifferTestBase
     # $ rm empty.rb
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
-
     old_files = { 'empty.rb' => '' }
     new_files = {}
 
@@ -224,7 +223,16 @@ class GitDiffJoinTest < DifferTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
-    expected = { 'copy' => [] }
+    expected =
+    { 'copy' =>
+      [
+        {
+          number: 1,
+          type: :same,
+          line: ''
+        }
+      ]
+    }
     assert_join(expected, diff_lines, old_files, new_files)
   end
 
@@ -260,7 +268,15 @@ class GitDiffJoinTest < DifferTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
-    expected = { 'copy' => [] }
+    expected = { 'copy' =>
+      [
+        {
+          number: 1,
+          type: :same,
+          line: 'xxx'
+        }
+      ]
+    }
     assert_join(expected, diff_lines, old_files, new_files)
   end
 
@@ -275,6 +291,8 @@ class GitDiffJoinTest < DifferTestBase
     # $ echo -n 'something changed' > non-empty.c
     # $ git add . && git commit -m "2" && git tag 2 HEAD
     # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    old_files = { 'non-empty.c' => 'something' }
+    new_files = { 'non-empty.c' => 'something changed' }
     diff_lines =
     [
       'diff --git a/non-empty.c b/non-empty.c',
@@ -292,15 +310,15 @@ class GitDiffJoinTest < DifferTestBase
     {
       'non-empty.c' =>
       {
-        was_filename: 'non-empty.c',
-        now_filename: 'non-empty.c',
+        old_filename: 'non-empty.c',
+        new_filename: 'non-empty.c',
         chunks:
         [
           {
-            was: { start_line:1, size:1 },
-            now: { start_line:1, size:1 },
-            deleted_lines: [ 'something' ],
-            added_lines: [ 'something changed' ],
+            old: { start_line:1, size:1 },
+            new: { start_line:1, size:1 },
+            deleted: [ 'something' ],
+            added: [ 'something changed' ],
           }
         ]
       }
@@ -317,7 +335,7 @@ class GitDiffJoinTest < DifferTestBase
         { :type => :added, :line => 'something changed', :number => 1 }
       ]
     }
-    assert_join(expected, diff_lines, visible_files = {})
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -329,7 +347,8 @@ class GitDiffJoinTest < DifferTestBase
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     assert_equal expected_diffs, actual_diffs
 
-    visible_files = { 'wibble.txt' => 'content' }
+    old_files = { 'wibble.txt' => 'content' }
+    new_files = { 'wibble.txt' => 'content' }
     expected =
     {
       'wibble.txt' =>
@@ -337,7 +356,7 @@ class GitDiffJoinTest < DifferTestBase
         { :type => :same, :line => 'content', :number => 1}
       ]
     }
-    assert_join(expected, diff_lines, visible_files)
+    assert_join(expected, diff_lines, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

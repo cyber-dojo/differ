@@ -22,8 +22,9 @@ module GitDiffJoin # mix-in
       else
         old_file = old_files[old_filename]
         old_lines = line_split(old_file)
-        #now_lines = line_split(now_files[filename])
-        join[new_filename] = git_diff_join_builder(diff, old_lines)
+        new_file = new_files[new_filename]
+        new_lines = line_split(new_file)
+        join[new_filename] = git_diff_join_builder(diff, old_lines, new_lines)
       end
       filenames.delete(new_filename)
     end
