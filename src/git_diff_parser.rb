@@ -43,7 +43,9 @@ class GitDiffParser
 
   def parse_chunk
     if range = parse_range
-      parse_section(range)
+      range[:deleted] = parse_lines(/^\-(.*)/)
+      range[:added  ] = parse_lines(/^\+(.*)/)
+      range
     end
   end
 
@@ -55,16 +57,6 @@ class GitDiffParser
       next_line
       { old_start_line:range[1].to_i, new_start_line:range[3].to_i }
     end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_section(range)
-    range[:deleted] = parse_lines(/^\-(.*)/)
-    parse_newline_at_eof
-    range[:added] = parse_lines(/^\+(.*)/)
-    parse_newline_at_eof
-    range
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -147,29 +139,30 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_newline_at_eof
-    next_line if /^\\ No newline at end of file/.match(line)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   def parse_lines(re)
     lines = []
     while md = re.match(line)
       lines << md[1]
       next_line
     end
+    parse_newline_at_eof
     lines
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def next_line
-    @n += 1
+  def parse_newline_at_eof
+    next_line if /^\\ No newline at end of file/.match(line)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def line
     @lines[@n]
+  end
+
+  def next_line
+    @n += 1
   end
 
 end
