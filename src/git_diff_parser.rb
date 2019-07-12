@@ -11,11 +11,9 @@ class GitDiffParser
   attr_reader :lines, :n
 
   def parse_all
-    all = {}
+    all = []
     while /^diff --git/.match(line) do
-      one = parse_one
-      filename = one[:new_filename] || one[:old_filename]
-      all[filename] = one
+      all << parse_one
     end
     all
   end

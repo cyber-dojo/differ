@@ -10,7 +10,7 @@ module GitDiffJoin # mix-in
     join = {}
     filenames = new_files.keys
     diffs = GitDiffParser.new(diff_lines).parse_all
-    diffs.each do |_filename, diff|
+    diffs.each do |diff|
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
       if new_file?(diff)

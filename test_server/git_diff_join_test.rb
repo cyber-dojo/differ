@@ -28,14 +28,13 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'empty.rb' =>
+    [
       {
         old_filename: 'empty.rb',
         new_filename: nil,
         chunks: []
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
@@ -70,8 +69,7 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'non-empty.h' =>
+    [
       {
         old_filename: 'non-empty.h',
         new_filename: nil,
@@ -85,7 +83,7 @@ class GitDiffJoinTest < DifferTestBase
           }
         ]
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
@@ -124,14 +122,13 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'empty.h' =>
+    [
       {
         old_filename: nil,
         new_filename: 'empty.h',
         chunks: []
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
@@ -164,8 +161,7 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'non-empty.c' =>
+    [
       {
         old_filename: nil,
         new_filename: 'non-empty.c',
@@ -179,7 +175,7 @@ class GitDiffJoinTest < DifferTestBase
           }
         ]
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
@@ -214,19 +210,19 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'copy' =>
+    [
       {
         old_filename: 'plain',
         new_filename: 'copy',
         chunks: []
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected =
-    { 'copy' =>
+    {
+      'copy' =>
       [
         {
           number: 1,
@@ -259,18 +255,19 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'copy' =>
+    [
       {
         old_filename: 'plain',
         new_filename: 'copy',
         chunks: []
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
-    expected = { 'copy' =>
+    expected =
+    {
+      'copy' =>
       [
         {
           number: 1,
@@ -309,8 +306,7 @@ class GitDiffJoinTest < DifferTestBase
     ].join("\n")
 
     expected_diffs =
-    {
-      'non-empty.c' =>
+    [
       {
         old_filename: 'non-empty.c',
         new_filename: 'non-empty.c',
@@ -324,7 +320,7 @@ class GitDiffJoinTest < DifferTestBase
           }
         ]
       }
-    }
+    ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
@@ -345,9 +341,9 @@ class GitDiffJoinTest < DifferTestBase
   test '35C',
   'unchanged file' do
     diff_lines = [].join("\n")
-    expected_diffs = {}
+    expected_diffs = []
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
-    assert_equal expected_diffs, actual_diffs
+    my_assert_equal expected_diffs, actual_diffs
 
     old_files = { 'wibble.txt' => 'content' }
     new_files = { 'wibble.txt' => 'content' }

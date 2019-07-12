@@ -210,8 +210,7 @@ class GitDiffParserTest < DifferTestBase
     ].join("\n")
 
     expected =
-    {
-      '\\was_newfile_FIU' => # <-- single backslash
+    [
       {
         old_filename: '\\was_newfile_FIU', # <-- single backslash
         new_filename: nil,
@@ -225,11 +224,9 @@ class GitDiffParserTest < DifferTestBase
           }
         ]
       }
-    }
+    ]
 
-    parser = GitDiffParser.new(lines)
-    actual = parser.parse_all
-    my_assert_equal expected, actual
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -243,18 +240,15 @@ class GitDiffParserTest < DifferTestBase
     ].join("\n")
 
     expected =
-    {
-      'original' =>
+    [
       {
         old_filename: 'original',
         new_filename: nil,
         chunks: []
       }
-    }
+    ]
 
-    parser = GitDiffParser.new(lines)
-    actual = parser.parse_all
-    my_assert_equal expected, actual
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -274,8 +268,7 @@ class GitDiffParserTest < DifferTestBase
     ].join("\n")
 
     expected =
-    {
-      'untitled.rb' =>
+    [
       {
         old_filename: 'untitled.rb',
         new_filename: nil,
@@ -289,11 +282,9 @@ class GitDiffParserTest < DifferTestBase
           }
         ]
       }
-    }
+    ]
 
-    parser = GitDiffParser.new(lines)
-    actual = parser.parse_all
-    my_assert_equal expected, actual
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -308,18 +299,15 @@ class GitDiffParserTest < DifferTestBase
     ].join("\n")
 
     expected =
-    {
-      '\\was_newfile_FIU' => # <-- single backslash
+    [
       {
         old_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
         new_filename: '\\was_newfile_FIU',      # <-- single backslash
         chunks: []
       }
-    }
+    ]
 
-    parser = GitDiffParser.new(lines)
-    actual = parser.parse_all
-    my_assert_equal expected, actual
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -334,18 +322,15 @@ class GitDiffParserTest < DifferTestBase
     ].join("\n")
 
     expected =
-    {
-      'newname' =>
+    [
       {
         old_filename: 'oldname',
         new_filename: 'newname',
         chunks: []
       }
-    }
+    ]
 
-    parser = GitDiffParser.new(lines)
-    actual = parser.parse_all
-    my_assert_equal expected, actual
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -365,25 +350,24 @@ class GitDiffParserTest < DifferTestBase
       '+obir obri oibr oirb orbi oribx'
     ].join("\n")
 
-    expected_diff =
-    {
-      old_filename: 'instructions',
-      new_filename: 'instructions_new',
-      chunks:
-      [
-        {
-          old_start_line:6,
-          deleted: [ 'obir obri oibr oirb orbi orib' ],
-          new_start_line:6,
-          added: [ 'obir obri oibr oirb orbi oribx' ]
-        }
-      ]
-    }
+    expected =
+    [
+      {
+        old_filename: 'instructions',
+        new_filename: 'instructions_new',
+        chunks:
+        [
+          {
+            old_start_line:6,
+            deleted: [ 'obir obri oibr oirb orbi orib' ],
+            new_start_line:6,
+            added: [ 'obir obri oibr oirb orbi oribx' ]
+          }
+        ]
+      }
+    ]
 
-    expected = { 'instructions_new' => expected_diff }
-    parser = GitDiffParser.new(lines)
-    actual = parser.parse_all
-    my_assert_equal expected, actual
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -410,44 +394,37 @@ class GitDiffParserTest < DifferTestBase
       "\\ No newline at end of file"
     ].join("\n")
 
-    expected_diff_1 =
-    {
-      old_filename: 'lines',
-      new_filename: 'lines',
-      chunks:
-      [
-        {
-          old_start_line:1,
-          deleted: [ 'ddd' ],
-          new_start_line:1,
-          added: [ 'eee' ]
-        }
-      ]
-    }
-
-    expected_diff_2 =
-    {
-      old_filename: 'other',
-      new_filename: 'other',
-      chunks:
-      [
-        {
-          old_start_line:14,
-          deleted: [ 'CCC', 'DDD' ],
-          new_start_line:14,
-          added: [ 'EEE', 'FFF' ]
-        }
-      ]
-    }
-
     expected =
-    {
-      'lines' => expected_diff_1,
-      'other' => expected_diff_2
-    }
+    [
+      {
+        old_filename: 'lines',
+        new_filename: 'lines',
+        chunks:
+        [
+          {
+            old_start_line:1,
+            deleted: [ 'ddd' ],
+            new_start_line:1,
+            added: [ 'eee' ]
+          }
+        ]
+      },
+      {
+        old_filename: 'other',
+        new_filename: 'other',
+        chunks:
+        [
+          {
+            old_start_line:14,
+            deleted: [ 'CCC', 'DDD' ],
+            new_start_line:14,
+            added: [ 'EEE', 'FFF' ]
+          }
+        ]
+      }
+    ]
 
-    parser = GitDiffParser.new(lines)
-    my_assert_equal expected, parser.parse_all
+    my_assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -586,14 +563,15 @@ class GitDiffParserTest < DifferTestBase
     ].join("\n")
 
     expected =
-      [
-        {
-          old_start_line:17,
-          deleted: [ 'CCC','DDD' ],
-          new_start_line:17,
-          added: [ 'EEE','FFF' ]
-        }
-      ]
+    [
+      {
+        old_start_line:17,
+        deleted: [ 'CCC','DDD' ],
+        new_start_line:17,
+        added: [ 'EEE','FFF' ]
+      }
+    ]
+
     my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_all
   end
 
@@ -626,6 +604,7 @@ class GitDiffParserTest < DifferTestBase
         }
       ]
     }
+
     my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
@@ -645,6 +624,7 @@ class GitDiffParserTest < DifferTestBase
       '+++ b/diamond.h'
     ]
     all_lines = (lines + trailing).join("\n")
+
     my_assert_equal lines, GitDiffParser.new(all_lines).parse_prefix_lines
   end
 
@@ -686,6 +666,7 @@ class GitDiffParserTest < DifferTestBase
         }
       ]
     }
+
     my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
@@ -726,6 +707,7 @@ class GitDiffParserTest < DifferTestBase
         }
       ]
     }
+
     my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
@@ -766,6 +748,7 @@ class GitDiffParserTest < DifferTestBase
         }
       ]
     }
+
     my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
@@ -807,6 +790,7 @@ class GitDiffParserTest < DifferTestBase
         }
       ]
     }
+
     my_assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
@@ -832,35 +816,29 @@ class GitDiffParserTest < DifferTestBase
       '\\ No newline at end of file'
     ].join("\n")
 
-    expected_diff_1 =
-    {
-      old_filename: "hiker.h",
-      new_filename: "hiker.txt",
-      chunks: []
-    }
-    expected_diff_2 =
-    {
-       old_filename: 'wibble.c',
-       new_filename: 'wibble.c',
-       chunks:
-       [
-         {
-           old_start_line:1,
-           deleted: [],
-           new_start_line:1,
-           added: ['abc']
-         }
-       ]
-    }
+    expected =
+    [
+      {
+        old_filename: "hiker.h",
+        new_filename: "hiker.txt",
+        chunks: []
+      },
+      {
+         old_filename: 'wibble.c',
+         new_filename: 'wibble.c',
+         chunks:
+         [
+           {
+             old_start_line:1,
+             deleted: [],
+             new_start_line:1,
+             added: ['abc']
+           }
+         ]
+      }
+    ]
 
-    expected_diffs =
-    {
-      'hiker.txt' => expected_diff_1,
-      'wibble.c'  => expected_diff_2
-    }
-
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
-    my_assert_equal expected_diffs, actual_diffs
+    my_assert_equal expected, GitDiffParser.new(diff_lines).parse_all
   end
 
 end
