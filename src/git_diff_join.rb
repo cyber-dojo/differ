@@ -8,12 +8,11 @@ module GitDiffJoin # mix-in
 
   def git_diff_join(diff_lines, old_files, new_files)
     joined = {}
-    new_filenames = new_files.keys
+    filenames = new_files.keys
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |diff|
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
-      new_filenames.delete(new_filename)
       if deleted_file?(diff)
         old_lines = empty_file?(diff) ? [] : diff[:chunks][0][:deleted]
         joined[old_filename] = all(old_lines, :deleted)
@@ -24,10 +23,11 @@ module GitDiffJoin # mix-in
         old_lines = line_split(old_files[old_filename])
         joined[new_filename] = git_diff_join_builder(diff, old_lines)
       end
+      filenames.delete(new_filename)
     end
-    new_filenames.each do |new_filename|
-      new_lines = line_split(new_files[new_filename])
-      joined[new_filename] = all(new_lines, :same)
+    filenames.each do |unchanged_filename|
+      lines = line_split(new_files[unchanged_filename])
+      joined[unchanged_filename] = all(lines, :same)
     end
     joined
   end
