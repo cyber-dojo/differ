@@ -50,8 +50,8 @@ module GitDiffJoin # mix-in
   end
 
   def all(lines, type)
-    lines.collect.each_with_index do |line, number|
-      { line: line, type: type, number: number + 1 }
+    lines.collect.each_with_index do |line, index|
+      { line:line, type:type, number:index+1 }
     end
   end
 

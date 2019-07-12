@@ -14,28 +14,23 @@ module GitDiffJoinBuilder # mix-in
   def git_diff_join_builder(diff, old_lines, new_lines)
 
     diff[:chunks].each_with_index do |chunk,chunk_index|
-      section = [
-        { :type => :section, :index => chunk_index }
-      ]
+      section = [ { type: :section, index: chunk_index } ]
       o = chunk[:old][:start_line] # 1-based
-      chunk[:deleted].each_with_index do |line,index|
-        line_number = o + index
-        old_lines[line_number-1] = nil
-        section << { number:line_number, type: :deleted, line:line }
+      chunk[:deleted].each.with_index(o) do |line,number|
+        old_lines[number-1] = nil
+        section << { number:number, :type => :deleted, line:line }
       end
       n = chunk[:new][:start_line] # 1-based
-      chunk[:added].each_with_index do |line,index|
-        line_number = n + index
-        line = new_lines[line_number-1]
-        section << { number:line_number, type: :added, line:line }
+      chunk[:added].each.with_index(n) do |line,number|
+        section << { number:number, :type => :added, line:line }
       end
       old_lines[o-1] = section
     end
 
     result = []
-    old_lines.each_with_index do |entry,index|
+    old_lines.each.with_index(1) do |entry,index|
       if entry.is_a?(String)
-        result += [ { number:index+1, type: :same, line:entry } ]
+        result += [ { number:index, type: :same, line:entry } ]
       elsif entry.is_a?(Array)
         result += entry
       end
