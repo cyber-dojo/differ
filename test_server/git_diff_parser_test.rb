@@ -547,7 +547,7 @@ class GitDiffParserTest < DifferTestBase
       added: [ 'BBB' ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_one
+    my_assert_equal expected, GitDiffParser.new(lines).parse_chunk
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -572,7 +572,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_chunk_all
+    my_assert_equal expected, GitDiffParser.new(lines).parse_chunks
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -

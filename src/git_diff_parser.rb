@@ -21,21 +21,19 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_one
-    prefix_lines = parse_prefix_lines
-    old_filename,new_filename = parse_old_new_filenames(prefix_lines)
-    chunks = parse_chunk_all
+    old_filename,new_filename = parse_old_new_filenames(parse_prefix_lines)
     {
       new_filename: new_filename,
       old_filename: old_filename,
-            chunks: chunks
+            chunks: parse_chunks
     }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_chunk_all
+  def parse_chunks
     chunks = []
-    while chunk = parse_chunk_one
+    while chunk = parse_chunk
       chunks << chunk
     end
     chunks
@@ -43,7 +41,7 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_chunk_one
+  def parse_chunk
     if range = parse_range
       parse_section(range)
     end
@@ -74,7 +72,6 @@ class GitDiffParser
   def parse_prefix_lines
     line0 = line
     next_line
-
     lines = []
     while (!line.nil?) &&             # still more lines
           (line !~ /^diff --git/) &&  # not in next file
