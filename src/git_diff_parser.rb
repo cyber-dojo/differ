@@ -14,8 +14,8 @@ class GitDiffParser
     all = {}
     while /^diff --git/.match(line) do
       one = parse_one
-      name = one[:now_filename] || one[:was_filename]
-      all[name] = one
+      filename = one[:new_filename] || one[:old_filename]
+      all[filename] = one
     end
     all
   end
@@ -24,11 +24,11 @@ class GitDiffParser
 
   def parse_one
     prefix_lines = parse_prefix_lines
-    was_filename,now_filename = parse_was_now_filenames(prefix_lines)
+    old_filename,new_filename = parse_old_new_filenames(prefix_lines)
     chunks = parse_chunk_all
     {
-      was_filename: was_filename,
-      now_filename: now_filename,
+      new_filename: new_filename,
+      old_filename: old_filename,
             chunks: chunks
     }
   end
@@ -63,7 +63,7 @@ class GitDiffParser
       now = { start_line: range[3].to_i,
                     size: size_or_default(range[4])
             }
-      { was: was, now: now }
+      { old: was, new: now }
     end
   end
 
@@ -102,36 +102,37 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_was_now_filenames(prefix)
+  def parse_old_new_filenames(prefix)
     next_line if %r|^\-\-\- (.*)|.match(line)
     next_line if %r|^\+\+\+ (.*)|.match(line)
-    was,now = get_was_now_filenames(prefix[0])
-    now = nil if prefix[1].start_with?('deleted file mode')
-    was = nil if prefix[1].start_with?('new file mode')
-    [was, now]
+    old_filename,new_filename = old_new_filenames(prefix[0])
+    new_filename = nil if prefix[1].start_with?('deleted file mode')
+    old_filename = nil if prefix[1].start_with?('new file mode')
+    [old_filename, new_filename]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def get_was_now_filenames(first_line)
-    return was_now_match(:uf, :uf, first_line) ||
-           was_now_match(:uf, :qf, first_line) ||
-           was_now_match(:qf, :qf, first_line) ||
-           was_now_match(:qf, :uf, first_line)
+  def old_new_filenames(first_line)
+    return old_new_filename_match(:uf, :uf, first_line) ||
+           old_new_filename_match(:uf, :qf, first_line) ||
+           old_new_filename_match(:qf, :qf, first_line) ||
+           old_new_filename_match(:qf, :uf, first_line)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def was_now_match(was, now, first_line)
-    filename = {
-      :qf => '("(\\"|[^"])+")', # quoted,   eg "b/emb ed\"ed.h"
-      :uf => '([^ ]*)',         # unquoted, eg a/plain
-    }
-    md = %r[^diff --git #{filename[was]} #{filename[now]}$].match(first_line)
+  FILENAME_REGEXS = {
+    :qf => '("(\\"|[^"])+")', # quoted-filename,   eg "b/emb ed\"ed.h"
+    :uf => '([^ ]*)',         # unquoted-filename, eg a/plain
+  }
+
+  def old_new_filename_match(q1, q2, first_line)
+    md = %r[^diff --git #{FILENAME_REGEXS[q1]} #{FILENAME_REGEXS[q2]}$].match(first_line)
     return nil if md.nil?
-    was_index = 1
-    now_index = (was === :uf) ? 2 : 3
-    return [ unescaped(md[was_index]), unescaped(md[now_index]) ]
+    old_index = 1
+    new_index = (q1 === :uf) ? 2 : 3
+    return [ unescaped(md[old_index]), unescaped(md[new_index]) ]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -19,149 +19,149 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D5F',
-  'parse was & now filenames with space in both filenames' do
+  'parse old & new filenames with space in both filenames' do
     prefix = [
        'diff --git "a/e mpty.h" "b/e mpty.h"',
        'index 0000000..e69de29'
     ]
-    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal 'e mpty.h', was_filename, 'was_filename'
-    my_assert_equal 'e mpty.h', now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal 'e mpty.h', old_filename, :old_filename
+    my_assert_equal 'e mpty.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1B5',
-  'parse was & now filenames with double-quote and space in both filenames' do
+  'parse old & new filenames with double-quote and space in both filenames' do
     # double-quote " is a legal character in a linux filename
     prefix = [
        'diff --git "a/li n\"ux" "b/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal "li n\"ux", was_filename, 'was_filename'
-    my_assert_equal "em bed\"ded", now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal "li n\"ux",    old_filename, :old_filename
+    my_assert_equal "em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '50A',
-  'parse was & now filenames with double-quote and space only in now filename' do
+  'parse old & new filenames with double-quote and space only in now filename' do
     # git diff only double quotes filenames if it has to
     prefix = [
        'diff --git a/plain "b/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal 'plain', was_filename, 'was_filename'
-    my_assert_equal "em bed\"ded", now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal 'plain',       old_filename, :was_filename
+    my_assert_equal "em bed\"ded", new_filename, :now_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D8',
-  'parse was & now filenames with double-quote and space only in was filename' do
+  'parse old & new filenames with double-quote and space only in was filename' do
     # double-quote " is a legal character in a linux filename
     prefix = [
        'diff --git "a/emb ed\"ded" b/plain',
        'index 0000000..e69de29'
     ]
-    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal "emb ed\"ded", was_filename, 'was_filename'
-    my_assert_equal 'plain', now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal "emb ed\"ded", old_filename, :was_filename
+    my_assert_equal 'plain',       new_filename, :now_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',
-  'now_filename is nil for for deleted file' do
+  'new_filename is nil for for deleted file' do
     prefix = [
       'diff --git a/Deleted.java b/Deleted.java',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal 'Deleted.java', was_filename, 'was_filename'
-    assert_nil now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal 'Deleted.java', old_filename, :old_filename
+    assert_nil new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2A9',
-  'was_filename is nil for new file' do
+  'old_filename is nil for new file' do
     prefix = [
        'diff --git a/empty.h b/empty.h',
        'new file mode 100644',
        'index 0000000..e69de29'
     ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_nil was_filename, 'was_filename'
-    my_assert_equal 'empty.h', now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    assert_nil old_filename, :old_filename
+    my_assert_equal 'empty.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A90',
-  'parse was & now filenames for renamed file' do
+  'parse old & new filenames for renamed file' do
     diff_lines = [
       'diff --git a/old_name.h "b/new \"name.h"',
       'similarity index 100%',
       'rename from old_name.h',
       'rename to new_name.h'
     ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    my_assert_equal 'old_name.h', was_filename, 'was_filename'
-    my_assert_equal "new \"name.h", now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(diff_lines)
+    my_assert_equal 'old_name.h',   old_filename, :old_filename
+    my_assert_equal "new \"name.h", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD7',
-  'parse was & now filenames for new file in nested sub-dir' do
+  'parse old & new filenames for new file in nested sub-dir' do
     prefix = [
        'diff --git a/1/2/3/empty.h b/1/2/3/empty.h',
        'new file mode 100644',
        'index 0000000..e69de29'
     ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    assert_nil was_filename, 'was_filename'
-    my_assert_equal '1/2/3/empty.h', now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    assert_nil old_filename, :old_filename
+    my_assert_equal '1/2/3/empty.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD8',
-  'parse was & now filenames for renamed file in nested sub-dir' do
+  'parse old & new filenames for renamed file in nested sub-dir' do
     diff_lines = [
       'diff --git a/1/2/3/old_name.h b/1/2/3/new_name.h',
       'similarity index 100%',
       'rename from 1/2/3/old_name.h',
       'rename to 1/2/3/new_name.h'
     ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    my_assert_equal '1/2/3/old_name.h', was_filename, 'was_filename'
-    my_assert_equal '1/2/3/new_name.h', now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(diff_lines)
+    my_assert_equal '1/2/3/old_name.h', old_filename, :old_filename
+    my_assert_equal '1/2/3/new_name.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD9',
-  'parse was & now filenames for renamed file across nested sub-dir' do
+  'parse old & new filenames for renamed file across nested sub-dir' do
     diff_lines = [
       'diff --git a/1/2/3/old_name.h b/4/5/6/new_name.h',
       'similarity index 100%',
       'rename from 1/2/3/old_name.h',
       'rename to 4/5/6/new_name.h'
     ]
-    was_filename, now_filename = GitDiffParser.new('').parse_was_now_filenames(diff_lines)
-    my_assert_equal '1/2/3/old_name.h', was_filename, 'was_filename'
-    my_assert_equal '4/5/6/new_name.h', now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(diff_lines)
+    my_assert_equal '1/2/3/old_name.h', old_filename, :old_filename
+    my_assert_equal '4/5/6/new_name.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD0', %w(
-    parse was & now nested sub-dir filenames
+    parse old & new nested sub-dir filenames
     with double-quote and space in both filenames
   ) do
     # double-quote " is a legal character in a linux filename
@@ -169,15 +169,15 @@ class GitDiffParserTest < DifferTestBase
        'diff --git "a/s/d/f/li n\"ux" "b/u/i/o/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal "s/d/f/li n\"ux", was_filename, 'was_filename'
-    my_assert_equal "u/i/o/em bed\"ded", now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal "s/d/f/li n\"ux",    old_filename, :old_filename
+    my_assert_equal "u/i/o/em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD1', %w(
-    parse was & now nested sub-dir filenames
+    parse old & new nested sub-dir filenames
     with double-quote and space in both filenames
     and where first sub-dir is 'a' or 'b' which could clash
     with git-diff output which uses a/ and b/
@@ -187,9 +187,9 @@ class GitDiffParserTest < DifferTestBase
        'diff --git "a/a/d/f/li n\"ux" "b/b/u/i/o/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    was_filename,now_filename = GitDiffParser.new('').parse_was_now_filenames(prefix)
-    my_assert_equal "a/d/f/li n\"ux", was_filename, 'was_filename'
-    my_assert_equal "b/u/i/o/em bed\"ded", now_filename, 'now_filename'
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    my_assert_equal "a/d/f/li n\"ux",      old_filename, :old_filename
+    my_assert_equal "b/u/i/o/em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -213,13 +213,13 @@ class GitDiffParserTest < DifferTestBase
     {
       '\\was_newfile_FIU' => # <-- single backslash
       {
-        was_filename: '\\was_newfile_FIU', # <-- single backslash
-        now_filename: nil,
+        old_filename: '\\was_newfile_FIU', # <-- single backslash
+        new_filename: nil,
         chunks:
         [
           {
-            now: { start_line:0, size:0 },
-            was: { start_line:1, size:1 },
+            old: { start_line:1, size:1 },
+            new: { start_line:0, size:0 },
             deleted_lines: [ 'Please rename me!' ],
             added_lines: []
           }
@@ -246,8 +246,8 @@ class GitDiffParserTest < DifferTestBase
     {
       'original' =>
       {
-        was_filename: 'original',
-        now_filename: nil,
+        old_filename: 'original',
+        new_filename: nil,
         chunks: []
       }
     }
@@ -277,13 +277,13 @@ class GitDiffParserTest < DifferTestBase
     {
       'untitled.rb' =>
       {
-        was_filename: 'untitled.rb',
-        now_filename: nil,
+        old_filename: 'untitled.rb',
+        new_filename: nil,
         chunks:
         [
           {
-            was: { start_line:1, size:3 },
-            now: { start_line:0, size:0 },
+            old: { start_line:1, size:3 },
+            new: { start_line:0, size:0 },
             deleted_lines: [ 'def answer', '  42', 'end'],
             added_lines: []
           }
@@ -311,8 +311,8 @@ class GitDiffParserTest < DifferTestBase
     {
       '\\was_newfile_FIU' => # <-- single backslash
       {
-        was_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
-        now_filename: '\\was_newfile_FIU',      # <-- single backslash
+        old_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
+        new_filename: '\\was_newfile_FIU',      # <-- single backslash
         chunks: []
       }
     }
@@ -337,8 +337,8 @@ class GitDiffParserTest < DifferTestBase
     {
       'newname' =>
       {
-        was_filename: 'oldname',
-        now_filename: 'newname',
+        old_filename: 'oldname',
+        new_filename: 'newname',
         chunks: []
       }
     }
@@ -367,13 +367,13 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff =
     {
-      was_filename: 'instructions',
-      now_filename: 'instructions_new',
+      old_filename: 'instructions',
+      new_filename: 'instructions_new',
       chunks:
       [
         {
-          was: { start_line:6, size:1 },
-          now: { start_line:6, size:1 },
+          old: { start_line:6, size:1 },
+          new: { start_line:6, size:1 },
           deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
           added_lines: [ 'obir obri oibr oirb orbi oribx' ]
         }
@@ -412,13 +412,13 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-      was_filename: 'lines',
-      now_filename: 'lines',
+      old_filename: 'lines',
+      new_filename: 'lines',
       chunks:
       [
         {
-          was: { start_line:1, size:1 },
-          now: { start_line:1, size:1 },
+          old: { start_line:1, size:1 },
+          new: { start_line:1, size:1 },
           deleted_lines: [ 'ddd' ],
           added_lines: [ 'eee' ]
         }
@@ -427,13 +427,13 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_2 =
     {
-      was_filename: 'other',
-      now_filename: 'other',
+      old_filename: 'other',
+      new_filename: 'other',
       chunks:
       [
         {
-          was: { start_line:14, size:2 },
-          now: { start_line:14, size:2 },
+          old: { start_line:14, size:2 },
+          new: { start_line:14, size:2 },
           deleted_lines: [ 'CCC', 'DDD' ],
           added_lines: [ 'EEE', 'FFF' ]
         }
@@ -455,12 +455,12 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D56',
-  'parse range was-size and now-size defaulted' do
+  'parse range old-size and new-size defaulted' do
     lines = '@@ -3 +5 @@'
     expected =
     {
-      was: { start_line:3, size:1 },
-      now: { start_line:5, size:1 },
+      old: { start_line:3, size:1 },
+      new: { start_line:5, size:1 },
     }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -468,12 +468,12 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AAA',
-  'parse range was-size defaulted' do
+  'parse range old-size defaulted' do
     lines = '@@ -3 +5,9 @@'
     expected =
     {
-      was: { start_line:3, size:1 },
-      now: { start_line:5, size:9 },
+      old: { start_line:3, size:1 },
+      new: { start_line:5, size:9 },
     }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -481,12 +481,12 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '787',
-  'parse range now-size defaulted' do
+  'parse range new-size defaulted' do
     lines = '@@ -3,4 +5 @@'
     expected =
     {
-      was: { start_line:3, size:4 },
-      now: { start_line:5, size:1 },
+      old: { start_line:3, size:4 },
+      new: { start_line:5, size:1 },
     }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -498,8 +498,8 @@ class GitDiffParserTest < DifferTestBase
     lines = '@@ -3,4 +5,6 @@'
     expected =
     {
-      was: { start_line:3, size:4 },
-      now: { start_line:5, size:6 },
+      old: { start_line:3, size:4 },
+      new: { start_line:5, size:6 },
     }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
@@ -546,19 +546,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was_filename: 'lines',
-      now_filename: 'lines',
+      old_filename: 'lines',
+      new_filename: 'lines',
       chunks:
       [
         {
-          was: { start_line:3, size:1 },
-          now: { start_line:3, size:1 },
+          old: { start_line:3, size:1 },
+          new: { start_line:3, size:1 },
           deleted_lines: [ 'BBB' ],
           added_lines: [ 'CCC' ]
         },
         {
-          was: { start_line:8, size:1 },
-          now: { start_line:8, size:1 },
+          old: { start_line:8, size:1 },
+          new: { start_line:8, size:1 },
           deleted_lines: [ 'SSS' ],
           added_lines: [ 'TTT' ]
         }
@@ -580,8 +580,8 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was: { start_line:4, size:1 },
-      now: { start_line:4, size:1 },
+      old: { start_line:4, size:1 },
+      new: { start_line:4, size:1 },
       deleted_lines: [ 'AAA' ],
       added_lines: [ 'BBB' ]
     }
@@ -604,8 +604,8 @@ class GitDiffParserTest < DifferTestBase
     expected =
       [
         {
-          was: { start_line:17, size:2 },
-          now: { start_line:17, size:2 },
+          old: { start_line:17, size:2 },
+          new: { start_line:17, size:2 },
           deleted_lines: [ 'CCC','DDD' ],
           added_lines: [ 'EEE','FFF' ]
         }
@@ -630,13 +630,13 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was_filename: 'gapper.rb',
-      now_filename: 'gapper.rb',
+      old_filename: 'gapper.rb',
+      new_filename: 'gapper.rb',
       chunks:
       [
         {
-          was: { start_line:4, size:1 },
-          now: { start_line:4, size:2 },
+          old: { start_line:4, size:1 },
+          new: { start_line:4, size:2 },
           deleted_lines: [ 'XXX' ],
           added_lines: [ 'YYY', 'ZZZ' ]
         }
@@ -684,19 +684,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was_filename: 'test_gapper.rb',
-      now_filename: 'test_gapper.rb',
+      old_filename: 'test_gapper.rb',
+      new_filename: 'test_gapper.rb',
       chunks:
       [
         {
-          was: { start_line:9, size:1 },
-          now: { start_line:9, size:1 },
+          old: { start_line:9, size:1 },
+          new: { start_line:9, size:1 },
           deleted_lines: [ 'p Timw.now' ],
           added_lines: [ 'p Time.now' ]
         },
         {
-          was: { start_line:19, size:1 },
-          now: { start_line:19, size:1 },
+          old: { start_line:19, size:1 },
+          new: { start_line:19, size:1 },
           deleted_lines: [ 'q Timw.now' ],
           added_lines: [ 'q Time.now' ]
         }
@@ -724,19 +724,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was_filename: 'lines',
-      now_filename: 'lines',
+      old_filename: 'lines',
+      new_filename: 'lines',
       chunks:
       [
         {
-          was: { start_line:5, size:1 },
-          now: { start_line:5, size:1 },
+          old: { start_line:5, size:1 },
+          new: { start_line:5, size:1 },
           deleted_lines: [ 'DDD' ],
           added_lines: [ 'EEE' ]
         },
         {
-          was: { start_line:9, size:1 },
-          now: { start_line:9, size:1 },
+          old: { start_line:9, size:1 },
+          new: { start_line:9, size:1 },
           deleted_lines: [ 'GGG' ],
           added_lines: [ 'HHH' ]
         }
@@ -764,19 +764,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was_filename: 'lines',
-      now_filename: 'lines',
+      old_filename: 'lines',
+      new_filename: 'lines',
       chunks:
       [
         {
-          was: { start_line:5, size:1 },
-          now: { start_line:5, size:1 },
+          old: { start_line:5, size:1 },
+          new: { start_line:5, size:1 },
           deleted_lines: [ 'DDD' ],
           added_lines: [ 'EEE' ]
         },
         {
-          was: { start_line:7, size:1 },
-          now: { start_line:7, size:1 },
+          old: { start_line:7, size:1 },
+          new: { start_line:7, size:1 },
           deleted_lines: [ 'HHH' ],
           added_lines: [ 'JJJ' ]
         }
@@ -805,19 +805,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-       was_filename: 'lines',
-       now_filename: 'lines',
+       old_filename: 'lines',
+       new_filename: 'lines',
        chunks:
        [
          {
-           was: { start_line:5, size:1 },
-           now: { start_line:5, size:1 },
+           old: { start_line:5, size:1 },
+           new: { start_line:5, size:1 },
            deleted_lines: [ 'DDD' ],
            added_lines: [ 'EEE' ]
          },
          {
-           was: { start_line:13, size:1 },
-           now: { start_line:13, size:1 },
+           old: { start_line:13, size:1 },
+           new: { start_line:13, size:1 },
            deleted_lines: [ 'TTT' ],
            added_lines: [ 'UUU' ]
         }
@@ -857,13 +857,13 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      was_filename: 'sandbox/CircularBufferTest.cpp',
-      now_filename: 'sandbox/CircularBufferTest.cpp',
+      old_filename: 'sandbox/CircularBufferTest.cpp',
+      new_filename: 'sandbox/CircularBufferTest.cpp',
       chunks:
       [
         {
-          was: { start_line:35, size:3 },
-          now: { start_line:35, size:8 },
+          old: { start_line:35, size:3 },
+          new: { start_line:35, size:8 },
           deleted_lines: [],
           added_lines:
           [
@@ -904,19 +904,19 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-      was_filename: "hiker.h",
-      now_filename: "hiker.txt",
+      old_filename: "hiker.h",
+      new_filename: "hiker.txt",
       chunks: []
     }
     expected_diff_2 =
     {
-       was_filename: 'wibble.c',
-       now_filename: 'wibble.c',
+       old_filename: 'wibble.c',
+       new_filename: 'wibble.c',
        chunks:
        [
          {
-           was: { start_line:1, size:2 },
-           now: { start_line:1, size:3 },
+           old: { start_line:1, size:2 },
+           new: { start_line:1, size:3 },
            deleted_lines: [],
            added_lines: ['abc']
          }

@@ -11,7 +11,7 @@ module GitDiffJoinBuilder # mix-in
 
   module_function
 
-  def git_diff_join_builder(diff, now_lines)
+  def git_diff_join_builder(diff, was_lines, now_lines)
     join = []
     line_number = 1
     from = 0

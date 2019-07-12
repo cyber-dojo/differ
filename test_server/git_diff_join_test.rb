@@ -248,7 +248,7 @@ class GitDiffJoinTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D0',
-  'existing file is changed' do
+  'existing non-empty file is changed' do
     # Note use of -n in the echoes. This is to get the \\No newline at end of file
     # $ git init
     # $ echo -n 'something' > non-empty.c

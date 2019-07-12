@@ -38,7 +38,7 @@ class DifferTestBase < HexMiniTest
     if lhs != rhs
       temp_file(:expected, lhs) do |lhs_filename|
         temp_file(:actual, rhs) do |rhs_filename|
-          puts message unless message.nil?
+          puts message.to_s unless message.nil?
           puts `diff #{lhs_filename} #{rhs_filename}`
         end
       end
