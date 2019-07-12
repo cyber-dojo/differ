@@ -78,11 +78,19 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_old_new_filenames(prefix)
-    next_line if %r|^\-\-\- (.*)|.match(line)
-    next_line if %r|^\+\+\+ (.*)|.match(line)
+    if %r|^\-\-\- (.*)|.match(line)
+      next_line
+    end
+    if %r|^\+\+\+ (.*)|.match(line)
+      next_line
+    end
     old_filename,new_filename = old_new_filenames(prefix[0])
-    new_filename = nil if prefix[1].start_with?('deleted file mode')
-    old_filename = nil if prefix[1].start_with?('new file mode')
+    if prefix[1].start_with?('deleted file mode')
+      new_filename = nil
+    end
+    if prefix[1].start_with?('new file mode')
+      old_filename = nil
+    end
     [old_filename, new_filename]
   end
 
@@ -104,9 +112,15 @@ class GitDiffParser
 
   def old_new_filename_match(q1, q2, first_line)
     md = %r[^diff --git #{FILENAME_REGEXS[q1]} #{FILENAME_REGEXS[q2]}$].match(first_line)
-    return nil if md.nil?
+    if md.nil?
+      return nil
+    end
     old_index = 1
-    new_index = (q1 === :uf) ? 2 : 3
+    if q1 === :uf
+      new_index = 2
+    else
+      new_index = 3
+    end
     [ unescaped(md[old_index]), unescaped(md[new_index]) ]
   end
 
@@ -115,7 +129,9 @@ class GitDiffParser
   def unescaped(filename)
     # filename[1..-2] to lose the opening and closing "
     # then unescape without using eval
-    filename = unescape(filename[1..-2]) if filename[0].chr === '"'
+    if filename[0].chr === '"'
+      filename = unescape(filename[1..-2])
+    end
     # drop leading a/ or b/
     filename[2..-1]
     # Note: there is a [git diff] option --no-prefix which removes
@@ -152,7 +168,9 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_newline_at_eof
-    next_line if /^\\ No newline at end of file/.match(line)
+    if /^\\ No newline at end of file/.match(line)
+      next_line
+    end
   end
 
   private

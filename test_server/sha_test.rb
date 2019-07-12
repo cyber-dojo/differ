@@ -16,7 +16,7 @@ class ShaTest < DifferTestBase
   end
 
   private
-  
+
   def sha
     differ.sha
   end
