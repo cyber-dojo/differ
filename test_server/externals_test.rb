@@ -11,6 +11,13 @@ class ExternalsTest < DifferTestBase
     assert_equal 'ExternalDiskWriter', disk.class.name
   end
 
+  test '921',
+  'alternate disk can be substitited' do
+    externals.disk = 'hello'
+    assert_equal 'hello', externals.disk
+    assert_equal 'hello', disk
+  end
+
   # - - - - - - - - - - - - - - - - -
 
   test 'C8F',
@@ -23,6 +30,13 @@ class ExternalsTest < DifferTestBase
   test '1B1',
   'default shell is ExternalSheller' do
     assert_equal 'ExternalSheller', shell.class.name
+  end
+
+  test '1B2',
+  'alternate shell can be substituted' do
+    externals.shell = 'gday'
+    assert_equal 'gday', externals.shell
+    assert_equal 'gday', shell
   end
 
 end
