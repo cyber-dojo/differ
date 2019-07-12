@@ -13,16 +13,16 @@ module GitDiffJoinBuilder # mix-in
 
   def git_diff_join_builder(diff, old_lines)
 
-    diff[:chunks].each_with_index do |chunk,chunk_index|
-      section = [ { type: :section, index: chunk_index } ]
+    diff[:chunks].each.with_index do |chunk,index|
+      section = [ { :type => :section, index:index } ]
       old_start_line = chunk[:old_start_line] # 1-based
-      chunk[:deleted].each.with_index(old_start_line) do |line,number|
-        old_lines[number-1] = nil
-        section << { number:number, :type => :deleted, line:line }
+      chunk[:deleted].each.with_index(old_start_line) do |line,old_number|
+        old_lines[old_number-1] = nil
+        section << { :type => :deleted, line:line, number:old_number }
       end
       new_start_line = chunk[:new_start_line] # 1-based
-      chunk[:added].each.with_index(new_start_line) do |line,number|
-        section << { number:number, :type => :added, line:line }
+      chunk[:added].each.with_index(new_start_line) do |line,new_number|
+        section << { :type => :added, line:line, number:new_number }
       end
       old_lines[old_start_line-1] = section
     end
@@ -30,7 +30,7 @@ module GitDiffJoinBuilder # mix-in
     result = []
     old_lines.each.with_index(1) do |entry,index|
       if entry.is_a?(String)
-        result += [ { number:index, type: :same, line:entry } ]
+        result += [ { :type => :same, line:entry, number:index } ]
       elsif entry.is_a?(Array)
         result += entry
       end
