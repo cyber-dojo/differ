@@ -54,17 +54,11 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_range
-    re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
+    re = /^@@ -(\d+)(,\d+)? \+(\d+)(,\d+)? @@.*/
     if range = re.match(line)
       next_line
       { old_start_line:range[1].to_i, new_start_line:range[3].to_i }
     end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def size_or_default(size)
-    size ? size.to_i : 1
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -126,7 +120,7 @@ class GitDiffParser
     return nil if md.nil?
     old_index = 1
     new_index = (q1 === :uf) ? 2 : 3
-    return [ unescaped(md[old_index]), unescaped(md[new_index]) ]
+    [ unescaped(md[old_index]), unescaped(md[new_index]) ]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
