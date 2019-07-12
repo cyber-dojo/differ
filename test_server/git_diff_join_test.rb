@@ -181,6 +181,39 @@ class GitDiffJoinTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'AA6',
+  'empty file is copied' do
+    # $ touch plain
+    # $ git add . && git commit -m "1" && git tag 1 HEAD
+    # $ mv plain copy
+    # $ git add . && git commit -m "2" && git tag 2 HEAD
+    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
+    diff_lines =
+    [
+      'diff --git a/plain b/copy',
+      'similarity index 100%',
+      'rename from plain',
+      'rename to copy'
+    ].join("\n")
+
+    expected_diffs =
+    {
+      'copy' =>
+      {
+        was_filename: 'plain',
+        now_filename: 'copy',
+        chunks: []
+      }
+    }
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
+    my_assert_equal expected_diffs, actual_diffs
+
+    expected = { 'copy' => [] }
+    assert_join(expected, diff_lines, visible_files = {})
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'AA7',
   'non-empty file is copied' do
     # $ echo xxx > plain
