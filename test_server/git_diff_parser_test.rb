@@ -211,12 +211,6 @@ class GitDiffParserTest < DifferTestBase
     {
       '\\was_newfile_FIU' => # <-- single backslash
       {
-        prefix_lines:
-        [
-            'diff --git "a/\\\\was_newfile_FIU" "b/\\\\was_newfile_FIU"',
-            'deleted file mode 100644',
-            'index 21984c7..0000000',
-        ],
         was_filename: '\\was_newfile_FIU', # <-- single backslash
         now_filename: nil,
         chunks:
@@ -258,12 +252,6 @@ class GitDiffParserTest < DifferTestBase
     {
       'original' =>
       {
-        prefix_lines:
-        [
-            'diff --git a/original b/original',
-            'deleted file mode 100644',
-            'index e69de29..0000000',
-        ],
         was_filename: 'original',
         now_filename: nil,
         chunks: []
@@ -295,12 +283,6 @@ class GitDiffParserTest < DifferTestBase
     {
       'untitled.rb' =>
       {
-        prefix_lines:
-        [
-            'diff --git a/untitled.rb b/untitled.rb',
-            'deleted file mode 100644',
-            'index 5c4b3ab..0000000',
-        ],
         was_filename: 'untitled.rb',
         now_filename: nil,
         chunks:
@@ -343,13 +325,6 @@ class GitDiffParserTest < DifferTestBase
     {
       '\\was_newfile_FIU' => # <-- single backslash
       {
-        prefix_lines:
-        [
-            'diff --git "a/was_\\\\wa s_newfile_FIU" "b/\\\\was_newfile_FIU"',
-            'similarity index 100%',
-            'rename from "was_\\\\wa s_newfile_FIU"',
-            'rename to "\\\\was_newfile_FIU"',
-        ],
         was_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
         now_filename: '\\was_newfile_FIU',      # <-- single backslash
         chunks: []
@@ -376,13 +351,6 @@ class GitDiffParserTest < DifferTestBase
     {
       'newname' =>
       {
-        prefix_lines:
-        [
-            'diff --git a/oldname b/newname',
-            'similarity index 100%',
-            'rename from oldname',
-            'rename to newname',
-        ],
         was_filename: 'oldname',
         now_filename: 'newname',
         chunks: []
@@ -413,33 +381,25 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff =
     {
-        prefix_lines:
-          [
-            'diff --git a/instructions b/instructions_new',
-            'similarity index 87%',
-            'rename from instructions',
-            'rename to instructions_new',
-            'index e747436..83ec100 100644'
-          ],
-          was_filename: 'instructions',
-          now_filename: 'instructions_new',
-          chunks:
+      was_filename: 'instructions',
+      now_filename: 'instructions_new',
+      chunks:
+      [
+        {
+          range:
+          {
+            was: { start_line:6, size:1 },
+            now: { start_line:6, size:1 },
+          },
+          sections:
           [
             {
-              range:
-              {
-                was: { start_line:6, size:1 },
-                now: { start_line:6, size:1 },
-              },
-              sections:
-              [
-                {
-                  deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
-                  added_lines: [ 'obir obri oibr oirb orbi oribx' ]
-                } # section
-              ] # sections
-            } # chunk
-          ] # chunks
+              deleted_lines: [ 'obir obri oibr oirb orbi orib' ],
+              added_lines: [ 'obir obri oibr oirb orbi oribx' ]
+            } # section
+          ] # sections
+        } # chunk
+      ] # chunks
     }
 
     expected = { 'instructions_new' => expected_diff }
@@ -474,11 +434,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-        prefix_lines:
-          [
-            'diff --git a/lines b/lines',
-            'index 896ddd8..2c8d1b8 100644'
-          ],
         was_filename: 'lines',
         now_filename: 'lines',
         chunks:
@@ -502,11 +457,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_2 =
     {
-        prefix_lines:
-          [
-            'diff --git a/other b/other',
-            'index cf0389a..b28bf03 100644'
-          ],
         was_filename: 'other',
         now_filename: 'other',
         chunks:
@@ -634,11 +584,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        prefix_lines:
-          [
-            'diff --git a/lines b/lines',
-            'index b1a30d9..7fa9727 100644'
-          ],
         was_filename: 'lines',
         now_filename: 'lines',
         chunks:
@@ -754,11 +699,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      prefix_lines:
-      [
-        'diff --git a/gapper.rb b/gapper.rb',
-        'index 26bc41b..8a5b0b7 100644'
-      ],
       was_filename: 'gapper.rb',
       now_filename: 'gapper.rb',
       chunks:
@@ -820,11 +760,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        prefix_lines:
-          [
-            'diff --git a/test_gapper.rb b/test_gapper.rb',
-            'index 4d3ca1b..61e88f0 100644'
-          ],
         was_filename: 'test_gapper.rb',
         now_filename: 'test_gapper.rb',
         chunks:
@@ -880,11 +815,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        prefix_lines:
-          [
-            'diff --git a/lines b/lines',
-            'index 5ed4618..c47ec44 100644'
-          ],
         was_filename: 'lines',
         now_filename: 'lines',
         chunks:
@@ -941,11 +871,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        prefix_lines:
-          [
-            'diff --git a/lines b/lines',
-            'index 5ed4618..aad3f67 100644'
-          ],
         was_filename: 'lines',
         now_filename: 'lines',
         chunks:
@@ -1003,11 +928,6 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-        prefix_lines:
-          [
-            'diff --git a/lines b/lines',
-            'index 5ed4618..e78c888 100644'
-          ],
         was_filename: 'lines',
         now_filename: 'lines',
         chunks:
@@ -1136,24 +1056,12 @@ class GitDiffParserTest < DifferTestBase
 
     expected_diff_1 =
     {
-      prefix_lines:
-      [
-        'diff --git a/hiker.h b/hiker.txt',
-        'similarity index 100%',
-        'rename from hiker.h',
-        'rename to hiker.txt',
-      ],
       was_filename: "hiker.h",
       now_filename: "hiker.txt",
       chunks: []
     }
     expected_diff_2 =
     {
-      prefix_lines:
-      [
-        'diff --git a/wibble.c b/wibble.c',
-        'index eff4ff4..2ca787d 100644'
-      ],
       was_filename: 'wibble.c',
       now_filename: 'wibble.c',
       chunks:

@@ -27,7 +27,6 @@ class GitDiffParser
     was_filename,now_filename = parse_was_now_filenames(prefix_lines)
     chunks = parse_chunk_all
     {
-      prefix_lines: prefix_lines,
       was_filename: was_filename,
       now_filename: now_filename,
             chunks: chunks
