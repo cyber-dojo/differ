@@ -155,7 +155,7 @@ class GitDiffParser
     next_line if /^\\ No newline at end of file/.match(line)
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  private
 
   def line
     @lines[@n]
