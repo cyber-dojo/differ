@@ -218,9 +218,9 @@ class GitDiffParserTest < DifferTestBase
         chunks:
         [
           {
-            old: { start_line:1, size:1 },
-            new: { start_line:0, size:0 },
+            old_start_line:1,
             deleted: [ 'Please rename me!' ],
+            new_start_line:0,
             added: []
           }
         ]
@@ -282,9 +282,9 @@ class GitDiffParserTest < DifferTestBase
         chunks:
         [
           {
-            old: { start_line:1, size:3 },
-            new: { start_line:0, size:0 },
+            old_start_line:1,
             deleted: [ 'def answer', '  42', 'end'],
+            new_start_line:0,
             added: []
           }
         ]
@@ -372,9 +372,9 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:6, size:1 },
-          new: { start_line:6, size:1 },
+          old_start_line:6,
           deleted: [ 'obir obri oibr oirb orbi orib' ],
+          new_start_line:6,
           added: [ 'obir obri oibr oirb orbi oribx' ]
         }
       ]
@@ -417,9 +417,9 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:1, size:1 },
-          new: { start_line:1, size:1 },
+          old_start_line:1,
           deleted: [ 'ddd' ],
+          new_start_line:1,
           added: [ 'eee' ]
         }
       ]
@@ -432,9 +432,9 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:14, size:2 },
-          new: { start_line:14, size:2 },
+          old_start_line:14,
           deleted: [ 'CCC', 'DDD' ],
+          new_start_line:14,
           added: [ 'EEE', 'FFF' ]
         }
       ]
@@ -457,11 +457,7 @@ class GitDiffParserTest < DifferTestBase
   test 'D56',
   'parse range old-size and new-size defaulted' do
     lines = '@@ -3 +5 @@'
-    expected =
-    {
-      old: { start_line:3, size:1 },
-      new: { start_line:5, size:1 },
-    }
+    expected = { old_start_line:3, new_start_line:5 }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
@@ -470,11 +466,7 @@ class GitDiffParserTest < DifferTestBase
   test 'AAA',
   'parse range old-size defaulted' do
     lines = '@@ -3 +5,9 @@'
-    expected =
-    {
-      old: { start_line:3, size:1 },
-      new: { start_line:5, size:9 },
-    }
+    expected = { old_start_line:3, new_start_line:5 }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
@@ -483,11 +475,7 @@ class GitDiffParserTest < DifferTestBase
   test '787',
   'parse range new-size defaulted' do
     lines = '@@ -3,4 +5 @@'
-    expected =
-    {
-      old: { start_line:3, size:4 },
-      new: { start_line:5, size:1 },
-    }
+    expected = { old_start_line:3, new_start_line:5 }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
@@ -496,11 +484,7 @@ class GitDiffParserTest < DifferTestBase
   test '64D',
   'parse range nothing defaulted' do
     lines = '@@ -3,4 +5,6 @@'
-    expected =
-    {
-      old: { start_line:3, size:4 },
-      new: { start_line:5, size:6 },
-    }
+    expected = { old_start_line:3, new_start_line:5 }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
@@ -551,15 +535,15 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:3, size:1 },
-          new: { start_line:3, size:1 },
+          old_start_line:3,
           deleted: [ 'BBB' ],
+          new_start_line:3,
           added: [ 'CCC' ]
         },
         {
-          old: { start_line:8, size:1 },
-          new: { start_line:8, size:1 },
+          old_start_line:8,
           deleted: [ 'SSS' ],
+          new_start_line:8,
           added: [ 'TTT' ]
         }
       ]
@@ -580,9 +564,9 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
-      old: { start_line:4, size:1 },
-      new: { start_line:4, size:1 },
+      old_start_line:4,
       deleted: [ 'AAA' ],
+      new_start_line:4,
       added: [ 'BBB' ]
     }
 
@@ -604,9 +588,9 @@ class GitDiffParserTest < DifferTestBase
     expected =
       [
         {
-          old: { start_line:17, size:2 },
-          new: { start_line:17, size:2 },
+          old_start_line:17,
           deleted: [ 'CCC','DDD' ],
+          new_start_line:17,
           added: [ 'EEE','FFF' ]
         }
       ]
@@ -635,9 +619,9 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:4, size:1 },
-          new: { start_line:4, size:2 },
+          old_start_line:4,
           deleted: [ 'XXX' ],
+          new_start_line:4,
           added: [ 'YYY', 'ZZZ' ]
         }
       ]
@@ -689,15 +673,15 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:9, size:1 },
-          new: { start_line:9, size:1 },
+          old_start_line:9,
           deleted: [ 'p Timw.now' ],
+          new_start_line:9,
           added: [ 'p Time.now' ]
         },
         {
-          old: { start_line:19, size:1 },
-          new: { start_line:19, size:1 },
+          old_start_line:19,
           deleted: [ 'q Timw.now' ],
+          new_start_line:19,
           added: [ 'q Time.now' ]
         }
       ]
@@ -729,15 +713,15 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:5, size:1 },
-          new: { start_line:5, size:1 },
+          old_start_line:5,
           deleted: [ 'DDD' ],
+          new_start_line:5,
           added: [ 'EEE' ]
         },
         {
-          old: { start_line:9, size:1 },
-          new: { start_line:9, size:1 },
+          old_start_line:9,
           deleted: [ 'GGG' ],
+          new_start_line:9,
           added: [ 'HHH' ]
         }
       ]
@@ -769,15 +753,15 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:5, size:1 },
-          new: { start_line:5, size:1 },
+          old_start_line:5,
           deleted: [ 'DDD' ],
+          new_start_line:5,
           added: [ 'EEE' ]
         },
         {
-          old: { start_line:7, size:1 },
-          new: { start_line:7, size:1 },
+          old_start_line:7,
           deleted: [ 'HHH' ],
+          new_start_line:7,
           added: [ 'JJJ' ]
         }
       ]
@@ -810,15 +794,15 @@ class GitDiffParserTest < DifferTestBase
        chunks:
        [
          {
-           old: { start_line:5, size:1 },
-           new: { start_line:5, size:1 },
+           old_start_line:5,
            deleted: [ 'DDD' ],
+           new_start_line:5,
            added: [ 'EEE' ]
          },
          {
-           old: { start_line:13, size:1 },
-           new: { start_line:13, size:1 },
+           old_start_line:13,
            deleted: [ 'TTT' ],
+           new_start_line:13,
            added: [ 'UUU' ]
         }
       ]
@@ -862,9 +846,9 @@ class GitDiffParserTest < DifferTestBase
       chunks:
       [
         {
-          old: { start_line:35, size:3 },
-          new: { start_line:35, size:8 },
+          old_start_line:35,
           deleted: [],
+          new_start_line:35,
           added:
           [
             '',
@@ -915,9 +899,9 @@ class GitDiffParserTest < DifferTestBase
        chunks:
        [
          {
-           old: { start_line:1, size:2 },
-           new: { start_line:1, size:3 },
+           old_start_line:1,
            deleted: [],
+           new_start_line:1,
            added: ['abc']
          }
        ]

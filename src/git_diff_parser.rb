@@ -57,13 +57,7 @@ class GitDiffParser
     re = /^@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@.*/
     if range = re.match(line)
       next_line
-      was = { start_line: range[1].to_i,
-                    size: size_or_default(range[2])
-            }
-      now = { start_line: range[3].to_i,
-                    size: size_or_default(range[4])
-            }
-      { old: was, new: now }
+      { old_start_line:range[1].to_i, new_start_line:range[3].to_i }
     end
   end
 

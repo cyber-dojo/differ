@@ -7,6 +7,8 @@ class GitDiffJoinTest < DifferTestBase
     '74C'
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'A5C',
   'empty file is deleted' do
     # $ git init
@@ -76,9 +78,9 @@ class GitDiffJoinTest < DifferTestBase
         chunks:
         [
           {
-            old: { start_line:1, size:1 },
-            new: { start_line:0, size:0 },
+            old_start_line:1,
             deleted: [ 'something' ],
+            new_start_line:0,
             added: [],
           }
         ]
@@ -170,9 +172,9 @@ class GitDiffJoinTest < DifferTestBase
         chunks:
         [
           {
-            old: { start_line:0, size:0 },
-            new: { start_line:1, size:1 },
+            old_start_line:0,
             deleted: [],
+            new_start_line:1,
             added: [ 'something' ],
           }
         ]
@@ -315,9 +317,9 @@ class GitDiffJoinTest < DifferTestBase
         chunks:
         [
           {
-            old: { start_line:1, size:1 },
-            new: { start_line:1, size:1 },
+            old_start_line:1,
             deleted: [ 'something' ],
+            new_start_line:1,
             added: [ 'something changed' ],
           }
         ]

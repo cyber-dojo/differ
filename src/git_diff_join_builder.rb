@@ -15,16 +15,16 @@ module GitDiffJoinBuilder # mix-in
 
     diff[:chunks].each_with_index do |chunk,chunk_index|
       section = [ { type: :section, index: chunk_index } ]
-      o = chunk[:old][:start_line] # 1-based
-      chunk[:deleted].each.with_index(o) do |line,number|
+      old_start_line = chunk[:old_start_line] # 1-based
+      chunk[:deleted].each.with_index(old_start_line) do |line,number|
         old_lines[number-1] = nil
         section << { number:number, :type => :deleted, line:line }
       end
-      n = chunk[:new][:start_line] # 1-based
-      chunk[:added].each.with_index(n) do |line,number|
+      new_start_line = chunk[:new_start_line] # 1-based
+      chunk[:added].each.with_index(new_start_line) do |line,number|
         section << { number:number, :type => :added, line:line }
       end
-      old_lines[o-1] = section
+      old_lines[old_start_line-1] = section
     end
 
     result = []
