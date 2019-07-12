@@ -8,29 +8,26 @@ module GitDiffJoin # mix-in
 
   def git_diff_join(diff_lines, old_files, new_files)
     join = {}
-    filenames = new_files.keys
+    new_filenames = new_files.keys
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |diff|
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
-      if new_file?(diff)
-        new_lines = empty_file?(diff) ? [] : diff[:chunks][0][:added]
-        join[new_filename] = all(new_lines, :added)
-      elsif deleted_file?(diff)
+      if deleted_file?(diff)
         old_lines = empty_file?(diff) ? [] : diff[:chunks][0][:deleted]
         join[old_filename] = all(old_lines, :deleted)
-      else
-        old_file = old_files[old_filename]
-        old_lines = line_split(old_file)
-        new_file = new_files[new_filename]
-        new_lines = line_split(new_file)
-        join[new_filename] = git_diff_join_builder(diff, old_lines, new_lines)
+      elsif new_file?(diff)
+        new_lines = empty_file?(diff) ? [] : diff[:chunks][0][:added]
+        join[new_filename] = all(new_lines, :added)
+      else # changed-file
+        old_lines = line_split(old_files[old_filename])
+        join[new_filename] = git_diff_join_builder(diff, old_lines)
       end
-      filenames.delete(new_filename)
+      new_filenames.delete(new_filename)
     end
-    filenames.each do |filename|
-      lines = line_split(new_files[filename])
-      join[filename] = all(lines, :same)
+    new_filenames.each do |new_filename|
+      new_lines = line_split(new_files[new_filename])
+      join[new_filename] = all(new_lines, :same)
     end
     join
   end

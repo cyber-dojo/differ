@@ -11,7 +11,7 @@ module GitDiffJoinBuilder # mix-in
 
   module_function
 
-  def git_diff_join_builder(diff, old_lines, new_lines)
+  def git_diff_join_builder(diff, old_lines)
 
     diff[:chunks].each_with_index do |chunk,chunk_index|
       section = [ { type: :section, index: chunk_index } ]
