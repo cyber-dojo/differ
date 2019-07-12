@@ -10,8 +10,8 @@ class LineSplitterTest < DifferTestBase
   include LineSplitter
 
   test 'CCA',
-  'splitting nil is an empty array' do
-    assert_line_split [], nil
+  'splitting nil raises' do
+    assert_raises { line_split(nil) }
   end
 
   #- - - - - - - - - - - - - - - -

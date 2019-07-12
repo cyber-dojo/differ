@@ -4,9 +4,7 @@ module LineSplitter # mix-in
   module_function
 
   def line_split(source)
-    if source.nil?
-      []
-    elsif source === ''
+    if source === ''
       ['']
     else
       lines = source.split(/\n/, -1)
