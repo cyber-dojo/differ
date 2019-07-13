@@ -48,9 +48,7 @@ class ExternalGitter
       "#{m}",
       '--'     # specifies to git that n,m are revisions and not filenames
     ].join(space)
-    o = shell.assert_cd_exec(path, "git diff #{options}")
-    #o.split("\n").each{|line| p line}
-    o
+    shell.assert_cd_exec(path, "git diff #{options}")
   end
 
   private
