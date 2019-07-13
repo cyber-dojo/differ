@@ -214,7 +214,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: '\\was_newfile_FIU', # <-- single backslash
         new_filename: nil,
-        chunks:
+        hunks:
         [
           {
             old_start_line:1,
@@ -244,7 +244,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'original',
         new_filename: nil,
-        chunks: []
+        hunks: []
       }
     ]
 
@@ -272,7 +272,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'untitled.rb',
         new_filename: nil,
-        chunks:
+        hunks:
         [
           {
             old_start_line:1,
@@ -303,7 +303,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
         new_filename: '\\was_newfile_FIU',      # <-- single backslash
-        chunks: []
+        hunks: []
       }
     ]
 
@@ -326,7 +326,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'oldname',
         new_filename: 'newname',
-        chunks: []
+        hunks: []
       }
     ]
 
@@ -355,7 +355,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'instructions',
         new_filename: 'instructions_new',
-        chunks:
+        hunks:
         [
           {
             old_start_line:6,
@@ -399,7 +399,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'lines',
         new_filename: 'lines',
-        chunks:
+        hunks:
         [
           {
             old_start_line:1,
@@ -412,7 +412,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'other',
         new_filename: 'other',
-        chunks:
+        hunks:
         [
           {
             old_start_line:14,
@@ -509,7 +509,7 @@ class GitDiffParserTest < DifferTestBase
     {
       old_filename: 'lines',
       new_filename: 'lines',
-      chunks:
+      hunks:
       [
         {
           old_start_line:3,
@@ -547,7 +547,7 @@ class GitDiffParserTest < DifferTestBase
       added: [ 'BBB' ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_chunk
+    my_assert_equal expected, GitDiffParser.new(lines).parse_hunk
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -572,7 +572,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_chunks
+    my_assert_equal expected, GitDiffParser.new(lines).parse_hunks
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -594,7 +594,7 @@ class GitDiffParserTest < DifferTestBase
     {
       old_filename: 'gapper.rb',
       new_filename: 'gapper.rb',
-      chunks:
+      hunks:
       [
         {
           old_start_line:4,
@@ -650,7 +650,7 @@ class GitDiffParserTest < DifferTestBase
     {
       old_filename: 'test_gapper.rb',
       new_filename: 'test_gapper.rb',
-      chunks:
+      hunks:
       [
         {
           old_start_line:9,
@@ -691,7 +691,7 @@ class GitDiffParserTest < DifferTestBase
     {
       old_filename: 'lines',
       new_filename: 'lines',
-      chunks:
+      hunks:
       [
         {
           old_start_line:5,
@@ -732,7 +732,7 @@ class GitDiffParserTest < DifferTestBase
     {
       old_filename: 'lines',
       new_filename: 'lines',
-      chunks:
+      hunks:
       [
         {
           old_start_line:5,
@@ -774,7 +774,7 @@ class GitDiffParserTest < DifferTestBase
     {
        old_filename: 'lines',
        new_filename: 'lines',
-       chunks:
+       hunks:
        [
          {
            old_start_line:5,
@@ -821,12 +821,12 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: "hiker.h",
         new_filename: "hiker.txt",
-        chunks: []
+        hunks: []
       },
       {
          old_filename: 'wibble.c',
          new_filename: 'wibble.c',
-         chunks:
+         hunks:
          [
            {
              old_start_line:1,

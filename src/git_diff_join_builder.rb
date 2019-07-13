@@ -8,22 +8,22 @@
 # old_lines: an array containing the old content of the diffed file.
 #
 # Notes:
-# o) a diff's chunk range specifies line-numbers which are 1-based
+# o) a diff's hunk range specifies line numbers which are 1-based
 # o) the array of lines is 0-based
-# o) git_diff_join_builder() mutates the old_lines argument
+# o) git_diff_join_builder() mutates its old_lines argument
 
 module GitDiffJoinBuilder
 
   module_function
 
   def git_diff_join_builder(diff, old_lines)
-    diff[:chunks].each.with_index do |chunk,index|
-      old_start_line = chunk[:old_start_line]
-      new_start_line = chunk[:new_start_line]
+    diff[:hunks].each.with_index do |hunk,index|
+      old_start_line = hunk[:old_start_line]
+      new_start_line = hunk[:new_start_line]
       section = [ { :type => :section, index:index } ]
-      section += lines(old_start_line, chunk, :deleted)
-      section += lines(new_start_line, chunk, :added)
-      set_nil(old_lines, old_start_line-1, chunk[:deleted].size)
+      section += lines(old_start_line, hunk, :deleted)
+      section += lines(new_start_line, hunk, :added)
+      set_nil(old_lines, old_start_line-1, hunk[:deleted].size)
       old_lines[old_start_line-1] = section
     end
     result = []
@@ -44,8 +44,8 @@ module GitDiffJoinBuilder
     line_numbers.each { |line_number| old_lines[line_number] = nil }
   end
 
-  def lines(start_line, chunk, symbol)
-    chunk[symbol].collect.with_index(start_line) do |line,number|
+  def lines(start_line, hunk, symbol)
+    hunk[symbol].collect.with_index(start_line) do |line,number|
       { type:symbol, line:line, number:number }
     end
   end

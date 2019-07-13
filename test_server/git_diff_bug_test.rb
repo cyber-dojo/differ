@@ -28,7 +28,7 @@ class GitDiffBugTest < DifferTestBase
       {
           old_filename: 'recently_used_list.cpp',
           new_filename: 'was_recently_used_list.test.cpp',
-          chunks: []
+          hunks: []
       }
     ]
     assert_equal expected, diff

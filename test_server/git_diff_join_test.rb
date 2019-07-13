@@ -32,7 +32,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: 'empty.rb',
         new_filename: nil,
-        chunks: []
+        hunks: []
       }
     ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
@@ -73,7 +73,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: 'non-empty.h',
         new_filename: nil,
-        chunks:
+        hunks:
         [
           {
             old_start_line:1,
@@ -126,7 +126,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: nil,
         new_filename: 'empty.h',
-        chunks: []
+        hunks: []
       }
     ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
@@ -165,7 +165,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: nil,
         new_filename: 'non-empty.c',
-        chunks:
+        hunks:
         [
           {
             old_start_line:0,
@@ -214,7 +214,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: 'plain',
         new_filename: 'copy',
-        chunks: []
+        hunks: []
       }
     ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
@@ -259,7 +259,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: 'plain',
         new_filename: 'copy',
-        chunks: []
+        hunks: []
       }
     ]
     actual_diffs = GitDiffParser.new(diff_lines).parse_all
@@ -310,7 +310,7 @@ class GitDiffJoinTest < DifferTestBase
       {
         old_filename: 'non-empty.c',
         new_filename: 'non-empty.c',
-        chunks:
+        hunks:
         [
           {
             old_start_line:1,

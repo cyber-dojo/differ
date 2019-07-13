@@ -25,23 +25,23 @@ class GitDiffParser
     {
       new_filename: new_filename,
       old_filename: old_filename,
-            chunks: parse_chunks
+             hunks: parse_hunks
     }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_chunks
-    chunks = []
-    while chunk = parse_chunk
-      chunks << chunk
+  def parse_hunks
+    hunks = []
+    while hunk = parse_hunk
+      hunks << hunk
     end
-    chunks
+    hunks
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_chunk
+  def parse_hunk
     if range = parse_range
       range[:deleted] = parse_lines(/^\-(.*)/)
       range[:added  ] = parse_lines(/^\+(.*)/)

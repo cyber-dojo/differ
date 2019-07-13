@@ -14,10 +14,10 @@ module GitDiffJoin # mix-in
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
       if deleted_file?(diff)
-        old_lines = empty_file?(diff) ? [] : diff[:chunks][0][:deleted]
+        old_lines = empty_file?(diff) ? [] : diff[:hunks][0][:deleted]
         joined[old_filename] = all(old_lines, :deleted)
       elsif new_file?(diff)
-        new_lines = empty_file?(diff) ? [] : diff[:chunks][0][:added]
+        new_lines = empty_file?(diff) ? [] : diff[:hunks][0][:added]
         joined[new_filename] = all(new_lines, :added)
       else # changed-file
         old_lines = line_split(old_files[old_filename])
@@ -43,7 +43,7 @@ module GitDiffJoin # mix-in
   end
 
   def empty_file?(diff)
-    diff[:chunks] === []
+    diff[:hunks] === []
   end
 
   def all(lines, type)
