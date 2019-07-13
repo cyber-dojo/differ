@@ -68,14 +68,18 @@ class GitDiffParser
     line0 = line
     next_line
     lines = []
-    while (!line.nil?) &&             # still more lines
-          (line !~ /^diff --git/) &&  # not in next file
-          (line !~ /^[-]/) &&         # not in --- filename
-          (line !~ /^[+]/)            # not in +++ filename
+    while header?(line)
       lines << line
       next_line
     end
     [line0] + lines
+  end
+
+  def header?(line)
+    (!line.nil?) &&             # still more lines
+    (line !~ /^diff --git/) &&  # not in next file
+    (line !~ /^[-]/) &&         # not in --- filename
+    (line !~ /^[+]/)            # not in +++ filename
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
