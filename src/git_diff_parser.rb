@@ -11,7 +11,7 @@ class GitDiffParser
     @n = 0
   end
 
-  attr_reader :lines, :n
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_all
     all = []
@@ -58,7 +58,9 @@ class GitDiffParser
     re = /^@@ -(\d+)(,\d+)? \+(\d+)(,\d+)? @@.*/
     if range = re.match(line)
       next_line
-      { old_start_line:range[1].to_i, new_start_line:range[3].to_i }
+      { old_start_line:range[1].to_i,
+        new_start_line:range[3].to_i
+      }
     end
   end
 
@@ -73,13 +75,6 @@ class GitDiffParser
       next_line
     end
     [line0] + lines
-  end
-
-  def header?(line)
-    (!line.nil?) &&             # still more lines
-    (line !~ /^diff --git/) &&  # not in next file
-    (line !~ /^[-]/) &&         # not in --- filename
-    (line !~ /^[+]/)            # not in +++ filename
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -99,6 +94,15 @@ class GitDiffParser
       old_filename = nil
     end
     [old_filename, new_filename]
+  end
+
+  private
+
+  def header?(line)
+    (!line.nil?) &&             # still more lines
+    (line !~ /^diff --git/) &&  # not in next file
+    (line !~ /^[-]/) &&         # not in --- filename
+    (line !~ /^[+]/)            # not in +++ filename
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -189,7 +193,7 @@ class GitDiffParser
     end
   end
 
-  private
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def line
     @lines[@n]
@@ -220,19 +224,17 @@ end
 #  A hunk begins with range information. The range information
 #  is surrounded by double-at signs.
 #    So in this example its @@ -4,7 +15,8 @@
-#  The hunk range information contains at most two hunk ranges.
+#  The hunk range information contains two hunk ranges.
 #  @@ -4,7 +15,8 is for added lines (-4,7) and deleted lines (+5,8)
-#  @@ -4,7 @@ is for deleted lines only.
-#  @@ +15,8 @@ is for added lines only.
 #
 #  Each hunk range is of the format L,S where
 #  L is the starting line number and
-#  S is the number of lines the change chunk applies to.
+#  S is the number of lines the change hunk applies to.
 #
 #  For -deleted lines, L,S refers to the original file.
 #  For   +added lines, L,S refers to the new file.
 #
-#  The ,S is optional and if missing indicates a chunk size of 1.
+#  The ,S is optional and if missing indicates a hunk size of 1.
 #  So -3 is the same as -3,1
 #  And -1 is the same as -1,1
 #  And -3 +5 is the same as -3,1 +5,1

@@ -8,12 +8,6 @@ class GitDiffParserTest < DifferTestBase
     'B56'
   end
 
-  test '42B',
-  'lines are split' do
-    lines = [ 'a', 'b' ]
-    my_assert_equal lines, GitDiffParser.new(lines.join("\n")).lines
-  end
-
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_old_new_filenames()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -463,28 +457,6 @@ class GitDiffParserTest < DifferTestBase
     lines = '@@ -3,4 +5,6 @@'
     expected = { old_start_line:3, new_start_line:5 }
     my_assert_equal expected, GitDiffParser.new(lines).parse_range
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'A14',
-  'parse no-newline-at-eof without leading backslash' do
-    lines = ' No newline at eof'
-    parser = GitDiffParser.new(lines)
-    assert_equal 0, parser.n
-    parser.parse_newline_at_eof
-    my_assert_equal 0, parser.n
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '9B9',
-  'parse no-newline-at-eof with leading backslash' do
-    lines = '\\ No newline at end of file'
-    parser = GitDiffParser.new(lines)
-    assert_equal 0, parser.n
-    parser.parse_newline_at_eof
-    my_assert_equal 1, parser.n
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
