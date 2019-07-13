@@ -124,27 +124,36 @@ class GitDiffParser
     else
       new_index = 3
     end
-    [ unescaped(md[old_index]), unescaped(md[new_index]) ]
+    [ cleaned(md[old_index]), cleaned(md[new_index]) ]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def unescaped(filename)
-    # filename[1..-2] to lose the opening and closing "
-    # then unescape without using eval
-    if filename[0].chr === '"'
-      filename = unescape(filename[1..-2])
+  def cleaned(filename)
+    if quoted?(filename)
+      filename = unquoted(filename)
     end
-    # drop leading a/ or b/
-    filename[2..-1]
+    without_ab_prefix(unescaped(filename))
+  end
+
+  def quoted?(filename)
+    filename[0].chr === '"'
+  end
+
+  def unquoted(filename)
+    filename[1..-2]
+  end
+
+  def without_ab_prefix(filename)
+    # Drop leading a/ or b/
     # Note: there is a [git diff] option --no-prefix which removes
     # the leading a/ b/ from the output. Using that option would
     # require removing a/ b/ from a lot of test code.
+    filename[2..-1]
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def unescape(str)
+  def unescaped(str)
+    # Avoiding eval.
     # http://stackoverflow.com/questions/8639642/best-way-to-escape-and-unescape-strings-in-ruby
     unescapes = {
         "\\\\" => "\x5c",
