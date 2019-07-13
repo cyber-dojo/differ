@@ -1,6 +1,9 @@
 require_relative 'line_splitter'
 
 # Parses the output of 'git diff' command.
+# Assumes the --unified=0 option has been used
+# so there are no context lines.
+
 class GitDiffParser
 
   def initialize(diff_text)
@@ -21,7 +24,7 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_one
-    old_filename,new_filename = parse_old_new_filenames(parse_prefix_lines)
+    old_filename,new_filename = parse_old_new_filenames(parse_header)
     {
       new_filename: new_filename,
       old_filename: old_filename,
@@ -61,7 +64,7 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_prefix_lines
+  def parse_header
     line0 = line
     next_line
     lines = []
@@ -77,18 +80,18 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_old_new_filenames(prefix)
+  def parse_old_new_filenames(header)
     if %r|^\-\-\- (.*)|.match(line)
       next_line
     end
     if %r|^\+\+\+ (.*)|.match(line)
       next_line
     end
-    old_filename,new_filename = old_new_filenames(prefix[0])
-    if prefix[1].start_with?('deleted file mode')
+    old_filename,new_filename = old_new_filenames(header[0])
+    if header[1].start_with?('deleted file mode')
       new_filename = nil
     end
-    if prefix[1].start_with?('new file mode')
+    if header[1].start_with?('new file mode')
       old_filename = nil
     end
     [old_filename, new_filename]
@@ -200,19 +203,18 @@ end
 #
 # LINE: @@ -4,7 +4,8 @@ def time_gaps(from, to, seconds_per_gap)
 #
-#  Following this is a change chunk containing the line differences.
-#  A chunk begins with range information. The range information
+#  Following this is a change hunk containing the line differences.
+#  A hunk begins with range information. The range information
 #  is surrounded by double-at signs.
 #    So in this example its @@ -4,7 +15,8 @@
-#  The chunk range information contains at most two chunk ranges.
+#  The hunk range information contains at most two hunk ranges.
 #  @@ -4,7 +15,8 is for added lines (-4,7) and deleted lines (+5,8)
 #  @@ -4,7 @@ is for deleted lines only.
 #  @@ +15,8 @@ is for added lines only.
 #
-#  Each chunk range is of the format L,S where
+#  Each hunk range is of the format L,S where
 #  L is the starting line number and
-#  S is the number of lines the change chunk applies to for
-#  each respective file.
+#  S is the number of lines the change chunk applies to.
 #
 #  For -deleted lines, L,S refers to the original file.
 #  For   +added lines, L,S refers to the new file.
@@ -231,12 +233,8 @@ end
 #  as above. I wondered if the format of this was that the initial \
 #  means the line is a comment line and that there could be (are) other
 #  comments, but googling does not indicate this.
-#
-# http://www.artima.com/weblogs/viewpost.jsp?thread=164293
-# Is a blog entry by Guido van Rossum.
-# He says that in L,S the ,S can be omitted if the chunk size
-# S is 1. So -3 is the same as -3,1
-#
 #--------------------------------------------------------------
+# https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html#Detailed%20Unified
+# https://stackoverflow.com/questions/2529441
 # http://en.wikipedia.org/wiki/Diff
 # http://www.chemie.fu-berlin.de/chemnet/use/info/diff/diff_3.html

@@ -20,11 +20,11 @@ class GitDiffParserTest < DifferTestBase
 
   test 'D5F',
   'parse old & new filenames with space in both filenames' do
-    prefix = [
+    header = [
        'diff --git "a/e mpty.h" "b/e mpty.h"',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal 'e mpty.h', old_filename, :old_filename
     my_assert_equal 'e mpty.h', new_filename, :new_filename
   end
@@ -34,11 +34,11 @@ class GitDiffParserTest < DifferTestBase
   test '1B5',
   'parse old & new filenames with double-quote and space in both filenames' do
     # double-quote " is a legal character in a linux filename
-    prefix = [
+    header = [
        'diff --git "a/li n\"ux" "b/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal "li n\"ux",    old_filename, :old_filename
     my_assert_equal "em bed\"ded", new_filename, :new_filename
   end
@@ -48,11 +48,11 @@ class GitDiffParserTest < DifferTestBase
   test '50A',
   'parse old & new filenames with double-quote and space only in new-filename' do
     # git diff only double quotes filenames if it has to
-    prefix = [
+    header = [
        'diff --git a/plain "b/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal 'plain',       old_filename, :old_filename
     my_assert_equal "em bed\"ded", new_filename, :new_filename
   end
@@ -62,11 +62,11 @@ class GitDiffParserTest < DifferTestBase
   test '4D8',
   'parse old & new filenames with double-quote and space only in old-filename' do
     # double-quote " is a legal character in a linux filename
-    prefix = [
+    header = [
        'diff --git "a/emb ed\"ded" b/plain',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal "emb ed\"ded", old_filename, :old_filename
     my_assert_equal 'plain',       new_filename, :new_filename
   end
@@ -75,12 +75,12 @@ class GitDiffParserTest < DifferTestBase
 
   test '740',
   'new_filename is nil for for deleted file' do
-    prefix = [
+    header = [
       'diff --git a/Deleted.java b/Deleted.java',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal 'Deleted.java', old_filename, :old_filename
     assert_nil new_filename, :new_filename
   end
@@ -89,12 +89,12 @@ class GitDiffParserTest < DifferTestBase
 
   test '2A9',
   'old_filename is nil for new file' do
-    prefix = [
+    header = [
        'diff --git a/empty.h b/empty.h',
        'new file mode 100644',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     assert_nil old_filename, :old_filename
     my_assert_equal 'empty.h', new_filename, :new_filename
   end
@@ -118,12 +118,12 @@ class GitDiffParserTest < DifferTestBase
 
   test 'AD7',
   'parse old & new filenames for new file in nested sub-dir' do
-    prefix = [
+    header = [
        'diff --git a/1/2/3/empty.h b/1/2/3/empty.h',
        'new file mode 100644',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     assert_nil old_filename, :old_filename
     my_assert_equal '1/2/3/empty.h', new_filename, :new_filename
   end
@@ -165,11 +165,11 @@ class GitDiffParserTest < DifferTestBase
     with double-quote and space in both filenames
   ) do
     # double-quote " is a legal character in a linux filename
-    prefix = [
+    header = [
        'diff --git "a/s/d/f/li n\"ux" "b/u/i/o/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal "s/d/f/li n\"ux",    old_filename, :old_filename
     my_assert_equal "u/i/o/em bed\"ded", new_filename, :new_filename
   end
@@ -183,11 +183,11 @@ class GitDiffParserTest < DifferTestBase
     with git-diff output which uses a/ and b/
   ) do
     # double-quote " is a legal character in a linux filename
-    prefix = [
+    header = [
        'diff --git "a/a/d/f/li n\"ux" "b/b/u/i/o/em bed\"ded"',
        'index 0000000..e69de29'
     ]
-    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(prefix)
+    old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     my_assert_equal "a/d/f/li n\"ux",      old_filename, :old_filename
     my_assert_equal "b/u/i/o/em bed\"ded", new_filename, :new_filename
   end
@@ -625,7 +625,7 @@ class GitDiffParserTest < DifferTestBase
     ]
     all_lines = (lines + trailing).join("\n")
 
-    my_assert_equal lines, GitDiffParser.new(all_lines).parse_prefix_lines
+    my_assert_equal lines, GitDiffParser.new(all_lines).parse_header
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -799,7 +799,7 @@ class GitDiffParserTest < DifferTestBase
   test '124',%w(
     renamed but unchanged file has no trailing
     --- or +++ lines and must not consume diff
-    of following file as its prefix_lines
+    of following file as its header_lines
   ) do
 
     diff_lines = [
