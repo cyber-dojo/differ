@@ -10,23 +10,22 @@
 # Notes:
 # o) a diff's chunk range specifies line-numbers which are 1-based
 # o) the array of lines is 0-based
+# o) git_diff_join_builder() mutates the old_lines argument
 
 module GitDiffJoinBuilder
 
   module_function
 
   def git_diff_join_builder(diff, old_lines)
-
     diff[:chunks].each.with_index do |chunk,index|
       old_start_line = chunk[:old_start_line]
       new_start_line = chunk[:new_start_line]
-      set_nil(old_lines, old_start_line, chunk[:deleted].size)
       section = [ { :type => :section, index:index } ]
       section += lines(old_start_line, chunk, :deleted)
       section += lines(new_start_line, chunk, :added)
+      set_nil(old_lines, old_start_line-1, chunk[:deleted].size)
       old_lines[old_start_line-1] = section
     end
-
     result = []
     old_lines.each.with_index(1) do |entry,index|
       if entry.is_a?(String)
@@ -41,9 +40,8 @@ module GitDiffJoinBuilder
   private
 
   def set_nil(old_lines, start_line, size)
-    lo = start_line - 1
-    hi = lo + size
-    (lo...hi).each { |number| old_lines[number] = nil }
+    line_numbers = (start_line...start_line+size)
+    line_numbers.each { |line_number| old_lines[line_number] = nil }
   end
 
   def lines(start_line, chunk, symbol)
