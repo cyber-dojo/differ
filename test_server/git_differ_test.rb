@@ -422,7 +422,7 @@ class GitDifferTest < DifferTestBase
 
   test '6D7',
   'change in non-empty file shows as +added and -deleted lines',
-  'with each chunk in its own indexed section' do
+  'with each hunk in its own indexed section' do
     @was_files = {
       'diamond.h' =>
         [
@@ -474,7 +474,7 @@ class GitDifferTest < DifferTestBase
   test '6D8', %w(
     change in non-empty file in sub-dir
     shows as +added and -deleted lines
-    with each chunk in its own indexed section
+    with each hunk in its own indexed section
   ) do
     @was_files = {
       'p/diamond.h' =>

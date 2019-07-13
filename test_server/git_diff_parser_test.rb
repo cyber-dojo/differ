@@ -462,7 +462,7 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1BC',
-  'two chunks with no newline at end of file' do
+  'two hunks with no newline at end of file' do
     lines = [
       'diff --git a/lines b/lines',
       'index b1a30d9..7fa9727 100644',
@@ -504,7 +504,7 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B2C',
-  'diff one-chunk one-line' do
+  'diff one-hunk one-line' do
     lines = [
       '@@ -4,1 +4,1 @@',
       '-AAA',
@@ -525,7 +525,7 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E9F',
-  'diff one-chunk two-lines' do
+  'diff one-hunk two-lines' do
     lines = [
       '@@ -17,2 +17,2 @@',
       '-CCC',
@@ -603,7 +603,7 @@ class GitDiffParserTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'C10',
-  'diff two chunks' do
+  'diff two hunks' do
     lines = [
       'diff --git a/test_gapper.rb b/test_gapper.rb',
       'index 4d3ca1b..61e88f0 100644',
@@ -728,7 +728,7 @@ class GitDiffParserTest < DifferTestBase
 
   test '274',
   '7 unchanged lines between two changed lines',
-  'creates two chunks' do
+  'creates two hunks' do
     lines = [
       'diff --git a/lines b/lines',
       'index 5ed4618..e78c888 100644',

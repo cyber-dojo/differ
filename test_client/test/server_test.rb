@@ -233,7 +233,7 @@ class DifferAppTest < ClientTestBase
 
   test 'B9E',
   'changed non-empty file shows as deleted and added lines',
-  'with each chunk in its own indexed section' do
+  'with each hunk in its own indexed section' do
     @was_files = {
       'diamond.h' =>
         [
@@ -280,7 +280,7 @@ class DifferAppTest < ClientTestBase
 
   test 'B9F',
   'changed non-empty file in nested sub-dir shows as deleted and added lines',
-  'with each chunk in its own indexed section' do
+  'with each hunk in its own indexed section' do
     @was_files = {
       'a/b/c/diamond.h' =>
         [

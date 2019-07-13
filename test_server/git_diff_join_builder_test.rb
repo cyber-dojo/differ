@@ -10,7 +10,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   end
 
   test '2D7',
-  'chunk with a space in its filename' do
+  'hunk with a space in its filename' do
 
     @diff_lines =
     [
@@ -41,7 +41,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F3C',
-  'chunk with defaulted now line info' do
+  'hunk with defaulted now line info' do
 
     @diff_lines =
     [
@@ -71,7 +71,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F10',
-    'two chunks with leading and trailing',
+    'two hunks with leading and trailing',
     'same lines and no newline at eof' do
 
     @diff_lines =
@@ -143,7 +143,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   test '1C8',
     'diffs 7 lines apart are not merged',
-    'into contiguous sections in one chunk' do
+    'into contiguous sections in one hunk' do
 
     @diff_lines =
     [
@@ -201,7 +201,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test 'C58',
-    'one chunk with two sections',
+    'one hunk with two sections',
     'each with one line added and one line deleted' do
 
     @diff_lines =
@@ -252,7 +252,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test '56A',
-  'one chunk with one section with only lines added' do
+  'one hunk with one section with only lines added' do
 
     @diff_lines =
     [
@@ -307,7 +307,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test 'FA0',
-  'one chunk with one section with only lines deleted' do
+  'one hunk with one section with only lines deleted' do
     @diff_lines =
     [
       'diff --git a/lines b/lines',
@@ -352,7 +352,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test 'ED0',
-    'one chunk with one section',
+    'one hunk with one section',
     'with more lines deleted than added' do
 
     @diff_lines =
@@ -412,7 +412,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test 'CAD',
-    'one chunk with one section',
+    'one hunk with one section',
     'with more lines added than deleted' do
 
     @diff_lines =
@@ -477,7 +477,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test '951',
-    'one chunk with one section',
+    'one hunk with one section',
     'with one line deleted and one line added' do
 
     @diff_lines =
@@ -542,7 +542,6 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
-    #puts diff
     actual = git_diff_join_builder(diff, @source_lines)
     puts "@expected:#{@expected.class.name}:#{@expected}:"
     puts "   actual:#{actual.class.name}:#{actual}:"
