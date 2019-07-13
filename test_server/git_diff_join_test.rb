@@ -11,21 +11,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test 'A5C',
   'empty file is deleted' do
-    # $ git init
-    # $ touch empty.rb
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ rm empty.rb
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = { 'empty.rb' => '' }
     new_files = {}
-
-    diff_lines =
-    [
-      'diff --git a/empty.rb b/empty.rb',
-      'deleted file mode 100644',
-      'index e69de29..0000000'
-    ].join("\n")
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
 
     expected_diffs =
     [
@@ -35,11 +24,9 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected = { 'empty.rb' => [] }
-
     assert_join(expected, diff_lines, old_files, new_files)
   end
 
@@ -47,27 +34,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test '0C6',
   'non-empty file is deleted' do
-    # $ git init
-    # $ echo -n something > non-empty.h
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ rm non-empty.h
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = { 'non-empty.h' => 'something' }
     new_files = {}
-
-    diff_lines =
-    [
-      'diff --git a/non-empty.h b/non-empty.h',
-      'deleted file mode 100644',
-      'index a459bc2..0000000',
-      '--- a/non-empty.h',
-      '+++ /dev/null',
-      '@@ -1 +0,0 @@',
-      '-something',
-      '\\ No newline at end of file'
-    ].join("\n")
-
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     [
       {
@@ -84,7 +54,6 @@ class GitDiffJoinTest < DifferTestBase
         ]
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected =
@@ -98,7 +67,6 @@ class GitDiffJoinTest < DifferTestBase
         }
       ]
     }
-
     assert_join(expected, diff_lines, old_files, new_files)
   end
 
@@ -106,21 +74,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test 'A2C',
   'empty file is created' do
-    # $ git init
-    # $ echo x > dummy
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ touch empty.h
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = {}
     new_files = { 'empty.h' => '' }
-    diff_lines =
-    [
-      'diff --git a/empty.h b/empty.h',
-      'new file mode 100644',
-      'index 0000000..e69de29'
-    ].join("\n")
-
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     [
       {
@@ -129,7 +86,6 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected = { 'empty.h' => [] }
@@ -140,26 +96,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test 'D09',
   'non-empty file is created' do
-    # $ git init
-    # $ echo x > dummy
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ echo -n 'something' > non-empty.c
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = {}
     new_files = { 'non-empty.c' => 'something' }
-    diff_lines =
-    [
-      'diff --git a/non-empty.c b/non-empty.c',
-      'new file mode 100644',
-      'index 0000000..a459bc2',
-      '--- /dev/null',
-      '+++ b/non-empty.c',
-      '@@ -0,0 +1 @@',
-      '+something',
-      '\\ No newline at end of file'
-    ].join("\n")
-
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     [
       {
@@ -176,7 +116,6 @@ class GitDiffJoinTest < DifferTestBase
         ]
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected =
@@ -193,22 +132,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test 'AA6',
   'empty file is copied' do
-    # $ git init
-    # $ touch plain
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ mv plain copy
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = { 'plain' => '' }
     new_files = { 'copy'  => '' }
-    diff_lines =
-    [
-      'diff --git a/plain b/copy',
-      'similarity index 100%',
-      'rename from plain',
-      'rename to copy'
-    ].join("\n")
-
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     [
       {
@@ -217,7 +144,6 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected =
@@ -238,22 +164,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test 'AA7',
   'non-empty file is copied' do
-    # $ git init
-    # $ echo xxx > plain
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ mv plain copy
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = { 'plain' => 'xxx' }
     new_files = { 'copy' => 'xxx' }
-    diff_lines =
-    [
-      'diff --git a/plain b/copy',
-      'similarity index 100%',
-      'copy from plain',
-      'copy to copy'
-    ].join("\n")
-
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     [
       {
@@ -262,7 +176,6 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected =
@@ -283,28 +196,10 @@ class GitDiffJoinTest < DifferTestBase
 
   test '4D0',
   'existing non-empty file is changed' do
-    # Note use of -n in the echoes. This is to get the \\No newline at end of file
-    # $ git init
-    # $ echo -n 'something' > non-empty.c
-    # $ git add . && git commit -m "1" && git tag 1 HEAD
-    # $ echo -n 'something changed' > non-empty.c
-    # $ git add . && git commit -m "2" && git tag 2 HEAD
-    # $ git diff --unified=0 --ignore-space-at-eol --indent-heuristic 1 2 --
     old_files = { 'non-empty.c' => 'something' }
     new_files = { 'non-empty.c' => 'something changed' }
-    diff_lines =
-    [
-      'diff --git a/non-empty.c b/non-empty.c',
-      'index a459bc2..605f7ff 100644',
-      '--- a/non-empty.c',
-      '+++ b/non-empty.c',
-      '@@ -1 +1 @@',
-      '-something',
-      '\\ No newline at end of file',
-      '+something changed',
-      '\\ No newline at end of file',
-    ].join("\n")
-
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all     
     expected_diffs =
     [
       {
@@ -321,7 +216,6 @@ class GitDiffJoinTest < DifferTestBase
         ]
       }
     ]
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     my_assert_equal expected_diffs, actual_diffs
 
     expected =
@@ -340,13 +234,9 @@ class GitDiffJoinTest < DifferTestBase
 
   test '35C',
   'unchanged file' do
-    diff_lines = [].join("\n")
-    expected_diffs = []
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all
-    my_assert_equal expected_diffs, actual_diffs
-
     old_files = { 'wibble.txt' => 'content' }
     new_files = { 'wibble.txt' => 'content' }
+    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
     expected =
     {
       'wibble.txt' =>
