@@ -32,7 +32,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
     @expected =
     [
       section(0),
-      added_line('Please rename me!', 1),
+      added('Please rename me!', 1),
     ]
 
     assert_equal_builder
@@ -62,7 +62,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
     @expected =
     [
       section(0),
-      added_line('aaa', 1),
+      added('aaa', 1),
     ]
 
     assert_equal_builder
@@ -80,28 +80,19 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'index b1a30d9..7fa9727 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -1,5 +1,5 @@',
-      ' aaa',
+      '@@ -2,1 +2,1 @@',
       '-bbb',
       '+ccc',
-      ' ddd',
-      ' eee',
-      ' fff',
-      '@@ -8,6 +8,6 @@',
-      ' nnn',
-      ' ooo',
-      ' ppp',
+      '@@ -11,1 +11,1 @@',
       '-qqq',
       '+rrr',
-      ' sss',
-      ' ttt',
       '\\ No newline at end of file'
     ]
 
     @source_lines =
     [
       'aaa',
-      'ccc',
+      'bbb',
       'ddd',
       'eee',
       'fff',
@@ -110,30 +101,30 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'nnn',
       'ooo',
       'ppp',
-      'rrr',
+      'qqq',
       'sss',
       'ttt'
     ]
 
     @expected =
     [
-      same_line('aaa', 1),
+      same('aaa', 1),
       section(0),
-      deleted_line('bbb', 2),
-      added_line('ccc', 2),
-      same_line('ddd',  3),
-      same_line('eee',  4),
-      same_line('fff',  5),
-      same_line('ggg',  6),
-      same_line('hhh',  7),
-      same_line('nnn',  8),
-      same_line('ooo',  9),
-      same_line('ppp', 10),
+      deleted('bbb', 2),
+      added('ccc', 2),
+      same('ddd',  3),
+      same('eee',  4),
+      same('fff',  5),
+      same('ggg',  6),
+      same('hhh',  7),
+      same('nnn',  8),
+      same('ooo',  9),
+      same('ppp', 10),
       section(1),
-      deleted_line('qqq', 11),
-      added_line('rrr', 11),
-      same_line('sss', 12),
-      same_line('ttt', 13)
+      deleted('qqq', 11),
+      added('rrr', 11),
+      same('sss', 12),
+      same('ttt', 13)
     ]
 
     assert_equal_builder
@@ -142,8 +133,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - -
 
   test '1C8',
-    'diffs 7 lines apart are not merged',
-    'into contiguous sections in one hunk' do
+    'one hunk with deleted only lines, one hunk with added only lines' do
 
     @diff_lines =
     [
@@ -151,22 +141,17 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'index 0719398..2943489 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -1,4 +1,4 @@',
+      '@@ -1,2 +0,0 @@',
       '-aaa',
-      '+bbb',
-      ' ccc',
-      ' ddd',
-      ' eee',
-      '@@ -6,4 +6,4 @@',
-      ' ppp',
-      ' qqq',
-      ' rrr',
-      '-sss',
-      '+ttt'
+      '-bbb',
+      '@@ -0,0 +9,2 @@',
+      '+uuu',
+      '+vvv'
     ]
 
     @source_lines =
     [
+      'aaa',
       'bbb',
       'ccc',
       'ddd',
@@ -181,18 +166,19 @@ class GitDiffJoinBuilderTest < DifferTestBase
     @expected =
     [
       section(0),
-      deleted_line('aaa', 1),
-      added_line('bbb', 1),
-      same_line('ccc', 2),
-      same_line('ddd', 3),
-      same_line('eee', 4),
-      same_line('fff', 5),
-      same_line('ppp', 6),
-      same_line('qqq', 7),
-      same_line('rrr', 8),
+      deleted('aaa', 1),
+      deleted('bbb', 2),
+      same('ccc', 2),
+      same('ddd', 3),
+      same('eee', 4),
+      same('fff', 5),
+      same('ppp', 6),
+      same('qqq', 7),
+      same('rrr', 8),
+      same('ttt', 9),
       section(1),
-      deleted_line('sss', 9),
-      added_line('ttt', 9)
+      added('uuu', 8),
+      added('vvv', 9)
     ]
 
     assert_equal_builder
@@ -232,18 +218,18 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @expected =
     [
-      same_line('aaa', 1),
-      same_line('bbb', 2),
+      same('aaa', 1),
+      same('bbb', 2),
       section(0),
-      deleted_line('ccc', 3),
-      added_line('ddd', 3),
-      same_line('eee', 4),
+      deleted('ccc', 3),
+      added('ddd', 3),
+      same('eee', 4),
       section(1),
-      deleted_line('fff', 5),
-      added_line('ggg', 5),
-      same_line('hhh', 6),
-      same_line('iii', 7),
-      same_line('jjj', 8)
+      deleted('fff', 5),
+      added('ggg', 5),
+      same('hhh', 6),
+      same('iii', 7),
+      same('jjj', 8)
     ]
 
     assert_equal_builder
@@ -288,17 +274,17 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @expected =
     [
-      same_line('aaa', 1),
-      same_line('bbb', 2),
-      same_line('ccc', 3),
+      same('aaa', 1),
+      same('bbb', 2),
+      same('ccc', 3),
       section(0),
-      added_line('ddd', 4),
-      added_line('eee', 5),
-      added_line('fff', 6),
-      same_line('ggg', 7),
-      same_line('hhh', 8),
-      same_line('iii', 9),
-      same_line('jjj', 10)
+      added('ddd', 4),
+      added('eee', 5),
+      added('fff', 6),
+      same('ggg', 7),
+      same('hhh', 8),
+      same('iii', 9),
+      same('jjj', 10)
     ]
 
     assert_equal_builder
@@ -333,17 +319,17 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @expected =
     [
-      same_line('aaa', 1),
-      same_line('bbb', 2),
-      same_line('ccc', 3),
-      same_line('ddd', 4),
+      same('aaa', 1),
+      same('bbb', 2),
+      same('ccc', 3),
+      same('ddd', 4),
       section(0),
-      deleted_line('EEE', 5),
-      deleted_line('FFF', 6),
-      same_line('ggg', 5),
-      same_line('hhh', 6),
-      same_line('iii', 7),
-      same_line('jjj', 8)
+      deleted('EEE', 5),
+      deleted('FFF', 6),
+      same('ggg', 5),
+      same('hhh', 6),
+      same('iii', 7),
+      same('jjj', 8)
     ]
 
     assert_equal_builder
@@ -390,20 +376,20 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @expected =
     [
-      same_line('bbb', 1),
-      same_line('ccc', 2),
-      same_line('ddd', 3),
-      same_line('eee', 4),
-      same_line('fff', 5),
+      same('bbb', 1),
+      same('ccc', 2),
+      same('ddd', 3),
+      same('eee', 4),
+      same('fff', 5),
       section(0),
-      deleted_line('ggg', 6),
-      deleted_line('hhh', 7),
-      deleted_line('iii', 8),
-      added_line('jjj', 6),
-      same_line('kkk', 7),
-      same_line('lll', 8),
-      same_line('mmm', 9),
-      same_line('nnn', 10)
+      deleted('ggg', 6),
+      deleted('hhh', 7),
+      deleted('iii', 8),
+      added('jjj', 6),
+      same('kkk', 7),
+      same('lll', 8),
+      same('mmm', 9),
+      same('nnn', 10)
     ]
 
     assert_equal_builder
@@ -453,22 +439,22 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @expected =
     [
-      same_line('aaa', 1),
-      same_line('bbb', 2),
-      same_line('ccc', 3),
-      same_line('ddd', 4),
-      same_line('eee', 5),
+      same('aaa', 1),
+      same('bbb', 2),
+      same('ccc', 3),
+      same('ddd', 4),
+      same('eee', 5),
       section(0),
-      deleted_line('fff', 6),
-      added_line('XXX',6),
-      added_line('YYY',7),
-      same_line('ggg',   8),
-      same_line('hhh',   9),
-      same_line('iii',  10),
-      same_line('jjj', 11),
-      same_line('kkk', 12),
-      same_line('lll', 13),
-      same_line('mmm',14),
+      deleted('fff', 6),
+      added('XXX',6),
+      added('YYY',7),
+      same('ggg',   8),
+      same('hhh',   9),
+      same('iii',  10),
+      same('jjj', 11),
+      same('kkk', 12),
+      same('lll', 13),
+      same('mmm',14),
     ]
 
     assert_equal_builder
@@ -516,21 +502,21 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @expected =
     [
-      same_line('zz', 1),
-      same_line('yy', 2),
-      same_line('xx', 3),
-      same_line('ww', 4),
-      same_line('aaa', 5),
-      same_line('bbb', 6),
-      same_line('ccc', 7),
+      same('zz', 1),
+      same('yy', 2),
+      same('xx', 3),
+      same('ww', 4),
+      same('aaa', 5),
+      same('bbb', 6),
+      same('ccc', 7),
       section(0),
-      deleted_line('QQQ', 8),
-      added_line('RRR', 8),
-      same_line('ddd',   9),
-      same_line('eee', 10),
-      same_line('fff', 11),
-      same_line('ggg', 12),
-      same_line('hhh', 13)
+      deleted('QQQ', 8),
+      added('RRR', 8),
+      same('ddd',   9),
+      same('eee', 10),
+      same('fff', 11),
+      same('ggg', 12),
+      same('hhh', 13)
     ]
 
     assert_equal_builder
@@ -543,31 +529,31 @@ class GitDiffJoinBuilderTest < DifferTestBase
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
     actual = git_diff_join_builder(diff, @source_lines)
-    puts "@expected:#{@expected.class.name}:#{@expected}:"
-    puts "   actual:#{actual.class.name}:#{actual}:"
+    #puts "@expected:#{@expected.class.name}:#{@expected}:"
+    #puts "   actual:#{actual.class.name}:#{actual}:"
     assert_equal @expected, actual, "sdsdsd"
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  def same_line(text, number)
-    line(text, :same, number)
-  end
-
-  def deleted_line(text, number)
-    line(text, :deleted, number)
-  end
-
-  def added_line(text, number)
-    line(text, :added, number)
-  end
-
-  def line(text, type, number)
-    { :line => text, :type => type, :number => number }
-  end
-
   def section(index)
-    { :type => :section, :index => index }
+    { :type => :section, index:index }
+  end
+
+  def same(line, number)
+    src(:same, line, number)
+  end
+
+  def deleted(line, number)
+    src(:deleted, line, number)
+  end
+
+  def added(line, number)
+    src(:added, line, number)
+  end
+
+  def src(type, line, number)
+    { type:type, line:line, number:number }
   end
 
 end
