@@ -12,31 +12,31 @@ class GitDiffer
       user_name = 'differ'
       user_email = user_name + '@cyber-dojo.org'
       git.setup(git_dir, user_name, user_email)
-
-      old_tag = 0
-      save(git_dir, old_files)
-      git.add(git_dir, '.')
-      git.commit(git_dir, old_tag)
-
-      Dir.mktmpdir(id, '/tmp') do |tmp_dir|
-        shell.assert_exec(
-          "mv #{git_dir}/.git #{tmp_dir}",
-          "rm -rf #{git_dir}",
-          "mkdir -p #{git_dir}",
-          "mv #{tmp_dir}/.git #{git_dir}"
-        )
-      end
-
-      new_tag = 1
-      save(git_dir, new_files)
-      git.add(git_dir, '.')
-      git.commit(git_dir, new_tag)
-
+      add_and_commit(git_dir, old_files, old_tag = 0)
+      remove_content_from(git_dir, id)
+      add_and_commit(git_dir, new_files, new_tag = 1)
       git.diff(git_dir, old_tag, new_tag)
     end
   end
 
   private
+
+  def add_and_commit(git_dir, files, tag)
+    save(git_dir, files)
+    git.add(git_dir, '.')
+    git.commit(git_dir, tag)
+  end
+
+  def remove_content_from(git_dir, id)
+    Dir.mktmpdir(id, '/tmp') do |tmp_dir|
+      shell.assert_exec(
+        "mv #{git_dir}/.git #{tmp_dir}",
+        "rm -rf #{git_dir}",
+        "mkdir -p #{git_dir}",
+        "mv #{tmp_dir}/.git #{git_dir}"
+      )
+    end
+  end
 
   def save(dir_name, files)
     files.each do |pathed_filename, content|
