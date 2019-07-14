@@ -26,7 +26,6 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @source_lines =
     [
-      'Please rename me!'
     ]
 
     @expected =
@@ -56,7 +55,6 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @source_lines =
     [
-      'aaa'
     ]
 
     @expected =
@@ -132,8 +130,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '1C8',
-    'one hunk with deleted only lines, one hunk with added only lines' do
+  test '1C8', %w(
+  two hunks,
+  one with deleted only lines from top
+  one with added only lines at the end ) do
 
     @diff_lines =
     [
@@ -144,7 +144,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
       '@@ -1,2 +0,0 @@',
       '-aaa',
       '-bbb',
-      '@@ -0,0 +9,2 @@',
+      '@@ -10,0 +9,2 @@',
       '+uuu',
       '+vvv'
     ]
@@ -160,7 +160,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'ppp',
       'qqq',
       'rrr',
-      'ttt'
+      'ttt',
     ]
 
     @expected =
@@ -168,17 +168,17 @@ class GitDiffJoinBuilderTest < DifferTestBase
       section(0),
       deleted('aaa', 1),
       deleted('bbb', 2),
-      same('ccc', 2),
-      same('ddd', 3),
-      same('eee', 4),
-      same('fff', 5),
-      same('ppp', 6),
-      same('qqq', 7),
-      same('rrr', 8),
-      same('ttt', 9),
+      same('ccc', 1),
+      same('ddd', 2),
+      same('eee', 3),
+      same('fff', 4),
+      same('ppp', 5),
+      same('qqq', 6),
+      same('rrr', 7),
+      same('ttt', 8),
       section(1),
-      added('uuu', 8),
-      added('vvv', 9)
+      added('uuu', 9),
+      added('vvv', 10)
     ]
 
     assert_equal_builder
@@ -246,16 +246,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'index 06e567b..59e88aa 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -1,6 +1,9 @@',
-      ' aaa',
-      ' bbb',
-      ' ccc',
+      '@@ -3,0 +4,3 @@',
       '+ddd',
       '+eee',
       '+fff',
-      ' ggg',
-      ' hhh',
-      ' iii'
     ]
 
     @source_lines =
@@ -263,9 +257,6 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'aaa',
       'bbb',
       'ccc',
-      'ddd',
-      'eee',
-      'fff',
       'ggg',
       'hhh',
       'iii',
@@ -311,6 +302,8 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'bbb',
       'ccc',
       'ddd',
+      'EEE',
+      'FFF',
       'ggg',
       'hhh',
       'iii',
@@ -344,20 +337,14 @@ class GitDiffJoinBuilderTest < DifferTestBase
     @diff_lines =
     [
       'diff --git a/lines b/lines',
-      'index 08fe19c..1f8695e 100644',
+      'index 71af3cd..0a682ee 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -3,9 +3,7 @@',
-      ' ddd',
-      ' eee',
-      ' fff',
+      '@@ -6,3 +6 @@',
       '-ggg',
       '-hhh',
       '-iii',
       '+jjj',
-      ' kkk',
-      ' lll',
-      ' mmm'
     ]
 
     @source_lines =
@@ -367,7 +354,9 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'ddd',
       'eee',
       'fff',
-      'jjj',
+      'ggg',
+      'hhh',
+      'iii',
       'kkk',
       'lll',
       'mmm',
@@ -404,19 +393,14 @@ class GitDiffJoinBuilderTest < DifferTestBase
     @diff_lines =
     [
       'diff --git a/lines b/lines',
-      'index 8e435da..a787223 100644',
+      'index cbe236c..e32c1da 100644',
       '--- a/lines',
       '+++ b/lines',
-      '@@ -3,7 +3,8 @@',
-      ' ccc',
-      ' ddd',
-      ' eee',
-      '-fff',
+      '@@ -3 +3,3 @@ bbb',
+      '-ccc',
       '+XXX',
       '+YYY',
-      ' ggg',
-      ' hhh',
-      ' iii'
+      '+ZZZ'
     ]
 
     @source_lines =
@@ -426,35 +410,21 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'ccc',
       'ddd',
       'eee',
-      'XXX',
-      'YYY',
-      'ggg',
-      'hhh',
-      'iii',
-      'jjj',
-      'kkk',
-      'lll',
-      'mmm'
+      'fff',
     ]
 
     @expected =
     [
       same('aaa', 1),
       same('bbb', 2),
-      same('ccc', 3),
-      same('ddd', 4),
-      same('eee', 5),
       section(0),
-      deleted('fff', 6),
-      added('XXX',6),
-      added('YYY',7),
-      same('ggg',   8),
-      same('hhh',   9),
-      same('iii',  10),
-      same('jjj', 11),
-      same('kkk', 12),
-      same('lll', 13),
-      same('mmm',14),
+      deleted('ccc', 3),
+      added('XXX', 3),
+      added('YYY', 4),
+      added('ZZZ', 5),
+      same('ddd', 6),
+      same('eee', 7),
+      same('fff', 8),
     ]
 
     assert_equal_builder
@@ -462,76 +432,12 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - -
 
-  test '951',
-    'one hunk with one section',
-    'with one line deleted and one line added' do
-
-    @diff_lines =
-    [
-      'diff --git a/lines b/lines',
-      'index 5ed4618..aad3f67 100644',
-      '--- a/lines',
-      '+++ b/lines',
-      '@@ -5,7 +5,7 @@',
-      ' aaa',
-      ' bbb',
-      ' ccc',
-      '-QQQ',
-      '+RRR',
-      ' ddd',
-      ' eee',
-      ' fff'
-    ]
-
-    @source_lines =
-    [
-      'zz',
-      'yy',
-      'xx',
-      'ww',
-      'aaa',
-      'bbb',
-      'ccc',
-      'RRR',
-      'ddd',
-      'eee',
-      'fff',
-      'ggg',
-      'hhh'
-    ]
-
-    @expected =
-    [
-      same('zz', 1),
-      same('yy', 2),
-      same('xx', 3),
-      same('ww', 4),
-      same('aaa', 5),
-      same('bbb', 6),
-      same('ccc', 7),
-      section(0),
-      deleted('QQQ', 8),
-      added('RRR', 8),
-      same('ddd',   9),
-      same('eee', 10),
-      same('fff', 11),
-      same('ggg', 12),
-      same('hhh', 13)
-    ]
-
-    assert_equal_builder
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   private
 
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
     actual = git_diff_join_builder(diff, @source_lines)
-    #puts "@expected:#{@expected.class.name}:#{@expected}:"
-    #puts "   actual:#{actual.class.name}:#{actual}:"
-    assert_equal @expected, actual, "sdsdsd"
+    my_assert_equal @expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - -
