@@ -589,15 +589,11 @@ class GitDiffParserTest < DifferTestBase
       'similarity index 99%',
       'rename from hiker.h',
       'rename to diamond.h',
-      'index afcb4df..c0f407c 100644'
-    ]
-    trailing = [
+      'index afcb4df..c0f407c 100644',
       '--- a/hiker.h',
       '+++ b/diamond.h'
     ]
-    all_lines = (lines + trailing).join("\n")
-
-    my_assert_equal lines, GitDiffParser.new(all_lines).parse_header
+    my_assert_equal lines, GitDiffParser.new(lines.join("\n")).parse_header
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -67,21 +67,13 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_header
-    line0 = line
-    next_line
-    lines = []
-    while header?(line)
+    lines = [ line ]
+    next_line # eat 'diff --git ...'
+    while in_header?(line)
       lines << line
       next_line
     end
-    header = [line0] + lines
-    if %r|^\-\-\- (.*)|.match(line)
-      next_line
-    end
-    if %r|^\+\+\+ (.*)|.match(line)
-      next_line
-    end
-    header
+    lines
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -99,11 +91,10 @@ class GitDiffParser
 
   private
 
-  def header?(line)
+  def in_header?(line)
     (!line.nil?) &&             # still more lines
     (line !~ /^diff --git/) &&  # not in next file
-    (line !~ /^[-]/) &&         # not in --- filename
-    (line !~ /^[+]/)            # not in +++ filename
+    (line !~ /^@@/)             # not in a range
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
