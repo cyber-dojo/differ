@@ -27,7 +27,7 @@ module GitDiffJoinBuilder
     end
 
     result.flatten!
-    new_line_numbers(result)
+    set_line_numbers(result)
     result
   end
 
@@ -53,15 +53,19 @@ module GitDiffJoinBuilder
     end
   end
 
-  def new_line_numbers(result)
+  def set_line_numbers(result)
     # so they are based on new_files and not old_files
     line_number = 0
     result.each do |entry|
-      if entry[:type] === :same || entry[:type] === :added
+      if visible?(entry)
         line_number += 1
         entry[:number] = line_number
       end
     end
+  end
+
+  def visible?(entry)
+    entry[:type] === :same || entry[:type] === :added
   end
 
 end
