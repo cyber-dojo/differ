@@ -74,18 +74,19 @@ class GitDiffParser
       lines << line
       next_line
     end
-    [line0] + lines
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_old_new_filenames(header)
+    header = [line0] + lines
     if %r|^\-\-\- (.*)|.match(line)
       next_line
     end
     if %r|^\+\+\+ (.*)|.match(line)
       next_line
     end
+    header
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def parse_old_new_filenames(header)
     old_filename,new_filename = old_new_filenames(header[0])
     if header[1].start_with?('deleted file mode')
       new_filename = nil
