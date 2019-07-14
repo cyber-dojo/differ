@@ -198,48 +198,49 @@ class GitDiffParser
 end
 
 #--------------------------------------------------------------
-# Git diff format notes
+# Notes
+#--------------------------------------------------------------
+# LINE: diff --git
+# LINE: ...
+# LINE: @@ -4,2 +4,1 @@ ...
+# LINE: -CCC
+# LINE: -DDD
+# LINE: +EEE
 #
-# LINE: --- a/gapper.rb
+# The line-range information is surrounded by @@'s'.
+#   Eg @@ -4,2 +4,1 @@
+# Which means
+#   -4,2 for the   added lines [ 'CCC','DDD' ]
+#   -4,1 for the deleted lines [ 'EEE' ]
 #
-#  The original file is preceded by ---
-#  If this is a new file this is --- /dev/null
+# The line-range format is L,N where
+#   L is the starting line number and
+#   N is the number of lines.
 #
-# LINE: +++ b/gapper.rb
+# For -deleted lines, L,N refers to the original file.
+# For   +added lines, L,N refers to the new file.
 #
-#  The new file is preceded by +++
-#  If this is a deleted file this is +++ /dev/null
+# The ,N is optional and if missing defaults to 1.
+#   Eg -3 +5 is the same as -3,1 +5,1
 #
-# LINE: @@ -4,7 +4,8 @@ def time_gaps(from, to, seconds_per_gap)
+# For a new/deleted file the range is -0,0
 #
-#  Following this is a change hunk containing the line differences.
-#  A hunk begins with range information. The range information
-#  is surrounded by double-at signs.
-#    So in this example its @@ -4,7 +15,8 @@
-#  The hunk range information contains two hunk ranges.
-#  @@ -4,7 +15,8 is for added lines (-4,7) and deleted lines (+5,8)
-#
-#  Each hunk range is of the format L,S where
-#  L is the starting line number and
-#  S is the number of lines the change hunk applies to.
-#
-#  For -deleted lines, L,S refers to the original file.
-#  For   +added lines, L,S refers to the new file.
-#
-#  The ,S is optional and if missing indicates a hunk size of 1.
-#  So -3 is the same as -3,1
-#  And -1 is the same as -1,1
-#  And -3 +5 is the same as -3,1 +5,1
-#
-#  If this is a     new file (--- /dev/null) the range is -0,0
-#  If this is a deleted file (+++ /dev/null) the range is -0,0
-#
+# Following the - lines and following the + lines
+# there may be a single line
+# LINE:\ No newline at end of file
+# Eg
+# LINE: diff --git
+# LINE: ...
+# LINE: @@ -4,2 +4,1 @@ ...
+# LINE: -CCC
+# LINE: -DDD
+# LINE:\ No newline at end of file
+# LINE: +EEE
 # LINE:\ No newline at end of file
 #
-#  Following this, optionally, is a single line starting with a \ character
-#  as above. I wondered if the format of this was that the initial \
-#  means the line is a comment line and that there could be (are) other
-#  comments, but googling does not indicate this.
+# I wondered if the format of this was that the initial \
+# means the line is a comment line and that there could be (are) other
+# comments, but googling does not indicate this.
 #--------------------------------------------------------------
 # https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html#Detailed%20Unified
 # https://stackoverflow.com/questions/2529441
