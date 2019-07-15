@@ -42,6 +42,8 @@ class DifferTestBase < HexMiniTest
           message = message.to_s
           message += "\n" + @_hex_test_id
           message += "\n" + @_hex_test_name
+          message += "\n" + lhs
+          message += "\n" + rhs
           flunk message
         end
       end

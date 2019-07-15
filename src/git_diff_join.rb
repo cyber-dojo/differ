@@ -20,8 +20,8 @@ module GitDiffJoin # mix-in
         new_lines = empty_file?(diff) ? [] : diff[:hunks][0][:added]
         joined[new_filename] = all(new_lines, :added)
       else # changed-file
-        old_lines = line_split(old_files[old_filename])
-        joined[new_filename] = git_diff_join_builder(diff, old_lines)
+        new_lines = line_split(new_files[new_filename])
+        joined[new_filename] = git_diff_join_builder(diff, new_lines)
       end
       filenames.delete(new_filename)
     end

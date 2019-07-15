@@ -454,18 +454,12 @@ class GitDifferTest < DifferTestBase
       'index a737c21..49a3313 100644',
       '--- a/diamond.h',
       '+++ b/diamond.h',
-      '@@ -1,8 +1,8 @@',
-      ' #ifndef DIAMOND',
-      ' #define DIAMOND',
-      ' ',
+      '@@ -4 +4 @@',
       '-#include <strin>',
       '+#include <string>',
-      ' ',
+      '@@ -6 +6 @@',
       '-void diamond(char)',
       '+void diamond(char);',
-      ' ',
-      ' #endif',
-      '\\ No newline at end of file'
     ]
   end
 
@@ -507,18 +501,12 @@ class GitDifferTest < DifferTestBase
       'index a737c21..49a3313 100644',
       '--- a/p/diamond.h',
       '+++ b/p/diamond.h',
-      '@@ -1,8 +1,8 @@',
-      ' #ifndef DIAMOND',
-      ' #define DIAMOND',
-      ' ',
+      '@@ -4 +4 @@',
       '-#include <strin>',
       '+#include <string>',
-      ' ',
+      '@@ -6 +6 @@',
       '-void diamond(char)',
       '+void diamond(char);',
-      ' ',
-      ' #endif',
-      '\\ No newline at end of file'
     ]
   end
 
@@ -540,6 +528,8 @@ class GitDifferTest < DifferTestBase
     ]
   end
 
+  # - - - - - - - - - - - - - - - - - - - -
+
   test 'C07',
   'renamed file in sub-dir shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
@@ -554,6 +544,8 @@ class GitDifferTest < DifferTestBase
     ]
   end
 
+  # - - - - - - - - - - - - - - - - - - - -
+
   test 'C08',
   'renamed file in nested sub-dir shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
@@ -567,6 +559,8 @@ class GitDifferTest < DifferTestBase
       'rename to x/y/z/diamond.h'
     ]
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'C09',
   'renamed file across nested sub-dirs shows as similarity 100%' do
@@ -597,15 +591,13 @@ class GitDifferTest < DifferTestBase
       'index 27a7ea6..2de4cc6 100644',
       '--- a/hiker.h',
       '+++ b/diamond.h',
-      '@@ -1,4 +1,4 @@',
-      ' a',
-      ' b',
+      '@@ -3 +3 @@ b',
       '-c',
       '+X',
-      ' d',
-      '\\ No newline at end of file'
     ]
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '6BF',%w(
     renamed and slightly changed file
@@ -622,13 +614,9 @@ class GitDifferTest < DifferTestBase
       'index 27a7ea6..2de4cc6 100644',
       '--- a/1/2/hiker.h',
       '+++ b/x/y/diamond.h',
-      '@@ -1,4 +1,4 @@',
-      ' a',
-      ' b',
+      '@@ -3 +3 @@ b',
       '-c',
       '+X',
-      ' d',
-      '\\ No newline at end of file'
     ]
   end
 
@@ -656,9 +644,7 @@ class GitDifferTest < DifferTestBase
       'index eff4ff4..2ca787d 100644',
       '--- a/wibble.c',
       '+++ b/wibble.c',
-      '@@ -1,2 +1,3 @@',
-      ' 123',
-      ' xyz',
+      '@@ -2,0 +3 @@ xyz',
       '+4',
       '\\ No newline at end of file'
     ]
@@ -670,7 +656,7 @@ class GitDifferTest < DifferTestBase
     lines += [''] unless lines === []
     expected = lines.join("\n")
     actual = GitDiffer.new(self).diff(@was_files, @now_files)
-    assert_equal expected, actual
+    my_assert_equal expected, actual
   end
 
 end
