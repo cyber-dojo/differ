@@ -34,6 +34,7 @@ class DifferTestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - -
 
+  # :nocov:
   def my_assert_equal(lhs, rhs, message = '')
     if lhs != rhs
       temp_file(:expected, lhs) do |lhs_filename|
@@ -57,6 +58,7 @@ class DifferTestBase < HexMiniTest
       yield pathed_filename
     end
   end
+  # :nocov:
 
 =begin
   def with_captured_stderr
