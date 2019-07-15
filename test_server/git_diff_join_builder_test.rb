@@ -26,6 +26,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @source_lines =
     [
+      'Please rename me!'
     ]
 
     @expected =
@@ -55,6 +56,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @source_lines =
     [
+      'aaa'
     ]
 
     @expected =
@@ -151,8 +153,6 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @source_lines =
     [
-      'aaa',
-      'bbb',
       'ccc',
       'ddd',
       'eee',
@@ -161,6 +161,8 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'qqq',
       'rrr',
       'ttt',
+      'uuu',
+      'vvv',
     ]
 
     @expected =
@@ -257,6 +259,9 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'aaa',
       'bbb',
       'ccc',
+      'ddd',
+      'eee',
+      'fff',
       'ggg',
       'hhh',
       'iii',
@@ -302,8 +307,6 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'bbb',
       'ccc',
       'ddd',
-      'EEE',
-      'FFF',
       'ggg',
       'hhh',
       'iii',
@@ -354,9 +357,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
       'ddd',
       'eee',
       'fff',
-      'ggg',
-      'hhh',
-      'iii',
+      'jjj',
       'kkk',
       'lll',
       'mmm',
@@ -407,7 +408,9 @@ class GitDiffJoinBuilderTest < DifferTestBase
     [
       'aaa',
       'bbb',
-      'ccc',
+      'XXX',
+      'YYY',
+      'ZZZ',
       'ddd',
       'eee',
       'fff',

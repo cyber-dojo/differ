@@ -11,61 +11,83 @@
 # o) a diff's hunk range specifies line numbers which are 1-based
 # o) the array of lines is 0-based
 
+require 'json'
+
 module GitDiffJoinBuilder
 
   module_function
 
-  def git_diff_join_builder(diff, old_lines)
-    result = old_lines.collect.with_index(1) do |line,number|
-      [ { :type => :same, line:line, number:number } ]
-    end
-    result.unshift([]) # make result 1-based to match range line-numbers
+  def git_diff_join_builder(diff, new_lines)
+    joined = []
+    new_lines.unshift(nil) # make it 1-based
+    line_number = 1
+    diff[:hunks].each.with_index(0) do |hunk,index|
+      dputs "at top: hunk==#{JSON.pretty_generate(hunk)}"
+      dputs "at top: line_number==#{line_number}"
 
-    diff[:hunks].each.with_index do |hunk,index|
-      remove_deleted_lines(result, hunk)
-      result[hunk[:old_start_line]] += make_section(hunk, index)
-    end
+      section = [ { :type => :section, index:index } ]
+      deleted_lines = hunk_lines(hunk, :deleted, hunk[:old_start_line])
+      added_lines = hunk_lines(hunk, :added,   hunk[:new_start_line])
 
-    result.flatten!
-    set_line_numbers(result)
-    result
-  end
-
-  private
-
-  def remove_deleted_lines(result, hunk)
-    old_start_line = hunk[:old_start_line]
-    old_end_line = old_start_line + hunk[:deleted].size
-    (old_start_line...old_end_line).each do |line_number|
-      result[line_number] = []
-    end
-  end
-
-  def make_section(hunk, index)
-    section = [ { :type => :section, index:index } ]
-    section += lines(hunk, hunk[:old_start_line], :deleted)
-    section += lines(hunk, hunk[:new_start_line], :added)
-  end
-
-  def lines(hunk, start_line, symbol)
-    hunk[symbol].collect.with_index(start_line) do |line,number|
-      { type:symbol, line:line, number:number }
-    end
-  end
-
-  def set_line_numbers(result)
-    # so they are based on new_files and not old_files
-    line_number = 0
-    result.each do |entry|
-      if visible?(entry)
-        line_number += 1
-        entry[:number] = line_number
+      end_line_number = hunk[:new_start_line]
+      if added_lines.empty?
+        end_line_number += 1
       end
+
+      dputs "top-same-lines: line_number=#{line_number}"
+      dputs "top-same-lines: end_line_number=#{end_line_number}"
+
+      lines = same_lines(new_lines, line_number, end_line_number)
+      dputs "top-same-lines: #{lines}"
+
+      joined += lines
+      show(joined,'After += top-same-lines')
+      joined += section
+      show(joined,'After += section')
+      joined += deleted_lines
+      show(joined,'After += deleted lines')
+      joined += added_lines
+      show(joined,'After += added lines')
+
+      line_number += lines.size
+      line_number += added_lines.size
+    end
+
+    lines = same_lines(new_lines, line_number, new_lines.size) # common end-lines
+    joined += lines
+    show(joined,'After += end-same-lines')
+    joined
+  end
+
+  def same_lines(src, lo, hi)
+    dputs "same_lines:lo=#{lo}"
+    dputs "same_lines:hi=#{hi}"
+    lines = src[lo...hi].collect.with_index(lo) do |line,number|
+      entry(:same,line,number)
+    end
+    dputs "same_lines:size=#{lines.size}"
+    lines
+  end
+
+  def hunk_lines(hunk, symbol, lo)
+    hunk[symbol].collect.with_index(lo) do |line,number|
+      entry(symbol,line,number)
     end
   end
 
-  def visible?(entry)
-    entry[:type] === :same || entry[:type] === :added
+  def entry(type, line, number)
+    { type:type, line:line, number:number }
+  end
+
+  def show(joined,msg)
+    dputs "#{msg}-----------------"
+    joined.each.with_index(0) do |line,index|
+      dputs "#{index}:#{line}"
+    end
+  end
+
+  def dputs(fmt, *args)
+    #puts(fmt, *args)
   end
 
 end
