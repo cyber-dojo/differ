@@ -22,72 +22,42 @@ module GitDiffJoinBuilder
     new_lines.unshift(nil) # make it 1-based
     line_number = 1
     diff[:hunks].each.with_index(0) do |hunk,index|
-      dputs "at top: hunk==#{JSON.pretty_generate(hunk)}"
-      dputs "at top: line_number==#{line_number}"
-
       section = [ { :type => :section, index:index } ]
       deleted_lines = hunk_lines(hunk, :deleted, hunk[:old_start_line])
-      added_lines = hunk_lines(hunk, :added,   hunk[:new_start_line])
+        added_lines = hunk_lines(hunk, :added,   hunk[:new_start_line])
 
-      end_line_number = hunk[:new_start_line]
       if added_lines.empty?
-        end_line_number += 1
+        range = (line_number...hunk[:new_start_line]+1)
+      else
+        range = (line_number...hunk[:new_start_line])
       end
 
-      dputs "top-same-lines: line_number=#{line_number}"
-      dputs "top-same-lines: end_line_number=#{end_line_number}"
-
-      lines = same_lines(new_lines, line_number, end_line_number)
-      dputs "top-same-lines: #{lines}"
+      lines = same_lines(new_lines, range)
 
       joined += lines
-      show(joined,'After += top-same-lines')
       joined += section
-      show(joined,'After += section')
       joined += deleted_lines
-      show(joined,'After += deleted lines')
       joined += added_lines
-      show(joined,'After += added lines')
 
-      line_number += lines.size
-      line_number += added_lines.size
+      line_number += lines.size + added_lines.size
     end
 
-    lines = same_lines(new_lines, line_number, new_lines.size) # common end-lines
+    lines = same_lines(new_lines, (line_number...new_lines.size))
     joined += lines
-    show(joined,'After += end-same-lines')
-    joined
   end
 
-  def same_lines(src, lo, hi)
-    dputs "same_lines:lo=#{lo}"
-    dputs "same_lines:hi=#{hi}"
-    lines = src[lo...hi].collect.with_index(lo) do |line,number|
-      entry(:same,line,number)
-    end
-    dputs "same_lines:size=#{lines.size}"
-    lines
+  def same_lines(src, range)
+    all_lines(:same, src[range], range.min)
   end
 
   def hunk_lines(hunk, symbol, lo)
-    hunk[symbol].collect.with_index(lo) do |line,number|
-      entry(symbol,line,number)
+    all_lines(symbol, hunk[symbol], lo)
+  end
+
+  def all_lines(type, from, lo)
+    from.collect.with_index(lo) do |line,number|
+      { type:type, line:line, number:number }
     end
-  end
-
-  def entry(type, line, number)
-    { type:type, line:line, number:number }
-  end
-
-  def show(joined,msg)
-    dputs "#{msg}-----------------"
-    joined.each.with_index(0) do |line,index|
-      dputs "#{index}:#{line}"
-    end
-  end
-
-  def dputs(fmt, *args)
-    #puts(fmt, *args)
   end
 
 end
