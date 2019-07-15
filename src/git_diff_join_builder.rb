@@ -10,6 +10,7 @@
 # Notes:
 # o) a diff's hunk range specifies line numbers which are 1-based
 # o) the array of lines is 0-based
+# o) the new_lines arg is mutated
 
 require 'json'
 
@@ -19,23 +20,22 @@ module GitDiffJoinBuilder
 
   def git_diff_join_builder(diff, new_lines)
     joined = []
-    new_lines.unshift(nil) # make it 1-based
+    new_lines.unshift(nil) # optimization: line-numbers are 1-based
     line_number = 1
     diff[:hunks].each.with_index(0) do |hunk,index|
-      section = [ { :type => :section, index:index } ]
       deleted_lines = lines(:deleted, hunk[:deleted], hunk[:old_start_line])
         added_lines = lines(:added  , hunk[:added  ], hunk[:new_start_line])
 
-      if added_lines.empty?                            # @@ ... -3,0 @@
+      if added_lines.empty?                            # @@ ... +3,0 @@
         range = (line_number..hunk[:new_start_line])   # => (LN..3)
-      else                                             # @@ ... -4,2 @@
+      else                                             # @@ ... +4,2 @@
         range = (line_number..hunk[:new_start_line]-1) # => (LN..3)
       end
 
       same_lines = lines(:same, new_lines[range], range.min)
 
       joined += same_lines
-      joined += section
+      joined += [ { :type => :section, index:index } ]
       joined += deleted_lines
       joined += added_lines
 
