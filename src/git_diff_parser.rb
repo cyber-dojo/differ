@@ -47,7 +47,9 @@ class GitDiffParser
   def parse_hunk
     if range = parse_range
       range[:deleted] = parse_lines(/^\-(.*)/)
+      parse_newline_at_eof
       range[:added  ] = parse_lines(/^\+(.*)/)
+      parse_newline_at_eof      
       range
     end
   end
@@ -173,7 +175,6 @@ class GitDiffParser
       lines << md[1]
       next_line
     end
-    parse_newline_at_eof
     lines
   end
 
