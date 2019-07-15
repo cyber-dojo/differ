@@ -7,30 +7,19 @@ class ExternalGitter
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def setup(path, user_name, user_email)
+  def setup(path)
     shell.assert_cd_exec(path,
       'git init --quiet',
-      "git config user.name #{quoted(user_name)}",
-      "git config user.email #{quoted(user_email)}"
+      "git config user.name 'differ'",
+      "git config user.email 'differ@cyber-dojo.org'"
     )
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def add(path, filename)
-    shell.assert_cd_exec(path, "git add #{quoted(filename)}")
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def rm(path, filename)
-    shell.assert_cd_exec(path, "git rm #{quoted(filename)}")
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def commit(path, tag)
+  def add_commit_tag(path, tag)
     shell.assert_cd_exec(path,
+      'git add .',
       "git commit --allow-empty --all --message #{tag} --quiet",
       "git tag #{tag} HEAD"
     )
@@ -55,10 +44,6 @@ class ExternalGitter
 
   def shell
     @externals.shell
-  end
-
-  def quoted(s)
-    "'" + s + "'"
   end
 
   def space

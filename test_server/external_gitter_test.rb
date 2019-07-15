@@ -15,41 +15,22 @@ class ExternalGitterTest < DifferTestBase
 
   test '0B4',
   'git.setup' do
-    user_name = 'lion'
-    user_email = "#{user_name}@cyber-dojo.org"
-    git.setup(path, user_name, user_email)
+    git.setup(path)
     expect_shell(
       'git init --quiet',
-      "git config user.name '#{user_name}'",
-      "git config user.email '#{user_email}'"
+      "git config user.name 'differ'",
+      "git config user.email 'differ@cyber-dojo.org'"
     )
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'AD5',
-  'git.add' do
-    filename = 'wibble.h'
-    git.add(path, filename)
-    expect_shell("git add '#{filename}'")
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'E16',
-  'git.rm' do
-    filename = 'wibble.c'
-    git.rm(path, filename)
-    expect_shell("git rm '#{filename}'")
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
   test '8AB',
-  'for git.commit' do
+  'for git.add_commit_tag' do
     tag = 6
-    git.commit(path, tag)
+    git.add_commit_tag(path, tag)
     expect_shell(
+      'git add .',
       "git commit --allow-empty --all --message #{tag} --quiet",
       "git tag #{tag} HEAD"
     )

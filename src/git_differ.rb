@@ -9,23 +9,17 @@ class GitDiffer
   def diff(old_files, new_files)
     id = SecureRandom.hex
     Dir.mktmpdir(id, '/tmp') do |git_dir|
-      user_name = 'differ'
-      user_email = user_name + '@cyber-dojo.org'
-      git.setup(git_dir, user_name, user_email)
-      add_and_commit(git_dir, old_files, old_tag = 0)
+      git.setup(git_dir)
+      save(git_dir, old_files)
+      git.add_commit_tag(git_dir, old_tag = 0)
       remove_content_from(git_dir, id)
-      add_and_commit(git_dir, new_files, new_tag = 1)
+      save(git_dir, new_files)
+      git.add_commit_tag(git_dir, new_tag = 1)
       git.diff(git_dir, old_tag, new_tag)
     end
   end
 
   private
-
-  def add_and_commit(git_dir, files, tag)
-    save(git_dir, files)
-    git.add(git_dir, '.')
-    git.commit(git_dir, tag)
-  end
 
   def remove_content_from(git_dir, id)
     Dir.mktmpdir(id, '/tmp') do |tmp_dir|
