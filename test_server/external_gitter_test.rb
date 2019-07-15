@@ -16,11 +16,11 @@ class ExternalGitterTest < DifferTestBase
   test '0B4',
   'git.setup' do
     git.setup(path)
-    expect_shell(
+    expect_shell([
       'git init --quiet',
       "git config user.name 'differ'",
       "git config user.email 'differ@cyber-dojo.org'"
-    )
+    ].join(' && '))
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -39,20 +39,19 @@ class ExternalGitterTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '9A2',
-  'git.diff' do
-    was_tag = 2
-    now_tag = 3
-    options = [
+  'git.diff_0_1' do
+    expected = [
+      'git diff',
       '--unified=0',
       '--ignore-space-at-eol',
       '--find-copies-harder',
       '--indent-heuristic',
-      "#{was_tag}",
-      "#{now_tag}",
+      '0',
+      '1',
       '--'
-    ].join(space)
-    git.diff(path, was_tag, now_tag)
-    expect_shell("git diff #{options}")
+    ].join(' ')
+    git.diff_0_1(path)
+    expect_shell(expected)
   end
 
   private
@@ -63,10 +62,6 @@ class ExternalGitterTest < DifferTestBase
 
   def path
     'a/b/c/'
-  end
-
-  def space
-   ' '
   end
 
 end

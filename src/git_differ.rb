@@ -11,11 +11,11 @@ class GitDiffer
     Dir.mktmpdir(id, '/tmp') do |git_dir|
       git.setup(git_dir)
       save(git_dir, old_files)
-      git.add_commit_tag(git_dir, old_tag = 0)
+      git.add_commit_tag(git_dir, 0)
       remove_content_from(git_dir, id)
       save(git_dir, new_files)
-      git.add_commit_tag(git_dir, new_tag = 1)
-      git.diff(git_dir, old_tag, new_tag)
+      git.add_commit_tag(git_dir, 1)
+      git.diff_0_1(git_dir)
     end
   end
 

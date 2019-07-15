@@ -8,11 +8,7 @@ class ExternalGitter
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def setup(path)
-    shell.assert_cd_exec(path,
-      'git init --quiet',
-      "git config user.name 'differ'",
-      "git config user.email 'differ@cyber-dojo.org'"
-    )
+    shell.assert_cd_exec(path, SETUP)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,27 +23,31 @@ class ExternalGitter
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def diff(path, n, m)
-    options = [
-      '--unified=0',
-      '--ignore-space-at-eol',
-      '--find-copies-harder',
-      '--indent-heuristic',
-      "#{n}",
-      "#{m}",
-      '--'     # specifies to git that n,m are revisions and not filenames
-    ].join(space)
-    shell.assert_cd_exec(path, "git diff #{options}")
+  def diff_0_1(path)
+    shell.assert_cd_exec(path, DIFF)
   end
 
   private
 
+  SETUP = [
+    'git init --quiet',
+    "git config user.name 'differ'",
+    "git config user.email 'differ@cyber-dojo.org'"
+  ].join(' && ')
+
+  DIFF = [
+    'git diff',
+    '--unified=0',
+    '--ignore-space-at-eol',
+    '--find-copies-harder',
+    '--indent-heuristic',
+    '0',
+    '1',
+    '--'     # specifies to git that 0,1 are revisions and not filenames
+  ].join(' ')
+
   def shell
     @externals.shell
-  end
-
-  def space
-    ' '
   end
 
 end
