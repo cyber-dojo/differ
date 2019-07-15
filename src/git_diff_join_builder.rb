@@ -27,9 +27,9 @@ module GitDiffJoinBuilder
         added_lines = hunk_lines(hunk, :added,   hunk[:new_start_line])
 
       if added_lines.empty?
-        range = (line_number...hunk[:new_start_line]+1)
+        range = (line_number..hunk[:new_start_line])
       else
-        range = (line_number...hunk[:new_start_line])
+        range = (line_number..hunk[:new_start_line]-1)
       end
 
       lines = same_lines(new_lines, range)
@@ -42,7 +42,7 @@ module GitDiffJoinBuilder
       line_number += lines.size + added_lines.size
     end
 
-    lines = same_lines(new_lines, (line_number...new_lines.size))
+    lines = same_lines(new_lines, (line_number..new_lines.size))
     joined += lines
   end
 
