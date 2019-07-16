@@ -8,35 +8,39 @@ class ExternalsTest < DifferTestBase
 
   test '920',
   'default disk is ExternalDiskWriter' do
-    assert_equal 'ExternalDiskWriter', disk.class.name
+    assert_equal ExternalDiskWriter, disk.class
   end
+
+  class AlternateDisk; end
 
   test '921',
   'alternate disk can be substitited' do
-    externals.disk = 'hello'
-    assert_equal 'hello', externals.disk
-    assert_equal 'hello', disk
+    externals.disk = AlternateDisk.new
+    assert_equal AlternateDisk, externals.disk.class
+    assert_equal AlternateDisk, disk.class
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test 'C8F',
   'default git is ExternalGitter' do
-    assert_equal 'ExternalGitter', git.class.name
+    assert_equal ExternalGitter, git.class
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '1B1',
   'default shell is ExternalSheller' do
-    assert_equal 'ExternalSheller', shell.class.name
+    assert_equal ExternalSheller, shell.class
   end
+
+  class AlternateShell; end
 
   test '1B2',
   'alternate shell can be substituted' do
-    externals.shell = 'gday'
-    assert_equal 'gday', externals.shell
-    assert_equal 'gday', shell
+    externals.shell = AlternateShell.new
+    assert_equal AlternateShell, externals.shell.class
+    assert_equal AlternateShell, shell.class
   end
 
 end
