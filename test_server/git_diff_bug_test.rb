@@ -15,7 +15,7 @@ class GitDiffBugTest < DifferTestBase
   'specific real dojo that once failed a diff' do
     bad_diff_lines =
     [
-      'diff --git a/recently_used_list.cpp b/was_recently_used_list.test.cpp',
+      'diff --git recently_used_list.cpp was_recently_used_list.test.cpp',
       'similarity index 100%',
       'copy from recently_used_list.cpp',
       'copy to was_recently_used_list.test.cpp',

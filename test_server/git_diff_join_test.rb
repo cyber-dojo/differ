@@ -199,7 +199,7 @@ class GitDiffJoinTest < DifferTestBase
     old_files = { 'non-empty.c' => 'something' }
     new_files = { 'non-empty.c' => 'something changed' }
     diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
-    actual_diffs = GitDiffParser.new(diff_lines).parse_all     
+    actual_diffs = GitDiffParser.new(diff_lines).parse_all
     expected_diffs =
     [
       {

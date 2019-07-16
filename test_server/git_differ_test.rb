@@ -45,7 +45,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'hiker.h' => '' }
     @new_files = { }
     assert_diff [
-      'diff --git a/hiker.h b/hiker.h',
+      'diff --git hiker.h hiker.h',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
@@ -60,7 +60,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'sub-dir/hiker.h' => '' }
     @new_files = { }
     assert_diff [
-      'diff --git a/sub-dir/hiker.h b/sub-dir/hiker.h',
+      'diff --git sub-dir/hiker.h sub-dir/hiker.h',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
@@ -75,7 +75,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'd1/d2/d3/d4/hiker.h' => '' }
     @new_files = { }
     assert_diff [
-      'diff --git a/d1/d2/d3/d4/hiker.h b/d1/d2/d3/d4/hiker.h',
+      'diff --git d1/d2/d3/d4/hiker.h d1/d2/d3/d4/hiker.h',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
@@ -90,10 +90,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
     assert_diff [
-      'diff --git a/hiker.h b/hiker.h',
+      'diff --git hiker.h hiker.h',
       'deleted file mode 100644',
       'index d68dd40..0000000',
-      '--- a/hiker.h',
+      '--- hiker.h',
       '+++ /dev/null',
       '@@ -1,4 +0,0 @@',
       '-a',
@@ -112,10 +112,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'dir/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
     assert_diff [
-      'diff --git a/dir/hiker.h b/dir/hiker.h',
+      'diff --git dir/hiker.h dir/hiker.h',
       'deleted file mode 100644',
       'index d68dd40..0000000',
-      '--- a/dir/hiker.h',
+      '--- dir/hiker.h',
       '+++ /dev/null',
       '@@ -1,4 +0,0 @@',
       '-a',
@@ -134,10 +134,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { '1/2/3/4/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
     assert_diff [
-      'diff --git a/1/2/3/4/hiker.h b/1/2/3/4/hiker.h',
+      'diff --git 1/2/3/4/hiker.h 1/2/3/4/hiker.h',
       'deleted file mode 100644',
       'index d68dd40..0000000',
-      '--- a/1/2/3/4/hiker.h',
+      '--- 1/2/3/4/hiker.h',
       '+++ /dev/null',
       '@@ -1,4 +0,0 @@',
       '-a',
@@ -156,10 +156,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'hiker.h' => '' }
     assert_diff [
-      'diff --git a/hiker.h b/hiker.h',
+      'diff --git hiker.h hiker.h',
       'index d68dd40..e69de29 100644',
-      '--- a/hiker.h',
-      '+++ b/hiker.h',
+      '--- hiker.h',
+      '+++ hiker.h',
       '@@ -1,4 +0,0 @@',
       '-a',
       '-b',
@@ -177,10 +177,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { '3/2/1/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { '3/2/1/hiker.h' => '' }
     assert_diff [
-      'diff --git a/3/2/1/hiker.h b/3/2/1/hiker.h',
+      'diff --git 3/2/1/hiker.h 3/2/1/hiker.h',
       'index d68dd40..e69de29 100644',
-      '--- a/3/2/1/hiker.h',
-      '+++ b/3/2/1/hiker.h',
+      '--- 3/2/1/hiker.h',
+      '+++ 3/2/1/hiker.h',
       '@@ -1,4 +0,0 @@',
       '-a',
       '-b',
@@ -198,10 +198,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { '1/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { '1/hiker.h' => '' }
     assert_diff [
-      'diff --git a/1/hiker.h b/1/hiker.h',
+      'diff --git 1/hiker.h 1/hiker.h',
       'index d68dd40..e69de29 100644',
-      '--- a/1/hiker.h',
-      '+++ b/1/hiker.h',
+      '--- 1/hiker.h',
+      '+++ 1/hiker.h',
       '@@ -1,4 +0,0 @@',
       '-a',
       '-b',
@@ -219,7 +219,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { }
     @new_files = { 'diamond.h' => '' }
     assert_diff [
-      'diff --git a/diamond.h b/diamond.h',
+      'diff --git diamond.h diamond.h',
       'new file mode 100644',
       'index 0000000..e69de29'
     ]
@@ -234,7 +234,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { }
     @new_files = { 'sub-dir/diamond.h' => '' }
     assert_diff [
-      'diff --git a/sub-dir/diamond.h b/sub-dir/diamond.h',
+      'diff --git sub-dir/diamond.h sub-dir/diamond.h',
       'new file mode 100644',
       'index 0000000..e69de29'
     ]
@@ -249,7 +249,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { }
     @new_files = { '1/2/3/4/diamond.h' => '' }
     assert_diff [
-      'diff --git a/1/2/3/4/diamond.h b/1/2/3/4/diamond.h',
+      'diff --git 1/2/3/4/diamond.h 1/2/3/4/diamond.h',
       'new file mode 100644',
       'index 0000000..e69de29'
     ]
@@ -262,11 +262,11 @@ class GitDifferTest < DifferTestBase
     @old_files = { }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/diamond.h b/diamond.h',
+      'diff --git diamond.h diamond.h',
       'new file mode 100644',
       'index 0000000..27a7ea6',
       '--- /dev/null',
-      '+++ b/diamond.h',
+      '+++ diamond.h',
       '@@ -0,0 +1,4 @@',
       '+a',
       '+b',
@@ -285,11 +285,11 @@ class GitDifferTest < DifferTestBase
     @old_files = { }
     @new_files = { '4/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/4/diamond.h b/4/diamond.h',
+      'diff --git 4/diamond.h 4/diamond.h',
       'new file mode 100644',
       'index 0000000..27a7ea6',
       '--- /dev/null',
-      '+++ b/4/diamond.h',
+      '+++ 4/diamond.h',
       '@@ -0,0 +1,4 @@',
       '+a',
       '+b',
@@ -308,11 +308,11 @@ class GitDifferTest < DifferTestBase
     @old_files = { }
     @new_files = { '1/2/3/4/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/1/2/3/4/diamond.h b/1/2/3/4/diamond.h',
+      'diff --git 1/2/3/4/diamond.h 1/2/3/4/diamond.h',
       'new file mode 100644',
       'index 0000000..27a7ea6',
       '--- /dev/null',
-      '+++ b/1/2/3/4/diamond.h',
+      '+++ 1/2/3/4/diamond.h',
       '@@ -0,0 +1,4 @@',
       '+a',
       '+b',
@@ -389,10 +389,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'diamond.h' => 'a' }
     @new_files = { 'diamond.h' => 'b' }
     assert_diff [
-      'diff --git a/diamond.h b/diamond.h',
+      'diff --git diamond.h diamond.h',
       'index 2e65efe..63d8dbd 100644',
-      '--- a/diamond.h',
-      '+++ b/diamond.h',
+      '--- diamond.h',
+      '+++ diamond.h',
       '@@ -1 +1 @@',
       '-a',
       '\\ No newline at end of file',
@@ -406,10 +406,10 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'x/diamond.h' => 'a' }
     @new_files = { 'x/diamond.h' => 'b' }
     assert_diff [
-      'diff --git a/x/diamond.h b/x/diamond.h',
+      'diff --git x/diamond.h x/diamond.h',
       'index 2e65efe..63d8dbd 100644',
-      '--- a/x/diamond.h',
-      '+++ b/x/diamond.h',
+      '--- x/diamond.h',
+      '+++ x/diamond.h',
       '@@ -1 +1 @@',
       '-a',
       '\\ No newline at end of file',
@@ -450,10 +450,10 @@ class GitDifferTest < DifferTestBase
         ].join("\n")
     }
     assert_diff [
-      'diff --git a/diamond.h b/diamond.h',
+      'diff --git diamond.h diamond.h',
       'index a737c21..49a3313 100644',
-      '--- a/diamond.h',
-      '+++ b/diamond.h',
+      '--- diamond.h',
+      '+++ diamond.h',
       '@@ -4 +4 @@',
       '-#include <strin>',
       '+#include <string>',
@@ -497,10 +497,10 @@ class GitDifferTest < DifferTestBase
         ].join("\n")
     }
     assert_diff [
-      'diff --git a/p/diamond.h b/p/diamond.h',
+      'diff --git p/diamond.h p/diamond.h',
       'index a737c21..49a3313 100644',
-      '--- a/p/diamond.h',
-      '+++ b/p/diamond.h',
+      '--- p/diamond.h',
+      '+++ p/diamond.h',
       '@@ -4 +4 @@',
       '-#include <strin>',
       '+#include <string>',
@@ -521,7 +521,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/hiker.h b/diamond.h',
+      'diff --git hiker.h diamond.h',
       'similarity index 100%',
       'rename from hiker.h',
       'rename to diamond.h'
@@ -537,7 +537,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'x/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/hiker.h b/x/diamond.h',
+      'diff --git hiker.h x/diamond.h',
       'similarity index 100%',
       'rename from hiker.h',
       'rename to x/diamond.h'
@@ -553,7 +553,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'x/y/z/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/hiker.h b/x/y/z/diamond.h',
+      'diff --git hiker.h x/y/z/diamond.h',
       'similarity index 100%',
       'rename from hiker.h',
       'rename to x/y/z/diamond.h'
@@ -569,7 +569,7 @@ class GitDifferTest < DifferTestBase
     @old_files = { '1/2/3/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'x/y/z/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
-      'diff --git a/1/2/3/hiker.h b/x/y/z/diamond.h',
+      'diff --git 1/2/3/hiker.h x/y/z/diamond.h',
       'similarity index 100%',
       'rename from 1/2/3/hiker.h',
       'rename to x/y/z/diamond.h'
@@ -584,13 +584,13 @@ class GitDifferTest < DifferTestBase
     @new_files = { 'diamond.h' => "a\nb\nX\nd" }
 
     assert_diff [
-      'diff --git a/hiker.h b/diamond.h',
+      'diff --git hiker.h diamond.h',
       'similarity index 57%',
       'rename from hiker.h',
       'rename to diamond.h',
       'index 27a7ea6..2de4cc6 100644',
-      '--- a/hiker.h',
-      '+++ b/diamond.h',
+      '--- hiker.h',
+      '+++ diamond.h',
       '@@ -3 +3 @@ b',
       '-c',
       '+X',
@@ -607,13 +607,13 @@ class GitDifferTest < DifferTestBase
     @new_files = { 'x/y/diamond.h' => "a\nb\nX\nd" }
 
     assert_diff [
-      'diff --git a/1/2/hiker.h b/x/y/diamond.h',
+      'diff --git 1/2/hiker.h x/y/diamond.h',
       'similarity index 57%',
       'rename from 1/2/hiker.h',
       'rename to x/y/diamond.h',
       'index 27a7ea6..2de4cc6 100644',
-      '--- a/1/2/hiker.h',
-      '+++ b/x/y/diamond.h',
+      '--- 1/2/hiker.h',
+      '+++ x/y/diamond.h',
       '@@ -3 +3 @@ b',
       '-c',
       '+X',
@@ -636,14 +636,14 @@ class GitDifferTest < DifferTestBase
     }
 
     assert_diff [
-      'diff --git a/a/hiker.h b/a/hiker.txt',
+      'diff --git a/hiker.h a/hiker.txt',
       'similarity index 100%',
       'rename from a/hiker.h',
       'rename to a/hiker.txt',
-      'diff --git a/wibble.c b/wibble.c',
+      'diff --git wibble.c wibble.c',
       'index eff4ff4..2ca787d 100644',
-      '--- a/wibble.c',
-      '+++ b/wibble.c',
+      '--- wibble.c',
+      '+++ wibble.c',
       '@@ -2,0 +3 @@ xyz',
       '+4',
       '\\ No newline at end of file'

@@ -14,11 +14,11 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/file with_space b/file with_space',
+      'diff --git file with_space file with_space',
       'new file mode 100644',
       'index 0000000..21984c7',
       '--- /dev/null',
-      '+++ b/file with_space',
+      '+++ file with_space',
       '@@ -0,0 +1 @@',
       '+Please rename me!',
       '\\ No newline at end of file'
@@ -45,10 +45,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/untitled_5G3 b/untitled_5G3',
+      'diff --git untitled_5G3 untitled_5G3',
       'index e69de29..2e65efe 100644',
-      '--- a/untitled_5G3',
-      '+++ b/untitled_5G3',
+      '--- untitled_5G3',
+      '+++ untitled_5G3',
       '@@ -0,0 +1 @@',
       '+aaa',
       '\\ No newline at end of file'
@@ -76,10 +76,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index b1a30d9..7fa9727 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -2,1 +2,1 @@',
       '-bbb',
       '+ccc',
@@ -139,10 +139,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 0719398..2943489 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -1,2 +0,0 @@',
       '-aaa',
       '-bbb',
@@ -194,10 +194,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 535d2b0..a173ef1 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -3 +3 @@ bbb',
       '-ccc',
       '+ddd',
@@ -244,10 +244,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 06e567b..59e88aa 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -3,0 +4,3 @@',
       '+ddd',
       '+eee',
@@ -292,10 +292,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
   'one hunk with one section with only lines deleted' do
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 0b669b6..a972632 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -5,2 +4,0 @@ ddd',
       '-EEE',
       '-FFF'
@@ -339,10 +339,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 71af3cd..0a682ee 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -6,3 +6 @@',
       '-ggg',
       '-hhh',
@@ -393,10 +393,10 @@ class GitDiffJoinBuilderTest < DifferTestBase
 
     @diff_lines =
     [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index cbe236c..e32c1da 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -3 +3,3 @@ bbb',
       '-ccc',
       '+XXX',

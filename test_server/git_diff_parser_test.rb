@@ -15,7 +15,7 @@ class GitDiffParserTest < DifferTestBase
   test 'D5F',
   'parse old & new filenames with space in both filenames' do
     header = [
-       'diff --git "a/e mpty.h" "b/e mpty.h"',
+       'diff --git "e mpty.h" "e mpty.h"',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
@@ -29,7 +29,7 @@ class GitDiffParserTest < DifferTestBase
   'parse old & new filenames with double-quote and space in both filenames' do
     # double-quote " is a legal character in a linux filename
     header = [
-       'diff --git "a/li n\"ux" "b/em bed\"ded"',
+       'diff --git "li n\"ux" "em bed\"ded"',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
@@ -43,7 +43,7 @@ class GitDiffParserTest < DifferTestBase
   'parse old & new filenames with double-quote and space only in new-filename' do
     # git diff only double quotes filenames if it has to
     header = [
-       'diff --git a/plain "b/em bed\"ded"',
+       'diff --git plain "em bed\"ded"',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
@@ -57,7 +57,7 @@ class GitDiffParserTest < DifferTestBase
   'parse old & new filenames with double-quote and space only in old-filename' do
     # double-quote " is a legal character in a linux filename
     header = [
-       'diff --git "a/emb ed\"ded" b/plain',
+       'diff --git "emb ed\"ded" plain',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
@@ -70,7 +70,7 @@ class GitDiffParserTest < DifferTestBase
   test '740',
   'new_filename is nil for for deleted file' do
     header = [
-      'diff --git a/Deleted.java b/Deleted.java',
+      'diff --git Deleted.java Deleted.java',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ]
@@ -84,7 +84,7 @@ class GitDiffParserTest < DifferTestBase
   test '2A9',
   'old_filename is nil for new file' do
     header = [
-       'diff --git a/empty.h b/empty.h',
+       'diff --git empty.h empty.h',
        'new file mode 100644',
        'index 0000000..e69de29'
     ]
@@ -98,7 +98,7 @@ class GitDiffParserTest < DifferTestBase
   test 'A90',
   'parse old & new filenames for renamed file' do
     diff_lines = [
-      'diff --git a/old_name.h "b/new \"name.h"',
+      'diff --git old_name.h "new \"name.h"',
       'similarity index 100%',
       'rename from old_name.h',
       'rename to new_name.h'
@@ -113,7 +113,7 @@ class GitDiffParserTest < DifferTestBase
   test 'AD7',
   'parse old & new filenames for new file in nested sub-dir' do
     header = [
-       'diff --git a/1/2/3/empty.h b/1/2/3/empty.h',
+       'diff --git 1/2/3/empty.h 1/2/3/empty.h',
        'new file mode 100644',
        'index 0000000..e69de29'
     ]
@@ -127,7 +127,7 @@ class GitDiffParserTest < DifferTestBase
   test 'AD8',
   'parse old & new filenames for renamed file in nested sub-dir' do
     diff_lines = [
-      'diff --git a/1/2/3/old_name.h b/1/2/3/new_name.h',
+      'diff --git 1/2/3/old_name.h 1/2/3/new_name.h',
       'similarity index 100%',
       'rename from 1/2/3/old_name.h',
       'rename to 1/2/3/new_name.h'
@@ -142,7 +142,7 @@ class GitDiffParserTest < DifferTestBase
   test 'AD9',
   'parse old & new filenames for renamed file across nested sub-dir' do
     diff_lines = [
-      'diff --git a/1/2/3/old_name.h b/4/5/6/new_name.h',
+      'diff --git 1/2/3/old_name.h 4/5/6/new_name.h',
       'similarity index 100%',
       'rename from 1/2/3/old_name.h',
       'rename to 4/5/6/new_name.h'
@@ -160,7 +160,7 @@ class GitDiffParserTest < DifferTestBase
   ) do
     # double-quote " is a legal character in a linux filename
     header = [
-       'diff --git "a/s/d/f/li n\"ux" "b/u/i/o/em bed\"ded"',
+       'diff --git "s/d/f/li n\"ux" "u/i/o/em bed\"ded"',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
@@ -178,7 +178,7 @@ class GitDiffParserTest < DifferTestBase
   ) do
     # double-quote " is a legal character in a linux filename
     header = [
-       'diff --git "a/a/d/f/li n\"ux" "b/b/u/i/o/em bed\"ded"',
+       'diff --git "a/d/f/li n\"ux" "b/u/i/o/em bed\"ded"',
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
@@ -193,10 +193,10 @@ class GitDiffParserTest < DifferTestBase
   test 'E10',
   'parse diff containing filename with backslash' do
     lines = [
-      'diff --git "a/\\\\was_newfile_FIU" "b/\\\\was_newfile_FIU"',
+      'diff --git "\\\\was_newfile_FIU" "\\\\was_newfile_FIU"',
       'deleted file mode 100644',
       'index 21984c7..0000000',
-      '--- "a/\\\\was_newfile_FIU"',
+      '--- "\\\\was_newfile_FIU"',
       '+++ /dev/null',
       '@@ -1 +0,0 @@',
       '-Please rename me!',
@@ -228,7 +228,7 @@ class GitDiffParserTest < DifferTestBase
   test '196',
   'parse diff deleted file' do
     lines = [
-      'diff --git a/original b/original',
+      'diff --git original original',
       'deleted file mode 100644',
       'index e69de29..0000000'
     ].join("\n")
@@ -250,10 +250,10 @@ class GitDiffParserTest < DifferTestBase
   test '0FE',
   'parse another diff-form of a deleted file' do
     lines = [
-      'diff --git a/untitled.rb b/untitled.rb',
+      'diff --git untitled.rb untitled.rb',
       'deleted file mode 100644',
       'index 5c4b3ab..0000000',
-      '--- a/untitled.rb',
+      '--- untitled.rb',
       '+++ /dev/null',
       '@@ -1,3 +0,0 @@',
       '-def answer',
@@ -286,7 +286,7 @@ class GitDiffParserTest < DifferTestBase
   test 'D91',
   'parse diff for renamed but unchanged file and newname is quoted' do
     lines = [
-      'diff --git "a/was_\\\\wa s_newfile_FIU" "b/\\\\was_newfile_FIU"',
+      'diff --git "was_\\\\wa s_newfile_FIU" "\\\\was_newfile_FIU"',
       'similarity index 100%',
       'rename from "was_\\\\wa s_newfile_FIU"',
       'rename to "\\\\was_newfile_FIU"'
@@ -309,7 +309,7 @@ class GitDiffParserTest < DifferTestBase
   test 'E38',
   'parse diff for renamed but unchanged file' do
     lines = [
-      'diff --git a/oldname b/newname',
+      'diff --git oldname newname',
       'similarity index 100%',
       'rename from oldname',
       'rename to newname'
@@ -332,13 +332,13 @@ class GitDiffParserTest < DifferTestBase
   test 'A61',
   "parse diff for renamed and changed file" do
     lines = [
-      'diff --git a/instructions b/instructions_new',
+      'diff --git instructions instructions_new',
       'similarity index 87%',
       'rename from instructions',
       'rename to instructions_new',
       'index e747436..83ec100 100644',
-      '--- a/instructions',
-      '+++ b/instructions_new',
+      '--- instructions',
+      '+++ instructions_new',
       '@@ -6,1 +6,1 @@ For example, the potential anagrams of "biro" are',
       '-obir obri oibr oirb orbi orib',
       '+obir obri oibr oirb orbi oribx'
@@ -369,17 +369,17 @@ class GitDiffParserTest < DifferTestBase
   test '91D',
   'parse diffs for two files' do
     lines = [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 896ddd8..2c8d1b8 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -1,1 +1,1 @@',
       '-ddd',
       '+eee',
-      'diff --git a/other b/other',
+      'diff --git other other',
       'index cf0389a..b28bf03 100644',
-      '--- a/other',
-      '+++ b/other',
+      '--- other',
+      '+++ other',
       '@@ -14,2 +14,2 @@',
       '-CCC',
       '-DDD',
@@ -464,10 +464,10 @@ class GitDiffParserTest < DifferTestBase
   test '1BC',
   'two hunks with no newline at end of file' do
     lines = [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index b1a30d9..7fa9727 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -3,1 +3,1 @@',
       '-BBB',
       '+CCC',
@@ -552,10 +552,10 @@ class GitDiffParserTest < DifferTestBase
   test 'A8A',
   'standard diff' do
     lines = [
-      'diff --git a/gapper.rb b/gapper.rb',
+      'diff --git gapper.rb gapper.rb',
       'index 26bc41b..8a5b0b7 100644',
-      '--- a/gapper.rb',
-      '+++ b/gapper.rb',
+      '--- gapper.rb',
+      '+++ gapper.rb',
       '@@ -4,1 +4,2 @@ COMMENT',
       '-XXX',
       '+YYY',
@@ -585,13 +585,13 @@ class GitDiffParserTest < DifferTestBase
   test '3B5',
   'find copies harder finds a rename' do
     lines = [
-      'diff --git a/hiker.h b/diamond.h',
+      'diff --git hiker.h diamond.h',
       'similarity index 99%',
       'rename from hiker.h',
       'rename to diamond.h',
       'index afcb4df..c0f407c 100644',
-      '--- a/hiker.h',
-      '+++ b/diamond.h'
+      '--- hiker.h',
+      '+++ diamond.h'
     ]
     my_assert_equal lines, GitDiffParser.new(lines.join("\n")).parse_header
   end
@@ -601,10 +601,10 @@ class GitDiffParserTest < DifferTestBase
   test 'C10',
   'diff two hunks' do
     lines = [
-      'diff --git a/test_gapper.rb b/test_gapper.rb',
+      'diff --git test_gapper.rb test_gapper.rb',
       'index 4d3ca1b..61e88f0 100644',
-      '--- a/test_gapper.rb',
-      '+++ b/test_gapper.rb',
+      '--- test_gapper.rb',
+      '+++ test_gapper.rb',
       '@@ -9,1 +9,1 @@ class TestGapper < Test::Unit::TestCase',
       '-p Timw.now',
       '+p Time.now',
@@ -643,10 +643,10 @@ class GitDiffParserTest < DifferTestBase
   test 'AD3',
   'when diffs are one line apart' do
     lines = [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 5ed4618..c47ec44 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -5,1 +5,1 @@ CCC',
       '-DDD',
       '+EEE',
@@ -684,10 +684,10 @@ class GitDiffParserTest < DifferTestBase
   test 'D3C',
   'when diffs are 2 lines apart' do
     lines = [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 5ed4618..aad3f67 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -5,1 +5,1 @@',
       '-DDD',
       '+EEE',
@@ -726,10 +726,10 @@ class GitDiffParserTest < DifferTestBase
   '7 unchanged lines between two changed lines',
   'creates two hunks' do
     lines = [
-      'diff --git a/lines b/lines',
+      'diff --git lines lines',
       'index 5ed4618..e78c888 100644',
-      '--- a/lines',
-      '+++ b/lines',
+      '--- lines',
+      '+++ lines',
       '@@ -5,1 +5,1 @@',
       '-DDD',
       '+EEE',
@@ -771,14 +771,14 @@ class GitDiffParserTest < DifferTestBase
   ) do
 
     diff_lines = [
-      'diff --git a/hiker.h b/hiker.txt',
+      'diff --git hiker.h hiker.txt',
       'similarity index 100%',
       'rename from hiker.h',
       'rename to hiker.txt',
-      'diff --git a/wibble.c b/wibble.c',
+      'diff --git wibble.c wibble.c',
       'index eff4ff4..2ca787d 100644',
-      '--- a/wibble.c',
-      '+++ b/wibble.c',
+      '--- wibble.c',
+      '+++ wibble.c',
       '@@ -1,2 +1,3 @@',
       '+abc',
       '\\ No newline at end of file'

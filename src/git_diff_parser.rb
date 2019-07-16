@@ -49,7 +49,7 @@ class GitDiffParser
       range[:deleted] = parse_lines(/^\-(.*)/)
       parse_newline_at_eof
       range[:added  ] = parse_lines(/^\+(.*)/)
-      parse_newline_at_eof      
+      parse_newline_at_eof
       range
     end
   end
@@ -135,7 +135,7 @@ class GitDiffParser
     if quoted?(filename)
       filename = unquoted(filename)
     end
-    without_ab_prefix(unescaped(filename))
+    unescaped(filename)
   end
 
   def quoted?(filename)
@@ -144,14 +144,6 @@ class GitDiffParser
 
   def unquoted(filename)
     filename[1..-2]
-  end
-
-  def without_ab_prefix(filename)
-    # Drop leading a/ or b/
-    # Note: there is a [git diff] option --no-prefix which removes
-    # the leading a/ b/ from the output. Using that option would
-    # require removing a/ b/ from a lot of test code.
-    filename[2..-1]
   end
 
   def unescaped(str)

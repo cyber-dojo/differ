@@ -1,14 +1,4 @@
 
-0.def without_ab_prefix(filename)
-    # Drop leading a/ or b/
-    # Note: there is a [git diff] option --no-prefix which removes
-    # the leading a/ b/ from the output. Using that option would
-    # require removing a/ b/ from a lot of test code.
-    filename[2..-1]
-  end
-Refactor to use --no-prefix and avoid need to call without_ab_prefix()
-
-
 1. Look into a possible git diff option to remove the last line info message...
 \\ No newline at end of file
 Looked. Found nothing....

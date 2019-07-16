@@ -43,6 +43,7 @@ class ExternalGitterTest < DifferTestBase
     expected = [
       'git diff',
       '--unified=0',
+      '--no-prefix',
       '--ignore-space-at-eol',
       '--find-copies-harder',
       '--indent-heuristic',
