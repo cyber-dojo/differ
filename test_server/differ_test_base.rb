@@ -8,10 +8,8 @@ class DifferTestBase < HexMiniTest
     super(arg)
   end
 
-  def diff(was_files, now_files)
-    differ.diff(was_files, now_files)
-  end
-
+  # Don't create a diff() method here as it interferes with MiniTest::Test
+  
   def differ
     @differ ||= Differ.new(externals)
   end
