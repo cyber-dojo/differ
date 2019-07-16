@@ -13,24 +13,24 @@ class DifferAppTest < ClientTestBase
 
   test '347',
   '>10K query is not rejected by thin' do
-    @now_files = {}
-    @was_files = { 'wibble.h' => 'X'*45*1024 }
+    @old_files = { 'wibble.h' => 'X'*45*1024 }
+    @new_files = {}
     json = get_diff
     refute_nil json['wibble.h']
   end
 
   test '348',
   '>10K query in nested sub-dir is not rejected by thin' do
-    @now_files = {}
-    @was_files = { 'gh/jk/wibble.h' => 'X'*45*1024 }
+    @old_files = { 'gh/jk/wibble.h' => 'X'*45*1024 }
+    @new_files = {}
     json = get_diff
     refute_nil json['gh/jk/wibble.h']
   end
 
   test 'AEC',
   'empty was_files and empty now_files is benign no-op' do
-    @was_files = {}
-    @now_files = {}
+    @old_files = {}
+    @new_files = {}
     json = get_diff
     assert_equal({}, json)
   end
@@ -41,15 +41,15 @@ class DifferAppTest < ClientTestBase
 
   test '313',
   'deleted empty file shows as empty array' do
-    @was_files = { 'hiker.h' => '' }
-    @now_files = { }
+    @old_files = { 'hiker.h' => '' }
+    @new_files = { }
     assert_diff 'hiker.h', []
   end
 
   test '314',
   'deleted empty file in nested sub-dir shows as empty array' do
-    @was_files = { '6/7/8/hiker.h' => '' }
-    @now_files = { }
+    @old_files = { '6/7/8/hiker.h' => '' }
+    @new_files = { }
     assert_diff '6/7/8/hiker.h', []
   end
 
@@ -57,8 +57,8 @@ class DifferAppTest < ClientTestBase
 
   test 'FE9',
   'deleted non-empty file shows as all lines deleted' do
-    @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
-    @now_files = { }
+    @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
+    @new_files = { }
     assert_diff 'hiker.h', [
       deleted(1, 'a'),
       deleted(2, 'b'),
@@ -69,8 +69,8 @@ class DifferAppTest < ClientTestBase
 
   test 'FEA',
   'deleted non-empty file in nested sub-dir shows as all lines deleted' do
-    @was_files = { '4/5/6/7/hiker.h' => "a\nb\nc\nd\n" }
-    @now_files = { }
+    @old_files = { '4/5/6/7/hiker.h' => "a\nb\nc\nd\n" }
+    @new_files = { }
     assert_diff '4/5/6/7/hiker.h', [
       deleted(1, 'a'),
       deleted(2, 'b'),
@@ -84,8 +84,8 @@ class DifferAppTest < ClientTestBase
   test 'B67',
   'all lines deleted but file not deleted',
   'shows as all lines deleted plus one empty line' do
-    @was_files = { 'hiker.h' => "a\nb\nc\nd\n" }
-    @now_files = { 'hiker.h' => '' }
+    @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
+    @new_files = { 'hiker.h' => '' }
     assert_diff 'hiker.h', [
       section(0),
       deleted(1, 'a'),
@@ -99,8 +99,8 @@ class DifferAppTest < ClientTestBase
   test 'B68',
   'all lines deleted but nested sub-dir file not deleted',
   'shows as all lines deleted plus one empty line' do
-    @was_files = { 'r/t/y/hiker.h' => "a\nb\nc\nd\n" }
-    @now_files = { 'r/t/y/hiker.h' => '' }
+    @old_files = { 'r/t/y/hiker.h' => "a\nb\nc\nd\n" }
+    @new_files = { 'r/t/y/hiker.h' => '' }
     assert_diff 'r/t/y/hiker.h', [
       section(0),
       deleted(1, 'a'),
@@ -117,15 +117,15 @@ class DifferAppTest < ClientTestBase
 
   test '95F',
   'added empty file shows as one empty file' do
-    @was_files = { }
-    @now_files = { 'diamond.h' => '' }
+    @old_files = { }
+    @new_files = { 'diamond.h' => '' }
     assert_diff 'diamond.h', []
   end
 
   test '960',
   'added empty file in nested sub-dir shows as one empty file' do
-    @was_files = { }
-    @now_files = { 'a/b/c/diamond.h' => '' }
+    @old_files = { }
+    @new_files = { 'a/b/c/diamond.h' => '' }
     assert_diff 'a/b/c/diamond.h', []
   end
 
@@ -133,8 +133,8 @@ class DifferAppTest < ClientTestBase
 
   test '2C3',
   'added non-empty file shows as all lines added' do
-    @was_files = { }
-    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
+    @old_files = { }
+    @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff 'diamond.h', [
       added(1, 'a'),
       added(2, 'b'),
@@ -145,8 +145,8 @@ class DifferAppTest < ClientTestBase
 
   test '2C4',
   'added non-empty file in nested sub-dir shows as all lines added' do
-    @was_files = { }
-    @now_files = { 'q/w/e/diamond.h' => "a\nb\nc\nd" }
+    @old_files = { }
+    @new_files = { 'q/w/e/diamond.h' => "a\nb\nc\nd" }
     assert_diff 'q/w/e/diamond.h', [
       added(1, 'a'),
       added(2, 'b'),
@@ -163,8 +163,8 @@ class DifferAppTest < ClientTestBase
   'unchanged empty-file shows as one empty line' do
     # same as adding an empty file except in this case
     # the filename exists in was_files
-    @was_files = { 'diamond.h' => '' }
-    @now_files = { 'diamond.h' => '' }
+    @old_files = { 'diamond.h' => '' }
+    @new_files = { 'diamond.h' => '' }
     assert_diff 'diamond.h', [ same(1, '') ]
   end
 
@@ -172,8 +172,8 @@ class DifferAppTest < ClientTestBase
   'unchanged empty-file in nested sub-dir shows as one empty line' do
     # same as adding an empty file except in this case
     # the filename exists in was_files
-    @was_files = { 'w/e/r/diamond.h' => '' }
-    @now_files = { 'w/e/r/diamond.h' => '' }
+    @old_files = { 'w/e/r/diamond.h' => '' }
+    @new_files = { 'w/e/r/diamond.h' => '' }
     assert_diff 'w/e/r/diamond.h', [ same(1, '') ]
   end
 
@@ -181,8 +181,8 @@ class DifferAppTest < ClientTestBase
 
   test '365',
   'unchanged non-empty file shows as all lines same' do
-    @was_files = { 'diamond.h' => "a\nb\nc\nd" }
-    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
+    @old_files = { 'diamond.h' => "a\nb\nc\nd" }
+    @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff 'diamond.h', [
       same(1, 'a'),
       same(2, 'b'),
@@ -193,8 +193,8 @@ class DifferAppTest < ClientTestBase
 
   test '366',
   'unchanged non-empty file in nested sub-dir shows as all lines same' do
-    @was_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
-    @now_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
+    @old_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
+    @new_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
     assert_diff 'r/t/y/diamond.h', [
       same(1, 'a'),
       same(2, 'bb'),
@@ -209,8 +209,8 @@ class DifferAppTest < ClientTestBase
 
   test 'E3E',
   'changed non-empty file shows as deleted and added lines' do
-    @was_files = { 'diamond.h' => 'a' }
-    @now_files = { 'diamond.h' => 'b' }
+    @old_files = { 'diamond.h' => 'a' }
+    @new_files = { 'diamond.h' => 'b' }
     assert_diff 'diamond.h', [
       section(0),
       deleted(1, 'a'),
@@ -220,8 +220,8 @@ class DifferAppTest < ClientTestBase
 
   test 'E3F',
   'changed non-empty file in nested sub-dir shows as deleted and added lines' do
-    @was_files = { 't/y/u/diamond.h' => 'a1' }
-    @now_files = { 't/y/u/diamond.h' => 'b2' }
+    @old_files = { 't/y/u/diamond.h' => 'a1' }
+    @new_files = { 't/y/u/diamond.h' => 'b2' }
     assert_diff 't/y/u/diamond.h', [
       section(0),
       deleted(1, 'a1'),
@@ -234,7 +234,7 @@ class DifferAppTest < ClientTestBase
   test 'B9E',
   'changed non-empty file shows as deleted and added lines',
   'with each hunk in its own indexed section' do
-    @was_files = {
+    @old_files = {
       'diamond.h' =>
         [
           '#ifndef DIAMOND',
@@ -247,7 +247,7 @@ class DifferAppTest < ClientTestBase
           '#endif',
         ].join("\n")
     }
-    @now_files = {
+    @new_files = {
       'diamond.h' =>
         [
         '#ifndef DIAMOND',
@@ -281,7 +281,7 @@ class DifferAppTest < ClientTestBase
   test 'B9F',
   'changed non-empty file in nested sub-dir shows as deleted and added lines',
   'with each hunk in its own indexed section' do
-    @was_files = {
+    @old_files = {
       'a/b/c/diamond.h' =>
         [
           '#ifndef DIAMOND',
@@ -294,7 +294,7 @@ class DifferAppTest < ClientTestBase
           '#endif',
         ].join("\n")
     }
-    @now_files = {
+    @new_files = {
       'a/b/c/diamond.h' =>
         [
         '#ifndef DIAMOND',
@@ -333,8 +333,8 @@ class DifferAppTest < ClientTestBase
   'renamed file shows as all lines same' do
     # same as unchanged non-empty file except the filename
     # does not exist in was_files
-    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
-    @now_files = { 'diamond.h' => "a\nb\nc\nd" }
+    @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff 'diamond.h', [
       same(1, 'a'),
       same(2, 'b'),
@@ -347,8 +347,8 @@ class DifferAppTest < ClientTestBase
   'renamed file in nested sub-dir shows as all lines same' do
     # same as unchanged non-empty file except the filename
     # does not exist in was_files
-    @was_files = { 'a/f/d/hiker.h'   => "a\nb\nc\nd" }
-    @now_files = { 'a/f/d/diamond.h' => "a\nb\nc\nd" }
+    @old_files = { 'a/f/d/hiker.h'   => "a\nb\nc\nd" }
+    @new_files = { 'a/f/d/diamond.h' => "a\nb\nc\nd" }
     assert_diff 'a/f/d/diamond.h', [
       same(1, 'a'),
       same(2, 'b'),
@@ -361,8 +361,8 @@ class DifferAppTest < ClientTestBase
 
   test 'FDB',
   'renamed and slightly changed file shows as mostly same lines' do
-    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
-    @now_files = { 'diamond.h' => "a\nb\nX\nd" }
+    @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @new_files = { 'diamond.h' => "a\nb\nX\nd" }
     assert_diff 'diamond.h', [
       same(   1, 'a'),
       same(   2, 'b'),
@@ -375,8 +375,8 @@ class DifferAppTest < ClientTestBase
 
   test 'FDC',
   'renamed and slightly changed file in nested sub-dir shows as mostly same lines' do
-    @was_files = { 'a/b/c/hiker.h'   => "a\nb\nc\nd" }
-    @now_files = { 'a/b/c/diamond.h' => "a\nb\nX\nd" }
+    @old_files = { 'a/b/c/hiker.h'   => "a\nb\nc\nd" }
+    @new_files = { 'a/b/c/diamond.h' => "a\nb\nX\nd" }
     assert_diff 'a/b/c/diamond.h', [
       same(   1, 'a'),
       same(   2, 'b'),
@@ -397,7 +397,7 @@ class DifferAppTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    GitDiff::git_diff(@was_files, @now_files)['diff']
+    GitDiff::git_diff(@old_files, @new_files)['diff']
   end
 
   # - - - - - - - - - - - - - - - - - - - -

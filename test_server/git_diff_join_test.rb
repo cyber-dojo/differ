@@ -241,7 +241,7 @@ class GitDiffJoinTest < DifferTestBase
     {
       'wibble.txt' =>
       [
-        { :type => :same, :line => 'content', :number => 1}
+        { :type => :same, :line => 'content', :number => 1 }
       ]
     }
     assert_join(expected, diff_lines, old_files, new_files)

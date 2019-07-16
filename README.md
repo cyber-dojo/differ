@@ -9,7 +9,7 @@
 
 - - - -
 # API
-  * [GET diff(was_files,now_files)](#get-diffwas_filesnow_files)
+  * [GET diff(old_files,new_files)](#get-diffold_filesnew_files)
   * [GET ready?](#get-ready)
   * [GET sha](#get-sha)
 
@@ -22,21 +22,21 @@
   * If the method raises an exception, a key equals "exception".
 
 - - - -
-## GET diff(was_files,now_files)
+## GET diff(old_files,new_files)
 Returns the diff of two sets of files.
 - parameters
-  * **was_files:Hash{String=>String}**
-  * **now_files:Hash{String=>String}**
+  * **old_files**:Hash{String=>String}
+  * **new_files**:Hash{String=>String}
   * eg
   ```json
-  { "was_files": {
+  { "old_files": {
       "hiker.h": "#ifndef HIKER_INCLUDED...",
       "hiker.c": "#include <stdio.h>...",
       "hiker.tests.c": "#include <assert.h>...",
       "cyber-dojo.sh": "make",
       "makefile": "..."
     },
-    "now_files": {
+    "new_files": {
       "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
       "hiker.c": "#include <stdio.h>...",
       "hiker.tests.c": "#include <assert.h>...",
@@ -45,6 +45,36 @@ Returns the diff of two sets of files.
     }
   }
   ```
+- returns
+  * unchanged lines as type "same" using the line number from **new_files**
+  * added lines as type "added" using line numbers from **new_files**
+  * deleted lines as type "deleted" using line numbers from **old_files**
+  * each added/deleted hunk as in indexed "sections"
+  * eg
+  ```json
+  {
+    "created.filename":
+    [
+      { "type": "section", "index": 0 },
+      { "type": "added", "line": "this file", "number": 1 },
+      { "type": "added", "line": "is new",    "number": 2 }
+    ],
+    ...
+  }
+  ```
+  * a deleted file as all lines :deleted
+  ```json
+  {
+    "deleted.filename":
+    [
+      { "type": "section", "index": 0 },      
+      { "type": "deleted", "line": "this file",   "number": 1 },
+      { "type": "deleted", "line": "had 2 lines", "number": 2 }
+    ],
+    ...
+  }
+  ```
+  *
 
 - - - -
 # GET ready?
