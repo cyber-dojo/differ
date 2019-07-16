@@ -14,4 +14,4 @@ use Prometheus::Middleware::Exporter
 
 externals = Externals.new
 differ = Differ.new(externals)
-run RackDispatcher.new(differ)
+run RackDispatcher.new(differ, Rack::Request)

@@ -60,15 +60,4 @@ class DifferTestBase < HexMiniTest
   end
   # :nocov:
 
-=begin
-  def with_captured_stderr
-    old_stderr = $stderr
-    $stderr = StringIO.new('', 'w')
-    result = yield
-    return [ $stderr.string, result ]
-  ensure
-    $stderr = old_stderr
-  end
-=end
-
 end
