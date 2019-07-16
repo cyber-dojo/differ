@@ -26,6 +26,22 @@ class RackDispatcherTest < DifferTestBase
     assert_dispatch_raises('sha', {}.to_json, 500, 'wibble')
   end
 
+  # - - - - - - - - - - - - - - - - -
+
+  test 'F1B',
+  'dispatch returns 500 status when implementation has syntax error' do
+    @differ_stub = DifferShaStub.new(SyntaxError, 'fubar')
+    assert_dispatch_raises('sha', {}.to_json, 500, 'fubar')
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test 'E2A',
+  'dispatch raises 400 when method name is unknown' do
+    @differ_stub = Object.new
+    assert_dispatch_raises('xyz', {}.to_json, 400, 'unknown path')
+  end
+
 
   private
 
