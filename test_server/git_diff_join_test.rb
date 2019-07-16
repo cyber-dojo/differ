@@ -24,7 +24,7 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected = { 'empty.rb' => [] }
     assert_join(expected, diff_lines, old_files, new_files)
@@ -54,7 +54,7 @@ class GitDiffJoinTest < DifferTestBase
         ]
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected =
     {
@@ -86,7 +86,7 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected = { 'empty.h' => [] }
     assert_join(expected, diff_lines, old_files, new_files)
@@ -116,7 +116,7 @@ class GitDiffJoinTest < DifferTestBase
         ]
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected =
     {
@@ -144,7 +144,7 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected =
     {
@@ -176,7 +176,7 @@ class GitDiffJoinTest < DifferTestBase
         hunks: []
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected =
     {
@@ -216,7 +216,7 @@ class GitDiffJoinTest < DifferTestBase
         ]
       }
     ]
-    my_assert_equal expected_diffs, actual_diffs
+    assert_equal expected_diffs, actual_diffs
 
     expected =
     {
@@ -251,7 +251,7 @@ class GitDiffJoinTest < DifferTestBase
 
   def assert_join(expected, diff_lines, old_files, new_files)
     actual = git_diff_join(diff_lines, old_files, new_files)
-    my_assert_equal expected, actual
+    assert_equal expected, actual
   end
 
   include GitDiffJoin

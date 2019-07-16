@@ -58,7 +58,7 @@ class ExternalGitterTest < DifferTestBase
   private
 
   def expect_shell(*messages)
-    my_assert_equal [[path]+messages], shell.spied
+    assert_equal [[path]+messages], shell.spied
   end
 
   def path

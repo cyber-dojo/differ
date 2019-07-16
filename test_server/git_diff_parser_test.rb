@@ -19,8 +19,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal 'e mpty.h', old_filename, :old_filename
-    my_assert_equal 'e mpty.h', new_filename, :new_filename
+    assert_equal 'e mpty.h', old_filename, :old_filename
+    assert_equal 'e mpty.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,8 +33,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal "li n\"ux",    old_filename, :old_filename
-    my_assert_equal "em bed\"ded", new_filename, :new_filename
+    assert_equal "li n\"ux",    old_filename, :old_filename
+    assert_equal "em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -47,8 +47,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal 'plain',       old_filename, :old_filename
-    my_assert_equal "em bed\"ded", new_filename, :new_filename
+    assert_equal 'plain',       old_filename, :old_filename
+    assert_equal "em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -61,8 +61,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal "emb ed\"ded", old_filename, :old_filename
-    my_assert_equal 'plain',       new_filename, :new_filename
+    assert_equal "emb ed\"ded", old_filename, :old_filename
+    assert_equal 'plain',       new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -75,7 +75,7 @@ class GitDiffParserTest < DifferTestBase
       'index e69de29..0000000'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal 'Deleted.java', old_filename, :old_filename
+    assert_equal 'Deleted.java', old_filename, :old_filename
     assert_nil new_filename, :new_filename
   end
 
@@ -90,7 +90,7 @@ class GitDiffParserTest < DifferTestBase
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     assert_nil old_filename, :old_filename
-    my_assert_equal 'empty.h', new_filename, :new_filename
+    assert_equal 'empty.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -104,8 +104,8 @@ class GitDiffParserTest < DifferTestBase
       'rename to new_name.h'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(diff_lines)
-    my_assert_equal 'old_name.h',   old_filename, :old_filename
-    my_assert_equal "new \"name.h", new_filename, :new_filename
+    assert_equal 'old_name.h',   old_filename, :old_filename
+    assert_equal "new \"name.h", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -119,7 +119,7 @@ class GitDiffParserTest < DifferTestBase
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
     assert_nil old_filename, :old_filename
-    my_assert_equal '1/2/3/empty.h', new_filename, :new_filename
+    assert_equal '1/2/3/empty.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -133,8 +133,8 @@ class GitDiffParserTest < DifferTestBase
       'rename to 1/2/3/new_name.h'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(diff_lines)
-    my_assert_equal '1/2/3/old_name.h', old_filename, :old_filename
-    my_assert_equal '1/2/3/new_name.h', new_filename, :new_filename
+    assert_equal '1/2/3/old_name.h', old_filename, :old_filename
+    assert_equal '1/2/3/new_name.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -148,8 +148,8 @@ class GitDiffParserTest < DifferTestBase
       'rename to 4/5/6/new_name.h'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(diff_lines)
-    my_assert_equal '1/2/3/old_name.h', old_filename, :old_filename
-    my_assert_equal '4/5/6/new_name.h', new_filename, :new_filename
+    assert_equal '1/2/3/old_name.h', old_filename, :old_filename
+    assert_equal '4/5/6/new_name.h', new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -164,8 +164,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal "s/d/f/li n\"ux",    old_filename, :old_filename
-    my_assert_equal "u/i/o/em bed\"ded", new_filename, :new_filename
+    assert_equal "s/d/f/li n\"ux",    old_filename, :old_filename
+    assert_equal "u/i/o/em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -182,8 +182,8 @@ class GitDiffParserTest < DifferTestBase
        'index 0000000..e69de29'
     ]
     old_filename,new_filename = GitDiffParser.new('').parse_old_new_filenames(header)
-    my_assert_equal "a/d/f/li n\"ux",      old_filename, :old_filename
-    my_assert_equal "b/u/i/o/em bed\"ded", new_filename, :new_filename
+    assert_equal "a/d/f/li n\"ux",      old_filename, :old_filename
+    assert_equal "b/u/i/o/em bed\"ded", new_filename, :new_filename
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -220,7 +220,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -242,7 +242,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -278,7 +278,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -301,7 +301,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -324,7 +324,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -361,7 +361,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -418,7 +418,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_all
+    assert_equal expected, GitDiffParser.new(lines).parse_all
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -429,7 +429,7 @@ class GitDiffParserTest < DifferTestBase
   'parse range old-size and new-size defaulted' do
     lines = '@@ -3 +5 @@'
     expected = { old_start_line:3, new_start_line:5 }
-    my_assert_equal expected, GitDiffParser.new(lines).parse_range
+    assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -438,7 +438,7 @@ class GitDiffParserTest < DifferTestBase
   'parse range old-size defaulted' do
     lines = '@@ -3 +5,9 @@'
     expected = { old_start_line:3, new_start_line:5 }
-    my_assert_equal expected, GitDiffParser.new(lines).parse_range
+    assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -447,7 +447,7 @@ class GitDiffParserTest < DifferTestBase
   'parse range new-size defaulted' do
     lines = '@@ -3,4 +5 @@'
     expected = { old_start_line:3, new_start_line:5 }
-    my_assert_equal expected, GitDiffParser.new(lines).parse_range
+    assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -456,7 +456,7 @@ class GitDiffParserTest < DifferTestBase
   'parse range nothing defaulted' do
     lines = '@@ -3,4 +5,6 @@'
     expected = { old_start_line:3, new_start_line:5 }
-    my_assert_equal expected, GitDiffParser.new(lines).parse_range
+    assert_equal expected, GitDiffParser.new(lines).parse_range
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -498,7 +498,7 @@ class GitDiffParserTest < DifferTestBase
       ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_one
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -519,7 +519,7 @@ class GitDiffParserTest < DifferTestBase
       added: [ 'BBB' ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_hunk
+    assert_equal expected, GitDiffParser.new(lines).parse_hunk
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -544,7 +544,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_hunks
+    assert_equal expected, GitDiffParser.new(lines).parse_hunks
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -577,7 +577,7 @@ class GitDiffParserTest < DifferTestBase
       ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_one
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -593,7 +593,7 @@ class GitDiffParserTest < DifferTestBase
       '--- hiker.h',
       '+++ diamond.h'
     ]
-    my_assert_equal lines, GitDiffParser.new(lines.join("\n")).parse_header
+    assert_equal lines, GitDiffParser.new(lines.join("\n")).parse_header
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -635,7 +635,7 @@ class GitDiffParserTest < DifferTestBase
       ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_one
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -676,7 +676,7 @@ class GitDiffParserTest < DifferTestBase
       ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_one
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -717,7 +717,7 @@ class GitDiffParserTest < DifferTestBase
       ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_one
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -759,7 +759,7 @@ class GitDiffParserTest < DifferTestBase
       ]
     }
 
-    my_assert_equal expected, GitDiffParser.new(lines).parse_one
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -806,7 +806,7 @@ class GitDiffParserTest < DifferTestBase
       }
     ]
 
-    my_assert_equal expected, GitDiffParser.new(diff_lines).parse_all
+    assert_equal expected, GitDiffParser.new(diff_lines).parse_all
   end
 
 end

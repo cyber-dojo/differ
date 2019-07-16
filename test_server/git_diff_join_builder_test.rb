@@ -467,7 +467,7 @@ class GitDiffJoinBuilderTest < DifferTestBase
   def assert_equal_builder
     diff = GitDiffParser.new(@diff_lines.join("\n")).parse_one
     actual = git_diff_join_builder(diff, @source_lines)
-    my_assert_equal @expected, actual
+    assert_equal @expected, actual
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - -

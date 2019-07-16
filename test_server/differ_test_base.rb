@@ -9,7 +9,7 @@ class DifferTestBase < HexMiniTest
   end
 
   # Don't create a diff() method here as it interferes with MiniTest::Test
-  
+
   def differ
     @differ ||= Differ.new(externals)
   end
@@ -29,33 +29,5 @@ class DifferTestBase < HexMiniTest
   def shell
     externals.shell
   end
-
-  # - - - - - - - - - - - - - - - - - - -
-
-  # :nocov:
-  def my_assert_equal(lhs, rhs, message = '')
-    if lhs != rhs
-      temp_file(:expected, lhs) do |lhs_filename|
-        temp_file(:actual, rhs) do |rhs_filename|
-          puts `diff #{lhs_filename} #{rhs_filename}`
-          message = message.to_s
-          message += "\n" + @_hex_test_id
-          message += "\n" + @_hex_test_name
-          message += "\n" + lhs
-          message += "\n" + rhs
-          flunk message
-        end
-      end
-    end
-  end
-
-  def temp_file(type, obj)
-    Tempfile.create(type.to_s, '/tmp') do |tmpfile|
-      pathed_filename = tmpfile.path
-      IO.write(pathed_filename, JSON.pretty_generate(obj))
-      yield pathed_filename
-    end
-  end
-  # :nocov:
 
 end

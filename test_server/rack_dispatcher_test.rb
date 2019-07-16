@@ -73,13 +73,13 @@ class RackDispatcherTest < DifferTestBase
     response,stderr = with_captured_stderr { rack_call(name, args) }
     assert_equal status, response[0], "message:#{message},stderr:#{stderr}"
     assert_equal({ 'Content-Type' => 'application/json' }, response[1])
-    my_assert_exception(response[2][0], name, args, message)
-    my_assert_exception(stderr,         name, args, message)
+    assert_exception(response[2][0], name, args, message)
+    assert_exception(stderr,         name, args, message)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def my_assert_exception(s, name, body, message)
+  def assert_exception(s, name, body, message)
     json = JSON.parse!(s)
     exception = json['exception']
     refute_nil exception
