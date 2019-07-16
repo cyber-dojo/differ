@@ -62,17 +62,12 @@ class DifferTestBase < HexMiniTest
 
 =begin
   def with_captured_stderr
-    result = nil
-    @stderr = ''
-    begin
-      old_stderr = $stderr
-      $stderr = StringIO.new('', 'w')
-      result = yield
-      @stderr = $stderr.string
-    ensure
-      $stderr = old_stderr
-    end
-    result
+    old_stderr = $stderr
+    $stderr = StringIO.new('', 'w')
+    result = yield
+    return [ $stderr.string, result ]
+  ensure
+    $stderr = old_stderr
   end
 =end
 

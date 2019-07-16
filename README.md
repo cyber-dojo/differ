@@ -25,8 +25,8 @@
 ## GET diff(old_files,new_files)
 Returns the diff of two sets of files.
 - parameters
-  * **old_files**:Hash{String=>String}
-  * **new_files**:Hash{String=>String}
+  * **old_files:Hash{String=>String}**
+  * **new_files:Hash{String=>String}**
   * eg
   ```json
   { "old_files": {
@@ -202,7 +202,7 @@ Coverage report copied to test_server/coverage/
                    errors |       0 ==     0 | true
                  warnings |       0 ==     0 | true
                     skips |       0 ==     0 | true
-        duration(test)[s] |    1.23 <=     3 | true
+        duration(test)[s] |    0.84 <=     3 | true
          coverage(src)[%] |   100.0 ==   100 | true
         coverage(test)[%] |   100.0 ==   100 | true
    lines(test)/lines(src) |    2.64 >=   2.6 | true
