@@ -1,4 +1,10 @@
 
+0. Use --unified=99999999999 and thus avoid having to stitch hunks and lines back together.
+Briefly looked into this. Works but decided not to do this. I think it could well be slower
+since I already have all of the old_files and new_files and this recreates a lot of their content.
+Using --unified=0 is nice as I have all of old_files new_files and just have to stitch the
+minimal hunk in.
+
 1. Look into a possible git diff option to remove the last line info message...
 \\ No newline at end of file
 Looked. Found nothing....
