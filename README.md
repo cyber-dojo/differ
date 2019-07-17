@@ -49,7 +49,7 @@ Returns the diff of two sets of files.
   * unchanged lines as type "same" using the line number from **new_files**
   * added lines as type "added" using line numbers from **new_files**
   * deleted lines as type "deleted" using line numbers from **old_files**
-  * each added/deleted hunk as in indexed "sections"
+  * each added/deleted hunk as indexed "sections"
   * eg
   ```json
   {
