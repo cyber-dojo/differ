@@ -33,5 +33,28 @@ class HttpJsonArgsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test '1BB',
+  %w( diff[was_files,now_files] arg ) do
+    was_files = { "name" => "a\nb" }
+    now_files = {}
+    body = {"was_files":was_files,"now_files":now_files}.to_json
+    args = HttpJsonArgs.new(body).get('/diff')
+    assert_equal 'diff', args[0]
+    assert_equal was_files, args[1][0]
+    assert_equal now_files, args[1][1]
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test '1BC',
+  %w( diff2[old_files,new_files] arg ) do
+    old_files = { "name" => "a\nb" }
+    new_files = {}
+    body = {"old_files":old_files,"new_files":new_files}.to_json
+    args = HttpJsonArgs.new(body).get('/diff2')
+    assert_equal 'diff', args[0]
+    assert_equal old_files, args[1][0]
+    assert_equal new_files, args[1][1]
+  end
 
 end
