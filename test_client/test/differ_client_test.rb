@@ -6,8 +6,17 @@ class DifferClientTest < ClientTestBase
     '200'
   end
 
-  test '8C1', %w( renaming diff's arguments step-1 ) do
-    assert_equal({}, differ.diff2({}, {}))
+  test '8C1', %w( renaming diff's arguments
+    step-1 rename to old_args/new_args
+    but default to was_args/now_args if not present ) do
+    requester = HttpJson::RequestPacker.new(externals.http, 'differ-server', 4567)
+    http = HttpJson::ResponseUnpacker.new(requester, DifferException)
+
+    new_arg_names = { old_files:{}, new_files:{} }
+    assert_equal({}, http.get(:diff, new_arg_names))
+
+    old_arg_names = { was_files:{}, now_files:{} }
+    assert_equal({}, http.get(:diff, old_arg_names))
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -192,14 +201,14 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'AEC',
-  'empty was_files and empty now_files is benign no-op' do
+  'empty old_files and empty new_files is benign no-op' do
     assert_equal({}, differ.diff({},{}))
   end
 
   test '7FE',
   'unchanged empty-file shows as one empty line' do
     # same as adding an empty file except in this case
-    # the filename exists in was_files
+    # the filename exists in old_files
     @old_files = { 'diamond.h' => '' }
     @new_files = { 'diamond.h' => '' }
     assert_diff 'diamond.h', [ same(1, '') ]
@@ -208,7 +217,7 @@ class DifferClientTest < ClientTestBase
   test '7FF',
   'unchanged empty-file in nested sub-dir shows as one empty line' do
     # same as adding an empty file except in this case
-    # the filename exists in was_files
+    # the filename exists in old_files
     @old_files = { 'w/e/r/diamond.h' => '' }
     @new_files = { 'w/e/r/diamond.h' => '' }
     assert_diff 'w/e/r/diamond.h', [ same(1, '') ]
@@ -369,7 +378,7 @@ class DifferClientTest < ClientTestBase
   test 'E50',
   'renamed file shows as all lines same' do
     # same as unchanged non-empty file except the filename
-    # does not exist in was_files
+    # does not exist in old_files
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff 'diamond.h', [
@@ -383,7 +392,7 @@ class DifferClientTest < ClientTestBase
   test 'E51',
   'renamed file in nested sub-dir shows as all lines same' do
     # same as unchanged non-empty file except the filename
-    # does not exist in was_files
+    # does not exist in old_files
     @old_files = { 'a/f/d/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'a/f/d/diamond.h' => "a\nb\nc\nd" }
     assert_diff 'a/f/d/diamond.h', [

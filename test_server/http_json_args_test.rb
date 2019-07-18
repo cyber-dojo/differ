@@ -27,17 +27,17 @@ class HttpJsonArgsTest < DifferTestBase
 
   test '691',
   %w( ctor does not raise when string-arg is valid json ) do
-    HttpJsonArgs.new('{}')
-    HttpJsonArgs.new('{"answer":42}')
+    HttpJsonArgs.new({}.to_json)
+    HttpJsonArgs.new({ answer:42 }.to_json)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '1BB',
-  %w( diff[was_files,now_files] arg ) do
+  %w( diff[was_files,now_files] old arg-names during arg-rename switch-over ) do
     was_files = { "name" => "a\nb" }
     now_files = {}
-    body = {"was_files":was_files,"now_files":now_files}.to_json
+    body = { was_files:was_files,now_files:now_files }.to_json
     args = HttpJsonArgs.new(body).get('/diff')
     assert_equal 'diff', args[0]
     assert_equal was_files, args[1][0]
@@ -47,11 +47,11 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '1BC',
-  %w( diff2[old_files,new_files] arg ) do
+  %w( diff2[old_files,new_files] ) do
     old_files = { "name" => "a\nb" }
     new_files = {}
-    body = {"old_files":old_files,"new_files":new_files}.to_json
-    args = HttpJsonArgs.new(body).get('/diff2')
+    body = { old_files:old_files,new_files:new_files }.to_json
+    args = HttpJsonArgs.new(body).get('/diff')
     assert_equal 'diff', args[0]
     assert_equal old_files, args[1][0]
     assert_equal new_files, args[1][1]

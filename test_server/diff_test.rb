@@ -7,7 +7,7 @@ class DiffTest < DifferTestBase
   end
 
   test '3DA',
-  'was_files is empty, now_files is empty' do
+  'old_files is empty, new_files is empty' do
     assert_equal({}, differ.diff({}, {}))
   end
 

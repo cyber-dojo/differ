@@ -15,10 +15,10 @@ class GitDifferTest < DifferTestBase
   test 'B9F',
   'tmp dir is deleted if exception is raised' do
     externals.disk = RaisingDiskWriter.new
-    was_files = { 'diamond.h' => 'a' } # ensure something to write
-    now_files = { }
+    old_files = { 'diamond.h' => 'a' } # ensure something to write
+    new_files = { }
     differ = GitDiffer.new(self)
-    error = assert_raises(RuntimeError) { differ.diff(was_files, now_files) }
+    error = assert_raises(RuntimeError) { differ.diff(old_files, new_files) }
     assert_equal 'raising', error.message
     dir_name = File.dirname(disk.pathed_filename)
     assert dir_name.start_with?('/tmp/')
@@ -30,7 +30,7 @@ class GitDifferTest < DifferTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '38A',
-  'empty was_files and empty now_files shows as benign nothing' do
+  'empty old_files and empty new_files shows as benign nothing' do
     @old_files = { }
     @new_files = { }
     assert_diff []
@@ -329,7 +329,7 @@ class GitDifferTest < DifferTestBase
   test '518',
   'unchanged empty-file has no diff' do
     # same as adding an empty file except in this case
-    # the filename exists in was_files
+    # the filename exists in old_files
     @old_files = { 'diamond.h' => '' }
     @new_files = { 'diamond.h' => '' }
     assert_diff []
@@ -340,7 +340,7 @@ class GitDifferTest < DifferTestBase
   test '519',
   'unchanged empty-file in sub-dir has no diff' do
     # same as adding an empty file except in this case
-    # the filename exists in was_files
+    # the filename exists in old_files
     @old_files = { 'x/diamond.h' => '' }
     @new_files = { 'x/diamond.h' => '' }
     assert_diff []
@@ -351,7 +351,7 @@ class GitDifferTest < DifferTestBase
   test '520',
   'unchanged empty-file in nested sub-dir has no diff' do
     # same as adding an empty file except in this case
-    # the filename exists in was_files
+    # the filename exists in old_files
     @old_files = { 'x/y/z/diamond.h' => '' }
     @new_files = { 'x/y/z/diamond.h' => '' }
     assert_diff []
@@ -517,7 +517,7 @@ class GitDifferTest < DifferTestBase
   test 'C06',
   'renamed file shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
-    # does not exist in was_files
+    # does not exist in old_files
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff [
@@ -533,7 +533,7 @@ class GitDifferTest < DifferTestBase
   test 'C07',
   'renamed file in sub-dir shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
-    # does not exist in was_files
+    # does not exist in old_files
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'x/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
@@ -549,7 +549,7 @@ class GitDifferTest < DifferTestBase
   test 'C08',
   'renamed file in nested sub-dir shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
-    # does not exist in was_files
+    # does not exist in old_files
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'x/y/z/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
@@ -565,7 +565,7 @@ class GitDifferTest < DifferTestBase
   test 'C09',
   'renamed file across nested sub-dirs shows as similarity 100%' do
     # same as unchanged non-empty file except the filename
-    # does not exist in was_files
+    # does not exist in old_files
     @old_files = { '1/2/3/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'x/y/z/diamond.h' => "a\nb\nc\nd" }
     assert_diff [
