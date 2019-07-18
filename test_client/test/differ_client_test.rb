@@ -6,19 +6,6 @@ class DifferClientTest < ClientTestBase
     '200'
   end
 
-  test '8C1', %w( renaming diff's arguments
-    step-1 rename to old_args/new_args
-    but default to was_args/now_args if not present ) do
-    requester = HttpJson::RequestPacker.new(externals.http, 'differ-server', 4567)
-    http = HttpJson::ResponseUnpacker.new(requester, DifferException)
-
-    new_arg_names = { old_files:{}, new_files:{} }
-    assert_equal({}, http.get(:diff, new_arg_names))
-
-    old_arg_names = { was_files:{}, now_files:{} }
-    assert_equal({}, http.get(:diff, old_arg_names))
-  end
-
   # - - - - - - - - - - - - - - - - - - - -
   # >10K query was a problem for thin at one time
   # - - - - - - - - - - - - - - - - - - - -

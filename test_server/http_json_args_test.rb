@@ -33,21 +33,8 @@ class HttpJsonArgsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '1BB',
-  %w( diff[was_files,now_files] old arg-names during arg-rename switch-over ) do
-    was_files = { "name" => "a\nb" }
-    now_files = {}
-    body = { was_files:was_files,now_files:now_files }.to_json
-    args = HttpJsonArgs.new(body).get('/diff')
-    assert_equal 'diff', args[0]
-    assert_equal was_files, args[1][0]
-    assert_equal now_files, args[1][1]
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
   test '1BC',
-  %w( diff2[old_files,new_files] ) do
+  %w( diff[old_files,new_files] ) do
     old_files = { "name" => "a\nb" }
     new_files = {}
     body = { old_files:old_files,new_files:new_files }.to_json

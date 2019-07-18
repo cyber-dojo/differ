@@ -22,21 +22,13 @@ class HttpJsonArgs
     case path
     when '/ready' then ['ready?',[]]
     when '/sha'   then ['sha',[]]
-    when '/diff'  then ['diff',[old_files||was_files, new_files||now_files]]
+    when '/diff'  then ['diff',[old_files, new_files]]
     else
       raise HttpJson::RequestError, 'unknown path'
     end
   end
 
   private
-
-  def was_files
-    @args[__method__.to_s]
-  end
-
-  def now_files
-    @args[__method__.to_s]
-  end
 
   def old_files
     @args[__method__.to_s]

@@ -10,17 +10,27 @@ class RackDispatcherTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '131', 'sha 200' do
+  test '131', 'ready 200' do
     @differ = Differ.new(externals)
-    args = {}
-    assert_dispatch('ready', args.to_json, true)
+    assert_dispatch('ready', {}.to_json, true)
   end
 
-  test '132', 'diff 200 with old arg-names' do
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '132', 'sha 200' do
     @differ = Differ.new(externals)
-    args = { was_files:{}, now_files:{} }
-    assert_dispatch('diff', args.to_json, {})
+    response = rack_call('sha', {}.to_json)
+    assert_equal 200, response[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    json = JSON.parse(response[2][0])
+    sha = json['sha']
+    assert_equal 40, sha.size
+    sha.each_char do |ch|
+      assert '0123456789abcdef'.include?(ch)
+    end
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '133', 'diff 200 with new arg-names' do
     @differ = Differ.new(externals)
