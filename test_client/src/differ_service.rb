@@ -24,11 +24,11 @@ class DifferService
     })
   end
 
-  #def diff2(old_files, new_files)
-  #  @http.get(__method__, {
-  #    old_files:old_files,
-  #    new_files:new_files
-  #  })
-  #end
+  def diff2(old_files, new_files)
+    @http.get(__method__, {
+      old_files:old_files,
+      new_files:new_files
+    })
+  end
 
 end

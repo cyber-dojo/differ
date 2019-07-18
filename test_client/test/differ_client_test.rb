@@ -6,6 +6,10 @@ class DifferClientTest < ClientTestBase
     '200'
   end
 
+  test '8C1', %w( renaming diff's arguments step-1 ) do
+    assert_equal({}, differ.diff2({}, {}))
+  end
+
   # - - - - - - - - - - - - - - - - - - - -
   # >10K query was a problem for thin at one time
   # - - - - - - - - - - - - - - - - - - - -
