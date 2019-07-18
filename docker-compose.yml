@@ -22,6 +22,8 @@ services:
         - SHA
     image: cyberdojo/differ
     container_name: test-differ-server
+    environment:
+      - NO_PROMETHEUS
     volumes:
       - ./test_server:/app/test:ro
     ports:
