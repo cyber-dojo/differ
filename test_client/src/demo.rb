@@ -1,4 +1,3 @@
-require_relative './git_diff'
 
 class Demo
 
@@ -40,7 +39,5 @@ class Demo
     html = '<pre>' + JSON.pretty_unparse(json) + '</pre>'
     [ 200, { 'Content-Type' => 'text/html' }, [ html ] ]
   end
-
-  include GitDiff
 
 end

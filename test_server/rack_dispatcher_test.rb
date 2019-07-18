@@ -8,6 +8,26 @@ class RackDispatcherTest < DifferTestBase
     '4AF'
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '131', 'sha 200' do
+    @differ = Differ.new(externals)
+    args = {}
+    assert_dispatch('ready', args.to_json, true)
+  end
+
+  test '132', 'diff 200' do
+    @differ = Differ.new(externals)
+    args = { "was_files":{}, "now_files":{} }
+    assert_dispatch('diff', args.to_json, {})
+  end
+
+  #test '133', 'diff2 200' do
+  #  @differ = Differ.new(externals)
+  #  args = { "old_files":{}, "new_files":{} }
+  #  assert_dispatch('diff2', args.to_json, {})
+  #end
+
   # - - - - - - - - - - - - - - - - -
 
   class DifferShaRaiser

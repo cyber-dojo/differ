@@ -1,14 +1,13 @@
 require_relative 'client_test_base'
-require_relative '../src/git_diff'
 
-class DifferAppTest < ClientTestBase
+class DifferClientTest < ClientTestBase
 
   def self.hex_prefix
     '200'
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-  # corner cases
+  # >10K query was a problem for thin at one time
   # - - - - - - - - - - - - - - - - - - - -
 
   test '347',
@@ -27,16 +26,43 @@ class DifferAppTest < ClientTestBase
     refute_nil json['gh/jk/wibble.h']
   end
 
-  test 'AEC',
-  'empty was_files and empty now_files is benign no-op' do
-    @old_files = {}
-    @new_files = {}
-    json = get_diff
-    assert_equal({}, json)
+  # - - - - - - - - - - - - - - - - - - - -
+  # ready
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '945', 'ready? 200' do
+    assert differ.ready?
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-  # delete
+  # sha
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '946', 'sha 200' do
+    sha = differ.sha
+    assert_equal 40, sha.size, 'sha.size'
+    sha.each_char do |ch|
+      assert '0123456789abcdef'.include?(ch), ch
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+  # failure cases
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test '7C0', %w( calling unknown method raises ) do
+    requester = HttpJson::RequestPacker.new(externals.http, 'differ-server', 4567)
+    http = HttpJson::ResponseUnpacker.new(requester, DifferException)
+    error = assert_raises(DifferException) { http.get(:shar, {"x":42}) }
+    json = JSON.parse(error.message)
+    assert_equal '/shar', json['path']
+    assert_equal '{"x":42}', json['body']
+    assert_equal 'DifferService', json['class']
+    assert_equal 'unknown path', json['message']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+  # delete file
   # - - - - - - - - - - - - - - - - - - - -
 
   test '313',
@@ -80,6 +106,8 @@ class DifferAppTest < ClientTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+  # delete content
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'B67',
   'all lines deleted but file not deleted',
@@ -112,7 +140,7 @@ class DifferAppTest < ClientTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-  # add
+  # new file
   # - - - - - - - - - - - - - - - - - - - -
 
   test '95F',
@@ -158,6 +186,11 @@ class DifferAppTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
   # no change
   # - - - - - - - - - - - - - - - - - - - -
+
+  test 'AEC',
+  'empty was_files and empty now_files is benign no-op' do
+    assert_equal({}, differ.diff({},{}))
+  end
 
   test '7FE',
   'unchanged empty-file shows as one empty line' do
@@ -397,7 +430,7 @@ class DifferAppTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    GitDiff::git_diff(@old_files, @new_files)['diff']
+    differ.diff(@old_files, @new_files)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
