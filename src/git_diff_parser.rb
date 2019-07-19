@@ -1,13 +1,12 @@
-require_relative 'line_splitter'
 
 # Parses the output of 'git diff' command.
-# Assumes the --unified=0 option has been used
-# so there are no context lines.
+# Assumes the --unified=99999999999 option has been used
+# so there is always a single @@ range and all context lines
 
 class GitDiffParser
 
   def initialize(diff_text)
-    @lines = LineSplitter.line_split(diff_text)
+    @lines = diff_text.split("\n")
     @n = 0
   end
 
@@ -15,7 +14,7 @@ class GitDiffParser
 
   def parse_all
     all = []
-    while /^diff --git/.match(line) do
+    while line && line.start_with?('diff --git') do
       all << parse_one
     end
     all
@@ -25,45 +24,41 @@ class GitDiffParser
 
   def parse_one
     old_filename,new_filename = parse_old_new_filenames(parse_header)
+    parse_range
     {
       new_filename: new_filename,
       old_filename: old_filename,
-             hunks: parse_hunks
+             lines: parse_lines
     }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_hunks
-    hunks = []
-    while hunk = parse_hunk
-      hunks << hunk
-    end
-    hunks
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_hunk
-    if range = parse_range
-      range[:deleted] = parse_lines(/^\-(.*)/)
+  def parse_lines
+    lines = []
+    index,old_number,new_number = 0,1,1
+    while line && !line.start_with?('diff --git') do
+      while same?(line) do
+        lines << src(:same, line, old_number)
+        old_number += 1
+        new_number += 1
+      end
+      if deleted?(line) || added?(line)
+        lines << { :type => :section, index:index }
+        index += 1
+      end
+      while deleted?(line) do
+        lines << src(:deleted, line, old_number)
+        old_number += 1
+      end
       parse_newline_at_eof
-      range[:added  ] = parse_lines(/^\+(.*)/)
+      while added?(line) do
+        lines << src(:added, line, new_number)
+        new_number += 1
+      end
       parse_newline_at_eof
-      range
     end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_range
-    re = /^@@ -(\d+)(,\d+)? \+(\d+)(,\d+)? @@.*/
-    if range = re.match(line)
-      next_line
-      { old_start_line:range[1].to_i,
-        new_start_line:range[3].to_i
-      }
-    end
+    lines
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -94,9 +89,9 @@ class GitDiffParser
   private
 
   def in_header?(line)
-    (!line.nil?) &&             # still more lines
-    (line !~ /^diff --git/) &&  # not in next file
-    (line !~ /^@@/)             # not in a range
+    line &&                             # still more lines
+    !line.start_with?('diff --git') &&  # not in next file
+    !line.start_with?('@@')             # not in a range
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -161,13 +156,29 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def parse_lines(re)
-    lines = []
-    while md = re.match(line)
-      lines << md[1]
+  def parse_range
+    if line && line.start_with?('@@')
       next_line
     end
-    lines
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def same?(line)
+    line && line[0] === ' '
+  end
+
+  def deleted?(line)
+    line && line[0] === '-'
+  end
+
+  def added?(line)
+    line && line[0] === '+'
+  end
+
+  def src(type, line, number)
+    next_line
+    { type:type, line:line[1..-1], number:number }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

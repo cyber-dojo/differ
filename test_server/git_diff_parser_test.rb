@@ -208,14 +208,10 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: '\\was_newfile_FIU', # <-- single backslash
         new_filename: nil,
-        hunks:
+        lines:
         [
-          {
-            old_start_line:1,
-            deleted: [ 'Please rename me!' ],
-            new_start_line:0,
-            added: []
-          }
+          section(0),
+          deleted(1, 'Please rename me!'),
         ]
       }
     ]
@@ -238,7 +234,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'original',
         new_filename: nil,
-        hunks: []
+        lines: []
       }
     ]
 
@@ -266,14 +262,12 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'untitled.rb',
         new_filename: nil,
-        hunks:
+        lines:
         [
-          {
-            old_start_line:1,
-            deleted: [ 'def answer', '  42', 'end'],
-            new_start_line:0,
-            added: []
-          }
+          section(0),
+          deleted(1, 'def answer'),
+          deleted(2, '  42'),
+          deleted(3, 'end'),
         ]
       }
     ]
@@ -297,7 +291,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
         new_filename: '\\was_newfile_FIU',      # <-- single backslash
-        hunks: []
+        lines: []
       }
     ]
 
@@ -320,7 +314,7 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'oldname',
         new_filename: 'newname',
-        hunks: []
+        lines: []
       }
     ]
 
@@ -336,12 +330,21 @@ class GitDiffParserTest < DifferTestBase
       'similarity index 87%',
       'rename from instructions',
       'rename to instructions_new',
-      'index e747436..83ec100 100644',
+      'index dc12fc4..08a6241 100644',
       '--- instructions',
       '+++ instructions_new',
-      '@@ -6,1 +6,1 @@ For example, the potential anagrams of "biro" are',
+      '@@ -1,10 +1,10 @@',
+      ' Write a program to generate all potential',
+      ' anagrams of an input string.',
+      ' ',
+      ' For example, the potential anagrams of "biro" are',
+      ' ',
+      ' biro bior brio broi boir bori',
+      ' ibro ibor irbo irob iobr iorb',
+      ' rbio rboi ribo riob roib robi',
       '-obir obri oibr oirb orbi orib',
-      '+obir obri oibr oirb orbi oribx'
+      '+obir obri oibr oirb orbi oribx',
+      ' ',
     ].join("\n")
 
     expected =
@@ -349,14 +352,20 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'instructions',
         new_filename: 'instructions_new',
-        hunks:
+        lines:
         [
-          {
-            old_start_line:6,
-            deleted: [ 'obir obri oibr oirb orbi orib' ],
-            new_start_line:6,
-            added: [ 'obir obri oibr oirb orbi oribx' ]
-          }
+            same(1, 'Write a program to generate all potential'),
+            same(2, 'anagrams of an input string.'),
+            same(3, ''),
+            same(4, 'For example, the potential anagrams of "biro" are'),
+            same(5, ''),
+            same(6, 'biro bior brio broi boir bori'),
+            same(7, 'ibro ibor irbo irob iobr iorb'),
+            same(8, 'rbio rboi ribo riob roib robi'),
+            section(0),
+            deleted(9, 'obir obri oibr oirb orbi orib'),
+            added(9, 'obir obri oibr oirb orbi oribx'),
+            same(10, ''),
         ]
       }
     ]
@@ -370,22 +379,23 @@ class GitDiffParserTest < DifferTestBase
   'parse diffs for two files' do
     lines = [
       'diff --git lines lines',
-      'index 896ddd8..2c8d1b8 100644',
+      'index 1d60b70..14fc1c2 100644',
       '--- lines',
       '+++ lines',
-      '@@ -1,1 +1,1 @@',
+      '@@ -1 +1 @@',
       '-ddd',
       '+eee',
       'diff --git other other',
-      'index cf0389a..b28bf03 100644',
+      'index f72fee1..9b29445 100644',
       '--- other',
       '+++ other',
-      '@@ -14,2 +14,2 @@',
+      '@@ -1,4 +1,4 @@',
+      ' AAA',
+      ' BBB',
       '-CCC',
       '-DDD',
       '+EEE',
       '+FFF',
-      "\\ No newline at end of file"
     ].join("\n")
 
     expected =
@@ -393,27 +403,25 @@ class GitDiffParserTest < DifferTestBase
       {
         old_filename: 'lines',
         new_filename: 'lines',
-        hunks:
+        lines:
         [
-          {
-            old_start_line:1,
-            deleted: [ 'ddd' ],
-            new_start_line:1,
-            added: [ 'eee' ]
-          }
+          section(0),
+          deleted(1, 'ddd'),
+          added(1, 'eee'),
         ]
       },
       {
         old_filename: 'other',
         new_filename: 'other',
-        hunks:
+        lines:
         [
-          {
-            old_start_line:14,
-            deleted: [ 'CCC', 'DDD' ],
-            new_start_line:14,
-            added: [ 'EEE', 'FFF' ]
-          }
+          same(1, 'AAA'),
+          same(2, 'BBB'),
+          section(0),
+          deleted(3, 'CCC'),
+          deleted(4, 'DDD'),
+          added(3, 'EEE'),
+          added(4, 'FFF'),
         ]
       }
     ]
@@ -422,79 +430,38 @@ class GitDiffParserTest < DifferTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # parse_range
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'D56',
-  'parse range old-size and new-size defaulted' do
-    lines = '@@ -3 +5 @@'
-    expected = { old_start_line:3, new_start_line:5 }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'AAA',
-  'parse range old-size defaulted' do
-    lines = '@@ -3 +5,9 @@'
-    expected = { old_start_line:3, new_start_line:5 }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '787',
-  'parse range new-size defaulted' do
-    lines = '@@ -3,4 +5 @@'
-    expected = { old_start_line:3, new_start_line:5 }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '64D',
-  'parse range nothing defaulted' do
-    lines = '@@ -3,4 +5,6 @@'
-    expected = { old_start_line:3, new_start_line:5 }
-    assert_equal expected, GitDiffParser.new(lines).parse_range
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1BC',
   'two hunks with no newline at end of file' do
     lines = [
       'diff --git lines lines',
-      'index b1a30d9..7fa9727 100644',
+      'index f70c2c0..ba0f878 100644',
       '--- lines',
       '+++ lines',
-      '@@ -3,1 +3,1 @@',
-      '-BBB',
-      '+CCC',
-      '@@ -8,1 +8,1 @@',
-      '-SSS',
-      '+TTT',
-      "\\ No newline at end of file"
+      '@@ -1,4 +1,5 @@',
+      ' aaa',
+      '-bbb',
+      '+BBB',
+      ' ccc',
+      ' ddd',
+      '+EEE',
+      '\ No newline at end of file',
     ].join("\n")
 
     expected =
     {
       old_filename: 'lines',
       new_filename: 'lines',
-      hunks:
+      lines:
       [
-        {
-          old_start_line:3,
-          deleted: [ 'BBB' ],
-          new_start_line:3,
-          added: [ 'CCC' ]
-        },
-        {
-          old_start_line:8,
-          deleted: [ 'SSS' ],
-          new_start_line:8,
-          added: [ 'TTT' ]
-        }
+        same(1, 'aaa'),
+        section(0),
+        deleted(2, 'bbb'),
+        added(2, 'BBB'),
+        same(3, 'ccc'),
+        same(4, 'ddd'),
+        section(1),
+        added(5, 'EEE'),
       ]
     }
 
@@ -807,6 +774,28 @@ class GitDiffParserTest < DifferTestBase
     ]
 
     assert_equal expected, GitDiffParser.new(diff_lines).parse_all
+  end
+
+  private
+
+  def section(index)
+    { :type => :section, index:index }
+  end
+
+  def same(number, line)
+    src(:same, number, line)
+  end
+
+  def deleted(number, line)
+    src(:deleted, number, line)
+  end
+
+  def added(number, line)
+    src(:added, number, line)
+  end
+
+  def src(type, number, line)
+    { type:type, number:number, line:line }
   end
 
 end

@@ -8,7 +8,9 @@ module LineSplitter # mix-in
       ['']
     else
       lines = source.split(/\n/, -1)
-      lines.pop if lines.last === ''
+      if lines.last === ''
+        lines.pop
+      end
       lines
     end
   end
