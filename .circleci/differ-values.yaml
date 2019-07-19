@@ -24,7 +24,7 @@ containers:
     volumeMounts:
       - name: differ-tmp-dir
         mountPath: /tmp
-        readOnly: false
+        readOnly: false        
     resources:
       limits:
         memory: 128Mi
