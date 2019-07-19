@@ -15,25 +15,37 @@ class ExternalGitterTest < DifferTestBase
 
   test '0B4',
   'git.setup' do
-    git.setup(path)
-    expect_shell([
+    expected = [
       'git init --quiet',
       "git config user.name 'differ'",
       "git config user.email 'differ@cyber-dojo.org'"
-    ].join(' && '))
+    ].join(' && ')
+    git.setup(path)
+    assert_shell(expected)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '8AB',
-  'for git.add_commit_tag' do
-    tag = 6
-    git.add_commit_tag(path, tag)
-    expect_shell(
+  'for git.add_commit_tag_0' do
+    expected = [
       'git add .',
-      "git commit --allow-empty --all --message #{tag} --quiet",
-      "git tag #{tag} HEAD"
-    )
+      "git commit --allow-empty --all --message 0 --quiet",
+      "git tag 0 HEAD"
+    ].join(' && ')
+    git.add_commit_tag_0(path)
+    assert_shell(expected)
+  end
+
+  test '8AC',
+  'for git.add_commit_tag_1' do
+    expected = [
+      'git add .',
+      "git commit --allow-empty --all --message 1 --quiet",
+      "git tag 1 HEAD"
+    ].join(' && ')
+    git.add_commit_tag_1(path)
+    assert_shell(expected)
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -52,12 +64,12 @@ class ExternalGitterTest < DifferTestBase
       '--'
     ].join(' ')
     git.diff_0_1(path)
-    expect_shell(expected)
+    assert_shell(expected)
   end
 
   private
 
-  def expect_shell(*messages)
+  def assert_shell(*messages)
     assert_equal [[path]+messages], shell.spied
   end
 

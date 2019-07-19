@@ -202,7 +202,7 @@ class GitDiffParser
 end
 
 #--------------------------------------------------------------
-# Notes
+# Notes (for when not using git diff --unified=VERY_LARGE)
 #--------------------------------------------------------------
 # LINE: diff --git
 # LINE: ...

@@ -13,18 +13,18 @@ class ExternalGitter
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def add_commit_tag(path, tag)
-    shell.assert_cd_exec(path,
-      'git add .',
-      "git commit --allow-empty --all --message #{tag} --quiet",
-      "git tag #{tag} HEAD"
-    )
+  def add_commit_tag_0(path)
+    shell.assert_cd_exec(path, ADD_COMMIT_TAG_0)
+  end
+
+  def add_commit_tag_1(path)
+    shell.assert_cd_exec(path, ADD_COMMIT_TAG_1)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def diff_0_1(path)
-    shell.assert_cd_exec(path, DIFF)
+    shell.assert_cd_exec(path, DIFF_0_1)
   end
 
   private
@@ -35,7 +35,19 @@ class ExternalGitter
     "git config user.email 'differ@cyber-dojo.org'"
   ].join(' && ')
 
-  DIFF = [
+  ADD_COMMIT_TAG_0 = [
+    'git add .',
+    "git commit --allow-empty --all --message 0 --quiet",
+    "git tag 0 HEAD"
+  ].join(' && ')
+
+  ADD_COMMIT_TAG_1 = [
+    'git add .',
+    "git commit --allow-empty --all --message 1 --quiet",
+    "git tag 1 HEAD"
+  ].join(' && ')
+
+  DIFF_0_1 = [
     'git diff',
     '--unified=99999999999',
     '--no-prefix',
