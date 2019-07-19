@@ -111,11 +111,11 @@ table =
     [ 'errors',                 error_count,        '==',   0 ],
     [ 'warnings',               warning_count,      '==',   0 ],
     [ 'skips',                  skip_count,         '==',   0 ],
-    [ 'duration(test)[s]',      test_duration,      '<=',   3 ],
+    [ 'duration(test)[s]',      test_duration,      '<=',   2 ],
     [ 'coverage(src)[%]',       src_coverage,       '==', 100 ],
     [ 'coverage(test)[%]',      test_coverage,      '==', 100 ],
-    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=', 2.5 ],
-    [ 'hits(src)/hits(test)',   f2(hits_ratio),     '>=',   4 ],
+    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=', 1.9 ],
+    [ 'hits(src)/hits(test)',   f2(hits_ratio),     '>=', 2.9 ],
   ]
 
 # - - - - - - - - - - - - - - - - - - - - - - -

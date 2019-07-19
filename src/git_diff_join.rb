@@ -44,10 +44,6 @@ module GitDiffJoin # mix-in
     diff[:new_filename].nil?
   end
 
-  def empty_file?(diff)
-    diff[:hunks] === []
-  end
-
   def all(lines, type)
     lines.collect.each.with_index(1) do |line,number|
       { type:type, line:line, number:number }

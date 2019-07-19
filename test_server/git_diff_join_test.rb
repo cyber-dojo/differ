@@ -51,6 +51,16 @@ class GitDiffJoinTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'A2D',
+  'empty file is renamed 100% identical across dirs' do
+    old_files = { 'plain' => '' }
+    new_files = { 'a/b/copy'  => '' }
+    expected = { 'a/b/copy' => [] }
+    assert_join(expected, old_files, new_files)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'F2E',
   'empty file has some content added' do
     old_files = { 'empty.c' => '' }
@@ -128,6 +138,64 @@ class GitDiffJoinTest < DifferTestBase
       'copy' =>
       [
         same(1, 'xxx'),
+      ]
+    }
+    assert_join(expected, old_files, new_files)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'BA7',
+  'non-empty file is renamed 100% identical across dirs' do
+    old_files = { 'a/b/plain' => 'zzz' }
+    new_files = { 'copy' => 'zzz' }
+    expected =
+    {
+      'copy' =>
+      [
+        same(1, 'zzz'),
+      ]
+    }
+    assert_join(expected, old_files, new_files)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'AA8',
+  'non-empty file is renamed <100% identical' do
+    old_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    new_files = { 'diamond.h' => "a\nb\nX\nd" }
+    expected =
+    {
+      'diamond.h' =>
+      [
+        same(1, 'a'),
+        same(2, 'b'),
+        section(0),
+        deleted(3, 'c'),
+        added(3, 'X'),
+        same(4, 'd')
+      ]
+    }
+    assert_join(expected, old_files, new_files)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'AA9',
+  'non-empty file is renamed <100% identical across dirs' do
+    old_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
+    new_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
+    expected =
+    {
+      '3/4/diamond.h' =>
+      [
+        same(1, 'a'),
+        same(2, 'b'),
+        section(0),
+        deleted(3, 'c'),
+        added(3, 'X'),
+        same(4, 'd')
       ]
     }
     assert_join(expected, old_files, new_files)
