@@ -473,45 +473,28 @@ class GitDiffParserTest < DifferTestBase
   test 'B2C',
   'diff one-hunk one-line' do
     lines = [
-      '@@ -4,1 +4,1 @@',
-      '-AAA',
-      '+BBB'
+      'diff --git lines lines',
+      'index 72943a1..f761ec1 100644',
+      '--- lines',
+      '+++ lines',
+      '@@ -1 +1 @@',
+      '-aaa',
+      '+bbb',
     ].join("\n")
 
     expected =
     {
-      old_start_line:4,
-      deleted: [ 'AAA' ],
-      new_start_line:4,
-      added: [ 'BBB' ]
+      old_filename: 'lines',
+      new_filename: 'lines',
+      lines:
+      [
+        section(0),
+        deleted(1, 'aaa'),
+        added(1, 'bbb'),
+      ]
     }
 
-    assert_equal expected, GitDiffParser.new(lines).parse_hunk
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'E9F',
-  'diff one-hunk two-lines' do
-    lines = [
-      '@@ -17,2 +17,2 @@',
-      '-CCC',
-      '-DDD',
-      '+EEE',
-      '+FFF'
-    ].join("\n")
-
-    expected =
-    [
-      {
-        old_start_line:17,
-        deleted: [ 'CCC','DDD' ],
-        new_start_line:17,
-        added: [ 'EEE','FFF' ]
-      }
-    ]
-
-    assert_equal expected, GitDiffParser.new(lines).parse_hunks
+    assert_equal expected, GitDiffParser.new(lines).parse_one
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -533,14 +516,12 @@ class GitDiffParserTest < DifferTestBase
     {
       old_filename: 'gapper.rb',
       new_filename: 'gapper.rb',
-      hunks:
+      lines:
       [
-        {
-          old_start_line:4,
-          deleted: [ 'XXX' ],
-          new_start_line:4,
-          added: [ 'YYY', 'ZZZ' ]
-        }
+        section(0),
+        deleted(1, 'XXX'),
+        added(1, 'YYY'),
+        added(2, 'ZZZ'),
       ]
     }
 
@@ -565,172 +546,6 @@ class GitDiffParserTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'C10',
-  'diff two hunks' do
-    lines = [
-      'diff --git test_gapper.rb test_gapper.rb',
-      'index 4d3ca1b..61e88f0 100644',
-      '--- test_gapper.rb',
-      '+++ test_gapper.rb',
-      '@@ -9,1 +9,1 @@ class TestGapper < Test::Unit::TestCase',
-      '-p Timw.now',
-      '+p Time.now',
-      "\\ No newline at end of file",
-      '@@ -19,1 +19,1 @@ class TestGapper < Test::Unit::TestCase',
-      '-q Timw.now',
-      '+q Time.now'
-    ].join("\n")
-
-    expected =
-    {
-      old_filename: 'test_gapper.rb',
-      new_filename: 'test_gapper.rb',
-      hunks:
-      [
-        {
-          old_start_line:9,
-          deleted: [ 'p Timw.now' ],
-          new_start_line:9,
-          added: [ 'p Time.now' ]
-        },
-        {
-          old_start_line:19,
-          deleted: [ 'q Timw.now' ],
-          new_start_line:19,
-          added: [ 'q Time.now' ]
-        }
-      ]
-    }
-
-    assert_equal expected, GitDiffParser.new(lines).parse_one
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'AD3',
-  'when diffs are one line apart' do
-    lines = [
-      'diff --git lines lines',
-      'index 5ed4618..c47ec44 100644',
-      '--- lines',
-      '+++ lines',
-      '@@ -5,1 +5,1 @@ CCC',
-      '-DDD',
-      '+EEE',
-      '@@ -9,1 +9,1 @@ FFF',
-      '-GGG',
-      '+HHH'
-    ].join("\n")
-
-    expected =
-    {
-      old_filename: 'lines',
-      new_filename: 'lines',
-      hunks:
-      [
-        {
-          old_start_line:5,
-          deleted: [ 'DDD' ],
-          new_start_line:5,
-          added: [ 'EEE' ]
-        },
-        {
-          old_start_line:9,
-          deleted: [ 'GGG' ],
-          new_start_line:9,
-          added: [ 'HHH' ]
-        }
-      ]
-    }
-
-    assert_equal expected, GitDiffParser.new(lines).parse_one
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'D3C',
-  'when diffs are 2 lines apart' do
-    lines = [
-      'diff --git lines lines',
-      'index 5ed4618..aad3f67 100644',
-      '--- lines',
-      '+++ lines',
-      '@@ -5,1 +5,1 @@',
-      '-DDD',
-      '+EEE',
-      '@@ -7,1 +7,1 @@',
-      '-HHH',
-      '+JJJ'
-    ].join("\n")
-
-    expected =
-    {
-      old_filename: 'lines',
-      new_filename: 'lines',
-      hunks:
-      [
-        {
-          old_start_line:5,
-          deleted: [ 'DDD' ],
-          new_start_line:5,
-          added: [ 'EEE' ]
-        },
-        {
-          old_start_line:7,
-          deleted: [ 'HHH' ],
-          new_start_line:7,
-          added: [ 'JJJ' ]
-        }
-      ]
-    }
-
-    assert_equal expected, GitDiffParser.new(lines).parse_one
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '274',
-  '7 unchanged lines between two changed lines',
-  'creates two hunks' do
-    lines = [
-      'diff --git lines lines',
-      'index 5ed4618..e78c888 100644',
-      '--- lines',
-      '+++ lines',
-      '@@ -5,1 +5,1 @@',
-      '-DDD',
-      '+EEE',
-      '@@ -13,1 +13,1 @@',
-      '-TTT',
-      '+UUU'
-    ].join("\n")
-
-    expected =
-    {
-       old_filename: 'lines',
-       new_filename: 'lines',
-       hunks:
-       [
-         {
-           old_start_line:5,
-           deleted: [ 'DDD' ],
-           new_start_line:5,
-           added: [ 'EEE' ]
-         },
-         {
-           old_start_line:13,
-           deleted: [ 'TTT' ],
-           new_start_line:13,
-           added: [ 'UUU' ]
-        }
-      ]
-    }
-
-    assert_equal expected, GitDiffParser.new(lines).parse_one
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test '124',%w(
     renamed but unchanged file has no trailing
     --- or +++ lines and must not consume diff
@@ -743,37 +558,25 @@ class GitDiffParserTest < DifferTestBase
       'rename from hiker.h',
       'rename to hiker.txt',
       'diff --git wibble.c wibble.c',
-      'index eff4ff4..2ca787d 100644',
+      'index 75b325b..c41a0ce 100644',
       '--- wibble.c',
       '+++ wibble.c',
-      '@@ -1,2 +1,3 @@',
-      '+abc',
+      '@@ -1,3 +1,4 @@',
+      ' 111',
+      ' 222',
+      ' abc',
+      '+ddd',
       '\\ No newline at end of file'
     ].join("\n")
 
     expected =
-    [
-      {
-        old_filename: "hiker.h",
-        new_filename: "hiker.txt",
-        hunks: []
-      },
-      {
-         old_filename: 'wibble.c',
-         new_filename: 'wibble.c',
-         hunks:
-         [
-           {
-             old_start_line:1,
-             deleted: [],
-             new_start_line:1,
-             added: ['abc']
-           }
-         ]
-      }
-    ]
+    {
+      old_filename: "hiker.h",
+      new_filename: "hiker.txt",
+      lines: []
+    }
 
-    assert_equal expected, GitDiffParser.new(diff_lines).parse_all
+    assert_equal expected, GitDiffParser.new(diff_lines).parse_one
   end
 
   private

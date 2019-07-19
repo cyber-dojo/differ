@@ -39,7 +39,7 @@ class GitDiffParser
     index,old_number,new_number = 0,1,1
     while line && !line.start_with?('diff --git') do
       while same?(line) do
-        lines << src(:same, line, old_number)
+        lines << src(:same, line, new_number)
         old_number += 1
         new_number += 1
       end

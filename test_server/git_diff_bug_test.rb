@@ -1,9 +1,6 @@
 require_relative 'differ_test_base'
-require_relative '../src/git_diff_join_builder'
 
 class GitDiffBugTest < DifferTestBase
-
-  include GitDiffJoinBuilder
 
   def self.hex_prefix
     '922'
@@ -28,7 +25,7 @@ class GitDiffBugTest < DifferTestBase
       {
           old_filename: 'recently_used_list.cpp',
           new_filename: 'was_recently_used_list.test.cpp',
-          hunks: []
+          lines: []
       }
     ]
     assert_equal expected, diff
