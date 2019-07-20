@@ -1,4 +1,8 @@
 require 'rack'
-require_relative './src/demo'
+require_relative 'src/demo'
+require_relative 'src/differ_service'
+require_relative 'src/externals'
 
-run Demo.new
+externals = Externals.new
+differ = DifferService.new(externals)
+run Demo.new(differ)

@@ -13,6 +13,8 @@ services:
     read_only: true
     tmpfs: /tmp
     restart: 'no'
+    ports:
+      - 4568:4568
 
 
   differ-server:
