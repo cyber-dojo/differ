@@ -28,8 +28,8 @@ class HttpJsonArgsTest < DifferTestBase
 
   test '691',
   %w( ctor does not raise when string-arg is valid json ) do
-    HttpJsonArgs.new({}.to_json)
-    HttpJsonArgs.new({ answer:42 }.to_json)
+    HttpJsonArgs.new('{}')
+    HttpJsonArgs.new('{"answer":42}')
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -38,12 +38,16 @@ class HttpJsonArgsTest < DifferTestBase
   %w( diff[id,old_files,new_files] ) do
     old_files = { 'hiker.h' => "a\nb" }
     new_files = { 'hiker.h' => "a\nb\nc" }
-    body = { id:hex_test_id, old_files:old_files,new_files:new_files }.to_json
-    args = HttpJsonArgs.new(body).get('/diff')
-    assert_equal 'diff', args[0]
-    assert_equal 'EE71BC',  args[1][0]
-    assert_equal old_files, args[1][1]
-    assert_equal new_files, args[1][2]
+    body = {
+      id:hex_test_id,
+      old_files:old_files,
+      new_files:new_files
+    }.to_json
+    name,args = HttpJsonArgs.new(body).get('/diff')
+    assert_equal 'diff', name
+    assert_equal 'EE71BC',  args[0]
+    assert_equal old_files, args[1]
+    assert_equal new_files, args[2]
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -52,8 +56,13 @@ class HttpJsonArgsTest < DifferTestBase
   %w( missing id raises HttpJson::RequestError ) do
     old_files = { 'hiker.h' => "a\nb" }
     new_files = { 'hiker.h' => "a\nb\nc" }
-    body = { old_files:old_files,new_files:new_files }.to_json
-    error = assert_raises(HttpJson::RequestError) { HttpJsonArgs.new(body).get('/diff') }
+    body = {
+      old_files:old_files,
+      new_files:new_files
+    }.to_json
+    error = assert_raises(HttpJson::RequestError) {
+      HttpJsonArgs.new(body).get('/diff')
+    }
     assert_equal 'id is missing', error.message
   end
 
@@ -61,9 +70,15 @@ class HttpJsonArgsTest < DifferTestBase
   %w( malformed id raises HttpJson::RequestError ) do
     old_files = { 'hiker.h' => "a\nb" }
     new_files = { 'hiker.h' => "a\nb\nc" }
-    %w( 12312= 1231234 ).each do |id|
-      body = { id:id,old_files:old_files,new_files:new_files }.to_json
-      error = assert_raises(HttpJson::RequestError) { HttpJsonArgs.new(body).get('/diff') }
+    %w( 12312= 1231234 ).each do |malformed_id|
+      body = {
+        id:malformed_id,
+        old_files:old_files,
+        new_files:new_files
+      }.to_json
+      error = assert_raises(HttpJson::RequestError) {
+        HttpJsonArgs.new(body).get('/diff')
+      }
       assert_equal 'id is malformed', error.message
     end
   end
