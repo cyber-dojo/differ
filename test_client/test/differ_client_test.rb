@@ -144,17 +144,17 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '95F',
-  'added empty file shows as one empty file' do
+  %w( added empty file shows as [''] ) do
     @old_files = { }
     @new_files = { 'diamond.h' => '' }
-    assert_diff 'diamond.h', []
+    assert_diff 'diamond.h', [ added(1,'') ]
   end
 
   test '960',
-  'added empty file in nested sub-dir shows as one empty file' do
+  %w( added empty file in nested sub-dir shows as [''] ) do
     @old_files = { }
     @new_files = { 'a/b/c/diamond.h' => '' }
-    assert_diff 'a/b/c/diamond.h', []
+    assert_diff 'a/b/c/diamond.h', [ added(1,'') ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -200,16 +200,16 @@ class DifferClientTest < ClientTestBase
     # the filename exists in old_files
     @old_files = { 'diamond.h' => '' }
     @new_files = { 'diamond.h' => '' }
-    assert_diff 'diamond.h', [ same(1, '') ]
+    assert_diff 'diamond.h', [ same(1,'') ]
   end
 
   test '7FF',
-  'unchanged empty-file in nested sub-dir shows as empty array' do
+  'unchanged empty-file in nested sub-dir shows as one empty line' do
     # same as adding an empty file except in this case
     # the filename exists in old_files
     @old_files = { 'w/e/r/diamond.h' => '' }
     @new_files = { 'w/e/r/diamond.h' => '' }
-    assert_diff 'w/e/r/diamond.h', [ same(1, '') ]
+    assert_diff 'w/e/r/diamond.h', [ same(1,'') ]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
