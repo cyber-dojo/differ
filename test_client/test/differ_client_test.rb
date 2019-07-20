@@ -86,6 +86,7 @@ class DifferClientTest < ClientTestBase
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
     assert_diff 'hiker.h', [
+      section(0),
       deleted(1, 'a'),
       deleted(2, 'b'),
       deleted(3, 'c'),
@@ -98,6 +99,7 @@ class DifferClientTest < ClientTestBase
     @old_files = { '4/5/6/7/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
     assert_diff '4/5/6/7/hiker.h', [
+      section(0),
       deleted(1, 'a'),
       deleted(2, 'b'),
       deleted(3, 'c'),
@@ -111,7 +113,7 @@ class DifferClientTest < ClientTestBase
 
   test 'B67',
   'all lines deleted but file not deleted',
-  'shows as all lines deleted plus one empty line' do
+  'shows as all lines deleted' do
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'hiker.h' => '' }
     assert_diff 'hiker.h', [
@@ -120,13 +122,12 @@ class DifferClientTest < ClientTestBase
       deleted(2, 'b'),
       deleted(3, 'c'),
       deleted(4, 'd'),
-      same(1, '')
     ]
   end
 
   test 'B68',
   'all lines deleted but nested sub-dir file not deleted',
-  'shows as all lines deleted plus one empty line' do
+  'shows as all lines deleted' do
     @old_files = { 'r/t/y/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'r/t/y/hiker.h' => '' }
     assert_diff 'r/t/y/hiker.h', [
@@ -135,7 +136,6 @@ class DifferClientTest < ClientTestBase
       deleted(2, 'b'),
       deleted(3, 'c'),
       deleted(4, 'd'),
-      same(1, '')
     ]
   end
 
@@ -164,6 +164,7 @@ class DifferClientTest < ClientTestBase
     @old_files = { }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff 'diamond.h', [
+      section(0),
       added(1, 'a'),
       added(2, 'b'),
       added(3, 'c'),
@@ -176,6 +177,7 @@ class DifferClientTest < ClientTestBase
     @old_files = { }
     @new_files = { 'q/w/e/diamond.h' => "a\nb\nc\nd" }
     assert_diff 'q/w/e/diamond.h', [
+      section(0),
       added(1, 'a'),
       added(2, 'b'),
       added(3, 'c'),
@@ -202,7 +204,7 @@ class DifferClientTest < ClientTestBase
   end
 
   test '7FF',
-  'unchanged empty-file in nested sub-dir shows as one empty line' do
+  'unchanged empty-file in nested sub-dir shows as empty array' do
     # same as adding an empty file except in this case
     # the filename exists in old_files
     @old_files = { 'w/e/r/diamond.h' => '' }
