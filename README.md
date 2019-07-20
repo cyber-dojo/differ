@@ -9,7 +9,7 @@
 
 - - - -
 # API
-  * [GET diff(old_files,new_files)](#get-diffold_filesnew_files)
+  * [GET diff(id,old_files,new_files)](#get-diffidold_filesnew_files)
   * [GET ready?](#get-ready)
   * [GET sha](#get-sha)
 
@@ -22,9 +22,10 @@
   * If the method raises an exception, a key equals "exception".
 
 - - - -
-## GET diff(old_files,new_files)
+## GET diff(id,old_files,new_files)
 Returns the diff of two sets of files.
 - parameters
+  * **id:String** for tracing, must be in [base58](https://github.com/cyber-dojo/runner/blob/master/src/base58.rb)
   * **old_files:Hash{String=>String}**
   * **new_files:Hash{String=>String}**
   * eg
