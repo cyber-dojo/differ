@@ -15,14 +15,14 @@ class GitDiffJoinTest < DifferTestBase
   'empty file is unchanged' do
     old_files = { 'empty.py' => '' }
     new_files = { 'empty.py' => '' }
-    expected = { 'empty.py' => [] }
+    expected = { 'empty.py' => [ same(1,'') ] }
     assert_join(expected, old_files, new_files)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A5C',
-  'empty file is deleted' do
+  'empty file is deleted is represented as []' do
     old_files = { 'empty.rb' => '' }
     new_files = {}
     expected = { 'empty.rb' => [] }
@@ -35,7 +35,7 @@ class GitDiffJoinTest < DifferTestBase
   'empty file is created' do
     old_files = {}
     new_files = { 'empty.h' => '' }
-    expected = { 'empty.h' => [] }
+    expected = { 'empty.h' => [ added(1,'') ] }
     assert_join(expected, old_files, new_files)
   end
 
@@ -45,7 +45,7 @@ class GitDiffJoinTest < DifferTestBase
   'empty file is renamed 100% identical' do
     old_files = { 'plain' => '' }
     new_files = { 'copy'  => '' }
-    expected = { 'copy' => [] }
+    expected = { 'copy' => [ same(1,'') ] }
     assert_join(expected, old_files, new_files)
   end
 
@@ -53,9 +53,9 @@ class GitDiffJoinTest < DifferTestBase
 
   test 'A2D',
   'empty file is renamed 100% identical across dirs' do
-    old_files = { 'plain' => '' }
-    new_files = { 'a/b/copy'  => '' }
-    expected = { 'a/b/copy' => [] }
+    old_files = { 'plain'    => '' }
+    new_files = { 'a/b/copy' => '' }
+    expected = { 'a/b/copy' => [ same(1,'') ] }
     assert_join(expected, old_files, new_files)
   end
 
