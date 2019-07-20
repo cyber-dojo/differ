@@ -13,31 +13,24 @@ class RackDispatcherTest < DifferTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '131', 'ready 200' do
-    @differ = Differ.new(externals)
-    assert_dispatch('ready', {}.to_json, true)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '132', 'sha 200' do
-    @differ = Differ.new(externals)
-    response = rack_call('sha', {}.to_json)
-    assert_equal 200, response[0]
-    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
-    json = JSON.parse(response[2][0])
-    sha = json['sha']
-    assert_equal 40, sha.size
-    sha.each_char do |ch|
-      assert '0123456789abcdef'.include?(ch)
+    args = {}
+    assert_200('ready', args) do |response|
+      assert_equal true, response['ready?']
     end
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  test '132', 'sha 200' do
+    args = {}
+    assert_200('sha', args) do |response|
+      assert_equal ENV['SHA'], response['sha']
+    end
+  end
 
   test '133', 'diff 200' do
-    @differ = Differ.new(externals)
     args = { id:hex_test_id, old_files:{}, new_files:{} }
-    assert_dispatch('diff', args.to_json, {})
+    assert_200('diff', args) do |response|
+      assert_equal({}, response['diff'])
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -46,29 +39,29 @@ class RackDispatcherTest < DifferTestBase
 
   test 'E2C',
   'dispatch returns 400 status when body is not JSON' do
-    assert_dispatch_raises('xyz', '123', 400, 'body is not JSON Hash')
+    assert_dispatch_error('xyz', '123', 400, 'body is not JSON Hash')
   end
 
   test 'E2B',
   'dispatch returns 400 status when body is not JSON Hash' do
-    assert_dispatch_raises('xyz', [].to_json, 400, 'body is not JSON Hash')
+    assert_dispatch_error('xyz', [].to_json, 400, 'body is not JSON Hash')
   end
 
   test 'E2A',
-  'dispatch raises 400 when method name is unknown' do
-    assert_dispatch_raises('xyz', {}.to_json, 400, 'unknown path')
+  'dispatch returns 400 when method name is unknown' do
+    assert_dispatch_error('xyz', {}.to_json, 400, 'unknown path')
   end
 
   test '228',
-  'diff raises 400 when id is missing' do
+  'diff returns 400 when id is missing' do
     args = { old_files:{}, new_files:{} }
-    assert_dispatch_raises('diff', args.to_json, 400, 'id is missing')
+    assert_dispatch_error('diff', args.to_json, 400, 'id is missing')
   end
 
   test '229',
-  'diff raises 400 when id is malformed' do
+  'diff returns 400 when id is malformed' do
     args = { id:'12345=',old_files:{}, new_files:{} }
-    assert_dispatch_raises('diff', args.to_json, 400, 'id is malformed')
+    assert_dispatch_error('diff', args.to_json, 400, 'id is malformed')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -88,73 +81,59 @@ class RackDispatcherTest < DifferTestBase
   test 'F1A',
   'dispatch returns 500 status when implementation raises' do
     @differ = DifferShaRaiser.new(ArgumentError, 'wibble')
-    assert_dispatch_raises('sha', {}.to_json, 500, 'wibble')
+    assert_dispatch_error('sha', {}.to_json, 500, 'wibble')
   end
 
   test 'F1B',
   'dispatch returns 500 status when implementation has syntax error' do
     @differ = DifferShaRaiser.new(SyntaxError, 'fubar')
-    assert_dispatch_raises('sha', {}.to_json, 500, 'fubar')
+    assert_dispatch_error('sha', {}.to_json, 500, 'fubar')
   end
 
   private
 
-  def assert_dispatch_raises(name, args, status, message)
+  def assert_200(name, args)
+    response = rack_call(name, args.to_json)
+    assert_equal 200, response[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    yield JSON.parse(response[2][0])
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_dispatch_error(name, args, status, message)
+    @differ ||= Object.new
     response,stderr = with_captured_stderr { rack_call(name, args) }
     assert_equal status, response[0], "message:#{message},stderr:#{stderr}"
     assert_equal({ 'Content-Type' => 'application/json' }, response[1])
-    assert_exception(response[2][0], name, args, message)
-    assert_exception(stderr,         name, args, message)
+    assert_json_exception(response[2][0], name, args, message)
+    assert_json_exception(stderr,         name, args, message)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_exception(s, name, body, message)
+  def assert_json_exception(s, name, body, message)
     json = JSON.parse!(s)
     exception = json['exception']
     refute_nil exception
-    assert_equal '/'+name, exception['path'], "path:#{__LINE__}"
-    assert_equal body, exception['body'], "body:#{__LINE__}"
-    assert_equal 'DifferService', exception['class'], "exception['class']:#{__LINE__}"
-    assert_equal message, exception['message'], "exception['message']:#{__LINE__}"
-    assert_equal 'Array', exception['backtrace'].class.name, "exception['backtrace'].class.name:#{__LINE__}"
-    assert_equal 'String', exception['backtrace'][0].class.name, "exception['backtrace'][0].class.name:#{__LINE__}"
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def assert_dispatch(name, args, stubbed)
-    if query?(name)
-      qname = name + '?'
-    else
-      qname = name
-    end
-    assert_rack_call(name, args, { qname => stubbed })
-  end
-
-  def query?(name)
-    ['ready'].include?(name)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def assert_rack_call(name, args, expected)
-    response = rack_call(name, args)
-    assert_equal 200, response[0]
-    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
-    assert_equal [to_json(expected)], response[2], args
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def to_json(body)
-    JSON.generate(body)
+    diagnostic = "path:#{__LINE__}"
+    assert_equal '/'+name, exception['path'], diagnostic
+    diagnostic = "body:#{__LINE__}"
+    assert_equal body, exception['body'], diagnostic
+    diagnostic = "exception['class']:#{__LINE__}"
+    assert_equal 'DifferService', exception['class'], diagnostic
+    diagnostic = "exception['message']:#{__LINE__}"
+    assert_equal message, exception['message'], diagnostic
+    diagnostic = "exception['backtrace'].class.name:#{__LINE__}"
+    assert_equal 'Array', exception['backtrace'].class.name, diagnostic
+    diagnostic = "exception['backtrace'][0].class.name:#{__LINE__}"
+    assert_equal 'String', exception['backtrace'][0].class.name, diagnostic
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def rack_call(name, args)
-    @differ ||= Object.new
+    @differ ||= Differ.new(externals)
     rack = RackDispatcher.new(@differ, RackRequestStub)
     env = { path_info:name, body:args }
     rack.call(env)
