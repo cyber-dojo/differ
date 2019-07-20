@@ -15,8 +15,8 @@ class Differ
     ENV['SHA']
   end
 
-  def diff(old_files, new_files)
-    git_diff = GitDiffer.new(@externals).diff(old_files, new_files)
+  def diff(id, old_files, new_files)
+    git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
     git_diff_join(git_diff, old_files, new_files)
   end
 

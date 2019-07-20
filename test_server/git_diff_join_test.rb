@@ -259,7 +259,7 @@ class GitDiffJoinTest < DifferTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_join(expected, old_files, new_files)
-    diff_lines = GitDiffer.new(externals).diff(old_files, new_files)
+    diff_lines = GitDiffer.new(externals).diff(hex_test_id, old_files, new_files)
     actual = git_diff_join(diff_lines, old_files, new_files)
     assert_equal expected, actual
   end

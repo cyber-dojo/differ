@@ -1,5 +1,6 @@
 require_relative 'http_json/request_error'
 require 'json'
+require 'securerandom'
 
 class HttpJsonArgs
 
@@ -22,13 +23,17 @@ class HttpJsonArgs
     case path
     when '/ready' then ['ready?',[]]
     when '/sha'   then ['sha',[]]
-    when '/diff'  then ['diff',[old_files, new_files]]
+    when '/diff'  then ['diff',[id, old_files, new_files]]
     else
       raise HttpJson::RequestError, 'unknown path'
     end
   end
 
   private
+
+  def id
+    @args[__method__.to_s] || SecureRandom.hex[0..5]
+  end
 
   def old_files
     @args[__method__.to_s]

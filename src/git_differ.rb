@@ -6,8 +6,7 @@ class GitDiffer
     @external = external
   end
 
-  def diff(old_files, new_files)
-    id = SecureRandom.hex
+  def diff(id, old_files, new_files)
     Dir.mktmpdir(id, '/tmp') do |git_dir|
       git.setup(git_dir)
       save(git_dir, old_files)

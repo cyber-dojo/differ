@@ -34,14 +34,29 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '1BC',
-  %w( diff[old_files,new_files] ) do
-    old_files = { "name" => "a\nb" }
-    new_files = {}
+  %w( diff[id,old_files,new_files] ) do
+    old_files = { 'hiker.h' => "a\nb" }
+    new_files = { 'hiker.h' => "a\nb\nc" }
+    body = { id:hex_test_id, old_files:old_files,new_files:new_files }.to_json
+    args = HttpJsonArgs.new(body).get('/diff')
+    assert_equal 'diff', args[0]
+    assert_equal 'EE71BC',  args[1][0]
+    assert_equal old_files, args[1][1]
+    assert_equal new_files, args[1][2]
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test '1BD',
+  %w( diff[old_files,new_files] id defaults to random-id till client passes it ) do
+    old_files = { 'hiker.h' => "a\nb" }
+    new_files = { 'hiker.h' => "a\nb\nc" } 
     body = { old_files:old_files,new_files:new_files }.to_json
     args = HttpJsonArgs.new(body).get('/diff')
     assert_equal 'diff', args[0]
-    assert_equal old_files, args[1][0]
-    assert_equal new_files, args[1][1]
+    refute_equal 'EE71BD',  args[1][0]
+    assert_equal old_files, args[1][1]
+    assert_equal new_files, args[1][2]
   end
 
 end

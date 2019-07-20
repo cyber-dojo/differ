@@ -69,6 +69,10 @@ class HexMiniTest < MiniTest::Test
 
   # - - - - - - - - - - - - - - - - - - - - - -
 
+  def hex_test_id
+    @_hex_test_id
+  end
+
   def hex_setup
   end
 
