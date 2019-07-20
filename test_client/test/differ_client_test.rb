@@ -191,7 +191,7 @@ class DifferClientTest < ClientTestBase
 
   test 'AEC',
   'empty old_files and empty new_files is benign no-op' do
-    assert_equal({}, differ.diff({},{}))
+    assert_equal({}, differ.diff(test_id,{},{}))
   end
 
   test '7FE',
@@ -432,7 +432,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    differ.diff(@old_files, @new_files)
+    differ.diff(test_id, @old_files, @new_files)
   end
 
   # - - - - - - - - - - - - - - - - - - - -

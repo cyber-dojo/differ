@@ -31,7 +31,7 @@ class Demo
   end
 
   def diff
-    duration,result = timed { differ.diff(old_files,new_files) }
+    duration,result = timed { differ.diff('PUF8Zg', old_files,new_files) }
     pre('diff', duration, 'LightGreen', result)
   end
 

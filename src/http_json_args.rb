@@ -1,6 +1,5 @@
 require_relative 'http_json/request_error'
 require 'json'
-require 'securerandom'
 
 class HttpJsonArgs
 
@@ -32,7 +31,7 @@ class HttpJsonArgs
   private
 
   def id
-    @args[__method__.to_s] || SecureRandom.hex[0..5]
+    @args[__method__.to_s]
   end
 
   def old_files
