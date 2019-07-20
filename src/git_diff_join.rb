@@ -14,7 +14,11 @@ module GitDiffJoin # mix-in
       if deleted_file?(diff)
         joined[old_filename] = diff[:lines]
       elsif new_file?(diff)
-        lines = empty?(diff) ? [added(1,'')] : diff[:lines]
+        if empty?(diff)
+          lines = [{ :type => :added, number:1, line:'' }]
+        else
+          lines = diff[:lines]
+        end
         joined[new_filename] = lines
       elsif unchanged_rename?(old_filename, old_files, new_filename, new_files)
         lines = line_split(new_files[new_filename])
