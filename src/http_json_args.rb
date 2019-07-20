@@ -1,3 +1,4 @@
+require_relative 'base58'
 require_relative 'http_json/request_error'
 require 'json'
 
@@ -31,8 +32,22 @@ class HttpJsonArgs
   private
 
   def id
-    @args[__method__.to_s]
+    name = __method__.to_s
+    unless @args.has_key?(name)
+      fail missing(name)
+    end
+    arg = @args[name]
+    unless well_formed_id?(arg)
+      fail malformed(name)
+    end
+    arg
   end
+
+  def well_formed_id?(arg)
+    Base58.string?(arg) && arg.size === 6
+  end
+
+  # - - - - - - - - - - - - - - - -
 
   def old_files
     @args[__method__.to_s]
@@ -40,6 +55,16 @@ class HttpJsonArgs
 
   def new_files
     @args[__method__.to_s]
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def missing(arg_name)
+    HttpJson::RequestError.new("#{arg_name} is missing")
+  end
+
+  def malformed(arg_name)
+    HttpJson::RequestError.new("#{arg_name} is malformed")
   end
 
 end

@@ -9,6 +9,8 @@ class RackDispatcherTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # 200
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '131', 'ready 200' do
     @differ = Differ.new(externals)
@@ -32,13 +34,46 @@ class RackDispatcherTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '133', 'diff 200 with new arg-names' do
+  test '133', 'diff 200' do
     @differ = Differ.new(externals)
-    args = { old_files:{}, new_files:{} }
+    args = { id:hex_test_id, old_files:{}, new_files:{} }
     assert_dispatch('diff', args.to_json, {})
   end
 
-  # - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # 400
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E2C',
+  'dispatch returns 400 status when body is not JSON' do
+    assert_dispatch_raises('xyz', '123', 400, 'body is not JSON Hash')
+  end
+
+  test 'E2B',
+  'dispatch returns 400 status when body is not JSON Hash' do
+    assert_dispatch_raises('xyz', [].to_json, 400, 'body is not JSON Hash')
+  end
+
+  test 'E2A',
+  'dispatch raises 400 when method name is unknown' do
+    assert_dispatch_raises('xyz', {}.to_json, 400, 'unknown path')
+  end
+
+  test '228',
+  'diff raises 400 when id is missing' do
+    args = { old_files:{}, new_files:{} }
+    assert_dispatch_raises('diff', args.to_json, 400, 'id is missing')
+  end
+
+  test '229',
+  'diff raises 400 when id is malformed' do
+    args = { id:'12345=',old_files:{}, new_files:{} }
+    assert_dispatch_raises('diff', args.to_json, 400, 'id is malformed')
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # 500
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   class DifferShaRaiser
     def initialize(*args)
@@ -60,41 +95,6 @@ class RackDispatcherTest < DifferTestBase
   'dispatch returns 500 status when implementation has syntax error' do
     @differ = DifferShaRaiser.new(SyntaxError, 'fubar')
     assert_dispatch_raises('sha', {}.to_json, 500, 'fubar')
-  end
-
-  test 'E2A',
-  'dispatch raises 400 when method name is unknown' do
-    @differ = Object.new
-    assert_dispatch_raises('xyz', {}.to_json, 400, 'unknown path')
-  end
-
-  test 'E2B',
-  'dispatch returns 400 status when JSON is malformed' do
-    @differ = Object.new
-    assert_dispatch_raises('xyz', [].to_json, 400, 'body is not JSON Hash')
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  class DifferStub
-    def sha
-      'hello from sha stub'
-    end
-    def ready?
-      'hello from ready? stub'
-    end
-  end
-
-  test 'E40',
-  'dispatch to ready? is 200' do
-    @differ = DifferStub.new
-    assert_dispatch('ready', {}.to_json, 'hello from ready? stub')
-  end
-
-  test 'E41',
-  'dispatch to sha is 200' do
-    @differ = DifferStub.new
-    assert_dispatch('sha', {}.to_json, 'hello from sha stub')
   end
 
   private
@@ -154,6 +154,7 @@ class RackDispatcherTest < DifferTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def rack_call(name, args)
+    @differ ||= Object.new
     rack = RackDispatcher.new(@differ, RackRequestStub)
     env = { path_info:name, body:args }
     rack.call(env)

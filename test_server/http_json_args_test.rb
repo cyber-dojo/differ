@@ -1,5 +1,6 @@
 require_relative 'differ_test_base'
 require_relative '../src/http_json_args'
+require_relative '../src/http_json/request_error'
 
 class HttpJsonArgsTest < DifferTestBase
 
@@ -48,15 +49,23 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '1BD',
-  %w( diff[old_files,new_files] id defaults to random-id till client passes it ) do
+  %w( missing id raises HttpJson::RequestError ) do
     old_files = { 'hiker.h' => "a\nb" }
-    new_files = { 'hiker.h' => "a\nb\nc" } 
+    new_files = { 'hiker.h' => "a\nb\nc" }
     body = { old_files:old_files,new_files:new_files }.to_json
-    args = HttpJsonArgs.new(body).get('/diff')
-    assert_equal 'diff', args[0]
-    refute_equal 'EE71BD',  args[1][0]
-    assert_equal old_files, args[1][1]
-    assert_equal new_files, args[1][2]
+    error = assert_raises(HttpJson::RequestError) { HttpJsonArgs.new(body).get('/diff') }
+    assert_equal 'id is missing', error.message
+  end
+
+  test '1BE',
+  %w( malformed id raises HttpJson::RequestError ) do
+    old_files = { 'hiker.h' => "a\nb" }
+    new_files = { 'hiker.h' => "a\nb\nc" }
+    %w( 12312= 1231234 ).each do |id|
+      body = { id:id,old_files:old_files,new_files:new_files }.to_json
+      error = assert_raises(HttpJson::RequestError) { HttpJsonArgs.new(body).get('/diff') }
+      assert_equal 'id is malformed', error.message
+    end
   end
 
 end
