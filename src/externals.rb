@@ -7,9 +7,6 @@ class Externals
   def disk
     @disk ||= ExternalDiskWriter.new
   end
-  def disk=(doppel)
-    @disk = doppel
-  end
 
   def git
     @git ||= ExternalGitter.new(self)
@@ -18,6 +15,13 @@ class Externals
   def shell
     @shell ||= ExternalSheller.new
   end
+
+  # - - - - - - - - - - - - - - - - - - - - -
+  
+  def disk=(doppel)
+    @disk = doppel
+  end
+
   def shell=(doppel)
     @shell = doppel
   end

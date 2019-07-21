@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'utf8_clean'
 require 'open3'
 
@@ -12,7 +14,7 @@ class ExternalSheller
     stdout = Utf8::clean(stdout)
     stderr = Utf8::clean(stderr)
     exit_status = r.exitstatus
-    unless exit_status === 0 && stderr === ''
+    unless success?(exit_status) && stderr.empty?
       diagnostic = {
         stdout:stdout,
         stderr:stderr,
@@ -24,6 +26,10 @@ class ExternalSheller
   end
 
   private
+
+  def success?(status)
+    status === 0
+  end
 
   def quoted(s)
     '"' + s + '"'

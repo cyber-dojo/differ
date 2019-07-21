@@ -1,9 +1,10 @@
-
-# Parses the output of 'git diff' command.
-# Assumes the --unified=99999999999 option has been used
-# so there is always a single @@ range and all context lines
+# frozen_string_literal: true
 
 class GitDiffParser
+
+  # Parses the output of 'git diff' command.
+  # Assumes the --unified=99999999999 option has been used
+  # so there is always a single @@ range and all context lines
 
   def initialize(diff_text)
     @lines = diff_text.split("\n")
