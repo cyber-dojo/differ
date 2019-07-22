@@ -16,14 +16,4 @@ class Externals
     @shell ||= ExternalSheller.new
   end
 
-  # - - - - - - - - - - - - - - - - - - - - -
-  
-  def disk=(doppel)
-    @disk = doppel
-  end
-
-  def shell=(doppel)
-    @shell = doppel
-  end
-
 end
