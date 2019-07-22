@@ -1,6 +1,6 @@
-require_relative 'http_service_exception'
+require_relative 'http_json/service_exception'
 
-class DifferException < HttpServiceException
+class DifferException < HttpJson::ServiceException
 
   def initialize(message)
     super
