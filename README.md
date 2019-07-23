@@ -1,4 +1,3 @@
-
 [![CircleCI](https://circleci.com/gh/cyber-dojo/differ.svg?style=svg)](https://circleci.com/gh/cyber-dojo/differ)
 
 # cyberdojo/differ docker image
