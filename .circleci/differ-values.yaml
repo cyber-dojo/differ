@@ -18,7 +18,6 @@ service:
 containers:
   - name: differ
     image: cyberdojo/differ
-    tag: ""
     securityContext:
       readOnlyRootFilesystem: true
     volumeMounts:
