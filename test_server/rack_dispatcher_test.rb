@@ -12,6 +12,15 @@ class RackDispatcherTest < DifferTestBase
   # 200
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '130', %w(
+  allow empty body instead of {} which is
+  useful for kubernetes live/ready probes ) do
+    response = rack_call('ready', '')
+    assert_equal 200, response[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    assert_equal({"ready?" => true}, JSON.parse(response[2][0]))
+  end
+
   test '131', 'ready 200' do
     args = {}
     assert_200('ready', args) do |response|

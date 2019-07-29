@@ -11,7 +11,7 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test 'A04',
-  'ctor raises when its string-arg is not valid json' do
+  'ctor raises when its string-arg is invalid json' do
     expected = 'body is not JSON'
     # abc is not a valid top-level json element
     error = assert_raises { HttpJsonArgs.new('abc') }
@@ -25,6 +25,12 @@ class HttpJsonArgsTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - -
+
+  test 'c89', %w(
+  ctor does not raise when body is empty string which is
+  useful for kubernetes live/ready probes ) do
+    HttpJsonArgs.new('')
+  end
 
   test '691',
   %w( ctor does not raise when string-arg is valid json ) do
