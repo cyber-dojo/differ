@@ -27,9 +27,9 @@ containers:
         readOnly: false
     resources:
       limits:
-        memory: 128Mi
+        memory: 32Mi
       requests:
-        memory: 128Mi
+        memory: 32Mi
       livenessProbe:
         path: /sha
         port: 4567
