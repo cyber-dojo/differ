@@ -11,4 +11,4 @@ else
   declare ip=localhost
 fi
 
-echo "demo -> ${ip}:4568"
+open "http://${ip}:4568"
