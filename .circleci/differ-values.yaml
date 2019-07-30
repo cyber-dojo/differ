@@ -30,10 +30,10 @@ containers:
       requests:
         memory: 32Mi
       livenessProbe:
-        path: /alive?
+        path: /sha
         port: 4567
       readinessProbe:
-        path: /ready?
+        path: /ready
         port: 4567
 
 envFromSecret: {}
