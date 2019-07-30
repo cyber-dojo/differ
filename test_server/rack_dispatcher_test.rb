@@ -21,21 +21,28 @@ class RackDispatcherTest < DifferTestBase
     assert_equal({"ready?" => true}, JSON.parse(response[2][0]))
   end
 
-  test '131', 'ready 200' do
-    args = {}
-    assert_200('ready', args) do |response|
-      assert_equal true, response['ready?']
-    end
-  end
-
-  test '132', 'sha 200' do
+  test '131', 'sha 200' do
     args = {}
     assert_200('sha', args) do |response|
       assert_equal ENV['SHA'], response['sha']
     end
   end
 
-  test '133', 'diff 200' do
+  test '132', 'alive 200' do
+    args = {}
+    assert_200('alive', args) do |response|
+      assert_equal true, response['alive?']
+    end
+  end
+
+  test '133', 'ready 200' do
+    args = {}
+    assert_200('ready', args) do |response|
+      assert_equal true, response['ready?']
+    end
+  end
+
+  test '134', 'diff 200' do
     args = { id:hex_test_id, old_files:{}, new_files:{} }
     assert_200('diff', args) do |response|
       assert_equal({}, response['diff'])

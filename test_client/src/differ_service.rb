@@ -9,11 +9,15 @@ class DifferService
     @http = HttpJson::ResponseUnpacker.new(requester, DifferException)
   end
 
-  def ready?
+  def sha
     @http.get(__method__, {})
   end
 
-  def sha
+  def alive?
+    @http.get(__method__, {})
+  end
+
+  def ready?
     @http.get(__method__, {})
   end
 

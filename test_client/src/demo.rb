@@ -8,6 +8,7 @@ class Demo
   def call(_env)
     html = ''
     html += sha
+    html += alive?
     html += ready?
     html += diff
     [ 200, { 'Content-Type' => 'text/html' }, [ html ] ]
@@ -23,6 +24,11 @@ class Demo
   def sha
     duration,result = timed { differ.sha }
     pre('sha', duration, 'LightGreen', result)
+  end
+
+  def alive?
+    duration,result = timed { differ.alive? }
+    pre('alive?', duration, 'LightGreen', result)
   end
 
   def ready?

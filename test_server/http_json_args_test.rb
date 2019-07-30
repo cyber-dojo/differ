@@ -28,7 +28,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   test 'c89', %w(
   ctor does not raise when body is empty string which is
-  useful for kubernetes live/ready probes ) do
+  useful for kubernetes liveness/readyness probes ) do
     HttpJsonArgs.new('')
   end
 
@@ -36,6 +36,26 @@ class HttpJsonArgsTest < DifferTestBase
   %w( ctor does not raise when string-arg is valid json ) do
     HttpJsonArgs.new('{}')
     HttpJsonArgs.new('{"answer":42}')
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test 'e12', 'sha has no args' do
+    name,args = HttpJsonArgs.new('{}').get('/sha')
+    assert_equal name, 'sha'
+    assert_equal [], args
+  end
+
+  test 'e13', 'alive has no args' do
+    name,args = HttpJsonArgs.new('{}').get('/alive')
+    assert_equal name, 'alive?'
+    assert_equal [], args
+  end
+
+  test 'e14', 'ready has no args' do
+    name,args = HttpJsonArgs.new('{}').get('/ready')
+    assert_equal name, 'ready?'
+    assert_equal [], args
   end
 
   # - - - - - - - - - - - - - - - - -

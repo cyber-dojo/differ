@@ -9,12 +9,16 @@ class Differ
     @externals = externals
   end
 
-  def ready?
-    true
-  end
-
   def sha
     ENV['SHA']
+  end
+
+  def alive?
+    true
+  end
+  
+  def ready?
+    true
   end
 
   def diff(id, old_files, new_files)

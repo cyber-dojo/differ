@@ -30,7 +30,7 @@ containers:
       requests:
         memory: 32Mi
       livenessProbe:
-        path: /sha
+        path: /alive?
         port: 4567
       readinessProbe:
         path: /ready?
