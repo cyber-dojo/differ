@@ -24,7 +24,7 @@
 ## GET diff(id,old_files,new_files)
 Returns the diff of two sets of files.
 - parameters
-  * **id:String** for tracing, must be in [base58](https://github.com/cyber-dojo/runner/blob/master/src/base58.rb)
+  * **id:String** for tracing, must be in [base58](https://github.com/cyber-dojo/differ/blob/master/src/base58.rb)
   * **old_files:Hash{String=>String}**
   * **new_files:Hash{String=>String}**
   * eg
@@ -108,10 +108,10 @@ Returns the diff of two sets of files.
 
 - - - -
 # build the image and run the tests
-- Builds the runner-server image and an example runner-client image.
-- Brings up a runner-server container and a runner-client container.
-- Runs the runner-server's tests from inside a runner-server container.
-- Runs the runner-client's tests from inside the runner-client container.
+- Builds the differ-server image and an example differ-client image.
+- Brings up a differ-server container and a differ-client container.
+- Runs the differ-server's tests from inside a differ-server container.
+- Runs the differ-client's tests from inside the differ-client container.
 
 ```text
 $ ./pipe_build_up_test.sh
