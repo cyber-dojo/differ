@@ -13,10 +13,10 @@ class HttpJsonArgs
   def initialize(body)
     @args = json_parse(body)
     unless @args.is_a?(Hash)
-      fail HttpJson::RequestError, 'body is not JSON Hash'
+      raise request_error('body is not JSON Hash')
     end
   rescue JSON::ParserError
-    fail HttpJson::RequestError, 'body is not JSON'
+    raise request_error('body is not JSON')
   end
 
   # - - - - - - - - - - - - - - - -
@@ -28,7 +28,7 @@ class HttpJsonArgs
     when '/ready' then ['ready?',[]]
     when '/diff'  then ['diff',[id, old_files, new_files]]
     else
-      raise HttpJson::RequestError, 'unknown path'
+      raise request_error('unknown path')
     end
   end
 
@@ -42,14 +42,16 @@ class HttpJsonArgs
     end
   end
 
+  # - - - - - - - - - - - - - - - -
+
   def id
     name = __method__.to_s
     unless @args.has_key?(name)
-      fail missing(name)
+      raise missing(name)
     end
     arg = @args[name]
     unless well_formed_id?(arg)
-      fail malformed(name)
+      raise malformed(name)
     end
     arg
   end
@@ -71,11 +73,19 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def missing(arg_name)
-    HttpJson::RequestError.new("#{arg_name} is missing")
+    request_error("#{arg_name} is missing")
   end
 
   def malformed(arg_name)
-    HttpJson::RequestError.new("#{arg_name} is malformed")
+    request_error("#{arg_name} is malformed")
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def request_error(text)
+    # Don't include body or path in exception message
+    # because rack-dispatcher adds those.
+    HttpJson::RequestError.new(text)
   end
 
 end
