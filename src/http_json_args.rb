@@ -4,11 +4,8 @@ require_relative 'base58'
 require_relative 'http_json/request_error'
 require 'json'
 
+# Checks for arguments synactic correctness
 class HttpJsonArgs
-
-  # Checks for arguments synactic correctness
-  # Exception messages use the words 'body' and 'path'
-  # to match RackDispatcher's exception keys.
 
   def initialize(body)
     @args = json_parse(body)
@@ -83,8 +80,8 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def request_error(text)
-    # Don't include body or path in exception message
-    # because rack-dispatcher adds those.
+    # Exception messages use the words 'body' and 'path'
+    # to match RackDispatcher's exception keys.
     HttpJson::RequestError.new(text)
   end
 
