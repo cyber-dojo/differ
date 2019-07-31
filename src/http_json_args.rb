@@ -42,12 +42,7 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def id
-    name = present_arg(__method__)
-    arg = @args[name]
-    unless well_formed_id?(arg)
-      raise malformed(name)
-    end
-    arg
+    checked_arg(:well_formed_id?)
   end
 
   def well_formed_id?(arg)
@@ -57,23 +52,30 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def old_files
-    name = present_arg(__method__)
-    @args[name]
+    checked_arg(:well_formed_files?)
   end
 
   def new_files
-    name = present_arg(__method__)
-    @args[name]
+    checked_arg(:well_formed_files?)
+  end
+
+  def well_formed_files?(_arg)
+    # TODO:
+    true
   end
 
   # - - - - - - - - - - - - - - - -
 
-  def present_arg(name)
-    name = name.to_s
+  def checked_arg(validator)
+    name = caller_locations(1,1)[0].label
     unless @args.has_key?(name)
       raise missing(name)
     end
-    name
+    arg = @args[name]
+    unless self.send(validator, arg)
+      raise malformed(name)
+    end
+    arg
   end
 
   # - - - - - - - - - - - - - - - -
