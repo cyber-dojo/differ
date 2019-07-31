@@ -77,8 +77,10 @@ class HttpJsonArgsTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - -
+  # missing arguments
+  # - - - - - - - - - - - - - - - - -
 
-  test '1BD',
+  test '7B1',
   %w( missing id raises HttpJson::RequestError ) do
     old_files = { 'hiker.h' => "a\nb" }
     new_files = { 'hiker.h' => "a\nb\nc" }
@@ -91,6 +93,40 @@ class HttpJsonArgsTest < DifferTestBase
     }
     assert_equal 'id is missing', error.message
   end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test '7B2',
+  %w( missing old_files raises HttpJson::RequestError ) do
+    new_files = { 'hiker.h' => "a\nb\nc" }
+    body = {
+      id:hex_test_id,
+      new_files:new_files
+    }.to_json
+    error = assert_raises(HttpJson::RequestError) {
+      HttpJsonArgs.new(body).get('/diff')
+    }
+    assert_equal 'old_files is missing', error.message
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test '7B3',
+  %w( missing new_files raises HttpJson::RequestError ) do
+    old_files = { 'hiker.h' => "a\nb\nc" }
+    body = {
+      id:hex_test_id,
+      old_files:old_files
+    }.to_json
+    error = assert_raises(HttpJson::RequestError) {
+      HttpJsonArgs.new(body).get('/diff')
+    }
+    assert_equal 'new_files is missing', error.message
+  end 
+
+  # - - - - - - - - - - - - - - - - -
+  # malformed arguments
+  # - - - - - - - - - - - - - - - - -
 
   test '1BE',
   %w( malformed id raises HttpJson::RequestError ) do

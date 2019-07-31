@@ -42,10 +42,7 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def id
-    name = __method__.to_s
-    unless @args.has_key?(name)
-      raise missing(name)
-    end
+    name = present_arg(__method__)
     arg = @args[name]
     unless well_formed_id?(arg)
       raise malformed(name)
@@ -60,11 +57,23 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def old_files
-    @args[__method__.to_s]
+    name = present_arg(__method__)
+    @args[name]
   end
 
   def new_files
-    @args[__method__.to_s]
+    name = present_arg(__method__)
+    @args[name]
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def present_arg(name)
+    name = name.to_s
+    unless @args.has_key?(name)
+      raise missing(name)
+    end
+    name
   end
 
   # - - - - - - - - - - - - - - - -
