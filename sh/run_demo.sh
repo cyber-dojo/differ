@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 readonly SH_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
@@ -13,3 +14,5 @@ docker exec \
       > ${TMP_HTML_FILENAME}
 
 open "file://${TMP_HTML_FILENAME}"
+
+${SH_DIR}/docker_containers_down.sh
