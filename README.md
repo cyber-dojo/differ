@@ -10,7 +10,7 @@
 # API
   * [GET diff(id,old_files,new_files)](#get-diffidold_filesnew_files)
   * [GET ready?](#get-ready)
-  * [GET alive?](#alive)  
+  * [GET alive?](#get-alive)  
   * [GET sha](#get-sha)
 
 - - - -
@@ -23,31 +23,9 @@
 
 - - - -
 ## GET diff(id,old_files,new_files)
-Returns the diff of two sets of files.
-- parameters
-  * **id:String** for tracing, must be in [base58](https://github.com/cyber-dojo/differ/blob/master/src/base58.rb)
-  * **old_files:Hash{String=>String}**
-  * **new_files:Hash{String=>String}**
-  * eg
-  ```json
-  { "old_files": {
-      "hiker.h": "#ifndef HIKER_INCLUDED...",
-      "hiker.c": "#include <stdio.h>...",
-      "hiker.tests.c": "#include <assert.h>...",
-      "cyber-dojo.sh": "make",
-      "makefile": "..."
-    },
-    "new_files": {
-      "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
-      "hiker.c": "#include <stdio.h>...",
-      "hiker.tests.c": "#include <assert.h>...",
-      "cyber-dojo.sh": "make",
-      "makefile": "...some-edits..."
-    }
-  }
-  ```
+The diff of two sets of files.
 - returns
-  * unchanged lines as type "same" using the line number from **new_files**
+  * unchanged lines as type "same" using line numbers from **new_files**
   * added lines as type "added" using line numbers from **new_files**
   * deleted lines as type "deleted" using line numbers from **old_files**
   * each added/deleted hunk as indexed "sections"
@@ -76,51 +54,74 @@ Returns the diff of two sets of files.
   }
   ```
   *
+- parameters
+  * **id:String** for tracing, must be in [base58](https://github.com/cyber-dojo/differ/blob/master/src/base58.rb)
+  * **old_files:Hash{String=>String}**
+  * **new_files:Hash{String=>String}**
+  * eg
+  ```json
+  { "old_files": {
+      "hiker.h": "#ifndef HIKER_INCLUDED...",
+      "hiker.c": "#include <stdio.h>...",
+      "hiker.tests.c": "#include <assert.h>...",
+      "cyber-dojo.sh": "make",
+      "makefile": "..."
+    },
+    "new_files": {
+      "fizz_buzz.h": "#ifndef FIZZ_BUZZ_INCLUDED...",
+      "hiker.c": "#include <stdio.h>...",
+      "hiker.tests.c": "#include <assert.h>...",
+      "cyber-dojo.sh": "make",
+      "makefile": "...some-edits..."
+    }
+  }
+  ```
 
 - - - -
 # GET ready?
-Useful as a kubernetes readiness probe.
+Useful as a readiness probe.
+- returns
+  * **true** if the service is ready
+  ```json
+  { "ready?": true }
+  ```
+  * **false** if the service is not ready
+  ```json
+  { "ready?": false }
+  ```
 - parameters
   * none
   ```json
   {}
-  ```
-- returns
-  * **true** if the service is ready
-  * **false** if the service is not ready
-  * eg
-  ```json
-  { "ready?": true }
-  { "ready?": false }
   ```
 
 - - - -
 # GET alive?
-Useful as a kubernetes liveness probe.
+Useful as a liveness probe.
+- returns
+  * **true**
+  ```json
+  { "ready?": true }
+  ```
 - parameters
   * none
   ```json
   {}
-  ```
-- returns
-  * **true**
-  * eg
-  ```json
-  { "ready?": true }
   ```
 
 - - - -
 # GET sha
+The git commit sha used to create the Docker image.
+- returns
+  * The 40 character sha string.
+  * eg
+  ```json
+  { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
+  ```
 - parameters
   * none
   ```json
   {}
-  ```
-- returns
-  * the git commit sha used to create the docker image
-  * eg
-  ```json
-  { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
   ```
 
 - - - -
