@@ -118,6 +118,6 @@ exit_unless_clean test-differ-server
 
 if [ "${1}" != 'server' ]; then
   container_up differ-client
-  #wait_until_ready  test-differ-client 4568
-  #exit_unless_clean test-differ-client
+  wait_until_ready  test-differ-client 4568
+  exit_unless_clean test-differ-client
 fi

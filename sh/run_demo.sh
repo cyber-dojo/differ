@@ -2,13 +2,14 @@
 
 readonly SH_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
-"${SH_DIR}/build_docker_images.sh"
-"${SH_DIR}/docker_containers_up.sh"
+${SH_DIR}/build_docker_images.sh
+${SH_DIR}/docker_containers_up.sh
 
-if [ ! -z "${DOCKER_MACHINE_NAME}" ]; then
-  declare ip=$(docker-machine ip "${DOCKER_MACHINE_NAME}")
-else
-  declare ip=localhost
-fi
+TMP_HTML_FILENAME=/tmp/differ-demo.html
 
-open "http://${ip}:4568"
+docker exec \
+  test-differ-client \
+    sh -c 'ruby /app/src/html_demo.rb' \
+      > ${TMP_HTML_FILENAME}
+
+open "file://${TMP_HTML_FILENAME}"

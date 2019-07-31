@@ -1,20 +1,19 @@
+require_relative 'differ_service'
+require_relative 'externals'
 
-class Demo
+class HtmlDemo
 
-  def initialize(differ)
-    @differ = differ
+  def initialize
+    externals = Externals.new
+    @differ = DifferService.new(externals)
   end
 
-  def call(_env)
-    html = ''
-    html += sha
-    html += alive?
-    html += ready?
-    html += diff
-    [ 200, { 'Content-Type' => 'text/html' }, [ html ] ]
-  rescue => error
-    body = [ [error.message] + [error.backtrace] ]
-    [ 200, { 'Content-Type' => 'text/html' }, body ]
+  def html
+    src = ''
+    src += sha
+    src += alive?
+    src += ready?
+    src += diff
   end
 
   private
@@ -81,3 +80,5 @@ class Demo
   end
 
 end
+
+puts HtmlDemo.new.html
