@@ -10,6 +10,7 @@
 # API
   * [GET diff(id,old_files,new_files)](#get-diffidold_filesnew_files)
   * [GET ready?](#get-ready)
+  * [GET alive?](#alive)  
   * [GET sha](#get-sha)
 
 - - - -
@@ -78,6 +79,7 @@ Returns the diff of two sets of files.
 
 - - - -
 # GET ready?
+Useful as a kubernetes readiness probe.
 - parameters
   * none
   ```json
@@ -90,6 +92,21 @@ Returns the diff of two sets of files.
   ```json
   { "ready?": true }
   { "ready?": false }
+  ```
+
+- - - -
+# GET alive?
+Useful as a kubernetes liveness probe.
+- parameters
+  * none
+  ```json
+  {}
+  ```
+- returns
+  * **true**
+  * eg
+  ```json
+  { "ready?": true }
   ```
 
 - - - -
