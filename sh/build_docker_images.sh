@@ -14,7 +14,9 @@ build_service_image()
 }
 
 build_service_image differ-server
-build_service_image differ-client
+if [ "${1}" != 'server' ]; then
+  build_service_image differ-client
+fi
 
 # Assuming we do not have any new differ commits, differ's latest commit
 # sha will match the image tag inside versioner's .env file.

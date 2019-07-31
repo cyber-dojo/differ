@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+
 ip_address()
 {
   if [ -n "${DOCKER_MACHINE_NAME}" ]; then
@@ -97,14 +99,25 @@ echo_docker_log()
 
 # - - - - - - - - - - - - - - - - - - -
 
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+container_up()
+{
+  echo
+  docker-compose \
+    --file "${ROOT_DIR}/docker-compose.yml" \
+    up \
+    -d \
+    --force-recreate \
+    ${1}
+}
 
-echo
-docker-compose \
-  --file "${ROOT_DIR}/docker-compose.yml" \
-  up \
-  -d \
-  --force-recreate
+# - - - - - - - - - - - - - - - - - - -
 
+container_up differ-server
 wait_until_ready  test-differ-server 4567
 exit_unless_clean test-differ-server
+
+if [ "${1}" != 'server' ]; then
+  container_up differ-client
+  #wait_until_ready  test-differ-client 4568
+  #exit_unless_clean test-differ-client
+fi
