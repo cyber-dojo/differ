@@ -39,7 +39,7 @@ declare client_status=0
 
 run_server_tests()
 {
-  run_tests 'nobody' 'server' "${*}"
+  run_tests nobody server "${*}"
   server_status=$?
 }
 
@@ -47,7 +47,7 @@ run_server_tests()
 
 run_client_tests()
 {
-  run_tests 'nobody' 'client' "${*}"
+  run_tests nobody client "${*}"
   client_status=$?
 }
 
