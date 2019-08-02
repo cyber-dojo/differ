@@ -22,4 +22,5 @@ fi
 # sha will match the image tag inside versioner's .env file.
 # This means we can tag to it and a [cyber-dojo up] call
 # will use the tagged image.
-docker tag cyberdojo/differ:latest cyberdojo/differ:${SHA:0:7}
+readonly IMAGE=cyberdojo/differ
+docker tag ${IMAGE}:latest ${IMAGE}:${SHA:0:7}
