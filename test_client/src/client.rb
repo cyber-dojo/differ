@@ -12,14 +12,13 @@ class Client
   def call(env)
     request = Rack::Request.new(env)
     path = request.path_info
-    body = request.body.read
-    name,args = HttpJsonArgs.new(body).get(path)
+    name,args = HttpJsonArgs.new.get(path)
     result = @differ.public_send(name, *args)
     json_response(200, { name => result })
   rescue HttpJson::RequestError => error
-    json_response(400, diagnostic(path, body, error))
+    json_response(400, diagnostic(path, error))
   rescue Exception => error
-    json_response(500, diagnostic(path, body, error))
+    json_response(500, diagnostic(path, error))
   end
 
   private
@@ -40,10 +39,9 @@ class Client
 
   # - - - - - - - - - - - - - - - -
 
-  def diagnostic(path, body, error)
+  def diagnostic(path, error)
     { 'exception' => {
         'path' => path,
-        'body' => body,
         'class' => 'DifferService',
         'message' => error.message,
         'backtrace' => error.backtrace
