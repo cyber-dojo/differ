@@ -41,8 +41,13 @@ wait_briefly_until_ready()
 ready()
 {
   local -r port="${1}"
-  local -r path=ready
-  local -r ready_cmd="curl --output $(ready_response_filename) --silent --fail -X GET http://$(ip_address):${port}/${path}"
+  local -r path=ready?
+  local -r ready_cmd="\
+    curl \
+      --output $(ready_response_filename) \
+      --silent \
+      --fail \
+      -X GET http://$(ip_address):${port}/${path}"
   rm -f "$(ready_response_filename)"
   if ${ready_cmd} && [ "$(ready_response)" = '{"ready?":true}' ]; then
     true
@@ -60,7 +65,7 @@ ready_response()
 # - - - - - - - - - - - - - - - - - - -
 ready_response_filename()
 {
-  echo /tmp/curl-ready-output
+  echo /tmp/curl-differ-ready-output
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -94,24 +99,28 @@ echo_docker_log()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-
 container_up_ready_and_clean()
 {
+  local -r root_dir="${1}"
+  local -r service_name="${2}"
+  local -r container_name="test-${service_name}"
+  local -r port="${3}"
   echo
   docker-compose \
-    --file "${ROOT_DIR}/docker-compose.yml" \
+    --file "${root_dir}/docker-compose.yml" \
     up \
     -d \
     --force-recreate \
-    differ-${1}
-  wait_briefly_until_ready  test-differ-${1} ${2}
-  exit_unless_clean test-differ-${1}
+      "${service_name}"
+  wait_briefly_until_ready "${container_name}" "${port}"
+  exit_unless_clean "${container_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
 
-container_up_ready_and_clean server 4567
+readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+
+container_up_ready_and_clean "${ROOT_DIR}" differ-server 4567
 if [ "${1}" != 'server' ]; then
-  container_up_ready_and_clean client 4568
+  container_up_ready_and_clean "${ROOT_DIR}" differ-client 4568
 fi
