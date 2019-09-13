@@ -16,7 +16,7 @@ class Differ
   def alive?
     true
   end
-  
+
   def ready?
     true
   end

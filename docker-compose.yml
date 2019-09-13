@@ -1,5 +1,5 @@
 
-version: '3'
+version: '2.2'
 
 services:
 
@@ -7,6 +7,7 @@ services:
     build:
       context: test_client
     image: cyberdojo/differ-client
+    init: true
     container_name: test-differ-client
     user: nobody
     read_only: true
@@ -22,6 +23,7 @@ services:
       args:
         - SHA
     image: cyberdojo/differ
+    init: true
     container_name: test-differ-server
     environment:
       - NO_PROMETHEUS
