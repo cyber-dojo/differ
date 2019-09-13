@@ -1,5 +1,5 @@
 
-version: '3.7'
+version: '3'
 
 services:
 
@@ -7,7 +7,6 @@ services:
     build:
       context: test_client
     image: cyberdojo/differ-client
-    init: true
     container_name: test-differ-client
     user: nobody
     read_only: true
@@ -30,7 +29,6 @@ services:
       - ./test_server:/app/test:ro
     ports:
       - 4567:4567
-    init: true
     user: nobody
     read_only: true
     tmpfs:
