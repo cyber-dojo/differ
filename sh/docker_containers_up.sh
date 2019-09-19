@@ -120,6 +120,8 @@ container_up_ready_and_clean()
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
+export NO_PROMETHEUS=true
+
 container_up_ready_and_clean "${ROOT_DIR}" differ-server 4567
 if [ "${1}" != 'server' ]; then
   container_up_ready_and_clean "${ROOT_DIR}" differ-client 4568

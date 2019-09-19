@@ -9,13 +9,11 @@ services:
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
+    ports: [4568:4568]
     user: nobody
     read_only: true
     tmpfs: /tmp
     restart: 'no'
-    ports:
-      - 4568:4568
-
 
   differ-server:
     build:
@@ -25,15 +23,13 @@ services:
     image: cyberdojo/differ
     init: true
     container_name: test-differ-server
-    environment:
-      - NO_PROMETHEUS
-    volumes:
-      - ./test_server:/app/test:ro
-    ports:
-      - 4567:4567
+    environment: [NO_PROMETHEUS]
+    ports: [4567:4567]
     user: nobody
     read_only: true
+    restart: 'no'
+    volumes:
+      - ./test_server:/app/test:ro
     tmpfs:
       - /tmp:exec,mode=1777 # Sticky bit must be set on /tmp otherwise
                             # Dir.mktmpdir(id,'/tmp') complains
-    restart: 'no'
