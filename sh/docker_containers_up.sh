@@ -72,7 +72,7 @@ ready_response_filename()
 exit_unless_clean()
 {
   local -r name="${1}"
-  local -r docker_log=$(docker logs "${name}")
+  local -r docker_log=$(docker logs "${name}" 2>&1)
   local -r line_count=$(echo -n "${docker_log}" | grep -c '^')
   echo -n "Checking ${name} started cleanly..."
   #Thin web server (v1.7.2 codename Bachmanity)
