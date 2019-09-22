@@ -16,4 +16,8 @@ require_relative 'src/externals'
 require_relative 'src/rack_dispatcher'
 externals = Externals.new
 differ = Differ.new(externals)
-run RackDispatcher.new(differ, Rack::Request)
+dispatcher = RackDispatcher.new(differ, Rack::Request)
+options = { :Host => '0.0.0.0', :Port => 4567 }
+Rack::Handler::Thin.run(dispatcher,options) do |server|
+  server.threaded = true
+end
