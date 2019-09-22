@@ -9,7 +9,8 @@ services:
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
-    ports: [4568:4568]
+    ports:
+      - 4568:4568
     user: nobody
     read_only: true
     tmpfs: /tmp
@@ -24,7 +25,8 @@ services:
     init: true
     container_name: test-differ-server
     environment: [NO_PROMETHEUS]
-    ports: [4567:4567]
+    ports:
+      - 4567:4567
     user: nobody
     read_only: true
     restart: 'no'
