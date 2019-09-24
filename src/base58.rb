@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'securerandom'
-
 class Base58
 
   # Alphabet of [0-9] [a-z] [A-Z] excluding ioIO
@@ -11,28 +9,12 @@ class Base58
   #   o) URLs
   #   o) directories
 
-  def self.string(size)
-    size.times.map{ letter }.join
-  end
-
   def self.string?(s)
     s.is_a?(String) &&
       s.chars.all?{ |char| letter?(char) }
   end
 
-  def self.alphabet
-    ALPHABET
-  end
-
   private
-
-  def self.letter
-    ALPHABET[index]
-  end
-
-  def self.index
-    SecureRandom.random_number(ALPHABET.size)
-  end
 
   def self.letter?(char)
     ALPHABET.include?(char)
