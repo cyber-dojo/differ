@@ -2,7 +2,7 @@
 
 require_relative 'base58'
 require_relative 'http_json/request_error'
-require 'json'
+require 'oj'
 
 # Checks for arguments synactic correctness
 class HttpJsonArgs
@@ -12,7 +12,7 @@ class HttpJsonArgs
     unless @args.is_a?(Hash)
       raise request_error('body is not JSON Hash')
     end
-  rescue JSON::ParserError
+  rescue Oj::ParseError
     raise request_error('body is not JSON')
   end
 
@@ -35,7 +35,7 @@ class HttpJsonArgs
     if body === ''
       {}
     else
-      JSON.parse(body)
+      Oj.strict_load(body)
     end
   end
 
