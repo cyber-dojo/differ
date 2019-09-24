@@ -1,9 +1,5 @@
 #!/bin/bash
 
+export RACK_ENV=production
 export RUBYOPT='-W2'
-
-rackup  \
-  --env production  \
-  --server thin     \
-  --warn            \
-    config.ru
+rackup --warn config.ru
