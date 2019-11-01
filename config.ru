@@ -1,6 +1,9 @@
 $stdout.sync = true
 $stderr.sync = true
 
+require 'rack'
+use Rack::Deflater, if: ->(_, _, _, body) { body.any? && body[0].length > 512 }
+
 unless ENV['NO_PROMETHEUS']
   require 'prometheus/middleware/collector'
   require 'prometheus/middleware/exporter'
@@ -11,11 +14,7 @@ end
 require_relative 'src/differ'
 require_relative 'src/externals'
 require_relative 'src/rack_dispatcher'
-require 'rack'
-use Rack::Deflater, if: ->(_, _, _, body) { body.any? && body[0].length > 512 }
 externals = Externals.new
 differ = Differ.new(externals)
 dispatcher = RackDispatcher.new(differ, Rack::Request)
-Rack::Handler::Thin.run(dispatcher,{ Port:4567 }) do |server|
-  server.threaded = true
-end
+run dispatcher

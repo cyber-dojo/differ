@@ -14,6 +14,9 @@ volumes:
 
 service:
   port: 4567
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "4567"
 
 containers:
   - name: differ

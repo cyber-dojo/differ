@@ -2,4 +2,4 @@
 
 export RACK_ENV=production
 export RUBYOPT='-W2'
-rackup --warn config.ru
+rackup --warn --port 4567 config.ru
