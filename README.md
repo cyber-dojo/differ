@@ -262,7 +262,6 @@ Removing network differ_default
 # build the demo and run it
 - Runs inside the differ-client's container.
 - Calls the differ-server's methods and displays their json results and how long they took.
-- If the differ-client's IP address is 192.168.99.100 then put 192.168.99.100:4568 into your browser to see the output.
 
 ```bash
 $ ./sh/run_demo.sh
