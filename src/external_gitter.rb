@@ -36,17 +36,16 @@ class ExternalGitter
     "git config user.email 'differ@cyber-dojo.org'"
   ].join(' && ').freeze
 
-  ADD_COMMIT_TAG_0 = [
-    'git add .',
-    "git commit --allow-empty --all --message 0 --quiet",
-    "git tag 0 HEAD"
-  ].join(' && ').freeze
+  def self.add_commit_tag(n)
+    [
+      'git add .',
+      "git commit --allow-empty --all --message #{n} --quiet",
+      "git tag #{n} HEAD"
+    ].join(' && ').freeze
+  end
 
-  ADD_COMMIT_TAG_1 = [
-    'git add .',
-    "git commit --allow-empty --all --message 1 --quiet",
-    "git tag 1 HEAD"
-  ].join(' && ').freeze
+  ADD_COMMIT_TAG_0 = add_commit_tag(0)
+  ADD_COMMIT_TAG_1 = add_commit_tag(1)
 
   DIFF_0_1 = [
     'git diff',
