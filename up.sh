@@ -3,8 +3,7 @@
 export RUBYOPT='-W2'
 
 rackup \
-  --env production  \
-  --port 4567       \
-  --server thin     \
-  --warn            \
+  --env production \
+  --port 4567      \
+  --warn           \
     config.ru
