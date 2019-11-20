@@ -75,18 +75,10 @@ exit_unless_clean()
   local -r docker_log=$(docker logs "${name}" 2>&1)
   local -r line_count=$(echo -n "${docker_log}" | grep -c '^')
   echo -n "Checking ${name} started cleanly..."
-  # 3 lines on Thin
+  # 3 lines on Thin (Unicorn=6, Puma=6)
   #Thin web server (v1.7.2 codename Bachmanity)
   #Maximum connections set to 1024
   #Listening on 0.0.0.0:4568, CTRL+C to stop
-
-  # 6 lines on Unicorn
-  #I, [2019-11-20T20:45:35.227182 #7]  INFO -- : listening on addr=0.0.0.0:4567 fd=9
-  #I, [2019-11-20T20:45:35.227528 #7]  INFO -- : worker=0 spawning...
-  #I, [2019-11-20T20:45:35.228359 #7]  INFO -- : master process ready
-  #I, [2019-11-20T20:45:35.229164 #9]  INFO -- : worker=0 spawned pid=9
-  #I, [2019-11-20T20:45:35.229455 #9]  INFO -- : Refreshing Gem list
-  #I, [2019-11-20T20:45:35.275913 #9]  INFO -- : worker=0 ready
   if [ "${line_count}" == '3' ]; then
     echo 'OK'
   else
