@@ -19,6 +19,9 @@ containers:
   - name: differ
     image: cyberdojo/differ
     securityContext:
+      runAsUser: 65534 # nobody
+      fsGroup: 65534 # nobody
+      allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     volumeMounts:
       - name: differ-tmp-dir
