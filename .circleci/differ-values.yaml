@@ -3,24 +3,26 @@ fullnameOverride: "differ"
 
 replicaCount: 3
 
-volumes:
-  - name: differ-tmp-dir
-    emptyDir:
-      medium: Memory
-      sizeLimit: "64Mi"
-
 service:
   port: 4567
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "4567"
 
+volumes:
+  - name: differ-tmp-dir
+    emptyDir:
+      medium: Memory
+      sizeLimit: "64Mi"
+
+podSecurityContext:
+  runAsUser: 65534 # nobody
+  fsGroup: 65534 # nobody
+
 containers:
   - name: differ
     image: cyberdojo/differ
     securityContext:
-      runAsUser: 65534 # nobody
-      fsGroup: 65534 # nobody
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     volumeMounts:

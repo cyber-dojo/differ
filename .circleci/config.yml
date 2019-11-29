@@ -53,7 +53,7 @@ jobs:
               -f .circleci/differ-values.yaml \
               beta-differ \
               praqma/cyber-dojo-service \
-              --version 0.2.3
+              --version 0.2.4
 
   deploy-to-prod:
     docker:
@@ -76,7 +76,7 @@ jobs:
               -f .circleci/differ-values.yaml \
               prod-differ \
               praqma/cyber-dojo-service \
-              --version 0.2.3
+              --version 0.2.4
 
 workflows:
   version: 2
