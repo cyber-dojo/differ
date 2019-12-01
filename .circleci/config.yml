@@ -25,9 +25,9 @@ jobs:
           name: Publish tagged docker image on dockerhub
           command: |
             set -e
-            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
             declare -r SHA="${CIRCLE_SHA1}"
+            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push cyberdojo/${NAME}:${SHA:0:7}
             docker push cyberdojo/${NAME}:latest
             docker logout
