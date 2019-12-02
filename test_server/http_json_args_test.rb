@@ -99,27 +99,6 @@ class HttpJsonArgsTest < DifferTestBase
     assert_missing(:new_files)
   end
 
-  # - - - - - - - - - - - - - - - - -
-  # malformed arguments
-  # - - - - - - - - - - - - - - - - -
-
-  test '1BE',
-  %w( malformed id raises HttpJson::RequestError ) do
-    old_files = { 'hiker.h' => "a\nb" }
-    new_files = { 'hiker.h' => "a\nb\nc" }
-    %w( 12312= 1231234 ).each do |malformed_id|
-      body = {
-        id:malformed_id,
-        old_files:old_files,
-        new_files:new_files
-      }.to_json
-      error = assert_raises(HttpJson::RequestError) {
-        HttpJsonArgs.new(body).get('/diff')
-      }
-      assert_equal 'id is malformed', error.message
-    end
-  end
-
   private
 
   def assert_missing(name)

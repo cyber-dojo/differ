@@ -74,12 +74,6 @@ class RackDispatcherTest < DifferTestBase
     assert_dispatch_error('diff', args.to_json, 400, 'id is missing')
   end
 
-  test '229',
-  'diff returns 400 when id is malformed' do
-    args = { id:'12345=',old_files:{}, new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'id is malformed')
-  end
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # 500
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

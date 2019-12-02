@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'base58'
 require_relative 'http_json/request_error'
 require 'oj'
 
-# Checks for arguments synactic correctness
 class HttpJsonArgs
 
   def initialize(body)
@@ -42,39 +40,24 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def id
-    checked_arg(:well_formed_id?)
+    exists_arg('id')
   end
-
-  def well_formed_id?(arg)
-    Base58.string?(arg) && arg.size === 6
-  end
-
-  # - - - - - - - - - - - - - - - -
 
   def old_files
-    checked_arg(:well_formed_files?)
+    exists_arg('old_files')
   end
 
   def new_files
-    checked_arg(:well_formed_files?)
-  end
-
-  def well_formed_files?(_arg)
-    # TODO:
-    true
+    exists_arg('new_files')
   end
 
   # - - - - - - - - - - - - - - - -
 
-  def checked_arg(validator)
-    name = caller_locations(1,1)[0].label
+  def exists_arg(name)
     unless @args.has_key?(name)
       raise missing(name)
     end
     arg = @args[name]
-    unless self.send(validator, arg)
-      raise malformed(name)
-    end
     arg
   end
 
@@ -82,10 +65,6 @@ class HttpJsonArgs
 
   def missing(arg_name)
     request_error("#{arg_name} is missing")
-  end
-
-  def malformed(arg_name)
-    request_error("#{arg_name} is malformed")
   end
 
   # - - - - - - - - - - - - - - - -
