@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-sdfsdf
+
 if [ "${1}" = '-h' ] || [ "${1}" = '--help' ]; then
   echo
   echo 'Use: pipe_build_up_test.sh [client|server] [HEX-ID...]'
