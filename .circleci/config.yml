@@ -13,7 +13,6 @@ jobs:
           name: Build tested docker image
           command: |
             set -e
-            echo ":${CIRCLECI_SCRIPT_DIR}:"
             ./pipe_build_up_test.sh
       - run:
           name: Tag docker image
