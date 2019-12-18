@@ -2,25 +2,26 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-export SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
+export COMMIT_SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 
-build_service_image()
+echo
+docker-compose \
+  --file "${ROOT_DIR}/docker-compose.yml" \
+  build
+
+readonly IMAGE=cyberdojo/differ
+
+images_sha_env_var()
 {
-  echo
-  docker-compose \
-    --file "${ROOT_DIR}/docker-compose.yml" \
-      build \
-        "${1}"
+  docker run --rm ${IMAGE}:latest sh -c 'env | grep SHA'
 }
 
-build_service_image differ-server
-if [ "${1}" != 'server' ]; then
-  build_service_image differ-client
+if [ "SHA=${COMMIT_SHA}" != $(images_sha_env_var) ]; then
+  echo "unexpected env-var inside image ${IMAGE}:latest"
+  echo "expected: 'SHA=${COMMIT_SHA}'"
+  echo "  actual: '$(images_sha_env_var)'"
+  exit 42
+else
+  readonly TAG=${COMMIT_SHA:0:7}
+  docker tag ${IMAGE}:latest ${IMAGE}:${TAG}
 fi
-
-# Assuming we do not have any new differ commits, differ's latest commit
-# sha will match the image tag inside versioner's .env file.
-# This means we can tag to it and a [cyber-dojo up] call
-# will use the tagged image.
-readonly IMAGE=cyberdojo/differ
-docker tag ${IMAGE}:latest ${IMAGE}:${SHA:0:7}

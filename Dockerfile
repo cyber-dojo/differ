@@ -6,8 +6,8 @@ RUN apk --update --upgrade --no-cache add git
 WORKDIR /app
 COPY --chown=nobody:nogroup . .
 
-ARG SHA
-ENV SHA=${SHA}
+ARG COMMIT_SHA
+ENV SHA=${COMMIT_SHA}
 
 EXPOSE 4567
 
