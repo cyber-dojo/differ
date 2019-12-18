@@ -2,14 +2,13 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+readonly IMAGE=cyberdojo/differ
 export COMMIT_SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 
 echo
 docker-compose \
   --file "${ROOT_DIR}/docker-compose.yml" \
   build
-
-readonly IMAGE=cyberdojo/differ
 
 images_sha_env_var()
 {
