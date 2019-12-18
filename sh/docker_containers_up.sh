@@ -18,24 +18,24 @@ wait_briefly_until_ready()
   local -r name="${1}"
   local -r port="${2}"
   local -r max_tries=10
-  echo -n "Waiting until ${name} is ready"
+  printf "Waiting until ${name} is ready"
   for _ in $(seq ${max_tries})
   do
-    echo -n '.'
+    printf '.'
     if ready ${port}; then
-      echo 'OK'
+      printf 'OK\n'
       return
     else
       sleep 0.1
     fi
   done
-  echo 'FAIL'
-  echo "${name} not ready after ${max_tries} tries"
+  printf 'FAIL\n'
+  printf "${name} not ready after ${max_tries} tries\n"
   if [ -f "$(ready_response_filename)" ]; then
-    echo "$(ready_response)"
+    printf "$(ready_response)\n"
   fi
   docker logs ${name}
-  exit 3
+  exit 42
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -66,7 +66,7 @@ ready_response()
 # - - - - - - - - - - - - - - - - - - -
 ready_response_filename()
 {
-  echo /tmp/curl-differ-ready-output
+  printf /tmp/curl-differ-ready-output
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -75,29 +75,29 @@ exit_unless_clean()
   local -r name="${1}"
   local -r docker_log=$(docker logs "${name}" 2>&1)
   local -r line_count=$(echo -n "${docker_log}" | grep -c '^')
-  echo -n "Checking ${name} started cleanly..."
+  printf "Checking ${name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
   #Thin web server (v1.7.2 codename Bachmanity)
   #Maximum connections set to 1024
   #Listening on 0.0.0.0:4568, CTRL+C to stop
   if [ "${line_count}" == '3' ]; then
-    echo 'OK'
+    printf 'OK\n'
   else
-    echo 'FAIL'
-    echo_docker_log "${name}" "${docker_log}"
-    exit 3
+    printf 'FAIL\n'
+    print_docker_log "${name}" "${docker_log}"
+    exit 42
   fi
 }
 
 # - - - - - - - - - - - - - - - - - - -
-echo_docker_log()
+print_docker_log()
 {
   local -r name="${1}"
   local -r docker_log="${2}"
-  echo "[docker logs ${name}]"
-  echo "<docker_log>"
-  echo "${docker_log}"
-  echo "</docker_log>"
+  printf "[docker logs ${name}]\n"
+  printf "<docker_log>\n"
+  printf "${docker_log}\n"
+  printf "</docker_log>\n"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -107,7 +107,7 @@ container_up_ready_and_clean()
   local -r service_name="${2}"
   local -r container_name="test-${service_name}"
   local -r port="${3}"
-  echo
+  printf '\n'
   docker-compose \
     --file "${root_dir}/docker-compose.yml" \
     up \
