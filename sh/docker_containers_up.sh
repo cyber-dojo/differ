@@ -2,7 +2,7 @@
 set -e
 
 # - - - - - - - - - - - - - - - - - - - - - -
-ip_address()
+ip_address_slow()
 {
   if [ -n "${DOCKER_MACHINE_NAME}" ]; then
     docker-machine ip ${DOCKER_MACHINE_NAME}
@@ -10,13 +10,14 @@ ip_address()
     echo localhost
   fi
 }
+readonly IP_ADDRESS=$(ip_address_slow)
 
 # - - - - - - - - - - - - - - - - - - - - - -
 wait_briefly_until_ready()
 {
   local -r name="${1}"
   local -r port="${2}"
-  local -r max_tries=20
+  local -r max_tries=10
   echo -n "Waiting until ${name} is ready"
   for _ in $(seq ${max_tries})
   do
@@ -47,7 +48,7 @@ ready()
       --output $(ready_response_filename) \
       --silent \
       --fail \
-      -X GET http://$(ip_address):${port}/${path}"
+      -X GET http://${IP_ADDRESS}:${port}/${path}"
   rm -f "$(ready_response_filename)"
   if ${ready_cmd} && [ "$(ready_response)" = '{"ready?":true}' ]; then
     true
@@ -118,9 +119,7 @@ container_up_ready_and_clean()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-
 export NO_PROMETHEUS=true
 
 container_up_ready_and_clean "${ROOT_DIR}" differ-server 4567
