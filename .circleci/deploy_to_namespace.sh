@@ -22,6 +22,6 @@ helm upgrade \
   --namespace=${NAMESPACE} \
   --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
   --values .circleci/differ-values.yaml \
-  ${NAMESPACE}-ragger \
+  ${NAMESPACE}-differ \
   praqma/cyber-dojo-service \
   --version 0.2.4
