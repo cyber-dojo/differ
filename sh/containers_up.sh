@@ -74,13 +74,7 @@ exit_unless_clean()
 {
   local -r name="${1}"
   local -r docker_log=$(docker logs "${name}" 2>&1)
-  local -r known_warning="daemons-1.3.1(.*)warning\: mismatched indentations at 'rescue'"
-  local -r stripped=$(echo -n "${docker_log}" | grep --invert-match -E "${known_warning}")
-  if [ "${docker_log}" == "${stripped}" ]; then
-    echo "WARNING: expected to find warning: ${known_warning}"
-    #exit 42
-  fi
-  local -r line_count=$(echo -n "${stripped}" | grep --count '^')
+  local -r line_count=$(echo -n "${docker_log}" | grep --count '^')
   printf "Checking ${name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
   # Thin web server (v1.7.2 codename Bachmanity)
