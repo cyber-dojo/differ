@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
-readonly SH_DIR="$( cd "$( dirname "${0}" )" && pwd )/sh"
-
-${SH_DIR}/build_docker_images.sh
-${SH_DIR}/docker_containers_up.sh
+readonly SH_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+source ${SH_DIR}/cat_env_vars.sh
+export $(cat_env_vars)
+${SH_DIR}/build_images.sh
+${SH_DIR}/containers_up.sh
 
 TMP_HTML_FILENAME=/tmp/differ-demo.html
 
@@ -15,4 +16,4 @@ docker exec \
 
 open "file://${TMP_HTML_FILENAME}"
 
-${SH_DIR}/docker_containers_down.sh
+${SH_DIR}/containers_down.sh
