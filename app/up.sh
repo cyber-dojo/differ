@@ -7,4 +7,4 @@ rackup \
   --env production \
   --port 4567      \
   --warn           \
-    config.ru
+    /app/config.ru

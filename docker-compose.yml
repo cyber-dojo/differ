@@ -17,7 +17,7 @@ services:
 
   differ-server:
     build:
-      context: .
+      context: app
       args: [ COMMIT_SHA ]
     image: cyberdojo/differ
     init: true

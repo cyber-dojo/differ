@@ -3,8 +3,7 @@ LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --upgrade --no-cache add git
 
-WORKDIR /app
-COPY --chown=nobody:nogroup . .
+COPY --chown=nobody:nogroup . /app
 
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}
@@ -12,4 +11,4 @@ ENV SHA=${COMMIT_SHA}
 EXPOSE 4567
 
 USER nobody
-CMD [ "./up.sh" ]
+CMD [ "/app/up.sh" ]
