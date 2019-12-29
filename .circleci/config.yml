@@ -6,20 +6,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build tested docker images and tag
-          command: |
-            set -e
-            ./pipe_build_up_test.sh
-      - run:
-          name: Publish tagged docker image on dockerhub
-          command: |
-            set -e
-            declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
-            declare -r SHA="${CIRCLE_SHA1}"
-            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
-            docker push cyberdojo/${NAME}:${SHA:0:7}
-            docker push cyberdojo/${NAME}:latest
-            docker logout
+          name: Build image, test it, tag it, publish it
+          command: ./build_test_tag_publish.sh
 
   deploy-to-beta:
     docker:
