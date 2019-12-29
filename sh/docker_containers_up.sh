@@ -21,11 +21,11 @@ wait_briefly_until_ready()
   printf "Waiting until ${name} is ready"
   for _ in $(seq ${max_tries})
   do
-    printf '.'
     if ready ${port}; then
-      printf 'OK\n'
+      printf '.OK\n'
       return
     else
+      printf '.'
       sleep 0.1
     fi
   done
@@ -74,30 +74,36 @@ exit_unless_clean()
 {
   local -r name="${1}"
   local -r docker_log=$(docker logs "${name}" 2>&1)
-  local -r line_count=$(echo -n "${docker_log}" | grep -c '^')
+  local -r known_warning="daemons-1.3.1(.*)warning\: mismatched indentations at 'rescue'"
+  local -r stripped=$(echo -n "${docker_log}" | grep --invert-match -E "${known_warning}")
+  if [ "${docker_log}" == "${stripped}" ]; then
+    echo "ERROR: expected to find warning: ${known_warning}"
+    exit 42
+  fi
+  local -r line_count=$(echo -n "${stripped}" | grep --count '^')
   printf "Checking ${name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
-  #Thin web server (v1.7.2 codename Bachmanity)
-  #Maximum connections set to 1024
-  #Listening on 0.0.0.0:4568, CTRL+C to stop
+  # Thin web server (v1.7.2 codename Bachmanity)
+  # Maximum connections set to 1024
+  # Listening on 0.0.0.0:4568, CTRL+C to stop
   if [ "${line_count}" == '3' ]; then
     printf 'OK\n'
   else
     printf 'FAIL\n'
-    print_docker_log "${name}" "${docker_log}"
+    echo_docker_log "${name}" "${docker_log}"
     exit 42
   fi
 }
 
 # - - - - - - - - - - - - - - - - - - -
-print_docker_log()
+echo_docker_log()
 {
   local -r name="${1}"
   local -r docker_log="${2}"
-  printf "[docker logs ${name}]\n"
-  printf "<docker_log>\n"
-  printf "${docker_log}\n"
-  printf "</docker_log>\n"
+  echo "[docker logs ${name}]"
+  echo "<docker_log>"
+  echo "${docker_log}"
+  echo "</docker_log>"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -111,7 +117,7 @@ container_up_ready_and_clean()
   docker-compose \
     --file "${root_dir}/docker-compose.yml" \
     up \
-    -d \
+    --detach \
     --force-recreate \
       "${service_name}"
   wait_briefly_until_ready "${container_name}" "${port}"
@@ -121,7 +127,6 @@ container_up_ready_and_clean()
 # - - - - - - - - - - - - - - - - - - -
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 export NO_PROMETHEUS=true
-
 container_up_ready_and_clean "${ROOT_DIR}" differ-server 4567
 if [ "${1}" != 'server' ]; then
   container_up_ready_and_clean "${ROOT_DIR}" differ-client 4568
