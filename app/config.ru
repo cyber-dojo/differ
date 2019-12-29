@@ -9,10 +9,10 @@ unless ENV['NO_PROMETHEUS']
 end
 
 require_relative 'src/externals'
-require_relative 'src/differ'
-require_relative 'src/rack_dispatcher'
 externals = Externals.new
+require_relative 'src/differ'
 differ = Differ.new(externals)
+require_relative 'src/rack_dispatcher'
 require 'rack'
 dispatcher = RackDispatcher.new(differ, Rack::Request)
 run dispatcher

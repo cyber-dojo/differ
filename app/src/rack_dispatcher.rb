@@ -3,7 +3,6 @@
 require_relative 'http_json/request_error'
 require_relative 'http_json_args'
 require 'json'
-require 'rack'
 
 class RackDispatcher
 
