@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -Ee
 
 readonly SH_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 source ${SH_DIR}/cat_env_vars.sh

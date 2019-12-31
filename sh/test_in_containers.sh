@@ -4,7 +4,6 @@ readonly root_dir="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly my_name=differ
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 run_tests()
 {
   local coverage_root=/tmp/coverage
@@ -33,7 +32,6 @@ run_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 declare server_status=0
 declare client_status=0
 
@@ -44,7 +42,6 @@ run_server_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 run_client_tests()
 {
   run_tests nobody client "${*}"
@@ -52,7 +49,6 @@ run_client_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 echo
 if [ "${1}" = 'server' ]; then
   shift
@@ -76,5 +72,5 @@ else
   echo "test-${my_name}-server: status = ${server_status}"
   echo "test-${my_name}-client: status = ${client_status}"
   echo
-  exit 3
+  exit 42
 fi
