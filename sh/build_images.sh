@@ -1,23 +1,39 @@
-#!/bin/bash
-set -e
+#!/bin/bash -Ee
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly IMAGE=cyberdojo/differ
-export COMMIT_SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 
-echo
-docker-compose \
-  --file "${ROOT_DIR}/docker-compose.yml" \
-  build
-
-images_sha_env_var()
+# - - - - - - - - - - - - - - - - - - - - - -
+build_images()
 {
-  docker run --rm ${IMAGE}:latest sh -c 'env | grep SHA'
+  docker-compose \
+    --file "${ROOT_DIR}/docker-compose.yml" \
+    build \
+    --build-arg COMMIT_SHA=$(git_commit_sha)
 }
 
-if [ "SHA=${COMMIT_SHA}" != $(images_sha_env_var) ]; then
-  echo "unexpected env-var inside image ${IMAGE}:latest"
-  echo "expected: 'SHA=${COMMIT_SHA}'"
-  echo "  actual: '$(images_sha_env_var)'"
+# - - - - - - - - - - - - - - - - - - - - - -
+git_commit_sha()
+{
+  echo $(cd "${ROOT_DIR}" && git rev-parse HEAD)
+}
+
+# - - - - - - - - - - - - - - - - - - - - - -
+image_name()
+{
+  echo "${CYBER_DOJO_DIFFER_IMAGE}"
+}
+
+# - - - - - - - - - - - - - - - - - - - - - -
+image_sha()
+{
+  docker run --rm $(image_name):latest sh -c 'env | grep SHA='
+}
+
+# - - - - - - - - - - - - - - - - - - - - - -
+build_images
+if [ "SHA=$(git_commit_sha)" != $(image_sha) ]; then
+  echo "unexpected env-var inside image $(image_name):latest"
+  echo "expected: 'SHA=$(git_commit_sha)'"
+  echo "  actual: '$(image_sha)'"
   exit 42
 fi
