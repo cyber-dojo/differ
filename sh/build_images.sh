@@ -20,7 +20,4 @@ if [ "SHA=${COMMIT_SHA}" != $(images_sha_env_var) ]; then
   echo "expected: 'SHA=${COMMIT_SHA}'"
   echo "  actual: '$(images_sha_env_var)'"
   exit 42
-else
-  readonly TAG=${COMMIT_SHA:0:7}
-  docker tag ${IMAGE}:latest ${IMAGE}:${TAG}
 fi
