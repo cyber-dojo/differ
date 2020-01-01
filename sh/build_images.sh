@@ -1,4 +1,4 @@
-#!/bin/bash -Ee
+#!/bin/bash -Eeu
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
@@ -31,8 +31,8 @@ image_sha()
 
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images
-if [ "SHA=$(git_commit_sha)" != $(image_sha) ]; then
-  echo "unexpected env-var inside image $(image_name):latest"
+if [ "SHA=$(git_commit_sha)" != "$(image_sha)" ]; then
+  echo "ERROR: unexpected env-var inside image $(image_name):latest"
   echo "expected: 'SHA=$(git_commit_sha)'"
   echo "  actual: '$(image_sha)'"
   exit 42
