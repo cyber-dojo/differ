@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -Eeu
 
 export RUBYOPT='-W2'
 
