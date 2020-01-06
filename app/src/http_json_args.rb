@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'http_json/request_error'
-require 'oj'
+require 'json'
 
 class HttpJsonArgs
 
@@ -10,7 +10,7 @@ class HttpJsonArgs
     unless @args.is_a?(Hash)
       raise request_error('body is not JSON Hash')
     end
-  rescue Oj::ParseError
+  rescue JSON::JSONError
     raise request_error('body is not JSON')
   end
 
@@ -33,7 +33,7 @@ class HttpJsonArgs
     if body === ''
       {}
     else
-      Oj.strict_load(body)
+      JSON.parse!(body)
     end
   end
 
