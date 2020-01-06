@@ -47,7 +47,8 @@ class HttpJsonArgs
       yield
     else
       plural = @args.size === 1 ? '' : 's'
-      raise request_error("unknown argument#{plural}: #{@args.keys.sort.join(', ')}")
+      names = @args.keys.sort.join(', ')
+      raise request_error("unknown argument#{plural}: #{names}")
     end
   end
 
