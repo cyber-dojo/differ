@@ -101,7 +101,7 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test 'd97',
-  %w( diff() missing new_files raises HttpJsonArgs::Error ) do
+  %w( diff() missing old_files and new_files raises HttpJsonArgs::Error ) do
     assert_missing_args(:old_files, :new_files)
   end
 
@@ -120,8 +120,8 @@ class HttpJsonArgsTest < DifferTestBase
   end
 
   test 'c53',
-  %w( ready?() unknown args raises HttpJsonArgs::Error ) do
-    assert_unknown_args('/ready', {flag:true, a:"dfg"}, 'a', 'flag')
+  %w( ready?() unknown arg raises HttpJsonArgs::Error ) do
+    assert_unknown_arg('/ready', {flag:true}, 'flag')
   end
 
   test 'c54',
@@ -154,7 +154,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   test 'd53',
   %w( ready?() unknown arg raises HttpJsonArgs::Error ) do
-    assert_unknown_arg('/ready', {flag:true}, 'flag')
+    assert_unknown_args('/ready', {flag:true,a:"dfg"}, 'a, flag')
   end
 
   test 'd54',
@@ -181,6 +181,8 @@ class HttpJsonArgsTest < DifferTestBase
     assert_equal "unknown argument: #{name}", error.message
   end
 
+  # - - - - - - - - - - - - - - - - -
+
   def assert_unknown_args(path, args, *names)
     error = assert_raises(HttpJsonArgs::Error) {
       HttpJsonArgs.new(args.to_json).dispatch(path, differ)
@@ -202,6 +204,8 @@ class HttpJsonArgsTest < DifferTestBase
     }
     assert_equal "missing argument: #{name}", error.message
   end
+
+  # - - - - - - - - - - - - - - - - -
 
   def assert_missing_args(*names)
     args = {
