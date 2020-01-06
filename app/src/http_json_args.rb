@@ -13,10 +13,7 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def initialize(body)
-    @args = json_parse(body)
-    unless @args.is_a?(Hash)
-      raise request_error('body is not JSON Hash')
-    end
+    @args = parse_json_args(body)
   rescue JSON::JSONError
     raise request_error('body is not JSON')
   end
@@ -28,7 +25,7 @@ class HttpJsonArgs
     when '/sha'   then no_args { differ.sha }
     when '/alive' then no_args { differ.alive? }
     when '/ready' then no_args { differ.ready? }
-    when '/diff'  then differ.diff(**@args)
+    when '/diff'  then differ.diff(**@args) # [1]
     else
       raise request_error('unknown path')
     end
@@ -42,6 +39,23 @@ class HttpJsonArgs
     raise
   end
 
+  private
+
+  def parse_json_args(body)
+    result = {}
+    if body != ''
+      args = JSON.parse!(body)
+      unless args.is_a?(Hash)
+        raise request_error('body is not JSON Hash')
+      end
+      # [1] double-splat requires top level keys to be symbols
+      args.each { |key,value| result[key.to_sym] = value }
+    end
+    result
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   def no_args
     if @args === {}
       yield
@@ -49,16 +63,6 @@ class HttpJsonArgs
       plural = @args.size === 1 ? '' : 's'
       names = @args.keys.sort.join(', ')
       raise request_error("unknown argument#{plural}: #{names}")
-    end
-  end
-
-  private
-
-  def json_parse(body)
-    if body === ''
-      {}
-    else
-      JSON.parse!(body, symbolize_names:true)
     end
   end
 

@@ -22,8 +22,6 @@ class Differ
   end
 
   def diff(id:, old_files:, new_files:)
-    old_files = unsymbolised(old_files)
-    new_files = unsymbolised(new_files)
     git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
     result = git_diff_join(git_diff, old_files, new_files)
     { 'diff' => result }
@@ -32,10 +30,5 @@ class Differ
   private
 
   include GitDiffJoin
-
-  def unsymbolised(arg)
-    s = JSON.fast_generate(arg)
-    JSON.parse!(s, symbolize_names:false)
-  end
 
 end
