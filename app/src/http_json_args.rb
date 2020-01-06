@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
-require_relative 'http_json/request_error'
 require 'json'
 
 class HttpJsonArgs
+
+  class Error < RuntimeError
+    def initialize(message)
+      super
+    end
+  end
+
+  # - - - - - - - - - - - - - - - -
 
   def initialize(body)
     @args = json_parse(body)
@@ -72,7 +79,7 @@ class HttpJsonArgs
   def request_error(text)
     # Exception messages use the words 'body' and 'path'
     # to match RackDispatcher's exception keys.
-    HttpJson::RequestError.new(text)
+    Error.new(text)
   end
 
 end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'http_json/request_error'
 require_relative 'http_json_args'
 require 'json'
 
@@ -17,7 +16,7 @@ class RackDispatcher
     body = request.body.read
     name,args = HttpJsonArgs.new(body).get(path)
     json_response_pass(200, { name => @differ.public_send(name, *args) })
-  rescue HttpJson::RequestError => caught
+  rescue HttpJsonArgs::Error => caught
     json_response_fail(400, path, body, caught)
   rescue Exception => caught
     json_response_fail(500, path, body, caught)
@@ -41,13 +40,13 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  def diagnostic(path, body, error)
+  def diagnostic(path, body, caught)
     { 'exception' => {
         'path' => path,
         'body' => body,
         'class' => 'DifferService',
-        'message' => error.message,
-        'backtrace' => error.backtrace
+        'message' => caught.message,
+        'backtrace' => caught.backtrace
       }
     }
   end

@@ -1,6 +1,5 @@
 require_relative 'differ_test_base'
 require_relative '../src/http_json_args'
-require_relative '../src/http_json/request_error'
 
 class HttpJsonArgsTest < DifferTestBase
 
@@ -81,21 +80,21 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '7B1',
-  %w( missing id raises HttpJson::RequestError ) do
+  %w( missing id raises HttpJsonArgs::Error ) do
     assert_missing(:id)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '7B2',
-  %w( missing old_files raises HttpJson::RequestError ) do
+  %w( missing old_files raises HttpJsonArgs::Error ) do
     assert_missing(:old_files)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '7B3',
-  %w( missing new_files raises HttpJson::RequestError ) do
+  %w( missing new_files raises HttpJsonArgs::Error ) do
     assert_missing(:new_files)
   end
 
@@ -108,7 +107,7 @@ class HttpJsonArgsTest < DifferTestBase
       new_files:{ 'hiker.h' => "a\nb\nc" }
     }
     args.delete(name)
-    error = assert_raises(HttpJson::RequestError) {
+    error = assert_raises(HttpJsonArgs::Error) {
       HttpJsonArgs.new(args.to_json).get('/diff')
     }
     assert_equal "#{name} is missing", error.message
