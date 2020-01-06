@@ -25,9 +25,9 @@ class HttpJsonArgs
 
   def dispatch(path, differ)
     case path
-    when '/sha'   then differ.sha
-    when '/alive' then differ.alive?
-    when '/ready' then differ.ready?
+    when '/sha'   then no_args { differ.sha }
+    when '/alive' then no_args { differ.alive? }
+    when '/ready' then no_args { differ.ready? }
     when '/diff'  then differ.diff(**@args)
     else
       raise request_error('unknown path')
@@ -36,10 +36,18 @@ class HttpJsonArgs
     if caught.message.start_with?('missing keyword: ')
       raise request_error(caught.message)
     end
-    #if caught.message.start_with?('unknown keyword: ')
-    #  raise request_error(caught.message)
-    #end
+    if caught.message.start_with?('unknown keyword: ')
+      raise request_error(caught.message)
+    end
     raise
+  end
+
+  def no_args
+    if @args === {}
+      yield
+    else
+      raise request_error('unknown arguments')
+    end
   end
 
   private

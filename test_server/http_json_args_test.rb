@@ -74,27 +74,75 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '7B1',
-  %w( missing id raises HttpJsonArgs::Error ) do
-    assert_missing(:id)
+  %w( diff() missing id raises HttpJsonArgs::Error ) do
+    assert_missing_arg(:id)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '7B2',
-  %w( missing old_files raises HttpJsonArgs::Error ) do
-    assert_missing(:old_files)
+  %w( diff() missing old_files raises HttpJsonArgs::Error ) do
+    assert_missing_arg(:old_files)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '7B3',
-  %w( missing new_files raises HttpJsonArgs::Error ) do
-    assert_missing(:new_files)
+  %w( diff() missing new_files raises HttpJsonArgs::Error ) do
+    assert_missing_arg(:new_files)
+  end
+
+  # - - - - - - - - - - - - - - - - -
+  # unknown arguments
+  # - - - - - - - - - - - - - - - - -
+
+  test 'c52',
+  %w( diff() unknown arg raises HttpJsonArgs::Error ) do
+    args = {
+      id:hex_test_id,
+      old_files:{ 'hiker.h' => "a\nb" },
+      new_files:{ 'hiker.h' => "a\nb\nc" },
+      nope:42
+    }
+    error = assert_raises(HttpJsonArgs::Error) {
+      HttpJsonArgs.new(args.to_json).dispatch('/diff', differ)
+    }
+    assert_equal "unknown keyword: nope", error.message
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test 'c53',
+  %w( sha() unknown arg raises HttpJsonArgs::Error ) do
+    assert_unknown_arg('/sha', {bad:21})
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test 'c54',
+  %w( alive?() unknown arg raises HttpJsonArgs::Error ) do
+    assert_unknown_arg('/alive', {none:"sd"})
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test 'c55',
+  %w( ready?() unknown arg raises HttpJsonArgs::Error ) do
+    assert_unknown_arg('/ready', {flag:true})
   end
 
   private
 
-  def assert_missing(name)
+  def assert_unknown_arg(path, args)
+    error = assert_raises(HttpJsonArgs::Error) {
+      HttpJsonArgs.new(args.to_json).dispatch(path, differ)
+    }
+    assert_equal 'unknown arguments', error.message
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  def assert_missing_arg(name)
     args = {
       id:hex_test_id,
       old_files:{ 'hiker.h' => "a\nb" },
