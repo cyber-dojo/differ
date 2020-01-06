@@ -16,28 +16,27 @@ class RackDispatcher
     path = request.path_info
     body = request.body.read
     name,args = HttpJsonArgs.new(body).get(path)
-    result = @differ.public_send(name, *args)
-    json_response(200, { name => result })
-  rescue HttpJson::RequestError => error
-    json_response(400, diagnostic(path, body, error))
-  rescue Exception => error
-    json_response(500, diagnostic(path, body, error))
+    json_response_pass(200, { name => @differ.public_send(name, *args) })
+  rescue HttpJson::RequestError => caught
+    json_response_fail(400, path, body, caught)
+  rescue Exception => caught
+    json_response_fail(500, path, body, caught)
   end
 
   private
 
-  def json_response(status, json)
-    if status === 200
-      body = JSON.fast_generate(json)
-    else
-      body = JSON.pretty_generate(json)
-      $stderr.puts(body)
-      $stderr.flush
-    end
-    [ status,
-      { 'Content-Type' => 'application/json' },
-      [ body ]
-    ]
+  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }
+
+  def json_response_pass(status, result)
+    s = JSON.fast_generate(result)
+    [ status, CONTENT_TYPE_JSON, [s] ]
+  end
+
+  def json_response_fail(status, path, body, caught)
+    s = JSON.pretty_generate(diagnostic(path, body, caught))
+    $stderr.puts(s)
+    $stderr.flush
+    [ status, CONTENT_TYPE_JSON, [s] ]
   end
 
   # - - - - - - - - - - - - - - - -
