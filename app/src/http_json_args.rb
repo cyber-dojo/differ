@@ -26,15 +26,11 @@ class HttpJsonArgs
     when '/alive' then no_args { differ.alive? }
     when '/ready' then no_args { differ.ready? }
     when '/diff'  then differ.diff(**@args) # [1]
-    else
-      raise request_error('unknown path')
+    else raise request_error('unknown path')
     end
   rescue ArgumentError => caught
-    if r = caught.message.match('missing keyword(s?): (.*)')
-      raise request_error("missing argument#{r[1]}: #{r[2]}")
-    end
-    if r = caught.message.match('unknown keyword(s?): (.*)')
-      raise request_error("unknown argument#{r[1]}: #{r[2]}")
+    if r = caught.message.match('(missing|unknown) keyword(s?): (.*)')
+      raise request_error("#{r[1]} argument#{r[2]}: #{r[3]}")
     end
     raise
   end
