@@ -10,20 +10,21 @@ class Differ
   end
 
   def sha
-    ENV['SHA']
+    { 'sha' => ENV['SHA'] }
   end
 
   def alive?
-    true
+    { 'alive?' => true }
   end
 
   def ready?
-    true
+    { 'ready?' => true }
   end
 
   def diff(id, old_files, new_files)
     git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
-    git_diff_join(git_diff, old_files, new_files)
+    result = git_diff_join(git_diff, old_files, new_files)
+    { 'diff' => result }
   end
 
   private

@@ -18,7 +18,7 @@ class ShaTest < DifferTestBase
   private
 
   def sha
-    differ.sha
+    differ.sha['sha']
   end
 
 end

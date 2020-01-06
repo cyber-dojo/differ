@@ -8,7 +8,7 @@ class DiffTest < DifferTestBase
 
   test '3DA',
   'old_files is empty, new_files is empty' do
-    assert_equal({}, differ.diff(hex_test_id, {}, {}))
+    assert_equal({'diff'=>{}}, differ.diff(hex_test_id, {}, {}))
   end
 
 end
