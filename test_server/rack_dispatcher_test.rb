@@ -71,7 +71,7 @@ class RackDispatcherTest < DifferTestBase
   test '228',
   'diff returns 400 when id is missing' do
     args = { old_files:{}, new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'id is missing')
+    assert_dispatch_error('diff', args.to_json, 400, 'missing keyword: id')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -112,7 +112,6 @@ class RackDispatcherTest < DifferTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_dispatch_error(name, args, status, message)
-    @differ ||= Object.new
     response,stderr = with_captured_stderr { rack_call(name, args) }
     assert_equal status, response[0], "message:#{message},stderr:#{stderr}"
     assert_equal({ 'Content-Type' => 'application/json' }, response[1])

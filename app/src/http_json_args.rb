@@ -23,15 +23,23 @@ class HttpJsonArgs
 
   # - - - - - - - - - - - - - - - -
 
-  def get(path)
+  def dispatch(path, differ)
     case path
-    when '/sha'   then ['sha',[]]
-    when '/alive' then ['alive?',[]]
-    when '/ready' then ['ready?',[]]
-    when '/diff'  then ['diff',[id, old_files, new_files]]
+    when '/sha'   then differ.sha
+    when '/alive' then differ.alive?
+    when '/ready' then differ.ready?
+    when '/diff'  then differ.diff(**@args)
     else
       raise request_error('unknown path')
     end
+  rescue ArgumentError => caught
+    if caught.message.start_with?('missing keyword: ')
+      raise request_error(caught.message)
+    end
+    #if caught.message.start_with?('unknown keyword: ')
+    #  raise request_error(caught.message)
+    #end
+    raise
   end
 
   private
@@ -40,38 +48,8 @@ class HttpJsonArgs
     if body === ''
       {}
     else
-      JSON.parse!(body)
+      JSON.parse!(body, symbolize_names:true)
     end
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def id
-    exists_arg('id')
-  end
-
-  def old_files
-    exists_arg('old_files')
-  end
-
-  def new_files
-    exists_arg('new_files')
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def exists_arg(name)
-    unless @args.has_key?(name)
-      raise missing(name)
-    end
-    arg = @args[name]
-    arg
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def missing(arg_name)
-    request_error("#{arg_name} is missing")
   end
 
   # - - - - - - - - - - - - - - - -

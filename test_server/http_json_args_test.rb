@@ -18,7 +18,7 @@ class HttpJsonArgsTest < DifferTestBase
     # nil is null in json
     error = assert_raises { HttpJsonArgs.new('{"x":nil}') }
     assert_equal expected, error.message
-    # keys have to be strings in json
+    # keys have to be strings in incoming json
     error = assert_raises { HttpJsonArgs.new('{42:"answer"}') }
     assert_equal expected, error.message
   end
@@ -40,27 +40,24 @@ class HttpJsonArgsTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test 'e12', 'sha has no args' do
-    name,args = HttpJsonArgs.new('{}').get('/sha')
-    assert_equal name, 'sha'
-    assert_equal [], args
+    result = HttpJsonArgs.new('{}').dispatch('/sha', differ)
+    assert_equal ['sha'], result.keys
   end
 
   test 'e13', 'alive has no args' do
-    name,args = HttpJsonArgs.new('{}').get('/alive')
-    assert_equal name, 'alive?'
-    assert_equal [], args
+    result = HttpJsonArgs.new('{}').dispatch('/alive', differ)
+    assert_equal({'alive?' => true }, result)
   end
 
   test 'e14', 'ready has no args' do
-    name,args = HttpJsonArgs.new('{}').get('/ready')
-    assert_equal name, 'ready?'
-    assert_equal [], args
+    result = HttpJsonArgs.new('{}').dispatch('/ready', differ)
+    assert_equal({ 'ready?' => true }, result)
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '1BC',
-  %w( diff[id,old_files,new_files] ) do
+  %w( diff has three keyword args; id:,old_files:,new_files: ) do
     old_files = { 'hiker.h' => "a\nb" }
     new_files = { 'hiker.h' => "a\nb\nc" }
     body = {
@@ -68,11 +65,8 @@ class HttpJsonArgsTest < DifferTestBase
       old_files:old_files,
       new_files:new_files
     }.to_json
-    name,args = HttpJsonArgs.new(body).get('/diff')
-    assert_equal 'diff', name
-    assert_equal 'EE71BC',  args[0]
-    assert_equal old_files, args[1]
-    assert_equal new_files, args[2]
+    result = HttpJsonArgs.new(body).dispatch('/diff', differ)
+    assert_equal ['diff'], result.keys
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -108,9 +102,9 @@ class HttpJsonArgsTest < DifferTestBase
     }
     args.delete(name)
     error = assert_raises(HttpJsonArgs::Error) {
-      HttpJsonArgs.new(args.to_json).get('/diff')
+      HttpJsonArgs.new(args.to_json).dispatch('/diff', differ)
     }
-    assert_equal "#{name} is missing", error.message
+    assert_equal "missing keyword: #{name}", error.message
   end
 
 end
