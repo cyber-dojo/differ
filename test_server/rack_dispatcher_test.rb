@@ -53,25 +53,49 @@ class RackDispatcherTest < DifferTestBase
   # 400
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'E2C',
+  test 'E20',
   'dispatch returns 400 status when body is not JSON' do
     assert_dispatch_error('xyz', '123', 400, 'body is not JSON Hash')
   end
 
-  test 'E2B',
+  test 'E21',
   'dispatch returns 400 status when body is not JSON Hash' do
     assert_dispatch_error('xyz', [].to_json, 400, 'body is not JSON Hash')
   end
 
-  test 'E2A',
+  test 'E22',
   'dispatch returns 400 when method name is unknown' do
     assert_dispatch_error('xyz', {}.to_json, 400, 'unknown path')
   end
 
-  test '228',
-  'diff returns 400 when id is missing' do
+  test 'E23',
+  'dispatch returns 400 when one arg is unknown' do
+    assert_dispatch_error('sha',   {x:42}.to_json, 400, 'unknown argument: x')
+    assert_dispatch_error('alive', {y:42}.to_json, 400, 'unknown argument: y')
+    assert_dispatch_error('ready', {z:42}.to_json, 400, 'unknown argument: z')
+    assert_dispatch_error('diff', {a:0,id:1,old_files:2,new_files:3}.to_json, 400,
+      'unknown argument: a')
+  end
+
+  test 'E24',
+  'dispatch returns 400 when two or more args are unknown' do
+    assert_dispatch_error('sha',   {x:4,y:2}.to_json, 400, 'unknown arguments: x, y')
+    assert_dispatch_error('alive', {y:4,a:2}.to_json, 400, 'unknown arguments: a, y')
+    assert_dispatch_error('ready', {z:4,b:2}.to_json, 400, 'unknown arguments: b, z')
+    assert_dispatch_error('diff', {b:0,id:1,old_files:2,new_files:3,a:4}.to_json, 400,
+      'unknown arguments: b, a')
+  end
+
+  test 'E25',
+  'diff returns 400 when one arg is missing' do
     args = { old_files:{}, new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'missing keyword: id')
+    assert_dispatch_error('diff', args.to_json, 400, 'missing argument: id')
+  end
+
+  test 'E26',
+  'diff returns 400 when two or more args are missing' do
+    args = { new_files:{} }
+    assert_dispatch_error('diff', args.to_json, 400, 'missing arguments: id, old_files')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

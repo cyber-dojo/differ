@@ -33,11 +33,11 @@ class HttpJsonArgs
       raise request_error('unknown path')
     end
   rescue ArgumentError => caught
-    if caught.message.start_with?('missing keyword: ')
-      raise request_error(caught.message)
+    if r = caught.message.match('missing keyword(s?): (.*)')
+      raise request_error("missing argument#{r[1]}: #{r[2]}")
     end
-    if caught.message.start_with?('unknown keyword: ')
-      raise request_error(caught.message)
+    if r = caught.message.match('unknown keyword(s?): (.*)')
+      raise request_error("unknown argument#{r[1]}: #{r[2]}")
     end
     raise
   end
@@ -46,7 +46,8 @@ class HttpJsonArgs
     if @args === {}
       yield
     else
-      raise request_error('unknown arguments')
+      plural = @args.size === 1 ? '' : 's'
+      raise request_error("unknown argument#{plural}: #{@args.keys.sort.join(', ')}")
     end
   end
 
