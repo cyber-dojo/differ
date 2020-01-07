@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -Ee
 
 readonly root_dir="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly my_name=differ
@@ -11,6 +11,7 @@ run_tests()
   local test_dir="test_${2}"
   local cid=$(docker ps --all --quiet --filter "name=test-${my_name}-${2}")
 
+  set +e
   docker exec \
     --user "${user}" \
     --env COVERAGE_ROOT=${coverage_root} \
@@ -18,6 +19,7 @@ run_tests()
       sh -c "/app/test/util/run.sh ${@:3}"
 
   local status=$?
+  set -e
 
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out.
   docker exec "${cid}" \
@@ -32,45 +34,19 @@ run_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-declare server_status=0
-declare client_status=0
-
-run_server_tests()
-{
-  run_tests nobody server "${*}"
-  server_status=$?
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-run_client_tests()
-{
-  run_tests nobody client "${*}"
-  client_status=$?
-}
+run_server_tests() { run_tests nobody server "${@}"; }
+run_client_tests() { run_tests nobody client "${@}"; }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 echo
-if [ "${1}" = 'server' ]; then
+if [ "${1}" == 'server' ]; then
   shift
-  run_server_tests "$@"
-elif [ "${1}" = 'client' ]; then
+  run_server_tests "${@}"
+elif [ "${1}" == 'client' ]; then
   shift
-  run_client_tests "$@"
+  run_client_tests "${@}"
 else
-  run_server_tests "$@"
-  run_client_tests "$@"
+  run_server_tests "${@}"
+  run_client_tests "${@}"
 fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-if [ "${server_status}" = "0" ] && [ "${client_status}" = "0" ];  then
-  echo '------------------------------------------------------'
-  echo 'All passed'
-  exit 0
-else
-  echo
-  echo "test-${my_name}-server: status = ${server_status}"
-  echo "test-${my_name}-client: status = ${client_status}"
-  echo
-  exit 42
-fi
+echo 'All passed'
