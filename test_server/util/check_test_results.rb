@@ -1,32 +1,40 @@
+TEST_LOG=ARGV[0]    # eg /tmp/coverage/test.log.part
+INDEX_HTML=ARGV[1]  # eg /tmp/coverage/index.html
 
+# - - - - - - - - - - - - - - - - - - - - - - -
 def number
   '[\.|\d]+'
 end
 
+# - - - - - - - - - - - - - - - - - - - - - - -
 def f2(s)
   result = ("%.2f" % s).to_s
   result += '0' if result.end_with?('.0')
   result
 end
 
+# - - - - - - - - - - - - - - - - - - - - - - -
 def cleaned(s)
   # guard against invalid byte sequence
   s = s.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
   s = s.encode('UTF-8', 'UTF-16')
 end
 
+# - - - - - - - - - - - - - - - - - - - - - - -
 def coloured(tf)
   red = 31
   green = 32
   colourize(tf ? green : red, tf)
 end
 
+# - - - - - - - - - - - - - - - - - - - - - - -
 def colourize(code, word)
   "\e[#{code}m#{word}\e[0m"
 end
 
+# - - - - - - - - - - - - - - - - - - - - - - -
 def get_index_stats(name)
-  html = `cat #{ARGV[1]}`
+  html = `cat #{INDEX_HTML}`
   html = cleaned(html)
   # It would be nice if simplecov saved the raw data to a json file
   # and created the html from that, but alas it does not.
@@ -54,9 +62,8 @@ def get_index_stats(name)
 end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
-
 def get_test_log_stats
-  test_log = `cat #{ARGV[0]}`
+  test_log = `cat #{TEST_LOG}`
   test_log = cleaned(test_log)
 
   stats = {}
@@ -82,13 +89,11 @@ def get_test_log_stats
 end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
-
 log_stats = get_test_log_stats
 test_stats = get_index_stats('test')
  app_stats = get_index_stats('app')
 
 # - - - - - - - - - - - - - - - - - - - - - - -
-
 test_count    = log_stats[:test_count]
 failure_count = log_stats[:failure_count]
 error_count   = log_stats[:error_count]
@@ -103,7 +108,6 @@ line_ratio    = (test_stats[:line_count].to_f / app_stats[:line_count].to_f)
 hits_ratio    = (app_stats[:hits_per_line].to_f / test_stats[:hits_per_line].to_f)
 
 # - - - - - - - - - - - - - - - - - - - - - - -
-
 table =
   [
     [ 'tests',                  test_count,         '!=',   0 ],
@@ -119,7 +123,6 @@ table =
   ]
 
 # - - - - - - - - - - - - - - - - - - - - - - -
-
 done = []
 print "\n"
 table.each do |name,value,op,limit|
@@ -129,5 +132,4 @@ table.each do |name,value,op,limit|
   ]
   done << result
 end
-
 exit done.all?
