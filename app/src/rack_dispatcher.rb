@@ -10,13 +10,15 @@ class RackDispatcher
     @request_class = request_class
   end
 
+  # - - - - - - - - - - - - - - - -
+
   def call(env)
     request = @request_class.new(env)
     body = request.body.read
     path = request.path_info
     result = HttpJsonArgs.new(body).dispatch(path, @differ)
     json_response_pass(200, result)
-  rescue HttpJsonArgs::Error => caught
+  rescue HttpJsonArgs::RequestError => caught
     json_response_fail(400, path, body, caught)
   rescue Exception => caught
     json_response_fail(500, path, body, caught)
@@ -24,12 +26,12 @@ class RackDispatcher
 
   private
 
-  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }
-
   def json_response_pass(status, result)
     s = JSON.fast_generate(result)
     [ status, CONTENT_TYPE_JSON, [s] ]
   end
+
+  # - - - - - - - - - - - - - - - -
 
   def json_response_fail(status, path, body, caught)
     s = JSON.pretty_generate(diagnostic(path, body, caught))
@@ -50,5 +52,9 @@ class RackDispatcher
       }
     }
   end
+
+  # - - - - - - - - - - - - - - - -
+
+  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }
 
 end

@@ -24,7 +24,7 @@ module GitDiffJoin # mix-in
         joined[new_filename] = lines
       elsif unchanged_rename?(old_filename, old_files, new_filename, new_files)
         lines = line_split(new_files[new_filename])
-        joined[new_filename] = all(lines, :same)
+        joined[new_filename] = all(:same, lines)
       else # changed-file
         joined[new_filename] = diff[:lines]
       end
@@ -32,7 +32,7 @@ module GitDiffJoin # mix-in
     end
     filenames.each do |unchanged_filename|
       lines = line_split(new_files[unchanged_filename])
-      joined[unchanged_filename] = all(lines, :same)
+      joined[unchanged_filename] = all(:same, lines)
     end
     joined
   end
@@ -63,7 +63,7 @@ module GitDiffJoin # mix-in
     diff[:new_filename].nil?
   end
 
-  def all(lines, type)
+  def all(type, lines)
     lines.collect.each.with_index(1) do |line,number|
       { type:type, line:line, number:number }
     end

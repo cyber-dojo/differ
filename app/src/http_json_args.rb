@@ -4,14 +4,6 @@ require 'json'
 
 class HttpJsonArgs
 
-  class Error < RuntimeError
-    def initialize(message)
-      super
-    end
-  end
-
-  # - - - - - - - - - - - - - - - -
-
   def initialize(body)
     @args = parse_json_args(body)
   rescue JSON::JSONError
@@ -38,16 +30,16 @@ class HttpJsonArgs
   private
 
   def parse_json_args(body)
-    result = {}
-    if body != ''
-      args = JSON.parse!(body)
-      unless args.is_a?(Hash)
+    args = {}
+    unless body === ''
+      json = JSON.parse!(body)
+      unless json.is_a?(Hash)
         raise request_error('body is not JSON Hash')
       end
-      # [1] double-splat requires top level keys to be symbols
-      args.each { |key,value| result[key.to_sym] = value }
+      # [1] make top-level keys symbols ready for double-splat
+      json.each { |key,value| args[key.to_sym] = value }
     end
-    result
+    args
   end
 
   # - - - - - - - - - - - - - - - -
@@ -65,9 +57,17 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def request_error(text)
-    # Exception messages use the words 'body' and 'path'
+    # text uses the words 'body' and 'path'
     # to match RackDispatcher's exception keys.
-    Error.new(text)
+    RequestError.new(text)
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  class RequestError < RuntimeError
+    def initialize(message)
+      super
+    end
   end
 
 end
