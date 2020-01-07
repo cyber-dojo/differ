@@ -14,10 +14,10 @@ class HttpJsonArgs
 
   def dispatch(path, differ)
     case path
-    when '/sha'   then no_args { differ.sha }
-    when '/alive' then no_args { differ.alive? }
-    when '/ready' then no_args { differ.ready? }
-    when '/diff'  then differ.diff(**@args) # [1]
+    when '/sha'   then differ.sha(**@args)
+    when '/alive' then differ.alive?(**@args)
+    when '/ready' then differ.ready?(**@args)
+    when '/diff'  then differ.diff(**@args)
     else raise request_error('unknown path')
     end
   rescue ArgumentError => caught
@@ -36,22 +36,10 @@ class HttpJsonArgs
       unless json.is_a?(Hash)
         raise request_error('body is not JSON Hash')
       end
-      # [1] make top-level keys symbols ready for double-splat
+      # double-splat requires symbol keys
       json.each { |key,value| args[key.to_sym] = value }
     end
     args
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def no_args
-    if @args === {}
-      yield
-    else
-      plural = @args.size === 1 ? '' : 's'
-      names = @args.keys.sort.join(', ')
-      raise request_error("unknown argument#{plural}: #{names}")
-    end
   end
 
   # - - - - - - - - - - - - - - - -

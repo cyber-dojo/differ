@@ -80,8 +80,8 @@ class RackDispatcherTest < DifferTestBase
   test 'E24',
   'dispatch returns 400 when two or more args are unknown' do
     assert_dispatch_error('sha',   {x:4,y:2}.to_json, 400, 'unknown arguments: x, y')
-    assert_dispatch_error('alive', {y:4,a:2}.to_json, 400, 'unknown arguments: a, y')
-    assert_dispatch_error('ready', {z:4,b:2}.to_json, 400, 'unknown arguments: b, z')
+    assert_dispatch_error('alive', {y:4,a:2}.to_json, 400, 'unknown arguments: y, a')
+    assert_dispatch_error('ready', {z:4,b:2}.to_json, 400, 'unknown arguments: z, b')
     assert_dispatch_error('diff', {b:0,id:1,old_files:2,new_files:3,a:4}.to_json, 400,
       'unknown arguments: b, a')
   end

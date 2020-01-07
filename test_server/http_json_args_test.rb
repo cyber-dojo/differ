@@ -144,7 +144,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   test 'd51',
   %w( sha() unknown args raises HttpJsonArgs::RequestError ) do
-    assert_unknown_args('/sha', {xxx:true, bad:21}, 'bad', 'xxx')
+    assert_unknown_args('/sha', {xxx:true, bad:21}, 'xxx', 'bad')
   end
 
   test 'd52',
@@ -154,7 +154,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   test 'd53',
   %w( ready?() unknown arg raises HttpJsonArgs::RequestError ) do
-    assert_unknown_args('/ready', {flag:true,a:"dfg"}, 'a, flag')
+    assert_unknown_args('/ready', {flag:true,a:"dfg"}, 'flag', 'a')
   end
 
   test 'd54',
