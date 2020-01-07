@@ -8,60 +8,27 @@ class HttpJsonArgsTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - -
-  # c'tor raising
-  # - - - - - - - - - - - - - - - - -
-
-  test 'A04',
-  'ctor raises when its string-arg is invalid json' do
-    expected = 'body is not JSON'
-    # abc is not a valid top-level json element
-    error = assert_raises { HttpJsonArgs.new('abc') }
-    assert_equal expected, error.message
-    # nil is null in json
-    error = assert_raises { HttpJsonArgs.new('{"x":nil}') }
-    assert_equal expected, error.message
-    # keys have to be strings in incoming json
-    error = assert_raises { HttpJsonArgs.new('{42:"answer"}') }
-    assert_equal expected, error.message
-  end
-
-  # - - - - - - - - - - - - - - - - -
-  # c'tor not raising
-  # - - - - - - - - - - - - - - - - -
-
-  test 'c88', %w(
-  ctor does not raise when body is empty string which is
-  useful for kubernetes liveness/readyness probes ) do
-    HttpJsonArgs.new('')
-  end
-
-  test 'c99',
-  %w( ctor does not raise when string-arg is valid json ) do
-    HttpJsonArgs.new('{}')
-    HttpJsonArgs.new('{"answer":42}')
-  end
-
-  # - - - - - - - - - - - - - - - - -
   # dispatch calls with correct number of args
+  # return hash with single key matching the path
   # - - - - - - - - - - - - - - - - -
 
-  test 'e12', 'sha has no args' do
-    result = HttpJsonArgs.new('{}').dispatch('/sha', differ)
+  test 'e12', '/sha has no args' do
+    result = dispatch('/sha', differ, '{}')
     assert_equal ['sha'], result.keys
   end
 
-  test 'e13', 'alive has no args' do
-    result = HttpJsonArgs.new('{}').dispatch('/alive', differ)
+  test 'e13', '/alive has no args' do
+    result = dispatch('/alive', differ, '{}')
     assert_equal({'alive?' => true }, result)
   end
 
-  test 'e14', 'ready has no args' do
-    result = HttpJsonArgs.new('{}').dispatch('/ready', differ)
+  test 'e14', '/ready has no args' do
+    result = dispatch('/ready', differ, '{}')
     assert_equal({ 'ready?' => true }, result)
   end
 
   test 'e15',
-  %w( diff has three keyword args; id:,old_files:,new_files: ) do
+  %w( /diff has three keyword args; id:,old_files:,new_files: ) do
     old_files = { 'hiker.h' => "a\nb" }
     new_files = { 'hiker.h' => "a\nb\nc" }
     body = {
@@ -69,12 +36,38 @@ class HttpJsonArgsTest < DifferTestBase
       old_files:old_files,
       new_files:new_files
     }.to_json
-    result = HttpJsonArgs.new(body).dispatch('/diff', differ)
+    result = dispatch('/diff', differ, body)
     assert_equal ['diff'], result.keys
   end
 
   # - - - - - - - - - - - - - - - - -
+  # dispatch calls with body that is not JSON
+  # raise HttpJsonArgs::RequestError
+  # - - - - - - - - - - - - - - - - -
+
+  test 'A04',
+  'dispatch raises when body string is invalid json' do
+    expected = 'body is not JSON'
+    info = 'abc is not a valid top-level json element'
+    error = assert_raises(HttpJsonArgs::RequestError) {
+      dispatch(nil,nil,'abc')
+    }
+    assert_equal expected, error.message, info
+    info = 'nil is null in json'
+    error = assert_raises(HttpJsonArgs::RequestError) {
+      dispatch(nil,nil,'{"x":nil}')
+    }
+    assert_equal expected, error.message, info
+    info = 'keys have to be strings in incoming json'
+    error = assert_raises(HttpJsonArgs::RequestError) {
+      dispatch(nil,nil,'{42:"answer"}')
+    }
+    assert_equal expected, error.message, info
+  end
+
+  # - - - - - - - - - - - - - - - - -
   # dispatch diff with one missing argument
+  # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
   test '7B1',
@@ -98,6 +91,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
   # dispatch diff with more than one missing argument
+  # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
   test 'd97',
@@ -107,6 +101,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
   # dispatch calls with one unknown argument
+  # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
   test 'c51',
@@ -116,7 +111,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   test 'c52',
   %w( alive?() unknown arg raises HttpJsonArgs::RequestError ) do
-    assert_unknown_arg('/alive', {none:"sd"}, 'none')
+    assert_unknown_arg('/alive', {none:'sd'}, 'none')
   end
 
   test 'c53',
@@ -133,13 +128,14 @@ class HttpJsonArgsTest < DifferTestBase
       nope:42
     }
     error = assert_raises(HttpJsonArgs::RequestError) {
-      HttpJsonArgs.new(args.to_json).dispatch('/diff', differ)
+      dispatch('/diff', differ, args.to_json)
     }
-    assert_equal "unknown argument: nope", error.message
+    assert_equal 'unknown argument: nope', error.message
   end
 
   # - - - - - - - - - - - - - - - - -
   # dispatch calls with more than one unknown argument
+  # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
   test 'd51',
@@ -149,12 +145,12 @@ class HttpJsonArgsTest < DifferTestBase
 
   test 'd52',
   %w( alive?() unknown args raises HttpJsonArgs::RequestError ) do
-    assert_unknown_args('/alive', {none:"sd", z:nil}, 'none', 'z')
+    assert_unknown_args('/alive', {none:'sd', z:nil}, 'none', 'z')
   end
 
   test 'd53',
   %w( ready?() unknown arg raises HttpJsonArgs::RequestError ) do
-    assert_unknown_args('/ready', {flag:true,a:"dfg"}, 'flag', 'a')
+    assert_unknown_args('/ready', {flag:true,a:'dfg'}, 'flag', 'a')
   end
 
   test 'd54',
@@ -167,16 +163,22 @@ class HttpJsonArgsTest < DifferTestBase
       zz:false
     }
     error = assert_raises(HttpJsonArgs::RequestError) {
-      HttpJsonArgs.new(args.to_json).dispatch('/diff', differ)
+      dispatch('/diff', differ, args.to_json)
     }
-    assert_equal "unknown arguments: nope, zz", error.message
+    assert_equal 'unknown arguments: nope, zz', error.message
   end
 
   private
 
+  def dispatch(path, differ, body)
+    HttpJsonArgs::dispatch(path, differ, body)
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
   def assert_unknown_arg(path, args, name)
     error = assert_raises(HttpJsonArgs::RequestError) {
-      HttpJsonArgs.new(args.to_json).dispatch(path, differ)
+      dispatch(path, differ, args.to_json)
     }
     assert_equal "unknown argument: #{name}", error.message
   end
@@ -185,7 +187,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   def assert_unknown_args(path, args, *names)
     error = assert_raises(HttpJsonArgs::RequestError) {
-      HttpJsonArgs.new(args.to_json).dispatch(path, differ)
+      dispatch(path, differ, args.to_json)
     }
     assert_equal "unknown arguments: #{names.join(', ')}", error.message
   end
@@ -200,7 +202,7 @@ class HttpJsonArgsTest < DifferTestBase
     }
     args.delete(name)
     error = assert_raises(HttpJsonArgs::RequestError) {
-      HttpJsonArgs.new(args.to_json).dispatch('/diff', differ)
+      dispatch('/diff', differ, args.to_json)
     }
     assert_equal "missing argument: #{name}", error.message
   end
@@ -215,7 +217,7 @@ class HttpJsonArgsTest < DifferTestBase
     }
     names.each { |name| args.delete(name) }
     error = assert_raises(HttpJsonArgs::RequestError) {
-      HttpJsonArgs.new(args.to_json).dispatch('/diff', differ)
+      dispatch('/diff', differ, args.to_json)
     }
     assert_equal "missing arguments: #{names.join(', ')}", error.message
   end
