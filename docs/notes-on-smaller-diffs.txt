@@ -1,0 +1,30 @@
+
+1. Look into a possible git diff option to remove the last line info message...
+\\ No newline at end of file
+Looked. Found nothing....
+
+2. Look into the git diff options to make diffs smaller
+Run options.sh
+
+Note..... [git diff --help] has this...
+Show words as [-removed-] and {+added+}.
+Makes no attempts to escape the delimiters
+if they appear in the input, so the output may
+be ambiguous.
+
+So, you could regex the files being diffed to see if they
+contain the patterns [-(.*)-] or {+(.*)+}
+and only use the smaller-diffs option if there is no match.
+I think the patterns cannot cross a line.
+
+Note..... [git diff --help] also has this...
+--word-diff-regex=<regex>
+<quote>
+Every non-overlapping match of the <regex> is considered a word.
+Anything between these matches is considered whitespace and ignored(!) for the
+purposes of finding differences. You may want to append |[^[:space:]] to your
+regular expression to make sure that it matches all non-whitespace characters.
+A match that contains a newline is silently truncated(!) at the newline.
+</quote>
+So what about a change that only inserts a newline?
+--word-diff-regex=.  does NOT see it.
