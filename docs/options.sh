@@ -2,27 +2,18 @@
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
-#echo
-#echo Currently...
-#${MY_DIR}/git-diff.sh
-
-#echo
 #option=--diff-algorithm=minimal
-#option=--diff-algorithm=histogram
-#echo ${option}
-#${MY_DIR}/git-diff.sh ${option}
+#option='--word-diff-regex=[^[:space:]]'
+#option='--word-diff-regex=. --diff-algorithm=minimal'
 
-#echo
-#option=--word-diff
-#echo ${option}
-#${MY_DIR}/git-diff.sh ${option}
+show()
+{
+  local -r option="${1}"
+  echo
+  echo "${option}"
+  ${MY_DIR}/git-diff.sh "${option}"
+}
 
-echo
-option='--word-diff-regex=. --diff-algorithm=patience'
-echo ${option}
-${MY_DIR}/git-diff.sh ${option}
-
-#echo
-#option='--word-diff-regex=.|[^[:space:]]'
-#echo ${option}
-#${MY_DIR}/git-diff.sh ${option}
+show '--diff-algorithm=histogram'
+show '--word-diff=porcelain'
+show '--word-diff-regex=.'

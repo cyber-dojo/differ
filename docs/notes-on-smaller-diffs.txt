@@ -28,3 +28,18 @@ A match that contains a newline is silently truncated(!) at the newline.
 </quote>
 So what about a change that only inserts a newline?
 --word-diff-regex=.  does NOT see it.
+
+
+Space insertion
+Paaa [-bbb-]{+bb b+} ccc ddd [-eee-]{+ee+}
+How would this look over two lines?
+Paaa [-bbb-] ccc ddd [-eee-]
+Paaa {+bb b+} ccc ddd {+ee+}
+
+How about if you just took -+ lines in a chunk
+and reprocessed them?
+
+-Paaa bbb ccc ddd eee
++Paaa bb b ccc ddd ee
+Would become...
+Paaa bb{+ +}b ccc ddd ee[-e-]
