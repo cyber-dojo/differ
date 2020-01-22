@@ -73,7 +73,12 @@ exit_unless_clean()
 {
   local -r name="${1}"
   local -r docker_log=$(docker logs "${name}" 2>&1)
-  local -r line_count=$(echo -n "${docker_log}" | grep --count '^')
+  local -r shadow_warning="rack/server.rb:(.*): warning: shadowing outer local variable - filename"
+  local -r stripped=$(echo -n "${docker_log}" | grep --invert-match -E "${shadow_warning}")
+  if [ "${docker_log}" != "${stripped}" ]; then
+    echo "SERVICE START-UP WARNING: ${shadow_warning}"
+  fi
+  local -r line_count=$(echo -n "${stripped}" | grep --count '^')
   printf "Checking ${name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
   # Thin web server (v1.7.2 codename Bachmanity)
