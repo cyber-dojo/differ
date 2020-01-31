@@ -78,11 +78,6 @@ exit_unless_clean()
   if [ "${docker_log}" != "${stripped}" ]; then
     echo "SERVICE START-UP WARNING: ${shadow_warning}"
   fi
-
-  echo '~~~~~~~~~~~~~~~~stripped~~~~~~~~~~~~~~'
-  echo "${stripped}"
-  echo '~~~~~~~~~~~~~~~~stripped~~~~~~~~~~~~~~'
-  
   local -r line_count=$(echo -n "${stripped}" | grep --count '^')
   printf "Checking ${name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
