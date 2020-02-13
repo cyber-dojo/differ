@@ -4,6 +4,6 @@ export RUBYOPT='-W2'
 
 rackup \
   --env production \
-  --port 4567      \
+  --port ${PORT}   \
   --warn           \
     /app/config.ru

@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/bash -Eeu
 
 export RUBYOPT='-W2'
 
 rackup \
   --env production \
-  --port 4568      \
+  --port ${PORT}   \
   --warn           \
     config.ru
