@@ -1,12 +1,14 @@
 #!/bin/bash -Eeu
 
+readonly MY_NAME=`basename "${0}"`
+
 if [ "${1:-}" == '-h' ] || [ "${1:-}" == '--help' ]; then
   echo
-  echo 'Use: pipe_build_up_test.sh [client|server] [HEX-ID...]'
+  echo "Use: ${MY_NAME} [client|server] [ID58...]"
   echo 'Options:'
   echo '   client  - only run the tests from inside the client'
   echo '   server  - only run the tests from inside the server'
-  echo '   HEX-ID  - only run the tests matching this identifier'
+  echo '   ID58    - only run the tests matching this identifier'
   exit 0
 fi
 
