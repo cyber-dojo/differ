@@ -9,7 +9,7 @@ services:
     image: cyberdojo/differ-client
     init: true
     container_name: test-differ-client
-    ports: [ "4568:4568" ]
+    ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]    
     user: nobody
     read_only: true
     tmpfs: /tmp

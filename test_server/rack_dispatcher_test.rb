@@ -70,32 +70,32 @@ class RackDispatcherTest < DifferTestBase
 
   test 'E23',
   'dispatch returns 400 when one arg is unknown' do
-    assert_dispatch_error('sha',   {x:42}.to_json, 400, 'unknown argument: x')
-    assert_dispatch_error('alive', {y:42}.to_json, 400, 'unknown argument: y')
-    assert_dispatch_error('ready', {z:42}.to_json, 400, 'unknown argument: z')
+    assert_dispatch_error('sha',   {x:42}.to_json, 400, 'unknown argument: :x')
+    assert_dispatch_error('alive', {y:42}.to_json, 400, 'unknown argument: :y')
+    assert_dispatch_error('ready', {z:42}.to_json, 400, 'unknown argument: :z')
     assert_dispatch_error('diff', {a:0,id:1,old_files:2,new_files:3}.to_json, 400,
-      'unknown argument: a')
+      'unknown argument: :a')
   end
 
   test 'E24',
   'dispatch returns 400 when two or more args are unknown' do
-    assert_dispatch_error('sha',   {x:4,y:2}.to_json, 400, 'unknown arguments: x, y')
-    assert_dispatch_error('alive', {y:4,a:2}.to_json, 400, 'unknown arguments: y, a')
-    assert_dispatch_error('ready', {z:4,b:2}.to_json, 400, 'unknown arguments: z, b')
+    assert_dispatch_error('sha',   {x:4,y:2}.to_json, 400, 'unknown arguments: :x, :y')
+    assert_dispatch_error('alive', {y:4,a:2}.to_json, 400, 'unknown arguments: :y, :a')
+    assert_dispatch_error('ready', {z:4,b:2}.to_json, 400, 'unknown arguments: :z, :b')
     assert_dispatch_error('diff', {b:0,id:1,old_files:2,new_files:3,a:4}.to_json, 400,
-      'unknown arguments: b, a')
+      'unknown arguments: :b, :a')
   end
 
   test 'E25',
   'diff returns 400 when one arg is missing' do
     args = { old_files:{}, new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'missing argument: id')
+    assert_dispatch_error('diff', args.to_json, 400, 'missing argument: :id')
   end
 
   test 'E26',
   'diff returns 400 when two or more args are missing' do
     args = { new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'missing arguments: id, old_files')
+    assert_dispatch_error('diff', args.to_json, 400, 'missing arguments: :id, :old_files')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -130,7 +130,7 @@ class HttpJsonArgsTest < DifferTestBase
     error = assert_raises(HttpJsonArgs::RequestError) {
       dispatch('/diff', differ, args.to_json)
     }
-    assert_equal 'unknown argument: nope', error.message
+    assert_equal 'unknown argument: :nope', error.message
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -165,7 +165,7 @@ class HttpJsonArgsTest < DifferTestBase
     error = assert_raises(HttpJsonArgs::RequestError) {
       dispatch('/diff', differ, args.to_json)
     }
-    assert_equal 'unknown arguments: nope, zz', error.message
+    assert_equal 'unknown arguments: :nope, :zz', error.message
   end
 
   private
@@ -180,7 +180,7 @@ class HttpJsonArgsTest < DifferTestBase
     error = assert_raises(HttpJsonArgs::RequestError) {
       dispatch(path, differ, args.to_json)
     }
-    assert_equal "unknown argument: #{name}", error.message
+    assert_equal "unknown argument: :#{name}", error.message
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -189,6 +189,7 @@ class HttpJsonArgsTest < DifferTestBase
     error = assert_raises(HttpJsonArgs::RequestError) {
       dispatch(path, differ, args.to_json)
     }
+    names.map!{ |name| ':'+name }
     assert_equal "unknown arguments: #{names.join(', ')}", error.message
   end
 
@@ -204,7 +205,7 @@ class HttpJsonArgsTest < DifferTestBase
     error = assert_raises(HttpJsonArgs::RequestError) {
       dispatch('/diff', differ, args.to_json)
     }
-    assert_equal "missing argument: #{name}", error.message
+    assert_equal "missing argument: :#{name}", error.message
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -219,6 +220,7 @@ class HttpJsonArgsTest < DifferTestBase
     error = assert_raises(HttpJsonArgs::RequestError) {
       dispatch('/diff', differ, args.to_json)
     }
+    names.map!{ |name| ":#{name}" }
     assert_equal "missing arguments: #{names.join(', ')}", error.message
   end
 

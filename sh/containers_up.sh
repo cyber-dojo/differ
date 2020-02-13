@@ -1,4 +1,6 @@
-#!/bin/bash -Ee
+#!/bin/bash -Eeu
+
+readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
 # - - - - - - - - - - - - - - - - - - - - - -
 ip_address_slow()
@@ -69,16 +71,29 @@ ready_response_filename()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-exit_unless_clean()
+strip_known_warning()
+{
+  local -r docker_log="${1}"
+  local -r known_warning="${2}"
+  local stripped=$(echo -n "${docker_log}" | grep --invert-match -E "${known_warning}")
+  if [ "${docker_log}" != "${stripped}" ]; then
+    >&2 echo "SERVICE START-UP WARNING: ${known_warning}"
+  fi
+  echo "${stripped}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+warn_if_unclean()
 {
   local -r name="${1}"
-  local -r docker_log=$(docker logs "${name}" 2>&1)
-  local -r shadow_warning="rack/server.rb:(.*): warning: shadowing outer local variable - filename"
-  local -r stripped=$(echo -n "${docker_log}" | grep --invert-match -E "${shadow_warning}")
-  if [ "${docker_log}" != "${stripped}" ]; then
-    echo "SERVICE START-UP WARNING: ${shadow_warning}"
-  fi
-  local -r line_count=$(echo -n "${stripped}" | grep --count '^')
+  local server_log=$(docker logs "${name}" 2>&1)
+
+  local -r shadow_warning="server.rb:(.*): warning: shadowing outer local variable - filename"
+  server_log=$(strip_known_warning "${server_log}" "${shadow_warning}")
+  local -r mismatched_indent_warning="application(.*): warning: mismatched indentations at 'rescue' with 'begin'"
+  server_log=$(strip_known_warning "${server_log}" "${mismatched_indent_warning}")
+
+  local -r line_count=$(echo -n "${server_log}" | grep --count '^')
   printf "Checking ${name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
   # Thin web server (v1.7.2 codename Bachmanity)
@@ -88,7 +103,7 @@ exit_unless_clean()
     printf 'OK\n'
   else
     printf 'FAIL\n'
-    echo_docker_log "${name}" "${docker_log}"
+    echo_docker_log "${name}" "${server_log}"
     exit 42
   fi
 }
@@ -107,25 +122,30 @@ echo_docker_log()
 # - - - - - - - - - - - - - - - - - - -
 container_up_ready_and_clean()
 {
-  local -r root_dir="${1}"
+  local -r port="${1}"
   local -r service_name="${2}"
   local -r container_name="test-${service_name}"
-  local -r port="${3}"
-  printf '\n'
-  docker-compose \
-    --file "${root_dir}/docker-compose.yml" \
-    up \
-    --detach \
-    --force-recreate \
-      "${service_name}"
+  container_up "${service_name}"
   wait_briefly_until_ready "${container_name}" "${port}"
-  exit_unless_clean "${container_name}"
+  warn_if_unclean "${container_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+container_up()
+{
+  local -r service_name="${1}"
+  printf '\n'
+  docker-compose \
+    --file "${ROOT_DIR}/docker-compose.yml" \
+    up \
+    --detach \
+    --force-recreate \
+    "${service_name}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
 export NO_PROMETHEUS=true
-container_up_ready_and_clean "${ROOT_DIR}" differ-server 4567
-if [ "${1}" != 'server' ]; then
-  container_up_ready_and_clean "${ROOT_DIR}" differ-client 4568
+container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}" differ-server
+if [ "${1:-}" != 'server' ]; then
+  container_up_ready_and_clean "${CYBER_DOJO_DIFFER_CLIENT_PORT}" differ-client
 fi
