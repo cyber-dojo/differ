@@ -6,27 +6,29 @@ services:
   differ-client:
     build:
       context: test_client
+    container_name: test-differ-client
     image: cyberdojo/differ-client
     init: true
-    container_name: test-differ-client
-    ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]    
-    user: nobody
+    ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
     read_only: true
-    tmpfs: /tmp
     restart: "no"
+    tmpfs: /tmp
+    user: nobody
 
   differ-server:
     build:
-      context: app
       args: [ COMMIT_SHA ]
-    image: ${CYBER_DOJO_DIFFER_IMAGE}
-    init: true
+      context: app
     container_name: test-differ-server
     environment: [ NO_PROMETHEUS ]
+    image: ${CYBER_DOJO_DIFFER_IMAGE}
+    init: true
     ports: [ "${CYBER_DOJO_DIFFER_PORT}:${CYBER_DOJO_DIFFER_PORT}" ]
-    user: nobody
     read_only: true
     restart: "no"
+    tmpfs: [ "/tmp:exec,mode=1777" ] # [1]
+    user: nobody
     volumes: [ "./test_server:/app/test:ro" ]
-    tmpfs: [ "/tmp:exec,mode=1777" ] # Sticky bit must be set on /tmp otherwise
-                                     # Dir.mktmpdir(id,'/tmp') complains
+
+# [1] Sticky bit must be set on /tmp otherwise
+#     Dir.mktmpdir(id,'/tmp') complains
