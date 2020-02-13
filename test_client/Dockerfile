@@ -4,7 +4,9 @@ LABEL maintainer=jon@jaggersoft.com
 WORKDIR /app
 COPY --chown=nobody:nogroup . .
 
-EXPOSE 4568
+ARG CYBER_DOJO_DIFFER_DEMO_PORT
+ENV PORT=${CYBER_DOJO_DIFFER_DEMO_PORT}
+EXPOSE ${PORT}
 
 USER nobody
-CMD [ "./up.sh" ]
+CMD [ "/app/up.sh" ]

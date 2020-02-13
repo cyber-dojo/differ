@@ -8,7 +8,9 @@ COPY --chown=nobody:nogroup . /app
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}
 
-EXPOSE 4567
+ARG CYBER_DOJO_DIFFER_PORT
+ENV PORT=${CYBER_DOJO_DIFFER_PORT}
+EXPOSE ${PORT}
 
 USER nobody
 CMD [ "/app/up.sh" ]
