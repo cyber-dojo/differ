@@ -14,7 +14,7 @@ services:
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    user: nobody
+    user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     volumes: [ "./test:/test:ro" ]
 
   differ-server:
@@ -29,7 +29,7 @@ services:
     read_only: true
     restart: "no"
     tmpfs: [ "/tmp:exec,mode=1777" ] # [1]
-    user: nobody
+    user: ${CYBER_DOJO_DIFFER_SERVER_USER}
     volumes: [ "./test:/test:ro" ]
 
 # [1] Sticky bit must be set on /tmp otherwise

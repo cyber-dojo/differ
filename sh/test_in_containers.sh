@@ -2,6 +2,8 @@
 
 readonly root_dir="$( cd "$( dirname "${0}" )/.." && pwd )"
 readonly my_name=${root_dir##*/}
+readonly client_user="${1}"; shift
+readonly server_user="${1}"; shift
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 run_tests()
@@ -59,8 +61,14 @@ run_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-run_server_tests() { run_tests nobody server "${@:-}"; }
-run_client_tests() { run_tests nobody client "${@:-}"; }
+run_server_tests()
+{
+  run_tests "${server_user}" server "${@:-}"
+}
+run_client_tests()
+{
+  run_tests "${client_user}" client "${@:-}"
+}
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 echo
