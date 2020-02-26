@@ -1,11 +1,11 @@
 #!/bin/bash -Eeu
 
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+readonly ROOT_DIR="$(cd "$(dirname "${0}")/.." && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - -
 ip_address_slow()
 {
-  if [ -n "${DOCKER_MACHINE_NAME}" ]; then
+  if [ -n "${DOCKER_MACHINE_NAME:-}" ]; then
     docker-machine ip ${DOCKER_MACHINE_NAME}
   else
     echo localhost
