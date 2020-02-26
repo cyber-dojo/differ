@@ -2,7 +2,7 @@ require_relative 'client_test_base'
 
 class DifferClientTest < ClientTestBase
 
-  def self.hex_prefix
+  def self.id58_prefix
     '200'
   end
 
@@ -199,7 +199,7 @@ class DifferClientTest < ClientTestBase
 
   test 'AEC',
   'empty old_files and empty new_files is benign no-op' do
-    assert_equal({}, differ.diff(test_id,{},{}))
+    assert_equal({}, differ.diff(id58,{},{}))
   end
 
   test '7FE',
@@ -440,7 +440,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def get_diff
-    differ.diff(test_id, @old_files, @new_files)
+    differ.diff(id58, @old_files, @new_files)
   end
 
   # - - - - - - - - - - - - - - - - - - - -

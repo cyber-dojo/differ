@@ -1,11 +1,11 @@
-require_relative '../src/http_json/response_unpacker'
-require_relative '../src/http_json/service_exception'
 require_relative 'client_test_base'
+require_src 'http_json/response_unpacker'
+require_src 'http_json/service_exception'
 require 'ostruct'
 
 class HttpResponseUnpackerTest < ClientTestBase
 
-  def self.hex_prefix
+  def self.id58_prefix
     'C20'
   end
 

@@ -1,8 +1,8 @@
-require_relative 'hex_mini_test'
-require_relative '../src/externals'
-require_relative '../src/differ_service'
+require_relative '../id58_test_base'
+require_src 'externals'
+require_src 'differ_service'
 
-class ClientTestBase < HexMiniTest
+class ClientTestBase < Id58TestBase
 
   def initialize(arg)
     super(arg)
