@@ -145,7 +145,8 @@ container_up()
 
 # - - - - - - - - - - - - - - - - - - -
 export NO_PROMETHEUS=true
-container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}" differ-server
-if [ "${1:-}" != 'server' ]; then
+if [ "${1:-}" == 'server' ]; then
+  container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}"        differ-server
+else
   container_up_ready_and_clean "${CYBER_DOJO_DIFFER_CLIENT_PORT}" differ-client
 fi

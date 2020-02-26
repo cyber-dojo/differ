@@ -8,6 +8,8 @@ services:
       args: [ CYBER_DOJO_DIFFER_CLIENT_PORT ]
       context: src/client
     container_name: test-differ-client
+    depends_on:
+      - differ-server
     image: cyberdojo/differ-client
     init: true
     ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
