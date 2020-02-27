@@ -52,7 +52,7 @@ run_tests()
   local -r status=${PIPESTATUS[0]}
   set -e
 
-  echo "Test files copied to test/${type}/${reports_dir}/"
+  echo "Coverage files copied to test/${type}/${reports_dir}/index.html"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
     docker logs "${container_name}"
