@@ -1,6 +1,6 @@
 #!/bin/bash -Eeu
 
-readonly root_dir="$( cd "$( dirname "${0}" )/.." && pwd )"
+readonly root_dir="$(cd "$(dirname "${0}")/.." && pwd)"
 readonly my_name=differ
 readonly client_user="${1}"; shift
 readonly server_user="${1}"; shift
@@ -17,6 +17,7 @@ run_tests()
   local -r coverage_code_group_name=tested
   local -r coverage_test_group_name=tester
 
+  echo
   echo '=================================='
   echo "Running ${type} tests"
   echo '=================================='
@@ -52,9 +53,11 @@ run_tests()
   local -r status=${PIPESTATUS[0]}
   set -e
 
-  echo "Coverage files copied to test/${type}/${reports_dir}/index.html"
+  local -r coverage_path="test/${type}/${reports_dir}/index.html"
+  echo "Coverage files copied to ${coverage_path}"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
+    open "${root_dir}/${coverage_path}"
     docker logs "${container_name}"
   fi
   return ${status}
