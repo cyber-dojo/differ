@@ -1,28 +1,28 @@
-Run options: --seed 15596
+Run options: --seed 26727
 
 # Running:
 
 ..........................................................................................
 
-Finished in 0.549344s, 163.8318 runs/s, 746.3449 assertions/s.
+Finished in 0.541432s, 166.2258 runs/s, 757.2507 assertions/s.
 
 90 runs, 410 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for MiniTest to /tmp/reports. 2062 / 3213 LOC (64.18%) covered.
 
 Slowest 5 tests are...
-0.0401 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
-0.0272 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0272 - 74C4D1:git_diff_join_test.rb:224:non-empty file has some content added at the end
-0.0259 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
-0.0255 - 74C4D2:git_diff_join_test.rb:242:non-empty file has some content added in the middle
-0.0255 - FCF3DA:diff_test.rb:9:old_files is empty, new_files is empty            
+0.0288 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0283 - 74C4D0:git_diff_join_test.rb:206:non-empty file has some content added at the start
+0.0282 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
+0.0267 - 74C0C6:git_diff_join_test.rb:98:non-empty file is deleted               
+0.0263 - 74CF2E:git_diff_join_test.rb:64:empty file has some content added       
+0.0250 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
 
 
                  failures |       0   <=     0 | [32m true [0m
                    errors |       0   <=     0 | [32m true [0m
                  warnings |       0   <=     0 | [32m true [0m
                     skips |       0   <=     0 | [32m true [0m
-        duration(test)[s] |    0.55   <=     3 | [32m true [0m
+        duration(test)[s] |    0.54   <=     3 | [32m true [0m
                     tests |      90   >=     1 | [32m true [0m
       coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
       coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
