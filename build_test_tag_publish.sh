@@ -7,12 +7,12 @@ export $(versioner_env_vars)
 #- - - - - - - - - - - - - - - - - - - - - -
 main()
 {
-  local -r server_user="${CYBER_DOJO_DIFFER_CLIENT_USER}"
-  local -r client_user="${CYBER_DOJO_DIFFER_SERVER_USER}"
+  local -r client_user="${CYBER_DOJO_DIFFER_CLIENT_USER}"
+  local -r server_user="${CYBER_DOJO_DIFFER_SERVER_USER}"
   show_help_if_requested "$@"
   ${SH_DIR}/build_images.sh "$@"
   ${SH_DIR}/containers_up.sh "$@"
-  ${SH_DIR}/test_in_containers.sh "${server_user}" "${client_user}" "$@"
+  ${SH_DIR}/test_in_containers.sh "${client_user}" "${server_user}" "$@"
   ${SH_DIR}/containers_down.sh
   ${SH_DIR}/tag_image.sh
   ${SH_DIR}/on_ci_publish_images.sh
