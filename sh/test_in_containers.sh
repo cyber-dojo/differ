@@ -63,14 +63,8 @@ run_tests()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-run_server_tests()
-{
-  run_tests "${server_user}" server "${@:-}"
-}
-run_client_tests()
-{
-  run_tests "${client_user}" client "${@:-}"
-}
+run_server_tests() { run_tests "${server_user}" server "${@:-}"; }
+run_client_tests() { run_tests "${client_user}" client "${@:-}"; }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 echo
