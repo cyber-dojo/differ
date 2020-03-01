@@ -1,28 +1,28 @@
-Run options: --seed 38844
+Run options: --seed 63484
 
 # Running:
 
 ..........................................................................................
 
-Finished in 0.587724s, 153.1330 runs/s, 697.6060 assertions/s.
+Finished in 0.560195s, 160.6583 runs/s, 731.8877 assertions/s.
 
 90 runs, 410 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for MiniTest to /tmp/reports. 2062 / 3213 LOC (64.18%) covered.
 
 Slowest 5 tests are...
-0.0595 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
-0.0339 - 74C4D0:git_diff_join_test.rb:206:non-empty file has some content added at the start
-0.0337 - 4AF134:rack_dispatcher_test.rb:45:diff 200                              
-0.0292 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0268 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
-0.0257 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
+0.0316 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0293 - 74C3ED:git_diff_join_test.rb:14:empty file is unchanged                 
+0.0290 - 74C0C6:git_diff_join_test.rb:98:non-empty file is deleted               
+0.0276 - 74C4D2:git_diff_join_test.rb:242:non-empty file has some content added in the middle
+0.0274 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
+0.0273 - 74C4D1:git_diff_join_test.rb:224:non-empty file has some content added at the end
 
 
                  failures |       0   <=     0 | [32m true [0m
                    errors |       0   <=     0 | [32m true [0m
                  warnings |       0   <=     0 | [32m true [0m
                     skips |       0   <=     0 | [32m true [0m
-        duration(test)[s] |    0.59   <=     3 | [32m true [0m
+        duration(test)[s] |    0.56   <=     3 | [32m true [0m
                     tests |      90   >=     1 | [32m true [0m
       coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
       coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
