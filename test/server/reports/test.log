@@ -1,31 +1,31 @@
-Run options: --seed 45599
+Run options: --seed 15596
 
 # Running:
 
 ..........................................................................................
 
-Finished in 0.568511s, 158.3084 runs/s, 721.1827 assertions/s.
+Finished in 0.549344s, 163.8318 runs/s, 746.3449 assertions/s.
 
 90 runs, 410 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for MiniTest to /tmp/reports. 2062 / 3213 LOC (64.18%) covered.
 
 Slowest 5 tests are...
-0.0350 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
-0.0287 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0277 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
-0.0271 - 74CAA8:git_diff_join_test.rb:164:non-empty file is renamed <100% identical
-0.0269 - 74CA2C:git_diff_join_test.rb:34:empty file is created                   
-0.0267 - 74C4D1:git_diff_join_test.rb:224:non-empty file has some content added at the end
+0.0401 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
+0.0272 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0272 - 74C4D1:git_diff_join_test.rb:224:non-empty file has some content added at the end
+0.0259 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
+0.0255 - 74C4D2:git_diff_join_test.rb:242:non-empty file has some content added in the middle
+0.0255 - FCF3DA:diff_test.rb:9:old_files is empty, new_files is empty            
 
 
                  failures |       0   <=     0 | [32m true [0m
                    errors |       0   <=     0 | [32m true [0m
                  warnings |       0   <=     0 | [32m true [0m
                     skips |       0   <=     0 | [32m true [0m
-        duration(test)[s] |    0.57   <=     3 | [32m true [0m
+        duration(test)[s] |    0.55   <=     3 | [32m true [0m
                     tests |      90   >=     1 | [32m true [0m
-         coverage(app)[%] |   100.0   >=   100 | [32m true [0m
-        coverage(test)[%] |   100.0   >=   100 | [32m true [0m
-   lines(test)/lines(app) |    1.86   >=   1.8 | [32m true [0m
-     hits(app)/hits(test) |    6.87   >=   6.8 | [32m true [0m
+      coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
+      coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
+     lines(tester/tested) |    1.86   >=   1.8 | [32m true [0m
+      hits(tested/tester) |    6.87   >=   6.8 | [32m true [0m
 

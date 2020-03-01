@@ -3,4 +3,7 @@
 versioner_env_vars()
 {
   docker run --rm cyberdojo/versioner
+  echo CYBER_DOJO_DIFFER_CLIENT_PORT=4568
+  echo CYBER_DOJO_DIFFER_CLIENT_USER=nobody
+  echo CYBER_DOJO_DIFFER_SERVER_USER=nobody
 }
