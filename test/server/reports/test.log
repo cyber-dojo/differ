@@ -1,28 +1,28 @@
-Run options: --seed 26727
+Run options: --seed 46428
 
 # Running:
 
 ..........................................................................................
 
-Finished in 0.541432s, 166.2258 runs/s, 757.2507 assertions/s.
+Finished in 0.529558s, 169.9532 runs/s, 774.2313 assertions/s.
 
 90 runs, 410 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for MiniTest to /tmp/reports. 2062 / 3213 LOC (64.18%) covered.
 
 Slowest 5 tests are...
-0.0288 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0283 - 74C4D0:git_diff_join_test.rb:206:non-empty file has some content added at the start
-0.0282 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
-0.0267 - 74C0C6:git_diff_join_test.rb:98:non-empty file is deleted               
-0.0263 - 74CF2E:git_diff_join_test.rb:64:empty file has some content added       
-0.0250 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
+0.0295 - FCF3DA:diff_test.rb:9:old_files is empty, new_files is empty            
+0.0282 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0264 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
+0.0256 - 74C4D2:git_diff_join_test.rb:242:non-empty file has some content added in the middle
+0.0256 - 74CAA8:git_diff_join_test.rb:164:non-empty file is renamed <100% identical
+0.0254 - 4AF134:rack_dispatcher_test.rb:45:diff 200                              
 
 
                  failures |       0   <=     0 | [32m true [0m
                    errors |       0   <=     0 | [32m true [0m
                  warnings |       0   <=     0 | [32m true [0m
                     skips |       0   <=     0 | [32m true [0m
-        duration(test)[s] |    0.54   <=     3 | [32m true [0m
+        duration(test)[s] |    0.53   <=     3 | [32m true [0m
                     tests |      90   >=     1 | [32m true [0m
       coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
       coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
