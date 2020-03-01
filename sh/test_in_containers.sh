@@ -57,7 +57,6 @@ run_tests()
   echo "Coverage files copied to ${coverage_path}"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
-    open "${root_dir}/${coverage_path}"
     docker logs "${container_name}"
   fi
   return ${status}
