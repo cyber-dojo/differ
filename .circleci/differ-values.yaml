@@ -4,10 +4,8 @@ fullnameOverride: "differ"
 replicaCount: 3
 
 service:
-  port: 4567
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "4567"
 
 volumes:
   - name: differ-tmp-dir
@@ -21,7 +19,6 @@ podSecurityContext:
 
 containers:
   - name: differ
-    image: cyberdojo/differ
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -38,10 +35,8 @@ containers:
         memory: 256Mi
     livenessProbe:
       path: /alive?
-      port: 4567
     readinessProbe:
       path: /ready?
-      port: 4567
 
 envFromSecret: {}
 

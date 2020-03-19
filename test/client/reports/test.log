@@ -1,21 +1,21 @@
-Run options: --seed 6904
+Run options: --seed 25506
 
 # Running:
 
 ..................................
 
-Finished in 0.724463s, 46.9313 runs/s, 113.1873 assertions/s.
+Finished in 0.716493s, 47.4534 runs/s, 114.4463 assertions/s.
 
 34 runs, 82 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for MiniTest to /tmp/reports. 2911 / 5510 LOC (52.83%) covered.
 
 Slowest 5 tests are...
-0.0332 - 200347:differ_client_test.rb:13:>10K query is not rejected by thin      
-0.0319 - 200FDC:differ_client_test.rb:419:renamed and slightly changed file in nested sub-dir shows as mostly same lines
-0.0318 - 200FEA:differ_client_test.rb:105:deleted non-empty file in nested sub-dir shows as all lines deleted
-0.0305 - 200E51:differ_client_test.rb:389:renamed file in nested sub-dir shows as all lines same
-0.0302 - 2007FF:differ_client_test.rb:214:unchanged empty-file in nested sub-dir shows as one empty line
-0.0295 - 200960:differ_client_test.rb:161:added empty file in nested sub-dir shows as ['']
+0.0357 - 200B68:differ_client_test.rb:136:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0310 - 2002C4:differ_client_test.rb:183:added non-empty file in nested sub-dir shows as all lines added
+0.0304 - 200FDC:differ_client_test.rb:419:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.0303 - 200E51:differ_client_test.rb:389:renamed file in nested sub-dir shows as all lines same
+0.0303 - 200347:differ_client_test.rb:13:>10K query is not rejected by thin      
+0.0291 - 200348:differ_client_test.rb:21:>10K query in nested sub-dir is not rejected by thin
 
 
                  failures |       0   <=     0 | [32m true [0m
