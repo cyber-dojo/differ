@@ -4,8 +4,10 @@ fullnameOverride: "differ"
 replicaCount: 3
 
 service:
+  port: 4567
   annotations:
     prometheus.io/scrape: "true"
+    prometheus.io/port: "4567"
 
 volumes:
   - name: differ-tmp-dir
@@ -31,12 +33,14 @@ containers:
         cpu: 10m
         memory: 64Mi
       limits:
-        cpu: 500m
+        cpu: 100m
         memory: 256Mi
     livenessProbe:
       path: /alive?
+      port: 4567
     readinessProbe:
       path: /ready?
+      port: 4567
 
 envFromSecret: {}
 
