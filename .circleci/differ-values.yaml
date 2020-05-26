@@ -1,7 +1,7 @@
 
 fullnameOverride: "differ"
 
-replicaCount: 3
+replicaCount: 1
 
 service:
   port: 4567
