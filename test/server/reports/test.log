@@ -1,28 +1,28 @@
-Run options: --seed 2793
+Run options: --seed 7515
 
 # Running:
 
 ..........................................................................................
 
-Finished in 0.598836s, 150.2916 runs/s, 684.6616 assertions/s.
+Finished in 0.611780s, 147.1118 runs/s, 670.1760 assertions/s.
 
 90 runs, 410 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for MiniTest to //tmp/reports. 2062 / 3213 LOC (64.18%) covered.
 
 Slowest 5 tests are...
-0.0346 - 74C3ED:git_diff_join_test.rb:14:empty file is unchanged                 
-0.0334 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
-0.0333 - 74CAA7:git_diff_join_test.rb:132:non-empty file is renamed 100% identical
-0.0320 - 74CA2C:git_diff_join_test.rb:34:empty file is created                   
-0.0302 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0287 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
+0.0725 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
+0.0316 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0283 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
+0.0279 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
+0.0271 - 74C4D0:git_diff_join_test.rb:206:non-empty file has some content added at the start
+0.0266 - 74C4D2:git_diff_join_test.rb:242:non-empty file has some content added in the middle
 
 
                  failures |       0   <=     0 | [32m true [0m
                    errors |       0   <=     0 | [32m true [0m
                  warnings |       0   <=     0 | [32m true [0m
                     skips |       0   <=     0 | [32m true [0m
-        duration(test)[s] |     0.6   <=     1 | [32m true [0m
+        duration(test)[s] |    0.61   <=     1 | [32m true [0m
                     tests |      90   >=     1 | [32m true [0m
       coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
       coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
