@@ -34,6 +34,10 @@ helm upgrade \
   --namespace=${NAMESPACE} \
   --set-string containers[0].image=${IMAGE} \
   --set-string containers[0].tag=${TAG} \
+  --set service.port=${PORT} \
+  --set containers[0].livenessProbe.port=${PORT} \
+  --set containers[0].readinessProbe.port=${PORT} \
+  --set-string service.annotations."prometheus\.io/port"=${PORT} \
   --values .circleci/differ-values.yaml \
   ${NAMESPACE}-differ \
   praqma/cyber-dojo-service \
