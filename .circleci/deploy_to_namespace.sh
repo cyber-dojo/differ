@@ -34,6 +34,6 @@ helm_upgrade \
    "${CYBER_DOJO_DIFFER_IMAGE}" \
    "${CYBER_DOJO_DIFFER_TAG}" \
    "${CYBER_DOJO_DIFFER_PORT}" \
-   ".circleci/differ-values.yaml" \
+   ".circleci/differ-values.yml" \
    "differ" \
    "praqma/cyber-dojo-service --version 0.2.5"
