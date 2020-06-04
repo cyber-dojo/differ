@@ -1,28 +1,28 @@
-Run options: --seed 9491
+Run options: --seed 52676
 
 # Running:
 
 ..................................
 
-Finished in 0.790743s, 42.9975 runs/s, 103.6999 assertions/s.
+Finished in 0.805965s, 42.1855 runs/s, 101.7415 assertions/s.
 
 34 runs, 82 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for MiniTest to //tmp/reports. 2911 / 5510 LOC (52.83%) covered.
+Coverage report generated for MiniTest to //tmp/reports. 2933 / 5510 LOC (53.23%) covered.
 
 Slowest 5 tests are...
-0.0402 - 200AEC:differ_client_test.rb:200:empty old_files and empty new_files is benign no-op
-0.0357 - 200FDC:differ_client_test.rb:419:renamed and slightly changed file in nested sub-dir shows as mostly same lines
-0.0347 - 200B68:differ_client_test.rb:136:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
-0.0341 - 200366:differ_client_test.rb:237:unchanged non-empty file in nested sub-dir shows as all lines same
-0.0336 - 200E3F:differ_client_test.rb:264:changed non-empty file in nested sub-dir shows as deleted and added lines
-0.0327 - 200348:differ_client_test.rb:21:>10K query in nested sub-dir is not rejected by thin
+0.0383 - 200B68:differ_client_test.rb:136:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0372 - 200FDB:differ_client_test.rb:405:renamed and slightly changed file shows as mostly same lines
+0.0345 - 2007FE:differ_client_test.rb:205:unchanged empty-file shows as one empty line
+0.0344 - 200348:differ_client_test.rb:21:>10K query in nested sub-dir is not rejected by thin
+0.0336 - 200E51:differ_client_test.rb:389:renamed file in nested sub-dir shows as all lines same
+0.0334 - 2002C4:differ_client_test.rb:183:added non-empty file in nested sub-dir shows as all lines added
 
 
                  failures |       0   <=     0 | [32m true [0m
                    errors |       0   <=     0 | [32m true [0m
                  warnings |       0   <=     0 | [32m true [0m
                     skips |       0   <=     0 | [32m true [0m
-        duration(test)[s] |    0.79   <=     2 | [32m true [0m
+        duration(test)[s] |    0.81   <=     2 | [32m true [0m
                     tests |      34   >=     1 | [32m true [0m
       coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
       coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
