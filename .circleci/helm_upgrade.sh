@@ -1,4 +1,5 @@
 
+# curled by https://github.com/dpolivaev/cyber-dojo-k8s-install/blob/master/install.sh
 
 helm_upgrade()
 {
@@ -11,15 +12,15 @@ helm_upgrade()
   local -r helm_repo="${7}"
 
   helm upgrade \
-  --install \
-  --namespace=${namespace} \
-  --set-string containers[0].image=${image} \
-  --set-string containers[0].tag=${tag} \
-  --set service.port=${port} \
-  --set containers[0].livenessProbe.port=${port} \
-  --set containers[0].readinessProbe.port=${port} \
-  --set-string service.annotations."prometheus\.io/port"=${port} \
-  --values ${values} \
-  ${namespace}-${repo} \
-  ${helm_repo}
+    --install \
+    --namespace=${namespace} \
+    --set-string containers[0].image=${image} \
+    --set-string containers[0].tag=${tag} \
+    --set service.port=${port} \
+    --set containers[0].livenessProbe.port=${port} \
+    --set containers[0].readinessProbe.port=${port} \
+    --set-string service.annotations."prometheus\.io/port"=${port} \
+    --values ${values} \
+    ${namespace}-${repo} \
+    ${helm_repo}
 }

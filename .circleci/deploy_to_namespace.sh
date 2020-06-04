@@ -27,15 +27,13 @@ helm init --client-only
 helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
 
 readonly NAMESPACE="${1}" # beta | prod
-readonly IMAGE="${CYBER_DOJO_DIFFER_IMAGE}"
-readonly PORT="${CYBER_DOJO_DIFFER_PORT}"
 readonly CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
 
 helm_upgrade \
    "${NAMESPACE}" \
-   "${IMAGE}" \
+   "${CYBER_DOJO_DIFFER_IMAGE}" \
    "${CYBER_DOJO_DIFFER_TAG}" \
-   "${PORT}" \
+   "${CYBER_DOJO_DIFFER_PORT}" \
    ".circleci/differ-values.yaml" \
    "differ" \
    "praqma/cyber-dojo-service --version 0.2.5"
