@@ -22,7 +22,7 @@ source ./.circleci/helm_upgrade.sh
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Normally I export the cyberdojo env-vars using the command
 # $ docker run --rm cyberdojo/versioner:latest
-# This won't work on the.circleci deployment step since it is
+# This won't work on the .circleci deployment step since it is
 # run inside the cyberdojo/gcloud-kubectl-helm image which does
 # not have docker. So doing it directly from versioner's git repo
 export $(curl https://raw.githubusercontent.com/cyber-dojo/versioner/master/app/.env)
@@ -35,6 +35,7 @@ helm_upgrade \
    "${CYBER_DOJO_DIFFER_IMAGE}" \
    "${CYBER_DOJO_DIFFER_TAG}" \
    "${CYBER_DOJO_DIFFER_PORT}" \
-   ".circleci/differ-values.yml" \
+   ".circleci/k8s-general-values.yml" \
+   ".circleci/k8s-specific-values.yml" \
    "differ" \
    "praqma/cyber-dojo-service --version 0.2.5"
