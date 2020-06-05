@@ -1,5 +1,7 @@
 #!/bin/bash -Eeu
 
+source ./.circleci/helm_upgrade.sh
+
 # misc env-vars are in ci context
 
 echo ${GCP_K8S_CREDENTIALS} > /gcp/gcp-credentials.json
@@ -16,8 +18,6 @@ gcloud container clusters get-credentials \
 helm init --client-only
 
 helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
-
-source ./.circleci/helm_upgrade.sh
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Normally I export the cyberdojo env-vars using the command
