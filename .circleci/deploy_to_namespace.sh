@@ -31,7 +31,7 @@ readonly NAMESPACE="${1}" # beta | prod
 readonly CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
 
 helm_upgrade \
-   "${NAMESPACE}" "differ" "praqma/cyber-dojo-service --version 0.2.5"
+   "${NAMESPACE}" "differ" "praqma/cyber-dojo-service --version 0.2.5" \
    "${CYBER_DOJO_DIFFER_IMAGE}" \
    "${CYBER_DOJO_DIFFER_TAG}" \
    "${CYBER_DOJO_DIFFER_PORT}" \
