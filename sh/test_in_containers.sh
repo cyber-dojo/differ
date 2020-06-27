@@ -1,5 +1,5 @@
 #!/bin/bash -Eeu
-readonly root_dir="$(cd "$(dirname "${0}")/.." && pwd)"
+readonly root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly my_name=differ
 readonly client_user="${1}"; shift
 readonly server_user="${1}"; shift

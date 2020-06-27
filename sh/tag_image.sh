@@ -1,6 +1,6 @@
 #!/bin/bash -Ee
 
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+readonly ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 image_name()

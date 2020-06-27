@@ -1,6 +1,6 @@
 #!/bin/bash -Eeu
 
-readonly ROOT_DIR="$(cd "$(dirname "${0}")/.." && pwd)"
+readonly ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - -
 ip_address_slow()
