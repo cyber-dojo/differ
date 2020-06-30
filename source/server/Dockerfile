@@ -1,4 +1,4 @@
-FROM cyberdojo/rack-base
+FROM cyberdojo/rack-base:bd4161e
 LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --upgrade --no-cache add git
