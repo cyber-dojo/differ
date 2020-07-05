@@ -1,4 +1,4 @@
-FROM cyberdojo/rack-base:bd4161e
+FROM cyberdojo/rack-base:2e387b6
 LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --upgrade --no-cache add git
@@ -12,5 +12,5 @@ ARG CYBER_DOJO_DIFFER_PORT
 ENV PORT=${CYBER_DOJO_DIFFER_PORT}
 EXPOSE ${PORT}
 
-USER nobody
+ENTRYPOINT ["/sbin/tini", "-g", "--"]
 CMD [ "/app/up.sh" ]
