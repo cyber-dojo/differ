@@ -12,5 +12,6 @@ ARG CYBER_DOJO_DIFFER_PORT
 ENV PORT=${CYBER_DOJO_DIFFER_PORT}
 EXPOSE ${PORT}
 
+USER nobody
 ENTRYPOINT ["/sbin/tini", "-g", "--"]
 CMD [ "/app/up.sh" ]
