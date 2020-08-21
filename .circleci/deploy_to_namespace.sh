@@ -7,6 +7,11 @@ source <(curl "${K8S_URL}/sh/deployment_functions.sh")
 export $(curl "${VERSIONER_URL}/app/.env")
 readonly CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
 
+echo '~~~~~~~~~~~~~~~~~~'
+echo "CIRCLE_SHA1=${CIRCLE_SHA1}"
+echo "CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"
+echo '~~~~~~~~~~~~~~~~~~'
+
 gcloud_init
 helm_init
 helm_upgrade_probe_yes_prometheus_yes \
