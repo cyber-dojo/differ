@@ -1,6 +1,6 @@
 #!/bin/bash -Eeu
 
-readonly ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+readonly ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images()
@@ -25,16 +25,32 @@ image_name()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
+image_tag()
+{
+  echo "${CYBER_DOJO_DIFFER_TAG}"
+}
+
+# - - - - - - - - - - - - - - - - - - - - - -
 image_sha()
 {
-  docker run --rm $(image_name):latest sh -c 'env | grep SHA='
+  echo "${CYBER_DOJO_DIFFER_SHA}"
+}
+
+# - - - - - - - - - - - - - - - - - - - - - -
+sha_in_image()
+{
+  docker run --rm $(image_name):$(image_tag) sh -c 'env | grep SHA='
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images
-if [ "SHA=$(git_commit_sha)" != "$(image_sha)" ]; then
-  echo "ERROR: unexpected env-var inside image $(image_name):latest"
+if [ "SHA=$(git_commit_sha)" != "$(sha_in_image)" ]; then
+  echo "ERROR: unexpected env-var inside image $(image_name):$(image_tag)"
   echo "expected: 'SHA=$(git_commit_sha)'"
-  echo "  actual: '$(image_sha)'"
+  echo "  actual: '$(sha_in_image)'"
   exit 42
+else
+  echo
+  echo "CYBER_DOJO_DIFFER_TAG=$(image_tag)"
+  echo "CYBER_DOJO_DIFFER_SHA=$(image_sha)"
 fi

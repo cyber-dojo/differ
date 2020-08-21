@@ -4,6 +4,9 @@ LABEL maintainer=jon@jaggersoft.com
 WORKDIR /app
 COPY --chown=nobody:nogroup . .
 
+ARG COMMIT_SHA
+ENV SHA=${COMMIT_SHA}
+
 ARG CYBER_DOJO_DIFFER_CLIENT_PORT
 ENV PORT=${CYBER_DOJO_DIFFER_CLIENT_PORT}
 EXPOSE ${PORT}

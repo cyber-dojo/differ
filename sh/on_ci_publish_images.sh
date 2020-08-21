@@ -13,9 +13,9 @@ image_name()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-image_sha()
+image_tag()
 {
-  docker run --rm $(image_name):latest sh -c 'echo ${SHA}'
+  echo "${CYBER_DOJO_DIFFER_TAG}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -26,12 +26,11 @@ on_ci_publish_tagged_images()
     return
   fi
   echo 'on CI so publishing tagged images'
-  local -r image="$(image_name)"
-  local -r sha="$(image_sha)"
   # DOCKER_USER, DOCKER_PASS are in ci context
   echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
-  docker push ${image}:latest
-  docker push ${image}:${sha:0:7}
+  docker tag $(image_name):$(image_tag) $(image_name):latest
+  docker push $(image_name):$(image_tag)
+  docker push $(image_name):latest
   docker logout
 }
 
