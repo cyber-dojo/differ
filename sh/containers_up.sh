@@ -78,20 +78,22 @@ strip_known_warning()
   local stripped=$(echo -n "${docker_log}" | grep --invert-match -E "${known_warning}")
   if [ "${docker_log}" != "${stripped}" ]; then
     >&2 echo "SERVICE START-UP WARNING: ${known_warning}"
+  else
+    >&2 echo "SERVICE START-UP WARNING NOT FOUND: ${known_warning}"
   fi
   echo "${stripped}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
-warn_if_unclean()
+exit_if_unclean()
 {
   local -r name="${1}"
   local server_log=$(docker logs "${name}" 2>&1)
 
-  local -r shadow_warning="server.rb:(.*): warning: shadowing outer local variable - filename"
-  server_log=$(strip_known_warning "${server_log}" "${shadow_warning}")
-  local -r mismatched_indent_warning="application(.*): warning: mismatched indentations at 'rescue' with 'begin'"
-  server_log=$(strip_known_warning "${server_log}" "${mismatched_indent_warning}")
+  #local -r shadow_warning="server.rb:(.*): warning: shadowing outer local variable - filename"
+  #server_log=$(strip_known_warning "${server_log}" "${shadow_warning}")
+  #local -r mismatched_indent_warning="application(.*): warning: mismatched indentations at 'rescue' with 'begin'"
+  #server_log=$(strip_known_warning "${server_log}" "${mismatched_indent_warning}")
 
   local -r line_count=$(echo -n "${server_log}" | grep --count '^')
   printf "Checking ${name} started cleanly..."
@@ -99,7 +101,7 @@ warn_if_unclean()
   # Thin web server (v1.7.2 codename Bachmanity)
   # Maximum connections set to 1024
   # Listening on 0.0.0.0:4568, CTRL+C to stop
-  if [ "${line_count}" == '3' ]; then
+  if [ "${line_count}" == '6' ]; then
     printf 'OK\n'
   else
     printf 'FAIL\n'
@@ -127,7 +129,7 @@ container_up_ready_and_clean()
   local -r container_name="test-${service_name}"
   container_up "${service_name}"
   wait_briefly_until_ready "${container_name}" "${port}"
-  warn_if_unclean "${container_name}"
+  exit_if_unclean "${container_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -150,3 +152,5 @@ if [ "${1:-}" == 'server' ]; then
 else
   container_up_ready_and_clean "${CYBER_DOJO_DIFFER_CLIENT_PORT}" differ-client
 fi
+
+#curl --silent --fail -X GET http://${IP_ADDRESS}:${CYBER_DOJO_DIFFER_PORT}/sha

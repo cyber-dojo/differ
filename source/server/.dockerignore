@@ -1,4 +1,5 @@
 *
 !code/
+!puma.rb
 !config.ru
 !up.sh
