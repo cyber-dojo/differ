@@ -3,7 +3,6 @@
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
-  export COMMIT_SHA="$(git_commit_sha)"
   docker-compose \
     --file "${SH_DIR}/../docker-compose.yml" \
     build \
