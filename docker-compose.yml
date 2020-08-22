@@ -4,7 +4,7 @@ version: '3.7'
 services:
 
   differ-client:
-    image: cyberdojo/differ-client:${CYBER_DOJO_DIFFER_TAG}
+    image: ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     build:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_CLIENT_PORT ]
