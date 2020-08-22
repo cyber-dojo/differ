@@ -1,11 +1,7 @@
 #!/bin/bash -Eeu
-readonly root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly my_name=differ
-readonly client_user="${1}"; shift
-readonly server_user="${1}"; shift
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-main()
+test_in_containers()
 {
   if on_ci; then
     docker pull cyberdojo/check-test-results:latest
@@ -27,8 +23,15 @@ main()
 on_ci() { [ -n "${CIRCLECI:-}" ]; }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-run_client_tests() { run_tests "${client_user}" client "${@:-}"; }
-run_server_tests() { run_tests "${server_user}" server "${@:-}"; }
+run_client_tests()
+{
+  run_tests "${CYBER_DOJO_DIFFER_CLIENT_USER}" client "${@:-}";
+}
+
+run_server_tests()
+{
+  run_tests "${CYBER_DOJO_DIFFER_SERVER_USER}" server "${@:-}";
+}
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 run_tests()
@@ -38,10 +41,10 @@ run_tests()
   local -r reports_dir_name=reports
   local -r tmp_dir=/tmp
   local -r coverage_root=/${tmp_dir}/${reports_dir_name}
-  local -r test_dir="${root_dir}/test/${type}"
+  local -r test_dir="${SH_DIR}/../test/${type}"
   local -r reports_dir=${test_dir}/${reports_dir_name}
   local -r test_log=test.log
-  local -r container_name="test-${my_name}-${type}" # eg test-creator-server
+  local -r container_name="test-differ-${type}" # eg test-differ-server
   local -r coverage_code_tab_name=tested
   local -r coverage_test_tab_name=tester
 
@@ -89,6 +92,3 @@ run_tests()
   fi
   return ${status}
 }
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-main "$@"

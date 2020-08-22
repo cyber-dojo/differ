@@ -7,7 +7,7 @@ services:
     image: cyberdojo/differ-client:${CYBER_DOJO_DIFFER_TAG}
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     build:
-      args: [ CYBER_DOJO_DIFFER_CLIENT_PORT ]
+      args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_CLIENT_PORT ]
       context: source/client
     container_name: test-differ-client
     depends_on:

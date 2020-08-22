@@ -33,6 +33,3 @@ on_ci_publish_tagged_images()
   docker push $(image_name):latest
   docker logout
 }
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-on_ci_publish_tagged_images

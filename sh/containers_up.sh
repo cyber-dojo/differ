@@ -1,7 +1,5 @@
 #!/bin/bash -Eeu
 
-readonly ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 # - - - - - - - - - - - - - - - - - - - - - -
 ip_address_slow()
 {
@@ -138,7 +136,7 @@ container_up()
   local -r service_name="${1}"
   printf '\n'
   docker-compose \
-    --file "${ROOT_DIR}/docker-compose.yml" \
+    --file "${SH_DIR}/../docker-compose.yml" \
     up \
     --detach \
     --force-recreate \
@@ -146,11 +144,13 @@ container_up()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-export NO_PROMETHEUS=true
-if [ "${1:-}" == 'server' ]; then
-  container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}"        differ-server
-else
-  container_up_ready_and_clean "${CYBER_DOJO_DIFFER_CLIENT_PORT}" differ-client
-fi
-
-#curl --silent --fail -X GET http://${IP_ADDRESS}:${CYBER_DOJO_DIFFER_PORT}/sha
+containers_up()
+{
+  export NO_PROMETHEUS=true
+  if [ "${1:-}" == 'server' ]; then
+    container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}"        differ-server
+  else
+    container_up_ready_and_clean "${CYBER_DOJO_DIFFER_CLIENT_PORT}" differ-client
+  fi
+  #curl --silent --fail -X GET http://${IP_ADDRESS}:${CYBER_DOJO_DIFFER_PORT}/sha
+}
