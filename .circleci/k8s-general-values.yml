@@ -29,9 +29,9 @@ containers:
     resources:
       requests:
         cpu: 20m
-        memory: 64Mi
+        memory: 32Mi
       limits:
-        memory: 256Mi
+        memory: 64Mi
     livenessProbe:
       path: /alive?
     readinessProbe:
