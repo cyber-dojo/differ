@@ -3,7 +3,8 @@ generate_port_env_vars()
 {
   echo
   echo 'containers:'
-  echo '  - env:'
+  echo '  - name: differ'
+  echo '    env:'
   for line in $(docker run --rm cyberdojo/versioner | grep PORT | tr ' ' '\n')
   do
     name="${line%=*}"
