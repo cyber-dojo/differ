@@ -3,6 +3,11 @@ fullnameOverride: "differ"
 
 replicaCount: 1
 
+envFromSecret: {}
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
 service:
   annotations:
     prometheus.io/scrape: "true"
@@ -22,8 +27,6 @@ containers:
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
-    env:
-      CYBER_DOJO_PROMETHEUS: "true"
     volumeMounts:
       - name: differ-tmp-dir
         mountPath: /tmp
@@ -38,11 +41,3 @@ containers:
       path: /alive?
     readinessProbe:
       path: /ready?
-
-envFromSecret: {}
-
-nodeSelector: {}
-
-affinity: {}
-
-tolerations: []
