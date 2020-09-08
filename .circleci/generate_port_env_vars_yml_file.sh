@@ -1,5 +1,8 @@
+#/bin/bash -Eeu
 
-generate_port_env_vars()
+readonly MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+generate_port_env_vars_yaml_file()
 {
   echo '    env:'
   echo '      CYBER_DOJO_PROMETHEUS: "true"'
@@ -10,3 +13,5 @@ generate_port_env_vars()
     echo "      ${name}: \"${port}\""
   done
 }
+
+generate_port_env_vars_yaml_file > "${MY_DIR}/env-var-values.yml"
