@@ -12,6 +12,8 @@ services:
     container_name: test-differ-client
     depends_on:
       - differ-server
+    env_file:
+      - .env
     ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
     read_only: true
     restart: "no"
@@ -25,7 +27,8 @@ services:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_PORT ]
       context: source/server
     container_name: test-differ-server
-    environment: [ NO_PROMETHEUS ]
+    env_file:
+      - .env
     ports: [ "${CYBER_DOJO_DIFFER_PORT}:${CYBER_DOJO_DIFFER_PORT}" ]
     read_only: true
     restart: "no"

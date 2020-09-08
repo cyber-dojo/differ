@@ -5,7 +5,9 @@ require_relative 'differ_exception'
 class DifferService
 
   def initialize(externals)
-    requester = HttpJson::RequestPacker.new(externals.http, 'differ-server', 4567)
+    service = 'differ-server'
+    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
+    requester = HttpJson::RequestPacker.new(externals.http, service, port)
     @http = HttpJson::ResponseUnpacker.new(requester, DifferException)
   end
 
