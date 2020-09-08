@@ -13,6 +13,8 @@ source "${MY_DIR}/generate_port_env_vars.sh"
 YAML_VALUES_FILE="${MY_DIR}/k8s-general-values.yml"
 generate_port_env_vars >> "${YAML_VALUES_FILE}"
 
+cat "${YAML_VALUES_FILE}"
+
 gcloud_init
 helm_init
 helm_upgrade_probe_yes_prometheus_yes \
