@@ -8,11 +8,11 @@ readonly VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/ma
 source <(curl "${K8S_URL}/sh/deployment_functions.sh")
 export $(curl "${VERSIONER_URL}/app/.env")
 readonly CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
-
-cat "${MY_DIR}/env-var-values.yml" >> "${YAML_VALUES_FILE}"
+readonly YAML_VALUES_FILE="${MY_DIR}/k8s-general-values.yml"
 
 gcloud_init
 helm_init
+cat "${MY_DIR}/env-var-values.yml" >> "${YAML_VALUES_FILE}"
 helm_upgrade_probe_yes_prometheus_yes \
    "${NAMESPACE}" \
    "differ" \
