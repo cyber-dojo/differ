@@ -136,7 +136,7 @@ container_up()
   local -r service_name="${1}"
   printf '\n'
   docker-compose \
-    --file "${SH_DIR}/../docker-compose.yml" \
+    --file "${ROOT_DIR}/docker-compose.yml" \
     up \
     --detach \
     --force-recreate \

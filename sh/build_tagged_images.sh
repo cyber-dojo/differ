@@ -31,7 +31,7 @@ remove_all_but_latest()
 build_images()
 {
   docker-compose \
-    --file "${SH_DIR}/../docker-compose.yml" \
+    --file "${ROOT_DIR}/docker-compose.yml" \
     build \
     --build-arg COMMIT_SHA=$(git_commit_sha)
 }
@@ -61,7 +61,7 @@ check_embedded_env_var()
 # - - - - - - - - - - - - - - - - - - - - - -
 git_commit_sha()
 {
-  echo $(cd "${SH_DIR}" && git rev-parse HEAD)
+  echo $(cd "${ROOT_DIR}" && git rev-parse HEAD)
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
