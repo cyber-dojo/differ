@@ -36,7 +36,42 @@ module GitDiffLib # mix-in
     joined
   end
 
+  # - - - - - - - - - - - - - - - - -
+
+  def git_diff_tip_data(diff_lines, old_files, new_files)
+    tip_data = {}
+    diffs = GitDiffParser.new(diff_lines).parse_all
+    diffs.each do |diff|
+      old_filename = diff[:old_filename]
+      new_filename = diff[:new_filename]
+      if deleted_file?(diff)
+        counts = added_deleted_counts(diff[:lines])
+        if counts['added'] + counts['deleted'] > 0
+          tip_data[old_filename] = counts
+        end
+      elsif new_file?(diff)
+        if empty?(diff)
+          lines = [{ :type => :added, number:1, line:'' }]
+        else
+          lines = diff[:lines]
+        end
+        tip_data[new_filename] = added_deleted_counts(lines)
+      elsif !unchanged_rename?(old_filename, old_files, new_filename, new_files)
+        # changed-file
+        tip_data[new_filename] = added_deleted_counts(diff[:lines])
+      end
+    end
+    tip_data
+  end
+
   private
+
+  def added_deleted_counts(lines)
+    {
+      'added'   => lines.count{ |line| line[:type] === :added   },
+      'deleted' => lines.count{ |line| line[:type] === :deleted }
+    }
+  end
 
   def empty?(diff)
     diff[:lines] === []
