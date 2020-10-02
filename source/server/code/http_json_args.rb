@@ -16,10 +16,11 @@ class HttpJsonArgs
   def self.dispatch(path, differ, body)
     args = parse_json_args(body)
     case path
-    when '/sha'   then differ.sha(**args)
-    when '/alive' then differ.alive?(**args)
-    when '/ready' then differ.ready?(**args)
-    when '/diff'  then differ.diff(**args)
+    when '/sha'           then differ.sha(**args)
+    when '/alive'         then differ.alive?(**args)
+    when '/ready'         then differ.ready?(**args)
+    when '/diff'          then differ.diff(**args)
+    when '/diff_tip_data' then differ.diff_tip_data(**args)
     else raise RequestError, 'unknown path'
     end
   rescue JSON::JSONError

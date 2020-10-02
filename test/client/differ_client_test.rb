@@ -18,6 +18,8 @@ class DifferClientTest < ClientTestBase
     refute_nil json['wibble.h']
   end
 
+  # - - - - - - - - - - - - - - - - - - - -
+
   test '348',
   '>10K query in nested sub-dir is not rejected by thin' do
     @old_files = { 'gh/jk/wibble.h' => 'X'*45*1024 }
@@ -80,6 +82,8 @@ class DifferClientTest < ClientTestBase
     assert_diff 'hiker.h', []
   end
 
+  # - - - - - - - - - - - - - - - - - - - -
+
   test '314',
   'deleted empty file in nested sub-dir shows as empty array' do
     @old_files = { '6/7/8/hiker.h' => '' }
@@ -100,7 +104,10 @@ class DifferClientTest < ClientTestBase
       deleted(3, 'c'),
       deleted(4, 'd')
     ]
+    assert_diff_tip_data('hiker.h', { 'added' => 0, 'deleted' => 4 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'FEA',
   'deleted non-empty file in nested sub-dir shows as all lines deleted' do
@@ -113,6 +120,7 @@ class DifferClientTest < ClientTestBase
       deleted(3, 'c'),
       deleted(4, 'd')
     ]
+    assert_diff_tip_data('4/5/6/7/hiker.h', { 'added' => 0, 'deleted' => 4 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -131,7 +139,10 @@ class DifferClientTest < ClientTestBase
       deleted(3, 'c'),
       deleted(4, 'd'),
     ]
+    assert_diff_tip_data('hiker.h', { 'added' => 0, 'deleted' => 4 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'B68',
   'all lines deleted but nested sub-dir file not deleted',
@@ -145,6 +156,7 @@ class DifferClientTest < ClientTestBase
       deleted(3, 'c'),
       deleted(4, 'd'),
     ]
+    assert_diff_tip_data('r/t/y/hiker.h', { 'added' => 0, 'deleted' => 4 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -156,13 +168,17 @@ class DifferClientTest < ClientTestBase
     @old_files = { }
     @new_files = { 'diamond.h' => '' }
     assert_diff 'diamond.h', [ added(1,'') ]
+    assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 0 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '960',
   %w( added empty file in nested sub-dir shows as [''] ) do
     @old_files = { }
     @new_files = { 'a/b/c/diamond.h' => '' }
     assert_diff 'a/b/c/diamond.h', [ added(1,'') ]
+    assert_diff_tip_data('a/b/c/diamond.h', { 'added' => 1, 'deleted' => 0 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -178,7 +194,10 @@ class DifferClientTest < ClientTestBase
       added(3, 'c'),
       added(4, 'd')
     ]
+    assert_diff_tip_data('diamond.h', { 'added' => 4, 'deleted' => 0 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '2C4',
   'added non-empty file in nested sub-dir shows as all lines added' do
@@ -191,6 +210,7 @@ class DifferClientTest < ClientTestBase
       added(3, 'c'),
       added(4, 'd')
     ]
+    assert_diff_tip_data('q/w/e/diamond.h', { 'added' => 4, 'deleted' => 0 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -200,7 +220,10 @@ class DifferClientTest < ClientTestBase
   test 'AEC',
   'empty old_files and empty new_files is benign no-op' do
     assert_equal({}, differ.diff(id58,{},{}))
+    assert_equal({}, differ.diff_tip_data(id58,{},{}))
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '7FE',
   'unchanged empty-file shows as one empty line' do
@@ -209,7 +232,10 @@ class DifferClientTest < ClientTestBase
     @old_files = { 'diamond.h' => '' }
     @new_files = { 'diamond.h' => '' }
     assert_diff 'diamond.h', [ same(1,'') ]
+    assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '7FF',
   'unchanged empty-file in nested sub-dir shows as one empty line' do
@@ -218,6 +244,7 @@ class DifferClientTest < ClientTestBase
     @old_files = { 'w/e/r/diamond.h' => '' }
     @new_files = { 'w/e/r/diamond.h' => '' }
     assert_diff 'w/e/r/diamond.h', [ same(1,'') ]
+    assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -232,7 +259,10 @@ class DifferClientTest < ClientTestBase
       same(3, 'c'),
       same(4, 'd')
     ]
+    assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test '366',
   'unchanged non-empty file in nested sub-dir shows as all lines same' do
@@ -244,6 +274,7 @@ class DifferClientTest < ClientTestBase
       same(3, 'c'),
       same(4, 'd')
     ]
+    assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -259,7 +290,10 @@ class DifferClientTest < ClientTestBase
       deleted(1, 'a'),
       added(  1, 'b')
     ]
+    assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'E3F',
   'changed non-empty file in nested sub-dir shows as deleted and added lines' do
@@ -270,6 +304,7 @@ class DifferClientTest < ClientTestBase
       deleted(1, 'a1'),
       added(  1, 'b2')
     ]
+    assert_diff_tip_data('t/y/u/diamond.h', { 'added' => 1, 'deleted' => 1 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -319,7 +354,10 @@ class DifferClientTest < ClientTestBase
       same(   7, ''),
       same(   8, '#endif'),
     ]
+    assert_diff_tip_data('diamond.h', { 'added' => 2, 'deleted' => 2 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'B9F',
   'changed non-empty file in nested sub-dir shows as deleted and added lines',
@@ -366,6 +404,7 @@ class DifferClientTest < ClientTestBase
       same(   7, ''),
       same(   8, '#endif'),
     ]
+    assert_diff_tip_data('a/b/c/diamond.h', { 'added' => 2, 'deleted' => 2 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -384,7 +423,10 @@ class DifferClientTest < ClientTestBase
       same(3, 'c'),
       same(4, 'd')
     ]
+    assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'E51',
   'renamed file in nested sub-dir shows as all lines same' do
@@ -398,6 +440,7 @@ class DifferClientTest < ClientTestBase
       same(3, 'c'),
       same(4, 'd')
     ]
+    assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -414,7 +457,10 @@ class DifferClientTest < ClientTestBase
       added(  3, 'X'),
       same(   4, 'd')
     ]
+    assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
   end
+
+  # - - - - - - - - - - - - - - - - - - - -
 
   test 'FDC',
   'renamed and slightly changed file in nested sub-dir shows as mostly same lines' do
@@ -428,19 +474,29 @@ class DifferClientTest < ClientTestBase
       added(  3, 'X'),
       same(   4, 'd')
     ]
+    assert_diff_tip_data('a/b/c/diamond.h', { 'added' => 1, 'deleted' => 1 })
   end
 
-  # - - - - - - - - - - - - - - - - - - - -
+  private
 
   def assert_diff(filename, expected)
     json = get_diff
     assert_equal expected, json[filename]
   end
 
-  # - - - - - - - - - - - - - - - - - - - -
-
   def get_diff
     differ.diff(id58, @old_files, @new_files)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def assert_diff_tip_data(filename, expected)
+    json = get_diff_tip_data
+    assert_equal expected, json[filename]
+  end
+
+  def get_diff_tip_data
+    differ.diff_tip_data(id58, @old_files, @new_files)
   end
 
   # - - - - - - - - - - - - - - - - - - - -

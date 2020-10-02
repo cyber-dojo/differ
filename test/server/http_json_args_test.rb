@@ -40,6 +40,19 @@ class HttpJsonArgsTest < DifferTestBase
     assert_equal ['diff'], result.keys
   end
 
+  test 'e16',
+  %w( /diff_tip_data has three keyword args; id:,old_files:,new_files: ) do
+    old_files = { 'hiker.h' => "a\nb" }
+    new_files = { 'hiker.h' => "a\nb\nc" }
+    body = {
+      id:id58,
+      old_files:old_files,
+      new_files:new_files
+    }.to_json
+    result = dispatch('/diff_tip_data', differ, body)
+    assert_equal ['diff_tip_data'], result.keys
+  end
+
   # - - - - - - - - - - - - - - - - -
   # dispatch calls with body that is not JSON
   # raise HttpJsonArgs::RequestError

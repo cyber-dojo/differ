@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'http_json/service_exception'
 
 class DifferException < HttpJson::ServiceException
