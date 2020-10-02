@@ -2,6 +2,7 @@
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export SH_DIR="${ROOT_DIR}/sh"
+
 source "${SH_DIR}/exit_zero_if_show_help.sh"
 source "${SH_DIR}/build_tagged_images.sh"
 source "${SH_DIR}/exit_zero_if_build_only.sh"
