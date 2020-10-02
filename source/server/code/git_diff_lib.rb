@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require_relative 'git_diff_parser'
 
-module GitDiffJoin # mix-in
+module GitDiffLib # mix-in
 
   module_function
 

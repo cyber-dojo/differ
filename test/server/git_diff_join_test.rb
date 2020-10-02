@@ -1,5 +1,5 @@
 require_relative 'differ_test_base'
-require_src 'git_diff_join'
+require_src 'git_diff_lib'
 
 class GitDiffJoinTest < DifferTestBase
 
@@ -256,15 +256,15 @@ class GitDiffJoinTest < DifferTestBase
     assert_join(expected, old_files, new_files)
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  private
+
+  include GitDiffLib
 
   def assert_join(expected, old_files, new_files)
     diff_lines = GitDiffer.new(externals).diff(id58, old_files, new_files)
     actual = git_diff_join(diff_lines, old_files, new_files)
     assert_equal expected, actual
   end
-
-  include GitDiffJoin
 
   def section(index)
     { :type => :section, index:index }

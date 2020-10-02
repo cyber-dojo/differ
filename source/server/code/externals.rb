@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'external_disk_writer'
 require_relative 'external_gitter'
 require_relative 'external_sheller'

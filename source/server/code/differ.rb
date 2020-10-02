@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-
 require_relative 'git_differ'
-require_relative 'git_diff_join'
+require_relative 'git_diff_lib'
 
 class Differ
 
@@ -27,8 +26,14 @@ class Differ
     { 'diff' => result }
   end
 
+  #def diff_tip_data(id:, old_files:, new_files:)
+  #  git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
+  #  result = git_diff_tip_data(git_diff, old_files, new_files)
+  #  { 'diff_tip_data' => result }
+  #end
+
   private
 
-  include GitDiffJoin
+  include GitDiffLib
 
 end
