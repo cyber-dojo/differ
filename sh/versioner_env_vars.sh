@@ -1,17 +1,15 @@
 #!/bin/bash -Eeu
 
-readonly ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 # - - - - - - - - - - - - - - - - - - - - - - - -
-image_sha()
+get_image_sha()
 {
   echo "$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-image_tag()
+get_image_tag()
 {
-  local -r sha="$(image_sha)"
+  local -r sha="$(get_image_sha)"
   echo "${sha:0:7}"
 }
 
@@ -19,8 +17,8 @@ image_tag()
 versioner_env_vars()
 {
   docker run --rm cyberdojo/versioner
-  echo CYBER_DOJO_DIFFER_SHA="$(image_sha)"
-  echo CYBER_DOJO_DIFFER_TAG="$(image_tag)"
+  echo CYBER_DOJO_DIFFER_SHA="$(get_image_sha)"
+  echo CYBER_DOJO_DIFFER_TAG="$(get_image_tag)"
   echo CYBER_DOJO_DIFFER_CLIENT_IMAGE=cyberdojo/differ-client
   echo CYBER_DOJO_DIFFER_CLIENT_PORT=9999
   echo CYBER_DOJO_DIFFER_CLIENT_USER=nobody

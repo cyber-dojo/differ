@@ -6,19 +6,9 @@ build_tagged_images()
   local -r dil=$(docker image ls --format "{{.Repository}}:{{.Tag}}")
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_IMAGE}"
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_CLIENT_IMAGE}"
-
-  docker-compose \
-    --file "${SH_DIR}/../docker-compose.yml" \
-    build \
-    --build-arg COMMIT_SHA=$(git_commit_sha)
-
-  docker tag $(image_name):$(image_tag) $(image_name):latest
-  docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
-
+  build_images
+  tag_images_to_latest
   check_embedded_env_var
-  echo
-  echo "CYBER_DOJO_DIFFER_TAG=$(image_tag)"
-  echo "CYBER_DOJO_DIFFER_SHA=$(image_sha)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
@@ -34,6 +24,27 @@ remove_all_but_latest()
       fi
     fi
   done
+  docker system prune --force  
+}
+
+# - - - - - - - - - - - - - - - - - - - - - -
+build_images()
+{
+  docker-compose \
+    --file "${SH_DIR}/../docker-compose.yml" \
+    build \
+    --build-arg COMMIT_SHA=$(git_commit_sha)
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - -
+tag_images_to_latest()
+{
+  docker tag $(image_name):$(image_tag) $(image_name):latest
+  docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
+  echo
+  echo "CYBER_DOJO_DIFFER_TAG=$(image_tag)"
+  echo "CYBER_DOJO_DIFFER_SHA=$(image_sha)"
+  echo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
