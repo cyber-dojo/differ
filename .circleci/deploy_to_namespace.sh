@@ -1,7 +1,6 @@
 #!/bin/bash -Eeu
 
-export MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
+readonly MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly NAMESPACE="${1}" # beta|prod
 readonly K8S_URL=https://raw.githubusercontent.com/cyber-dojo/k8s-install/master
 readonly VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
