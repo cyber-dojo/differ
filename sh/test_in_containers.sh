@@ -56,7 +56,7 @@ run_tests()
     --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
     --user "${user}" \
     "${container_name}" \
-      sh -c "/differ/test/lib/run.sh ${coverage_root} ${test_log} ${type} ${*:3}"
+      sh -c "/differ/test/lib/run.sh ${coverage_root} ${test_log} ${*:3}"
   set -e
 
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out

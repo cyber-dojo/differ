@@ -3,8 +3,7 @@
 readonly MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export COVERAGE_ROOT="${1}" # /tmp/coverage
 readonly TEST_LOG="${2}"    # test.log
-readonly TYPE="${3}"        # client|server
-shift; shift; shift
+shift; shift
 
 readonly TEST_FILES=(${MY_DIR}/../*_test.rb)
 readonly TEST_ARGS=(${@})
