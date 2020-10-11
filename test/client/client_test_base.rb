@@ -1,4 +1,4 @@
-require_relative '../id58_test_base'
+require_relative '../lib/id58_test_base'
 require_src 'externals'
 require_src 'differ_service'
 
