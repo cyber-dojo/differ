@@ -18,7 +18,8 @@ services:
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    volumes: [ "./test:/test:ro" ]
+    volumes:
+      - "./test/client:/test/client:ro"
 
   differ-server:
     image: ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
@@ -33,4 +34,5 @@ services:
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    volumes: [ "./test:/test:ro" ]
+    volumes:
+      - "./test/server:/test/server:ro"
