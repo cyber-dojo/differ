@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-def require_src(required)
+def require_app(required)
   require_relative "../../app/#{required}"
 end
 

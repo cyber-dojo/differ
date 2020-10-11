@@ -1,6 +1,6 @@
 require_relative 'client_test_base'
-require_src 'http_json/response_unpacker'
-require_src 'http_json/service_exception'
+require_app 'http_json/response_unpacker'
+require_app 'http_json/service_exception'
 require 'ostruct'
 
 class HttpResponseUnpackerTest < ClientTestBase

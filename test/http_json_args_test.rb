@@ -1,5 +1,5 @@
 require_relative 'differ_test_base'
-require_src 'http_json_args'
+require_app 'http_json_args'
 
 class HttpJsonArgsTest < DifferTestBase
 

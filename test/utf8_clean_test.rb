@@ -1,5 +1,5 @@
 require_relative 'differ_test_base'
-require_src 'utf8_clean'
+require_app 'utf8_clean'
 
 class Utf8CleanTest < DifferTestBase
 

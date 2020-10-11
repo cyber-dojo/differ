@@ -1,5 +1,5 @@
 require_relative 'differ_test_base'
-require_src 'git_diff_lib'
+require_app 'git_diff_lib'
 
 class GitDiffTipDataTest < DifferTestBase
 

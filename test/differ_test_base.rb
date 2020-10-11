@@ -1,6 +1,6 @@
 require_relative 'lib/id58_test_base'
-require_src 'externals'
-require_src 'differ'
+require_app 'externals'
+require_app 'differ'
 
 class DifferTestBase < Id58TestBase
 

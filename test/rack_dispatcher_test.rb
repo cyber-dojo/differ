@@ -1,6 +1,6 @@
 require_relative 'differ_test_base'
 require_relative 'rack_request_stub'
-require_src 'rack_dispatcher'
+require_app 'rack_dispatcher'
 
 class RackDispatcherTest < DifferTestBase
 
