@@ -3,7 +3,8 @@ LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --upgrade --no-cache add git
 
-COPY --chown=nobody:nogroup . /app
+WORKDIR /differ
+COPY --chown=nobody:nogroup . .
 
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}
@@ -14,4 +15,4 @@ EXPOSE ${PORT}
 
 USER nobody
 ENTRYPOINT ["/sbin/tini", "-g", "--"]
-CMD [ "/app/up.sh" ]
+CMD [ "/differ/up.sh" ]
