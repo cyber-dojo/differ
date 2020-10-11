@@ -2,7 +2,6 @@
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SH_DIR}/build_tagged_images.sh"
 source "${SH_DIR}/containers_up.sh"
 source "${SH_DIR}/versioner_env_vars.sh"
