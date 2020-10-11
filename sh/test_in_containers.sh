@@ -42,8 +42,8 @@ run_tests()
   local -r reports_dir=${test_dir}/${reports_dir_name}
   local -r test_log=test.log
   local -r container_name="test-differ-${type}" # eg test-differ-server
-  local -r coverage_code_tab_name=tested
-  local -r coverage_test_tab_name=tester
+  local -r coverage_code_tab_name=app
+  local -r coverage_test_tab_name=test
 
   echo
   echo '=================================='
