@@ -8,7 +8,7 @@ services:
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     build:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_CLIENT_PORT ]
-      context: source/client
+      context: client
     container_name: test-differ-client
     depends_on:
       - differ-server
@@ -19,14 +19,14 @@ services:
     restart: "no"
     tmpfs: /tmp
     volumes:
-      - "./test/client:/differ/test:ro"
+      - "./client/test:/differ/test:ro"
 
   differ-server:
     image: ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     user: ${CYBER_DOJO_DIFFER_SERVER_USER}
     build:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_PORT ]
-      context: source/server
+      context: .
     container_name: test-differ-server
     env_file:
       - .env
@@ -35,4 +35,4 @@ services:
     restart: "no"
     tmpfs: /tmp
     volumes:
-      - "./test/server:/differ/test:ro"
+      - "./test:/differ/test:ro"

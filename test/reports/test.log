@@ -1,0 +1,31 @@
+Run options: --seed 39499
+
+# Running:
+
+............................................................................................................
+
+Finished in 1.063714s, 101.5310 runs/s, 404.2440 assertions/s.
+
+108 runs, 430 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for MiniTest to //tmp/reports. 2192 / 3347 LOC (65.49%) covered.
+
+Slowest 5 tests are...
+0.0322 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0302 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
+0.0299 - 74CF2E:git_diff_join_test.rb:64:empty file has some content added       
+0.0295 - 74DF2E:git_diff_tip_data_test.rb:64:empty file has some content added   
+0.0292 - 74CAA7:git_diff_join_test.rb:132:non-empty file is renamed 100% identical
+0.0290 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
+
+
+                 failures |       0   <=     0 | [32m true [0m
+                   errors |       0   <=     0 | [32m true [0m
+                 warnings |       0   <=     0 | [32m true [0m
+                    skips |       0   <=     0 | [32m true [0m
+        duration(test)[s] |    1.06   <=     2 | [32m true [0m
+                    tests |     108   >=     1 | [32m true [0m
+      coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
+      coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
+     lines(tester/tested) |    2.32   >=   1.8 | [32m true [0m
+      hits(tested/tester) |    3.23   >=   3.2 | [32m true [0m
+

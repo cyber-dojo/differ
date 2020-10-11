@@ -1,0 +1,31 @@
+Run options: --seed 497
+
+# Running:
+
+..................................
+
+Finished in 1.317832s, 25.7999 runs/s, 78.1587 assertions/s.
+
+34 runs, 103 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for MiniTest to //tmp/reports. 2977 / 5547 LOC (53.67%) covered.
+
+Slowest 5 tests are...
+0.0659 - 200E51:differ_client_test.rb:431:renamed file in nested sub-dir shows as all lines same
+0.0634 - 200B9F:differ_client_test.rb:362:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
+0.0621 - 200FDC:differ_client_test.rb:465:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.0596 - 2002C3:differ_client_test.rb:186:added non-empty file shows as all lines added
+0.0589 - 200E3F:differ_client_test.rb:298:changed non-empty file in nested sub-dir shows as deleted and added lines
+0.0583 - 200366:differ_client_test.rb:267:unchanged non-empty file in nested sub-dir shows as all lines same
+
+
+                 failures |       0   <=     0 | [32m true [0m
+                   errors |       0   <=     0 | [32m true [0m
+                 warnings |       0   <=     0 | [32m true [0m
+                    skips |       0   <=     0 | [32m true [0m
+        duration(test)[s] |    1.32   <=     2 | [32m true [0m
+                    tests |      34   >=     1 | [32m true [0m
+      coverage(tested)[%] |   100.0   >=   100 | [32m true [0m
+      coverage(tester)[%] |   100.0   >=   100 | [32m true [0m
+     lines(tester/tested) |    3.69   >=   2.4 | [32m true [0m
+      hits(tested/tester) |    1.68   >=   1.6 | [32m true [0m
+

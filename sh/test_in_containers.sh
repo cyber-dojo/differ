@@ -38,12 +38,16 @@ run_tests()
   local -r reports_dir_name=reports
   local -r tmp_dir=/tmp
   local -r coverage_root=/${tmp_dir}/${reports_dir_name}
-  local -r test_dir="${SH_DIR}/../test/${type}"
-  local -r reports_dir=${test_dir}/${reports_dir_name}
   local -r test_log=test.log
   local -r container_name="test-differ-${type}" # eg test-differ-server
   local -r coverage_code_tab_name=app
   local -r coverage_test_tab_name=test
+  if [ "${type}" == 'server' ]; then
+    local -r test_dir="${SH_DIR}/../test"
+  else
+    local -r test_dir="${SH_DIR}/../client/test"
+  fi
+  local -r reports_dir=${test_dir}/${reports_dir_name}
 
   echo
   echo '=================================='
