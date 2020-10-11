@@ -15,4 +15,4 @@ EXPOSE ${PORT}
 
 USER nobody
 ENTRYPOINT ["/sbin/tini", "-g", "--"]
-CMD [ "/differ/up.sh" ]
+CMD [ "/differ/config/up.sh" ]
