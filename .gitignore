@@ -1,5 +1,5 @@
-test/server/reports/*
-test/server/reports/.*
+test/reports/*
+test/reports/.*
 
-test/client/reports/*
-test/client/reports/.*
+client/test/reports/*
+client/test/reports/.*
