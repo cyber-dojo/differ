@@ -45,7 +45,7 @@ run_tests()
   if [ "${type}" == 'server' ]; then
     local -r test_dir="${SH_DIR}/../test"
   else
-    local -r test_dir="${SH_DIR}/../client/test"
+    local -r test_dir="${SH_DIR}/../.client/test"
   fi
   local -r reports_dir=${test_dir}/${reports_dir_name}
 
