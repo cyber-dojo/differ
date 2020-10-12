@@ -2,6 +2,8 @@
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "${SH_DIR}/generate_env_var_yml_files.sh"
 source "${SH_DIR}/build_tagged_images.sh"
 source "${SH_DIR}/containers_up.sh"
 source "${SH_DIR}/versioner_env_vars.sh"
@@ -9,8 +11,8 @@ export $(versioner_env_vars)
 
 readonly TMP_HTML_FILENAME=/tmp/differ-demo.html
 
+generate_env_var_yml_files
 build_tagged_images
-
 containers_up
 
 docker exec \

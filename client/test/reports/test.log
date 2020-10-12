@@ -1,30 +1,30 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 22366
+Run options: --seed 43573
 
 # Running:
 
 ..................................
 
-Finished in 1.316778s, 25.8206 runs/s, 78.2212 assertions/s.
+Finished in 1.357508s, 25.0459 runs/s, 75.8743 assertions/s.
 
 34 runs, 103 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 299 / 299 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 299 / 299 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0719 - 200FDC:differ_client_test.rb:465:renamed and slightly changed file in nested sub-dir shows as mostly same lines
-0.0629 - 200B9F:differ_client_test.rb:362:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
-0.0609 - 200B9E:differ_client_test.rb:312:changed non-empty file shows as deleted and added lines with each hunk in its own indexed section
-0.0597 - 200E3F:differ_client_test.rb:298:changed non-empty file in nested sub-dir shows as deleted and added lines
-0.0595 - 200E51:differ_client_test.rb:431:renamed file in nested sub-dir shows as all lines same
-0.0593 - 200B68:differ_client_test.rb:147:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0784 - 200B68:differ_client_test.rb:147:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0708 - 2007FF:differ_client_test.rb:240:unchanged empty-file in nested sub-dir shows as one empty line
+0.0616 - 200366:differ_client_test.rb:267:unchanged non-empty file in nested sub-dir shows as all lines same
+0.0615 - 200E3F:differ_client_test.rb:298:changed non-empty file in nested sub-dir shows as deleted and added lines
+0.0603 - 200E51:differ_client_test.rb:431:renamed file in nested sub-dir shows as all lines same
+0.0598 - 200FDC:differ_client_test.rb:465:renamed and slightly changed file in nested sub-dir shows as mostly same lines
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.32   <=     2 | [32m true [0m
+         test:duration(s) |    1.36   <=     2 | [32m true [0m
                test:count |      34   >=     1 | [32m true [0m
           app:lines:total |      74   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
