@@ -1,0 +1,37 @@
+/usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
+Run options: --seed 10479
+
+# Running:
+
+............................................................................................................
+
+Finished in 1.043288s, 103.5189 runs/s, 412.1585 assertions/s.
+
+108 runs, 430 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 995 / 995 LOC (100.0%) covered.
+
+Slowest 5 tests are...
+0.0300 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0293 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
+0.0291 - 74DBA7:git_diff_tip_data_test.rb:116:non-empty file is renamed 100% identical across dirs
+0.0286 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
+0.0280 - 74DD09:git_diff_tip_data_test.rb:96:non-empty file is created           
+0.0278 - 74D5D2:git_diff_tip_data_test.rb:178:non-empty file has some content added in the middle
+
+
+            test:failures |       0   <=     0 | [32m true [0m
+              test:errors |       0   <=     0 | [32m true [0m
+            test:warnings |       1   <=     1 | [32m true [0m
+               test:skips |       0   <=     0 | [32m true [0m
+         test:duration[s] |    1.04   <=     2 | [32m true [0m
+               test:count |     108   >=     1 | [32m true [0m
+          lines(test/app) |    2.16   >=   2.0 | [32m true [0m
+           hits(app/test) |    3.01   >=   3.0 | [32m true [0m
+           app:line_count |     315   <=   500 | [32m true [0m
+         app:lines_missed |       0   <=     0 | [32m true [0m
+         app:branch_count |      60   <=    75 | [32m true [0m
+      app:branches_missed |       0   <=     0 | [32m true [0m
+        test:lines_missed |       0   <=     0 | [32m true [0m
+        test:branch_count |       0   <=     0 | [32m true [0m
+     test:branches_missed |       0   <=     0 | [32m true [0m
+
