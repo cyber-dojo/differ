@@ -47,7 +47,6 @@ run_tests()
   else
     local -r test_dir="${SH_DIR}/../client/test"
   fi
-  local -r reports_dir=${test_dir}/${reports_dir_name}
 
   echo
   echo '=================================='
@@ -71,22 +70,24 @@ run_tests()
       - "$(basename "${coverage_root}")" \
         | tar Cxf "${test_dir}/" -
 
+  local -r host_coverage_dir=${test_dir}/reports
+  mkdir -p "${host_coverage_dir}"
+
   set +e
   docker run \
     --env COVERAGE_CODE_TAB_NAME=${coverage_code_tab_name} \
     --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
     --rm \
-    --volume ${reports_dir}/${test_log}:${tmp_dir}/${test_log}:ro \
-    --volume ${reports_dir}/index.html:${tmp_dir}/index.html:ro \
+    --volume ${host_coverage_dir}/${test_log}:${tmp_dir}/${test_log}:ro \
+    --volume ${host_coverage_dir}/index.html:${tmp_dir}/index.html:ro \
     --volume ${test_dir}/metrics.rb:/app/metrics.rb:ro \
     cyberdojo/check-test-results:latest \
     sh -c "ruby /app/check_test_results.rb ${tmp_dir}/${test_log} ${tmp_dir}/index.html" \
-      | tee -a ${reports_dir}/${test_log}
+      | tee -a ${host_coverage_dir}/${test_log}
   local -r status=${PIPESTATUS[0]}
   set -e
 
-  local -r coverage_path="${reports_dir}/index.html"
-  echo "${type} test coverage at ${coverage_path}"
+  echo "${type} test coverage at ${host_coverage_dir}/index.html"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
     docker logs "${container_name}"
