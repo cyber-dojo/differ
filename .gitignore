@@ -3,9 +3,3 @@ test/reports/.*
 
 client/test/reports/*
 client/test/reports/.*
-
-test/coverage/*
-test/coverage/.*
-
-client/test/coverage/*
-client/test/coverage/.*
