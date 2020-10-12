@@ -1,8 +1,9 @@
 
+# min/max values used by cyberdojo/check-test-results image
+# which is called from scripts/test_in_containers.sh
+
 MIN = {
   test_count:1,
-  line_ratio:2.0,
-  hits_ratio:3.0,
 }
 
 MAX = {
