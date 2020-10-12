@@ -1,4 +1,5 @@
 require 'simplecov'
+require_relative 'simplecov-json'
 
 SimpleCov.start do
   enable_coverage :branch
@@ -10,3 +11,8 @@ SimpleCov.start do
   add_group(code_tab) { |src| src.filename =~ %r"^/differ/app" }
   add_group(test_tab) { |src| src.filename =~ %r"^/differ/test" }
 end
+
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::JSONFormatter,
+])
