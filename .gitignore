@@ -1,7 +1,0 @@
-test/reports/*
-test/reports/.*
-!test/reports/test.log
-
-client/test/reports/*
-client/test/reports/.*
-!client/test/reports/test.log
