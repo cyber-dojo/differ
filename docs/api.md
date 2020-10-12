@@ -63,8 +63,22 @@ Specifically, the names of the files that have changed,
 and for each file, the number of added and deleted lines.
 
 - - - -
+# GET alive?
+Useful as a Kubernetes liveness probe.
+- returns
+  * **true**
+  ```json
+  { "ready?": true }
+  ```
+- parameters
+  * none
+  ```json
+  {}
+  ```
+
+- - - -
 # GET ready?
-Useful as a readiness probe.
+Useful as a Kubernetes readyness probe.
 - returns
   * **true** if the service is ready
   ```json
@@ -81,22 +95,9 @@ Useful as a readiness probe.
   ```
 
 - - - -
-# GET alive?
-Useful as a liveness probe.
-- returns
-  * **true**
-  ```json
-  { "ready?": true }
-  ```
-- parameters
-  * none
-  ```json
-  {}
-  ```
-
-- - - -
 # GET sha
 The git commit sha used to create the Docker image.
+Present inside the image as the environment variable COMMIT_SHA.
 - returns
   * The 40 character sha string.
   * eg
@@ -108,7 +109,6 @@ The git commit sha used to create the Docker image.
   ```json
   {}
   ```
-
 
 - - - -
 ## JSON in
