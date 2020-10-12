@@ -13,12 +13,25 @@ MAX = {
 
   duration:2,
 
-  app_line_count:100,
-  app_lines_missed:0,
-  app_branch_count:10,
-  app_branches_missed:0,
+  app: {
+    lines: {
+       total:100,
+      missed:0,
+    },
+    branches: {
+       total:10,
+      missed:0,
+    }
+  },
 
-  test_lines_missed:0,
-  test_branch_count:0,
-  test_branches_missed:0,
+  test: {
+    lines: {
+       total:500,
+      missed:0,
+    },
+    branches: {
+       total:0,
+      missed:0,
+    }
+  }
 }

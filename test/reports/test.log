@@ -1,38 +1,37 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 46357
+Run options: --seed 31038
 
 # Running:
 
 ............................................................................................................
 
-Finished in 1.002281s, 107.7542 runs/s, 429.0212 assertions/s.
+Finished in 1.038614s, 103.9847 runs/s, 414.0132 assertions/s.
 
 108 runs, 430 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 995 / 995 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 995 / 995 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0314 - EE7e16:http_json_args_test.rb:43:/diff_tip_data has three keyword args; id:,old_files:,new_files:
-0.0296 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0289 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
-0.0279 - 74D5D1:git_diff_tip_data_test.rb:165:non-empty file has some content added at the end
-0.0278 - 74CA5C:git_diff_join_test.rb:24:empty file is deleted is represented as []
-0.0273 - 74C3ED:git_diff_join_test.rb:14:empty file is unchanged                 
+0.0333 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
+0.0314 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0305 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
+0.0295 - 74DBA7:git_diff_tip_data_test.rb:116:non-empty file is renamed 100% identical across dirs
+0.0281 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
+0.0280 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration[s] |     1.0   <=     2 | [32m true [0m
+         test:duration(s) |    1.04   <=     2 | [32m true [0m
                test:count |     108   >=     1 | [32m true [0m
-          lines(test/app) |    2.16   >=   2.0 | [32m true [0m
-           hits(app/test) |    3.01   >=   3.0 | [32m true [0m
-           app:line_count |     315   <=   500 | [32m true [0m
-         app:lines_missed |       0   <=     0 | [32m true [0m
-         app:branch_count |      60   <=    75 | [32m true [0m
-      app:branches_missed |       0   <=     0 | [32m true [0m
-        test:lines_missed |       0   <=     0 | [32m true [0m
-        test:branch_count |       0   <=     0 | [32m true [0m
-     test:branches_missed |       0   <=     0 | [32m true [0m
+          app:lines:total |     315   <=   500 | [32m true [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
+       app:branches:total |      60   <=    75 | [32m true [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     680   <=  1000 | [32m true [0m
+        test:lines:missed |       0   <=     0 | [32m true [0m
+      test:branches:total |       0   <=     0 | [32m true [0m
+     test:branches:missed |       0   <=     0 | [32m true [0m
 
