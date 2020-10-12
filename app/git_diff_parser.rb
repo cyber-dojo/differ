@@ -39,11 +39,7 @@ class GitDiffParser
     lines = []
     index,old_number,new_number = 0,1,1
     while line && !line.start_with?('diff --git') do
-      # Simplecov bug...
-      # https://github.com/colszowka/simplecov/issues/802
-      # :nocov:
       while same?(line) do
-      # :nocov:
         lines << src(:same, line, new_number)
         old_number += 1
         new_number += 1
