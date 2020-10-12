@@ -91,7 +91,7 @@ run_tests()
     --volume ${host_reports_dir}/${test_log}:${container_tmp_dir}/${test_log}:ro \
     --volume ${host_reports_dir}/index.html:${container_tmp_dir}/index.html:ro \
     --volume ${host_reports_dir}/coverage.json:${container_tmp_dir}/coverage.json:ro \
-    --volume ${host_test_dir}/metrics.rb:/app/metrics.rb:ro \
+    --volume ${host_test_dir}/lib/metrics.rb:/app/metrics.rb:ro \
     cyberdojo/check-test-results:latest \
     sh -c "ruby /app/check_test_results.rb ${container_tmp_dir}/${test_log} ${container_tmp_dir}/index.html ${container_tmp_dir}/coverage.json" \
       | tee -a ${host_reports_dir}/${test_log}

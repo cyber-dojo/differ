@@ -1,30 +1,30 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 31038
+Run options: --seed 57414
 
 # Running:
 
 ............................................................................................................
 
-Finished in 1.038614s, 103.9847 runs/s, 414.0132 assertions/s.
+Finished in 0.997654s, 108.2539 runs/s, 431.0110 assertions/s.
 
 108 runs, 430 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 995 / 995 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 995 / 995 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0333 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
-0.0314 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0305 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
-0.0295 - 74DBA7:git_diff_tip_data_test.rb:116:non-empty file is renamed 100% identical across dirs
-0.0281 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
-0.0280 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
+0.0319 - 74DD09:git_diff_tip_data_test.rb:96:non-empty file is created           
+0.0303 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
+0.0300 - 74C4D1:git_diff_join_test.rb:224:non-empty file has some content added at the end
+0.0281 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0281 - 74DA2D:git_diff_tip_data_test.rb:54:empty file is renamed 100% identical across dirs
+0.0278 - 74CA2D:git_diff_join_test.rb:54:empty file is renamed 100% identical across dirs
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.04   <=     2 | [32m true [0m
+         test:duration(s) |     1.0   <=     2 | [32m true [0m
                test:count |     108   >=     1 | [32m true [0m
           app:lines:total |     315   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
