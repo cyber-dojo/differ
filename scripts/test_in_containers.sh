@@ -35,23 +35,21 @@ run_tests()
 {
   local -r user="${1}" # eg nobody
   local -r type="${2}" # eg client|server
-  local -r reports_dir_name=reports
-  local -r tmp_dir=/tmp
-  local -r coverage_root=/${tmp_dir}/${reports_dir_name}
-  local -r test_log=test.log
   local -r container_name="test-differ-${type}" # eg test-differ-server
+
   local -r coverage_code_tab_name=app
   local -r coverage_test_tab_name=test
-  if [ "${type}" == 'server' ]; then
-    local -r test_dir="${SH_DIR}/../test"
-  else
-    local -r test_dir="${SH_DIR}/../client/test"
-  fi
+  local -r container_tmp_dir=/tmp
+  local -r container_coverage_dir=/${container_tmp_dir}/reports
+  local -r test_log=test.log
 
   echo
   echo '=================================='
   echo "Running ${type} tests"
   echo '=================================='
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Run tests (with coverage) inside the container.
 
   set +e
   docker exec \
@@ -59,35 +57,50 @@ run_tests()
     --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
     --user "${user}" \
     "${container_name}" \
-      sh -c "/differ/test/lib/run.sh ${coverage_root} ${test_log} ${*:3}"
+      sh -c "/differ/test/lib/run.sh ${container_coverage_dir} ${test_log} ${*:3}"
   set -e
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Extract test-run results and coverage data from the container.
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out
+
+  if [ "${type}" == 'server' ]; then
+    local -r host_test_dir="${SH_DIR}/../test"
+  else
+    local -r host_test_dir="${SH_DIR}/../client/test"
+  fi
+
   docker exec \
     "${container_name}" \
     tar Ccf \
-      "$(dirname "${coverage_root}")" \
-      - "$(basename "${coverage_root}")" \
-        | tar Cxf "${test_dir}/" -
+      "$(dirname "${container_coverage_dir}")" \
+      - "$(basename "${container_coverage_dir}")" \
+        | tar Cxf "${host_test_dir}/" -
 
-  local -r host_coverage_dir=${test_dir}/reports
-  mkdir -p "${host_coverage_dir}"
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Process test-run results and coverage data.
+
+  local -r host_reports_dir=${host_test_dir}/reports
+  mkdir -p "${host_reports_dir}"
 
   set +e
   docker run \
     --env COVERAGE_CODE_TAB_NAME=${coverage_code_tab_name} \
     --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
     --rm \
-    --volume ${host_coverage_dir}/${test_log}:${tmp_dir}/${test_log}:ro \
-    --volume ${host_coverage_dir}/index.html:${tmp_dir}/index.html:ro \
-    --volume ${test_dir}/metrics.rb:/app/metrics.rb:ro \
+    --volume ${host_reports_dir}/${test_log}:${container_tmp_dir}/${test_log}:ro \
+    --volume ${host_reports_dir}/index.html:${container_tmp_dir}/index.html:ro \
+    --volume ${host_test_dir}/metrics.rb:/app/metrics.rb:ro \
     cyberdojo/check-test-results:latest \
-    sh -c "ruby /app/check_test_results.rb ${tmp_dir}/${test_log} ${tmp_dir}/index.html" \
-      | tee -a ${host_coverage_dir}/${test_log}
+    sh -c "ruby /app/check_test_results.rb ${container_tmp_dir}/${test_log} ${container_tmp_dir}/index.html" \
+      | tee -a ${host_reports_dir}/${test_log}
   local -r status=${PIPESTATUS[0]}
   set -e
 
-  echo "${type} test coverage at ${host_coverage_dir}/index.html"
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Tell caller where the results are...
+
+  echo "${type} test coverage at ${host_reports_dir}/index.html"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
     docker logs "${container_name}"
