@@ -8,8 +8,8 @@ build_tagged_images()
   local -r dil=$(docker image ls --format "{{.Repository}}:{{.Tag}}")
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_IMAGE}"
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_CLIENT_IMAGE}"
-  build_images
-  tag_images_to_latest
+  echo; build_images
+  echo; tag_images_to_latest
   check_embedded_env_var
 }
 
@@ -42,10 +42,8 @@ tag_images_to_latest()
 {
   docker tag $(image_name):$(image_tag) $(image_name):latest
   docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
-  echo
   echo "CYBER_DOJO_DIFFER_TAG=$(image_tag)"
   echo "CYBER_DOJO_DIFFER_SHA=$(image_sha)"
-  echo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -

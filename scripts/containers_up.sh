@@ -125,8 +125,8 @@ container_up_ready_and_clean()
   local -r port="${1}"
   local -r service_name="${2}"
   local -r container_name="test-${service_name}"
-  container_up "${service_name}"
-  wait_briefly_until_ready "${container_name}" "${port}"
+  echo; container_up "${service_name}"
+  echo; wait_briefly_until_ready "${container_name}" "${port}"
   #exit_if_unclean "${container_name}"
 }
 
@@ -134,7 +134,6 @@ container_up_ready_and_clean()
 container_up()
 {
   local -r service_name="${1}"
-  printf '\n'
   augmented_docker_compose \
     up \
     --detach \
@@ -145,7 +144,6 @@ container_up()
 # - - - - - - - - - - - - - - - - - - -
 containers_up()
 {
-  export NO_PROMETHEUS=true
   if [ "${1:-}" == 'server' ]; then
     container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}"        differ-server
   else

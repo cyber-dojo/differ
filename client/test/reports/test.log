@@ -1,30 +1,30 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 31590
+Run options: --seed 12293
 
 # Running:
 
 ..................................
 
-Finished in 1.403145s, 24.2313 runs/s, 73.4065 assertions/s.
+Finished in 1.427314s, 23.8210 runs/s, 72.1635 assertions/s.
 
 34 runs, 103 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 299 / 299 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 299 / 299 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0688 - 200B9F:differ_client_test.rb:362:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
-0.0684 - 200FDC:differ_client_test.rb:465:renamed and slightly changed file in nested sub-dir shows as mostly same lines
-0.0651 - 2007FE:differ_client_test.rb:228:unchanged empty-file shows as one empty line
-0.0644 - 200E3F:differ_client_test.rb:298:changed non-empty file in nested sub-dir shows as deleted and added lines
-0.0641 - 200B68:differ_client_test.rb:147:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
-0.0641 - 200E51:differ_client_test.rb:431:renamed file in nested sub-dir shows as all lines same
+0.0872 - 200FDC:differ_client_test.rb:465:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.0697 - 200B9F:differ_client_test.rb:362:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
+0.0663 - 200E51:differ_client_test.rb:431:renamed file in nested sub-dir shows as all lines same
+0.0655 - 200B68:differ_client_test.rb:147:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0634 - 200366:differ_client_test.rb:267:unchanged non-empty file in nested sub-dir shows as all lines same
+0.0630 - 200FEA:differ_client_test.rb:112:deleted non-empty file in nested sub-dir shows as all lines deleted
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |     1.4   <=     2 | [32m true [0m
+         test:duration(s) |    1.43   <=     2 | [32m true [0m
                test:count |      34   >=     1 | [32m true [0m
           app:lines:total |      74   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
