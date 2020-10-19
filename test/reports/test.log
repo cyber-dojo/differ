@@ -1,30 +1,29 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 17005
+Run options: --seed 48248
 
 # Running:
 
 .................................................................................................................
 
-Finished in 1.121277s, 100.7779 runs/s, 391.5178 assertions/s.
+Finished in 1.098298s, 102.8865 runs/s, 399.7094 assertions/s.
 
 113 runs, 439 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 1133 / 1133 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 1133 / 1133 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0305 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
-0.0299 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
-0.0295 - EE7e16:http_json_args_test.rb:43:/diff_tip_data has three keyword args; id:,old_files:,new_files:
-0.0295 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0294 - 74CA5C:git_diff_join_test.rb:24:empty file is deleted is represented as []
-0.0292 - 74C21D:git_diff_join_test.rb:82:non-empty file is unchanged             
-
+0.0375 - 74DA2D:git_diff_tip_data_test.rb:54:empty file is renamed 100% identical across dirs
+0.0327 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
+0.0311 - 74DD09:git_diff_tip_data_test.rb:96:non-empty file is created           
+0.0307 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0301 - 74DBA7:git_diff_tip_data_test.rb:116:non-empty file is renamed 100% identical across dirs
+0.0290 - 74CBA7:git_diff_join_test.rb:148:non-empty file is renamed 100% identical across dirs
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.12   <=     2 | [32m true [0m
+         test:duration(s) |     1.1   <=     2 | [32m true [0m
                test:count |     113   >=     1 | [32m true [0m
           app:lines:total |     406   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
