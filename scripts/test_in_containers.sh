@@ -104,7 +104,8 @@ run_tests()
   echo "${type} test coverage at ${host_reports_dir}/index.html"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
-    docker logs "${container_name}"
+    :
+    #docker logs "${container_name}"
   fi
   return ${status}
 }

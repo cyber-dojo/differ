@@ -1,6 +1,7 @@
 require_relative 'lib/id58_test_base'
 require_app 'externals'
 require_app 'differ'
+require_app 'prober'
 
 class DifferTestBase < Id58TestBase
 
@@ -12,6 +13,10 @@ class DifferTestBase < Id58TestBase
 
   def differ
     @differ ||= Differ.new(externals)
+  end
+
+  def prober
+    @prober ||= Prober.new(externals)
   end
 
   def externals

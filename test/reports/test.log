@@ -1,36 +1,36 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 64565
+Run options: --seed 4016
 
 # Running:
 
-.............................................................................................................
+.................................................................................................................
 
-Finished in 1.010607s, 107.8560 runs/s, 426.4763 assertions/s.
+Finished in 1.157828s, 97.5965 runs/s, 379.1581 assertions/s.
 
-109 runs, 431 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1092 / 1108 LOC (98.56%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1092 / 1108 LOC (98.56%) covered.
+113 runs, 439 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1133 / 1133 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1133 / 1133 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0296 - 74CF2E:git_diff_join_test.rb:64:empty file has some content added       
-0.0277 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
-0.0273 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
-0.0271 - 74DF2E:git_diff_tip_data_test.rb:64:empty file has some content added   
-0.0269 - 74DAA6:git_diff_tip_data_test.rb:44:empty file is renamed 100% identical
-0.0264 - 74C4D2:git_diff_join_test.rb:242:non-empty file has some content added in the middle
+0.0351 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
+0.0318 - 4AF135:rack_dispatcher_test.rb:52:diff_tip_data 200                     
+0.0310 - 74DA2D:git_diff_tip_data_test.rb:54:empty file is renamed 100% identical across dirs
+0.0305 - 74DAA7:git_diff_tip_data_test.rb:106:non-empty file is renamed 100% identical
+0.0305 - 74D0C6:git_diff_tip_data_test.rb:86:non-empty file is deleted           
+0.0300 - 74DAA6:git_diff_tip_data_test.rb:44:empty file is renamed 100% identical
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.01   <=     2 | [32m true [0m
-               test:count |     109   >=     1 | [32m true [0m
-          app:lines:total |     416   <=   500 | [32m true [0m
-         app:lines:missed |      16   <=     0 | [31m false [0m
+         test:duration(s) |    1.16   <=     2 | [32m true [0m
+               test:count |     113   >=     1 | [32m true [0m
+          app:lines:total |     406   <=   500 | [32m true [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      66   <=    75 | [32m true [0m
-      app:branches:missed |       3   <=     0 | [31m false [0m
-         test:lines:total |     692   <=  1000 | [32m true [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     727   <=  1000 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
