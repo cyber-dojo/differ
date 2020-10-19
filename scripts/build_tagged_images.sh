@@ -1,5 +1,7 @@
 #!/bin/bash -Eeu
 
+source "${SH_DIR}/augmented_docker_compose.sh"
+
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
@@ -30,8 +32,7 @@ remove_all_but_latest()
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images()
 {
-  docker-compose \
-    --file "${ROOT_DIR}/docker-compose.yml" \
+  augmented_docker_compose \
     build \
     --build-arg COMMIT_SHA=$(git_commit_sha)
 }

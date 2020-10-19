@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require_relative 'git_differ'
 require_relative 'git_diff_lib'
+require_relative 'prober'
 
 class Differ
 
@@ -8,17 +9,9 @@ class Differ
     @externals = externals
   end
 
-  def sha
-    { 'sha' => ENV['SHA'] }
-  end
-
-  def alive?
-    { 'alive?' => true }
-  end
-
-  def ready?
-    { 'ready?' => true }
-  end
+  def alive?; prober.alive?; end
+  def ready?; prober.ready?; end
+  def sha; prober.sha; end
 
   def diff(id:, old_files:, new_files:)
     git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
@@ -35,5 +28,9 @@ class Differ
   private
 
   include GitDiffLib
+
+  def prober
+    Prober.new(@externals)
+  end
 
 end

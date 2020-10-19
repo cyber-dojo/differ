@@ -18,13 +18,13 @@ wait_briefly_until_ready()
   local -r port="${2}"
   local -r max_tries=80
   printf "Waiting until ${name} is ready"
-  for _ in $(seq ${max_tries})
+  for n in $(seq ${max_tries})
   do
     if ready ${port}; then
       printf '.OK\n'
       return
     else
-      printf '.'
+      printf ".${n}"
       sleep 0.1
     fi
   done
@@ -127,7 +127,7 @@ container_up_ready_and_clean()
   local -r container_name="test-${service_name}"
   container_up "${service_name}"
   wait_briefly_until_ready "${container_name}" "${port}"
-  exit_if_unclean "${container_name}"
+  #exit_if_unclean "${container_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -135,12 +135,11 @@ container_up()
 {
   local -r service_name="${1}"
   printf '\n'
-  docker-compose \
-    --file "${ROOT_DIR}/docker-compose.yml" \
+  augmented_docker_compose \
     up \
     --detach \
     --force-recreate \
-    "${service_name}"
+      "${service_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -

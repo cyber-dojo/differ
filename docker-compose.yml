@@ -28,6 +28,8 @@ services:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_PORT ]
       context: .
     container_name: test-differ-server
+    depends_on:
+      - model
     env_file:
       - .env
     ports: [ "${CYBER_DOJO_DIFFER_PORT}:${CYBER_DOJO_DIFFER_PORT}" ]
