@@ -1,35 +1,35 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 57874
+Run options: --seed 59670
 
 # Running:
 
-.................................................................................................................
+............................................................................................................................
 
-Finished in 1.046102s, 108.0201 runs/s, 419.6533 assertions/s.
+Finished in 1.551158s, 79.9403 runs/s, 291.3952 assertions/s.
 
-113 runs, 439 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1139 / 1149 LOC (99.13%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1139 / 1149 LOC (99.13%) covered.
+124 runs, 452 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1200 / 1200 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1200 / 1200 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0335 - EE7e15:http_json_args_test.rb:30:/diff has three keyword args; id:,old_files:,new_files:
-0.0293 - 74CAA8:git_diff_join_test.rb:164:non-empty file is renamed <100% identical
-0.0289 - 74DA2D:git_diff_tip_data_test.rb:54:empty file is renamed 100% identical across dirs
-0.0279 - 74DAA9:git_diff_tip_data_test.rb:139:non-empty file is renamed <100% identical across dirs
-0.0277 - 74DBA7:git_diff_tip_data_test.rb:116:non-empty file is renamed 100% identical across dirs
-0.0270 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
+0.0496 - 4DEk16:diff_summary_test.rb:65:non-empty file renamed 100% identical    
+0.0493 - 4DEk17:diff_summary_test.rb:72:non-empty file renamed <100% identical   
+0.0487 - 4DEj16:diff_summary_test.rb:39:empty file has one lines added           
+0.0483 - 4DEj15:diff_summary_test.rb:32:empty file renamed 100% identical across dirs
+0.0464 - 4DEk18:diff_summary_test.rb:84:two non-empty files both edited          
+0.0462 - EE7e17:http_json_args_test.rb:56:/diff_summary has three keyword args; id:, was_index:, now_index:
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.05   <=     2 | [32m true [0m
-               test:count |     113   >=     1 | [32m true [0m
+         test:duration(s) |    1.55   <=     2 | [32m true [0m
+               test:count |     124   >=     1 | [32m true [0m
           app:lines:total |     422   <=   500 | [32m true [0m
-         app:lines:missed |      10   <=     0 | [31m false [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      67   <=    75 | [32m true [0m
-      app:branches:missed |       1   <=     0 | [31m false [0m
-         test:lines:total |     727   <=  1000 | [32m true [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     778   <=  1000 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

@@ -1,30 +1,30 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 9936
+Run options: --seed 21802
 
 # Running:
 
 ..................................
 
-Finished in 1.662825s, 20.4471 runs/s, 61.9428 assertions/s.
+Finished in 1.308134s, 25.9912 runs/s, 78.7381 assertions/s.
 
 34 runs, 103 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 299 / 299 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 299 / 299 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.1232 - 2007FF:differ_client_test.rb:240:unchanged empty-file in nested sub-dir shows as one empty line
-0.1081 - 200960:differ_client_test.rb:176:added empty file in nested sub-dir shows as ['']
-0.0947 - 200FE9:differ_client_test.rb:96:deleted non-empty file shows as all lines deleted
-0.0935 - 200FDB:differ_client_test.rb:448:renamed and slightly changed file shows as mostly same lines
-0.0814 - 200B67:differ_client_test.rb:130:all lines deleted but file not deleted shows as all lines deleted
-0.0799 - 200B68:differ_client_test.rb:147:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0632 - 200FDC:differ_client_test.rb:465:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.0631 - 200E3F:differ_client_test.rb:298:changed non-empty file in nested sub-dir shows as deleted and added lines
+0.0623 - 200B68:differ_client_test.rb:147:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.0612 - 200B9F:differ_client_test.rb:362:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
+0.0598 - 200E51:differ_client_test.rb:431:renamed file in nested sub-dir shows as all lines same
+0.0574 - 200B67:differ_client_test.rb:130:all lines deleted but file not deleted shows as all lines deleted
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.66   <=     2 | [32m true [0m
+         test:duration(s) |    1.31   <=     2 | [32m true [0m
                test:count |      34   >=     1 | [32m true [0m
           app:lines:total |      74   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
