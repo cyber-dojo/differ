@@ -1,11 +1,11 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 59670
+Run options: --seed 60680
 
 # Running:
 
 ............................................................................................................................
 
-Finished in 1.551158s, 79.9403 runs/s, 291.3952 assertions/s.
+Finished in 1.603026s, 77.3537 runs/s, 281.9666 assertions/s.
 
 124 runs, 452 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 1200 / 1200 LOC (100.0%) covered.
@@ -13,17 +13,17 @@ Coverage report generated for Minitest to //tmp/reports/coverage.json. 1200 / 12
 
 Slowest 5 tests are...
 0.0496 - 4DEk16:diff_summary_test.rb:65:non-empty file renamed 100% identical    
-0.0493 - 4DEk17:diff_summary_test.rb:72:non-empty file renamed <100% identical   
-0.0487 - 4DEj16:diff_summary_test.rb:39:empty file has one lines added           
-0.0483 - 4DEj15:diff_summary_test.rb:32:empty file renamed 100% identical across dirs
-0.0464 - 4DEk18:diff_summary_test.rb:84:two non-empty files both edited          
-0.0462 - EE7e17:http_json_args_test.rb:56:/diff_summary has three keyword args; id:, was_index:, now_index:
+0.0494 - 4DEj15:diff_summary_test.rb:32:empty file renamed 100% identical across dirs
+0.0490 - 4DEj16:diff_summary_test.rb:39:empty file has one lines added           
+0.0476 - 4DEj13:diff_summary_test.rb:18:deleted empty file                       
+0.0472 - 4DEk15:diff_summary_test.rb:53:non-empty file deleted                   
+0.0466 - 4DEk18:diff_summary_test.rb:84:two non-empty files both edited          
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.55   <=     2 | [32m true [0m
+         test:duration(s) |     1.6   <=     2 | [32m true [0m
                test:count |     124   >=     1 | [32m true [0m
           app:lines:total |     422   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m

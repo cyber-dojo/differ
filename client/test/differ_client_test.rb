@@ -7,6 +7,28 @@ class DifferClientTest < ClientTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
+
+  test '344', %w(
+  add unused, defaulted, keyword-args to differ.diff_summary()
+  to allow nginx-redirect of old route and old args ) do
+    name = 'differ-server'
+    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
+    requester = HttpJson::RequestPacker.new(externals.http, name, port)
+    http = HttpJson::ResponseUnpacker.new(requester, DifferException)
+    actual = http.get('diff_summary', {
+      id:'RNCzUr', was_index:8, now_index:9, # required, used
+      version:1, avatar_index:54, number:61  # defaulted, unused
+    })
+    expected = {
+      'readme.txt' => {
+        'added' => 0,
+        'deleted' => 14
+      }
+    }
+    assert_equal expected, actual
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
   # >10K query was a problem for thin at one time
   # - - - - - - - - - - - - - - - - - - - -
 
@@ -468,7 +490,7 @@ class DifferClientTest < ClientTestBase
       same(   4, 'd')
     ]
     assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
-    assert_diff_summary('RNCzUr',13,14, { 'bats_help.txt' => { 'added' => 1, 'deleted' => 1 } })            
+    assert_diff_summary('RNCzUr',13,14, { 'bats_help.txt' => { 'added' => 1, 'deleted' => 1 } })
   end
 
   # - - - - - - - - - - - - - - - - - - - -

@@ -25,7 +25,7 @@ class Differ
     { 'diff_tip_data' => result }
   end
 
-  def diff_summary(id:, was_index:, now_index:)
+  def diff_summary(id:, was_index:, now_index:, version:nil,avatar_index:nil,number:nil)
     was_files = model_files(id, was_index)
     now_files = model_files(id, now_index)
     git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
