@@ -80,6 +80,7 @@ class DifferClientTest < ClientTestBase
     @old_files = { 'hiker.h' => '' }
     @new_files = { }
     assert_diff 'hiker.h', []
+    assert_diff_summary('RNCzUr',3,4, {})
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -105,6 +106,12 @@ class DifferClientTest < ClientTestBase
       deleted(4, 'd')
     ]
     assert_diff_tip_data('hiker.h', { 'added' => 0, 'deleted' => 4 })
+    assert_diff_summary('RNCzUr',8,9, {
+      'readme.txt' => {
+        'added' => 0,
+        'deleted' => 14
+      }
+    })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -179,6 +186,7 @@ class DifferClientTest < ClientTestBase
     @new_files = { 'a/b/c/diamond.h' => '' }
     assert_diff 'a/b/c/diamond.h', [ added(1,'') ]
     assert_diff_tip_data('a/b/c/diamond.h', { 'added' => 1, 'deleted' => 0 })
+    assert_diff_summary('RNCzUr',2,3, { 'empty.file' => { 'added'=>1, 'deleted'=>0} })
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -424,6 +432,8 @@ class DifferClientTest < ClientTestBase
       same(4, 'd')
     ]
     assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
+    assert_diff_summary('RNCzUr',5,6, {}) # in same dir
+    assert_diff_summary('RNCzUr',5,6, {}) # in new dir
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -458,6 +468,7 @@ class DifferClientTest < ClientTestBase
       same(   4, 'd')
     ]
     assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
+    assert_diff_summary('RNCzUr',13,14, { 'bats_help.txt' => { 'added' => 1, 'deleted' => 1 } })            
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -497,6 +508,13 @@ class DifferClientTest < ClientTestBase
 
   def get_diff_tip_data
     differ.diff_tip_data(id58, @old_files, @new_files)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def assert_diff_summary(id, was_index, now_index, expected)
+    actual = differ.diff_summary(id, was_index, now_index)
+    assert_equal expected, actual
   end
 
   # - - - - - - - - - - - - - - - - - - - -
