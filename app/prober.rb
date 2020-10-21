@@ -13,7 +13,7 @@ class Prober
   def ready?
     { 'ready?' => model.ready? }
   end
-  
+
   def sha
     { 'sha' => ENV['SHA'] }
   end

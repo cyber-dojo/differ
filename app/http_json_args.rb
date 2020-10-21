@@ -21,6 +21,7 @@ class HttpJsonArgs
     when '/ready'         then differ.ready?(**args)
     when '/diff'          then differ.diff(**args)
     when '/diff_tip_data' then differ.diff_tip_data(**args)
+    when '/diff_summary'  then differ.diff_summary(**args)
     else raise RequestError, 'unknown path'
     end
   rescue JSON::JSONError

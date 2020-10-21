@@ -24,6 +24,10 @@ class Externals
     @git ||= ExternalGitter.new(self)
   end
 
+  def prober
+    @prober ||= Prober.new(self)
+  end
+
   def shell
     @shell ||= ExternalSheller.new
   end

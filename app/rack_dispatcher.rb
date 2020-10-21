@@ -43,6 +43,7 @@ class RackDispatcher
 
   def diagnostic(path, body, caught)
     { 'exception' => {
+        'time' => Time.now,
         'path' => path,
         'body' => body,
         'class' => 'DifferService',

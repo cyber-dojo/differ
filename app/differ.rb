@@ -25,12 +25,34 @@ class Differ
     { 'diff_tip_data' => result }
   end
 
+  def diff_summary(id:, was_index:, now_index:)
+    was_files = model_files(id, was_index)
+    now_files = model_files(id, now_index)
+    git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
+    result = git_diff_tip_data(git_diff, was_files, now_files)
+    { 'diff_summary' => result }
+  end
+
   private
 
   include GitDiffLib
 
+  # - - - - - - - - - - - - -
+
+  def model_files(id, index)
+    model.kata_event(id, index)['files'].map{|filename, file|
+      [filename, file['content']]
+    }.to_h
+  end
+
+  # - - - - - - - - - - - - -
+
+  def model
+    @externals.model
+  end
+
   def prober
-    Prober.new(@externals)
+    @externals.prober
   end
 
 end
