@@ -1,0 +1,37 @@
+Git now has an option to show a diff summary
+Eg
+
+$ git diff --compact-summary HEAD HEAD^
+app/assets/javascripts/cyber-dojo_hover_tips.js | 14 +-------------
+app/views/dashboard/_traffic_lights.html.erb    | 12 +++++++++---
+app/views/kata/_avatar_image.html.erb           | 22 ++++++++++++++--------
+app/views/review/_review.html.erb               |  8 ++++++--
+4 files changed, 30 insertions(+), 26 deletions(-)
+
+Note
+14 +-------------          has  1+ 13-
+12 +++++++++---            has  9+  3-
+22 ++++++++++++++--------  has 14+  8-
+ 8 ++++++--                has  6+  2-
+
+See
+https://stackoverflow.com/questions/37582250/git-diff-in-summary/37582295
+--compact-summary embeds most of --summary back in --stat in the little space
+between the file name part and the graph line, e.g. with commit 0433d53:
+
+Documentation/merge-config.txt         |  4 +
+builtin/merge.c                        |  2 +
+...-pull-verify-signatures.sh (new +x) | 81 ++++++++++++++
+t/t7612-merge-verify-signatures.sh     | 45 ++++++++
+4 files changed, 132 insertions(+)
+
+It helps both condensing information and saving some text space.
+
+What's new in diffstat is:
+
+   A new 0644 file is shown as (new)
+   A new 0755 file is shown as (new +x)
+   A new symlink is shown as (new +l)
+   A deleted file is shown as (gone)  <==================================
+   A mode change adding executable bit is shown as (mode +x)
+   A mode change removing it is shown as (mode -x)
