@@ -82,26 +82,37 @@ This looks better.
 But it does not show (new) (gone) markers...
 Perhaps the output of 2 commands could be combined?
 
-UI for showing a new/deleted/renamed file?
-==========================================
-   same - Prefix the filename with a [=]
-    new - Prefix the filename with a [+] matches [+] to create new file on /kata/edit
-deleted - Prefix the filename with a [-] matches [-] to delete a file on kata/edit
-renamed - Prefix the filename with a [~] matches [~] to rename a file on /kata/edit
+
+UI for showing a new/deleted/renamed/existing file?
+===================================================
+existing - Prefix the filename with a [=]
+     new - Prefix the filename with a [+] matches [+] to create new file on /kata/edit
+ deleted - Prefix the filename with a [-] matches [-] to delete a file on kata/edit
+ renamed - Prefix the filename with a [~] matches [~] to rename a file on /kata/edit
 ....
 Could also use colours?
 -----------------------
-   same - black (as now)
-    new - Show the filename in green?
-deleted - Show the filename in red?
-renamed - ???
+existing - black (as now)
+     new - Show the filename in green?
+ deleted - Show the filename in red?
+ renamed - ???
 
-Using [-][=][+] column icons (with hover tips) will also help for
-people with red/green colour blindness!
+Use [-][+][=] column icons (with hover tips) for line counts, in that order.
+- Keeps [-][+] together as they are now, adds [=] to rhs
+- Maintains a difference to [+][-] ordering to create/delete file on kata/edit page.
+- Note, this will also help for people with red/green colour blindness!
+- The numbers could lose their colouring. The icons hold the colouring.
+- These column icons could be clicked to sort the filename ordering!
+- This two new [] mini buttons will take up a bit more horizontal space.
+    - drop idea of putting sponsors on rhs of review page (like on kata/edit).
+    - add [=] for number of unchanged lines, so [-][+][=]
+    - add [+][-][~][=] prefix to filename
+    - increase filename max-width
+
 
 Why not show the number of _unchanged_ lines?
 ===========================================
-Show [-] [=] [+]   deleted, unchanged, added
+Show [-][+][=]   deleted, added, unchanged
 This would (I think) require a full diff (as I'm doing now)
 
 
