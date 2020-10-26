@@ -90,11 +90,15 @@ UI for showing a deleted file?
 ==============================
 Show the filename itself in red
 
+UI for showing a renamed file?
+==============================
+??????????
+
 Why not show the number of unchanged lines?
 ===========================================
 I like this idea a lot.
-Show [+] [=] [-]   added, unchanged, deleted
-This would (I think) require a full diff again (as I'm doing now)
+Show [-] [=] [+]   delted, unchanged, added
+This would (I think) require a full diff (as I'm doing now)
 
 https://git-scm.com/docs/git-diff/2.5.6
 Suggests that a chunk header can have extra info for
