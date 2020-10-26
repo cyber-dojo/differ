@@ -16,6 +16,7 @@ Note
 
 See
 https://stackoverflow.com/questions/37582250/git-diff-in-summary/37582295
+<37582295>
 --compact-summary embeds most of --summary back in --stat in the little space
 between the file name part and the graph line, e.g. with commit 0433d53:
 
@@ -29,9 +30,54 @@ It helps both condensing information and saving some text space.
 
 What's new in diffstat is:
 
-   A new 0644 file is shown as (new)
+   A new 0644 file is shown as (new)  <==================================))))))))
    A new 0755 file is shown as (new +x)
    A new symlink is shown as (new +l)
-   A deleted file is shown as (gone)  <==================================
+   A deleted file is shown as (gone)  <==================================))))))))
    A mode change adding executable bit is shown as (mode +x)
    A mode change removing it is shown as (mode -x)
+</37582295>
+
+...Truncation?
+=============
+The text above suggests that a very long filename is truncated and
+only the initial ... is shown. Yes. Able to get that...this was for a plain rename with no edit.
+
+...ong.long.name => file.with.a.very.very.very.very.really.really.really.really.long.long.long.long.long.name.file.with.a.very.very.very.very.really.really.really.really.long.long.long.long.long.name | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+However, there is an option...
+$ git diff --compact-summary --stat-width=999999 HEAD^ HEAD
+And the truncation is no longer there.
+
+Rename?
+=======
+A file rename (with one line added) is shown as
+old.name => new.name | 1 +
+
+A file rename with no change is shown as
+old.name => new.name | 0
+
+What about filename with space in it?
+=====================================
+It's not quoted...
+
+file space.txt (new) | 1 +
+ 1 file changed, 1 insertion(+)
+
+What about a big change. Won't that have loads of +'s and -s ?
+=====================================
+Yes. They are truncated. So cant count them to determine
+number of added/deleted lines.
+
+
+Further down the StackOverflow post there is this...
+
+# list a diffstat-like output (+ed lines, -ed lines, file name):
+git diff --numstat
+1       0       path/to/modified/file
+0       0       path/to/{existing => renamed}/file
+
+This looks better.
+But it does not show (new) (gone) markers...
+Perhaps the output of 2 commands could be combined?
