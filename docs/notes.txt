@@ -82,23 +82,28 @@ This looks better.
 But it does not show (new) (gone) markers...
 Perhaps the output of 2 commands could be combined?
 
-UI for showing a new file?
-==========================
-Show the filename itself in green
+UI for showing a new/deleted/renamed file?
+==========================================
+   same - Prefix the filename with a [=]
+    new - Prefix the filename with a [+] matches [+] to create new file on /kata/edit
+deleted - Prefix the filename with a [-] matches [-] to delete a file on kata/edit
+renamed - Prefix the filename with a [~] matches [~] to rename a file on /kata/edit
+....
+Could also use colours?
+-----------------------
+   same - black (as now)
+    new - Show the filename in green?
+deleted - Show the filename in red?
+renamed - ???
 
-UI for showing a deleted file?
-==============================
-Show the filename itself in red
+Using [-][=][+] column icons (with hover tips) will also help for
+people with red/green colour blindness!
 
-UI for showing a renamed file?
-==============================
-??????????
-
-Why not show the number of unchanged lines?
+Why not show the number of _unchanged_ lines?
 ===========================================
-I like this idea a lot.
-Show [-] [=] [+]   delted, unchanged, added
+Show [-] [=] [+]   deleted, unchanged, added
 This would (I think) require a full diff (as I'm doing now)
+
 
 https://git-scm.com/docs/git-diff/2.5.6
 Suggests that a chunk header can have extra info for
