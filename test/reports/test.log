@@ -1,30 +1,30 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 41487
+Run options: --seed 1015
 
 # Running:
 
-.
+.............................................................................................................................
 
-Finished in 0.002613s, 382.6385 runs/s, 765.2770 assertions/s.
+Finished in 1.903778s, 65.6589 runs/s, 236.3721 assertions/s.
 
-1 runs, 2 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 482 / 1230 LOC (39.19%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 482 / 1230 LOC (39.19%) covered.
+125 runs, 450 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1230 / 1230 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1230 / 1230 LOC (100.0%) covered.
 
-Slowest 1 tests are...
-0.0000 - EE7jj9:http_json_args_test.rb:10:SPIKE: /diff_summary2 using proper GET query args
+Slowest tests are...
+0.1073 - EE7e17:http_json_args_test.rb:76:/diff_summary has three keyword args; id:, was_index:, now_index:
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |     0.0   <=     2 | [32m true [0m
+         test:duration(s) |     1.9   <=     2 | [32m true [0m
           app:lines:total |     438   <=   500 | [32m true [0m
-         app:lines:missed |     260   <=     0 | [31m false [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      68   <=    75 | [32m true [0m
-      app:branches:missed |      66   <=     0 | [31m false [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
          test:lines:total |     792   <=  1000 | [32m true [0m
-        test:lines:missed |     488   <=     0 | [31m false [0m
+        test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 
