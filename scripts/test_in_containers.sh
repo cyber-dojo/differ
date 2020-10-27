@@ -103,11 +103,9 @@ run_tests()
 
   echo "${type} test coverage at ${host_reports_dir}/index.html"
   echo "${type} test status == ${status}"
+  echo
   if [ "${status}" != '0' ]; then
-    local -r log=$(docker logs "${container_name}" 2>&1)
-    echo "${log}" | head -10
-    echo ...
-    echo "${log}" | tail -10
+    docker logs "${container_name}" 2>&1
   fi
   return ${status}
 }

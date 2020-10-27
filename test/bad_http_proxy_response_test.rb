@@ -13,10 +13,10 @@ class BadHttpProxyResponseTest < DifferTestBase
   test 'QN4', %w(
   |when an http-proxy
   |returns non-JSON in its response.body
-  |it raises an exeption
+  |ready absorbs the exeption and returns false
   ) do
     stub_model_http('xxxx')
-    ready_raises_exception
+    ready_returns_false
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -27,7 +27,7 @@ class BadHttpProxyResponseTest < DifferTestBase
   |it raises an exeption
   ) do
     stub_model_http('[]')
-    ready_raises_exception
+    ready_returns_false
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -38,7 +38,7 @@ class BadHttpProxyResponseTest < DifferTestBase
   |it raises an exeption
   ) do
     stub_model_http(response='{"exception":42}')
-    ready_raises_exception
+    ready_returns_false
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -50,7 +50,7 @@ class BadHttpProxyResponseTest < DifferTestBase
   |it raises an exeption
   ) do
     stub_model_http(response='{"wibble":42}')
-    ready_raises_exception
+    ready_returns_false
   end
 
   private
@@ -76,11 +76,10 @@ class BadHttpProxyResponseTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  def ready_raises_exception
-    error = assert_raises(HttpJsonHash::ServiceError) {
-      prober.ready?
-    }
-    assert_equal 'ready?', error.path
+  def ready_returns_false
+    actual = prober.ready?
+    expected = { 'ready?' => false }
+    assert_equal expected, actual
   end
 
 end

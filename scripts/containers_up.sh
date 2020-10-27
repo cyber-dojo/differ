@@ -88,8 +88,7 @@ container_up_healthy_and_clean()
   local -r service_name="${1}"
   echo; container_up               "${service_name}"
   echo; wait_briefly_until_healthy "${service_name}"
-  # Have to turn this off because health loop creates entres in log until model/saver are ready
-  #echo; exit_if_unclean            "${service_name}"
+  echo; exit_if_unclean            "${service_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
