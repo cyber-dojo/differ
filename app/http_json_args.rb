@@ -14,11 +14,8 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def self.dispatch(path, differ, body, params={})
-    if body === '' || body === '{}'
-      args = symbolized(params)
-    else
-      args = parse_json_args(body)
-    end
+    raw_args = empty?(body) ? params : json_parse(body)
+    args = symbolized(raw_args)
     case path
     when '/sha'           then differ.sha(**args)
     when '/alive'         then differ.alive?(**args)
@@ -40,17 +37,21 @@ class HttpJsonArgs
 
   private
 
-  def self.symbolized(params)
-    Hash[params.map{|key,value| [key.to_sym,value]}]
+  def self.empty?(body)
+    body === '' || body === '{}'
   end
 
-  def self.parse_json_args(body)
+  def self.json_parse(body)
     json = JSON.parse!(body)
     unless json.is_a?(Hash)
       raise RequestError, 'body is not JSON Hash'
     end
+    json
+  end
+
+  def self.symbolized(params)
     # double-splat requires symbol keys
-    Hash[json.map{|key,value| [key.to_sym,value]}]
+    Hash[params.map{|key,value| [key.to_sym,value]}]
   end
 
 end
