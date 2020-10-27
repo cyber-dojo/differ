@@ -1,27 +1,27 @@
 # frozen_string_literal: true
-require_relative 'external_http'
-require_relative 'external_model'
-require_relative 'external_disk_writer'
-require_relative 'external_gitter'
-require_relative 'external_sheller'
+require_relative 'external/http'
+require_relative 'external/model'
+require_relative 'external/disk_writer'
+require_relative 'external/gitter'
+require_relative 'external/sheller'
 
 class Externals
 
   def model
-    @model ||= ExternalModel.new(model_http)
+    @model ||= External::Model.new(model_http)
   end
   def model_http
-    @model_http ||= ExternalHttp.new
+    @model_http ||= External::Http.new
   end
 
   # - - - - - - - - - - - - - - - - -
 
   def disk
-    @disk ||= ExternalDiskWriter.new
+    @disk ||= External::DiskWriter.new
   end
 
   def git
-    @git ||= ExternalGitter.new(self)
+    @git ||= External::Gitter.new(self)
   end
 
   def prober
@@ -29,7 +29,7 @@ class Externals
   end
 
   def shell
-    @shell ||= ExternalSheller.new
+    @shell ||= External::Sheller.new
   end
 
 end

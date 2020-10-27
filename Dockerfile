@@ -18,7 +18,12 @@ EXPOSE ${PORT}
 # --retries=N      number of tries until container considered unhealthy
 # --start-period=S grace period when healthcheck fails dont count towards --retries
 
-HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/heathcheck.sh
+HEALTHCHECK         \
+  --interval=1s     \
+  --timeout=1s      \
+  --retries=5       \
+  --start-period=5s \
+  CMD ./config/heathcheck.sh
 
 USER nobody
 ENTRYPOINT ["/sbin/tini", "-g", "--"]
