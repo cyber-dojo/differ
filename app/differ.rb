@@ -26,6 +26,10 @@ class Differ
   end
 
   def diff_summary(id:, was_index:, now_index:, version:nil,avatar_index:nil,number:nil)
+    # args from JSON body will retain their type
+    # args from request query will be strings
+    was_index = was_index.to_i
+    now_index = now_index.to_i
     was_files = model_files(id, was_index)
     now_files = model_files(id, now_index)
     git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
@@ -34,6 +38,8 @@ class Differ
   end
 
   def diff_summary2(id:, was_index:, now_index:)
+    was_index = was_index.to_i
+    now_index = now_index.to_i
     { 'diff_summary2' => [
         { 'old_filename' => "hiker.h",
           'new_filename' => "hiker.hpp",
