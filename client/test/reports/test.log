@@ -1,24 +1,23 @@
-/usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 37588
+Run options: --seed 47746
 
 # Running:
 
 ....................................
 
-Finished in 2.056504s, 17.5054 runs/s, 53.9751 assertions/s.
+Finished in 1.972321s, 18.2526 runs/s, 56.2789 assertions/s.
 
 36 runs, 111 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 335 / 335 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 335 / 335 LOC (100.0%) covered.
 
 Slowest tests are...
-0.2334 - 200E50:differ_client_test.rb:467:renamed file shows as all lines same   
+0.1456 - 200FDC:differ_client_test.rb:521:renamed and slightly changed file in nested sub-dir shows as mostly same lines
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
-            test:warnings |       1   <=     1 | [32m true [0m
+            test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    2.06   <=     5 | [32m true [0m
+         test:duration(s) |    1.97   <=     5 | [32m true [0m
           app:lines:total |      80   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
