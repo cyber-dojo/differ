@@ -1,26 +1,14 @@
 #!/bin/bash -Eeu
 
 # - - - - - - - - - - - - - - - - - - - - - -
-ip_address_slow()
+wait_briefly_until_healthy()
 {
-  if [ -n "${DOCKER_MACHINE_NAME:-}" ]; then
-    docker-machine ip ${DOCKER_MACHINE_NAME}
-  else
-    echo localhost
-  fi
-}
-readonly IP_ADDRESS=$(ip_address_slow)
-
-# - - - - - - - - - - - - - - - - - - - - - -
-wait_briefly_until_ready()
-{
-  local -r name="${1}"
-  local -r port="${2}"
-  local -r max_tries=80
-  printf "Waiting until ${name} is ready"
+  local -r service_name="${1}"
+  local -r max_tries=30
+  printf "Waiting until ${service_name} is healthy"
   for n in $(seq ${max_tries})
   do
-    if ready ${port}; then
+    if healthy ${service_name}; then
       printf '.OK\n'
       return
     else
@@ -29,43 +17,17 @@ wait_briefly_until_ready()
     fi
   done
   printf 'FAIL\n'
-  printf "${name} not ready after ${max_tries} tries\n"
-  if [ -f "$(ready_response_filename)" ]; then
-    printf "$(ready_response)\n"
-  fi
-  docker logs ${name}
+  printf "${service_name} not ready after ${max_tries} tries\n"
+  local -r container_name="test_${service_name}"
+  docker logs "${container_name}"
   exit 42
 }
 
 # - - - - - - - - - - - - - - - - - - -
-ready()
+healthy()
 {
-  local -r port="${1}"
-  local -r path=ready?
-  local -r ready_cmd="\
-    curl \
-      --output $(ready_response_filename) \
-      --silent \
-      --fail \
-      -X GET http://${IP_ADDRESS}:${port}/${path}"
-  rm -f "$(ready_response_filename)"
-  if ${ready_cmd} && [ "$(ready_response)" = '{"ready?":true}' ]; then
-    true
-  else
-    false
-  fi
-}
-
-# - - - - - - - - - - - - - - - - - - -
-ready_response()
-{
-  cat "$(ready_response_filename)"
-}
-
-# - - - - - - - - - - - - - - - - - - -
-ready_response_filename()
-{
-  printf /tmp/curl-differ-ready-output
+  local -r container_name="${1}"
+  docker ps --filter health=healthy --format '{{.Names}}' | grep -q "${container_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -85,8 +47,9 @@ strip_known_warning()
 # - - - - - - - - - - - - - - - - - - -
 exit_if_unclean()
 {
-  local -r name="${1}"
-  local server_log=$(docker logs "${name}" 2>&1)
+  local -r service_name="${1}"
+  local -r container_name="test_${service_name}"
+  local server_log=$(docker logs "${container_name}" 2>&1)
 
   #local -r shadow_warning="server.rb:(.*): warning: shadowing outer local variable - filename"
   #server_log=$(strip_known_warning "${server_log}" "${shadow_warning}")
@@ -94,7 +57,7 @@ exit_if_unclean()
   #server_log=$(strip_known_warning "${server_log}" "${mismatched_indent_warning}")
 
   local -r line_count=$(echo -n "${server_log}" | grep --count '^')
-  printf "Checking ${name} started cleanly..."
+  printf "Checking ${service_name} started cleanly..."
   # 3 lines on Thin (Unicorn=6, Puma=6)
   # Thin web server (v1.7.2 codename Bachmanity)
   # Maximum connections set to 1024
@@ -103,7 +66,7 @@ exit_if_unclean()
     printf 'OK\n'
   else
     printf 'FAIL\n'
-    echo_docker_log "${name}" "${server_log}"
+    echo_docker_log "${container_name}" "${server_log}"
     exit 42
   fi
 }
@@ -111,23 +74,22 @@ exit_if_unclean()
 # - - - - - - - - - - - - - - - - - - -
 echo_docker_log()
 {
-  local -r name="${1}"
+  local -r container_name="${1}"
   local -r docker_log="${2}"
-  echo "[docker logs ${name}]"
+  echo "[docker logs ${container_name}]"
   echo "<docker_log>"
   echo "${docker_log}"
   echo "</docker_log>"
 }
 
 # - - - - - - - - - - - - - - - - - - -
-container_up_ready_and_clean()
+container_up_healthy_and_clean()
 {
-  local -r port="${1}"
-  local -r service_name="${2}"
-  local -r container_name="test_${service_name}"
-  echo; container_up "${service_name}"
-  echo; wait_briefly_until_ready "${container_name}" "${port}"
-  #exit_if_unclean "${container_name}"
+  local -r service_name="${1}"
+  echo; container_up               "${service_name}"
+  echo; wait_briefly_until_healthy "${service_name}"
+  # Have to turn this off because health loop creates entres in log until model/saver are ready
+  #echo; exit_if_unclean            "${service_name}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -145,9 +107,9 @@ container_up()
 containers_up()
 {
   if [ "${1:-}" == 'server' ]; then
-    container_up_ready_and_clean "${CYBER_DOJO_DIFFER_PORT}"        differ_server
+    container_up_healthy_and_clean differ_server
   else
-    container_up_ready_and_clean "${CYBER_DOJO_DIFFER_CLIENT_PORT}" differ_client
+    container_up_healthy_and_clean differ_client
   fi
   copy_in_saver_test_data
 }
