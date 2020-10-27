@@ -109,7 +109,7 @@ containers_up()
   if [ "${1:-}" == 'server' ]; then
     container_up_healthy_and_clean differ_server
   else
-    container_up_healthy_and_clean differ_client
+    container_up_healthy_and_clean differ_client # TODO: add healthcheck to client Dockerfile
   fi
   copy_in_saver_test_data
 }

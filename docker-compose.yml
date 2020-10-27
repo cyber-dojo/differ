@@ -23,13 +23,13 @@ services:
 
   differ_server:
     image: ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
-    user: ${CYBER_DOJO_DIFFER_SERVER_USER}
     build:
-      args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_PORT ]
       context: .
+      args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_PORT ]
     container_name: test_differ_server
     depends_on:
       - model
+    user: ${CYBER_DOJO_DIFFER_SERVER_USER}
     env_file:
       - .env
     ports: [ "${CYBER_DOJO_DIFFER_PORT}:${CYBER_DOJO_DIFFER_PORT}" ]
