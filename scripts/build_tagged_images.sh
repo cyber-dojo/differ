@@ -53,14 +53,13 @@ show_env_vars()
   echo
   echo "echo CYBER_DOJO_DIFFER_SHA=$(image_sha)"
   echo "echo CYBER_DOJO_DIFFER_TAG=$(image_tag)"
-  echo
 }
 
 #- - - - - - - - - - - - - - - - - - - - - - - -
 tag_images_to_latest()
 {
   docker tag $(image_name):$(image_tag) $(image_name):latest
-  docker tag $CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
+  docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
