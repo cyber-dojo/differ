@@ -8,6 +8,29 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
+  test 'jj9', 'SPIKE: /diff_summary2 using proper GET query args' do
+    name = 'differ-server'
+    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
+    requester = HttpJson::RequestPacker.new(externals.http, name, port)
+    http = HttpJson::ResponseUnpacker.new(requester, DifferException)
+    id = 'RNCzUr'
+    was_index = 8
+    now_index = 9
+    path = 'diff_summary2'
+    args = { id:id, was_index:was_index, now_index:now_index }
+    actual = http.get(path, args, { gives: :query })
+    expected = [
+      { 'old_filename' => "hiker.h",
+        'new_filename' => "hiker.hpp",
+        'counts' => { 'added' => 0, 'deleted' => 0, 'same' => 23 },
+        'lines' => []
+      }
+    ]
+    assert_equal expected, actual
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
   test '344', %w(
   add unused, defaulted, keyword-args to differ.diff_summary()
   to allow nginx-redirect of old route and old args ) do

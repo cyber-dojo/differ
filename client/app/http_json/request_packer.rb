@@ -7,25 +7,36 @@ module HttpJson
 
   class RequestPacker
 
-    def initialize(http, hostname, port)
-      @http = http.new(hostname, port)
-      @base_url = "http://#{hostname}:#{port}"
+    def initialize(http, host, port)
+      @http = http.new(host, port)
+      @base_url = "http://#{host}:#{port}"
     end
 
-    def get(path, args)
-      packed(path, args) do |url|
+    def get(path, args, options = {})
+      options[:gives] ||= :json
+      req = request(path, args, options) do |url|
         Net::HTTP::Get.new(url)
       end
+      @http.request(req)
     end
 
     private
 
-    def packed(path, args)
-      uri = URI.parse("#{@base_url}/#{path}")
-      req = yield uri
+    def request(path, args, options)
+      if options[:gives] === :query
+        req = yield URI.parse("#{@base_url}/#{path}#{query(args)}")
+      else
+        # default is currently to send GET args in request.body as JSON
+        # because this was written when I new nothing about http
+        req = yield URI.parse("#{@base_url}/#{path}")
+        req.body = JSON.generate(args)
+      end
       req.content_type = 'application/json'
-      req.body = JSON.generate(args)
-      @http.request(req)
+      req
+    end
+
+    def query(args)
+      '?' + args.map{ |key,value| "#{key}=#{value}" }.join('&')
     end
 
   end

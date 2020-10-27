@@ -6,12 +6,16 @@ class RackRequestStub
     @env = env
   end
 
-  def body
-    OpenStruct.new(read:@env[:body])
-  end
-
   def path_info
     "/#{@env[:path_info]}"
   end
 
+  def params
+    {}
+  end
+
+  def body
+    OpenStruct.new(read:@env[:body])
+  end
+  
 end

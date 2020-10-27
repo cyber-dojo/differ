@@ -7,6 +7,26 @@ class HttpJsonArgsTest < DifferTestBase
     'EE7'
   end
 
+  test 'jj9', 'SPIKE: /diff_summary2 using proper GET query args' do
+    path = 'diff_summary2'
+    id = 'RNCzUr'
+    was_index = 8
+    now_index = 9
+    args = { id:id, was_index:was_index, now_index:now_index }
+    body = ''
+    result = dispatch("/#{path}", differ, body, args)
+    assert_equal [path], result.keys
+    expected = [
+      { 'old_filename' => "hiker.h",
+        'new_filename' => "hiker.hpp",
+        'counts' => { 'added' => 0, 'deleted' => 0, 'same' => 23 },
+        'lines' => []
+      }
+    ]
+    actual = result[path]
+    assert_equal expected, actual
+  end
+
   # - - - - - - - - - - - - - - - - -
   # dispatch calls with correct number of args
   # return hash with single key matching the path
@@ -194,8 +214,8 @@ class HttpJsonArgsTest < DifferTestBase
 
   private
 
-  def dispatch(path, differ, body)
-    HttpJsonArgs::dispatch(path, differ, body)
+  def dispatch(path, differ, body, params={})
+    HttpJsonArgs::dispatch(path, differ, body, params)
   end
 
   # - - - - - - - - - - - - - - - - -

@@ -33,6 +33,17 @@ class Differ
     { 'diff_summary' => result }
   end
 
+  def diff_summary2(id:, was_index:, now_index:)
+    { 'diff_summary2' => [
+        { 'old_filename' => "hiker.h",
+          'new_filename' => "hiker.hpp",
+          'counts' => { 'added' => 0, 'deleted' => 0, 'same' => 23 },
+          'lines' => []
+        }
+      ]
+    }
+  end
+
   private
 
   include GitDiffLib

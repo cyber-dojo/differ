@@ -15,7 +15,7 @@ class HttpResponseUnpackerTest < ClientTestBase
     def initialize(body)
       @body = body
     end
-    def get(_path, _args)
+    def get(_path, _args, _params={})
       OpenStruct.new(body:@body)
     end
   end

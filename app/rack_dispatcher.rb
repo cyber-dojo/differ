@@ -14,8 +14,9 @@ class RackDispatcher
   def call(env)
     request = @request_class.new(env)
     path = request.path_info
+    params = request.params
     body = request.body.read
-    result = HttpJsonArgs::dispatch(path, @differ, body)
+    result = HttpJsonArgs::dispatch(path, @differ, body, params)
     json_response_pass(200, result)
   rescue HttpJsonArgs::RequestError => caught
     json_response_fail(400, path, body, caught)
