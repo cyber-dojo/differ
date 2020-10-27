@@ -3,9 +3,6 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 test_in_containers()
 {
-  if on_ci; then
-    docker pull cyberdojo/check-test-results:latest
-  fi
   if [ "${1:-}" == 'client' ]; then
     shift
     run_client_tests "${@:-}"
