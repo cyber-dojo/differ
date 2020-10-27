@@ -3,15 +3,15 @@ version: '3.7'
 
 services:
 
-  differ-client:
+  differ_client:
     image: ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     build:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_CLIENT_PORT ]
       context: client
-    container_name: test-differ-client
+    container_name: test_differ_client
     depends_on:
-      - differ-server
+      - differ_server
     env_file:
       - .env
     ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
@@ -21,13 +21,13 @@ services:
     volumes:
       - "./client/test:/differ/test:ro"
 
-  differ-server:
+  differ_server:
     image: ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     user: ${CYBER_DOJO_DIFFER_SERVER_USER}
     build:
       args: [ COMMIT_SHA, CYBER_DOJO_DIFFER_PORT ]
       context: .
-    container_name: test-differ-server
+    container_name: test_differ_server
     depends_on:
       - model
     env_file:

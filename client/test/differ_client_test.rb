@@ -9,7 +9,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'jj9', 'SPIKE: /diff_summary2 using proper GET query args' do
-    name = 'differ-server'
+    name = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJson::RequestPacker.new(externals.http, name, port)
     http = HttpJson::ResponseUnpacker.new(requester, DifferException)
@@ -34,7 +34,7 @@ class DifferClientTest < ClientTestBase
   test '344', %w(
   add unused, defaulted, keyword-args to differ.diff_summary()
   to allow nginx-redirect of old route and old args ) do
-    name = 'differ-server'
+    name = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJson::RequestPacker.new(externals.http, name, port)
     http = HttpJson::ResponseUnpacker.new(requester, DifferException)
@@ -106,7 +106,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '7C0', %w( calling unknown method raises ) do
-    requester = HttpJson::RequestPacker.new(externals.http, 'differ-server', 4567)
+    requester = HttpJson::RequestPacker.new(externals.http, 'differ_server', 4567)
     http = HttpJson::ResponseUnpacker.new(requester, DifferException)
     error = assert_raises(DifferException) { http.get(:shar, {"x":42}) }
     json = JSON.parse(error.message)

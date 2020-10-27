@@ -35,7 +35,7 @@ run_tests()
 {
   local -r user="${1}" # eg nobody
   local -r type="${2}" # eg client|server
-  local -r container_name="test-differ-${type}" # eg test-differ-server
+  local -r container_name="test_differ_${type}" # eg test_differ_server
 
   local -r coverage_code_tab_name=app
   local -r coverage_test_tab_name=test
@@ -104,7 +104,10 @@ run_tests()
   echo "${type} test coverage at ${host_reports_dir}/index.html"
   echo "${type} test status == ${status}"
   if [ "${status}" != '0' ]; then
-    docker logs "${container_name}"
+    local -r log=$(docker logs "${container_name}" 2>&1)
+    echo "${log}" | head -10
+    echo ...
+    echo "${log}" | tail -10
   fi
   return ${status}
 }

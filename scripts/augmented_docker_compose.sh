@@ -11,7 +11,7 @@ augmented_docker_compose()
                        saver \
     | tee /tmp/augmented-docker-compose.model.peek.yml \
     | docker-compose \
-        --project-name cyber-dojo \
+        --project-name cyber_dojo \
         --file -       \
         "$@"
 }
