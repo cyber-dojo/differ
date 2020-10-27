@@ -22,5 +22,5 @@ show_env_vars
 exit_zero_if_build_only "$@"
 containers_up "$@"
 test_in_containers "$@"
-#containers_down
+containers_down
 on_ci_publish_tagged_images
