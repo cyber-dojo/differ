@@ -23,5 +23,4 @@ exit_zero_if_build_only "$@"
 containers_up "$@"
 test_in_containers "$@"
 containers_down
-tag_images_to_latest
 on_ci_publish_tagged_images
