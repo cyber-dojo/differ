@@ -17,8 +17,11 @@ export $(versioner_env_vars)
 exit_zero_if_show_help "$@"
 generate_env_var_yml_files
 build_tagged_images
+check_embedded_env_var
+show_env_vars
 exit_zero_if_build_only "$@"
 containers_up "$@"
 test_in_containers "$@"
 containers_down
+tag_images_to_latest
 on_ci_publish_tagged_images

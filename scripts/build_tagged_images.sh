@@ -8,9 +8,7 @@ build_tagged_images()
   local -r dil=$(docker image ls --format "{{.Repository}}:{{.Tag}}")
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_IMAGE}"
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_CLIENT_IMAGE}"
-  echo; build_images
-  echo; tag_images_to_latest
-  check_embedded_env_var
+  build_images
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
@@ -32,18 +30,10 @@ remove_all_but_latest()
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images()
 {
+  echo
   augmented_docker_compose \
     build \
     --build-arg COMMIT_SHA=$(git_commit_sha)
-}
-
-#- - - - - - - - - - - - - - - - - - - - - - - -
-tag_images_to_latest()
-{
-  docker tag $(image_name):$(image_tag) $(image_name):latest
-  docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
-  echo "CYBER_DOJO_DIFFER_TAG=$(image_tag)"
-  echo "CYBER_DOJO_DIFFER_SHA=$(image_sha)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
@@ -55,6 +45,22 @@ check_embedded_env_var()
     echo "  actual: 'SHA=$(sha_in_image)'"
     exit 42
   fi
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - -
+show_env_vars()
+{
+  echo
+  echo "echo CYBER_DOJO_DIFFER_SHA=$(image_sha)"
+  echo "echo CYBER_DOJO_DIFFER_TAG=$(image_tag)"
+  echo
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - -
+tag_images_to_latest()
+{
+  docker tag $(image_name):$(image_tag) $(image_name):latest
+  docker tag $CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
