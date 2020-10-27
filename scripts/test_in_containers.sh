@@ -19,20 +19,26 @@ test_in_containers()
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 run_client_tests()
 {
-  run_tests "${CYBER_DOJO_DIFFER_CLIENT_USER}" client "${@:-}";
+  run_tests \
+    "${CYBER_DOJO_DIFFER_CLIENT_USER}" \
+    "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}" \
+    client "${@:-}";
 }
 
 run_server_tests()
 {
-  run_tests "${CYBER_DOJO_DIFFER_SERVER_USER}" server "${@:-}";
+  run_tests \
+    "${CYBER_DOJO_DIFFER_SERVER_USER}" \
+    "${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}" \
+    server "${@:-}";
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 run_tests()
 {
-  local -r user="${1}" # eg nobody
-  local -r type="${2}" # eg client|server
-  local -r container_name="test_differ_${type}" # eg test_differ_server
+  local -r user="${1}"           # eg nobody
+  local -r container_name="${2}" # eg test_differ_server
+  local -r type="${3}"           # eg client|server
 
   local -r coverage_code_tab_name=app
   local -r coverage_test_tab_name=test
@@ -54,7 +60,7 @@ run_tests()
     --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
     --user "${user}" \
     "${container_name}" \
-      sh -c "/differ/test/lib/run.sh ${container_coverage_dir} ${test_log} ${*:3}"
+      sh -c "/differ/test/lib/run.sh ${container_coverage_dir} ${test_log} ${*:4}"
   set -e
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
