@@ -1,31 +1,31 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 48656
+Run options: --seed 59693
 
 # Running:
 
 .............................................................................................................................
 
-Finished in 1.883094s, 66.3801 runs/s, 241.0926 assertions/s.
+Finished in 1.866214s, 66.9805 runs/s, 243.2733 assertions/s.
 
 125 runs, 454 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1219 / 1219 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1219 / 1219 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports. 1223 / 1223 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1223 / 1223 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.0747 - 4DEj16:diff_summary_test.rb:39:empty file has one lines added           
-0.0729 - 74DF2E:git_diff_tip_data_test.rb:64:empty file has some content added   
-0.0639 - 4DEj15:diff_summary_test.rb:32:empty file renamed 100% identical across dirs
-0.0594 - 4DEk17:diff_summary_test.rb:72:non-empty file renamed <100% identical   
-0.0591 - 4DEk15:diff_summary_test.rb:53:non-empty file deleted                   
-0.0577 - 4DEj12:diff_summary_test.rb:11:added empty file                         
+0.0609 - EE7e17:http_json_args_test.rb:76:/diff_summary has three keyword args; id:, was_index:, now_index:
+0.0511 - 4AF136:rack_dispatcher_test.rb:59:diff_summary 200                      
+0.0500 - 4DEk15:diff_summary_test.rb:53:non-empty file deleted                   
+0.0491 - 4DEk17:diff_summary_test.rb:72:non-empty file renamed <100% identical   
+0.0485 - 4DEj16:diff_summary_test.rb:39:empty file has one lines added           
+0.0481 - 4DEj12:diff_summary_test.rb:11:added empty file                         
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.88   <=     2 | [32m true [0m
+         test:duration(s) |    1.87   <=     2 | [32m true [0m
                test:count |     125   >=     1 | [32m true [0m
-          app:lines:total |     427   <=   500 | [32m true [0m
+          app:lines:total |     431   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      68   <=    75 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m

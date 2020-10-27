@@ -19,9 +19,9 @@ class RackDispatcher
     result = HttpJsonArgs::dispatch(path, @differ, body, params)
     json_response_pass(200, result)
   rescue HttpJsonArgs::RequestError => caught
-    json_response_fail(400, path, body, caught)
+    json_response_fail(400, path, params, body, caught)
   rescue Exception => caught
-    json_response_fail(500, path, body, caught)
+    json_response_fail(500, path, params, body, caught)
   end
 
   private
@@ -33,8 +33,8 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  def json_response_fail(status, path, body, caught)
-    s = JSON.pretty_generate(diagnostic(path, body, caught))
+  def json_response_fail(status, path, params, body, caught)
+    s = JSON.pretty_generate(diagnostic(path, params, body, caught))
     $stderr.puts(s)
     $stderr.flush
     [ status, CONTENT_TYPE_JSON, [s] ]
@@ -42,11 +42,12 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  def diagnostic(path, body, caught)
+  def diagnostic(path, params, body, caught)
     { 'exception' => {
         'time' => Time.now,
-        'path' => path,
         'body' => body,
+        'path' => path,
+        'params' => params,
         'class' => 'DifferService',
         'message' => caught.message,
         'backtrace' => caught.backtrace
