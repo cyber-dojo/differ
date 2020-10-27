@@ -13,7 +13,6 @@ module HttpJson
     end
 
     def get(path, args, options = {})
-      options[:gives] ||= :json
       req = request(path, args, options) do |url|
         Net::HTTP::Get.new(url)
       end

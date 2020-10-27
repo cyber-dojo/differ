@@ -14,7 +14,11 @@ class HttpJsonArgs
   # - - - - - - - - - - - - - - - -
 
   def self.dispatch(path, differ, body, params={})
-    args = parse_json_args(body)
+    if params.empty?
+      args = parse_json_args(body)
+    else
+      args = symbolized(params)
+    end
     case path
     when '/sha'           then differ.sha(**args)
     when '/alive'         then differ.alive?(**args)
@@ -22,7 +26,7 @@ class HttpJsonArgs
     when '/diff'          then differ.diff(**args)
     when '/diff_tip_data' then differ.diff_tip_data(**args)
     when '/diff_summary'  then differ.diff_summary(**args)
-    when '/diff_summary2' then differ.diff_summary2(**symbolized(params))
+    when '/diff_summary2' then differ.diff_summary2(**args)
     else raise RequestError, 'unknown path'
     end
   rescue JSON::JSONError

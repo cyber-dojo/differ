@@ -1,32 +1,32 @@
 /usr/local/bundle/gems/simplecov-0.19.0/lib/simplecov/configuration.rb:203: warning: instance variable @enable_for_subprocesses not initialized
-Run options: --seed 8235
+Run options: --seed 17652
 
 # Running:
 
 ....................................
 
-Finished in 1.645050s, 21.8838 runs/s, 67.4751 assertions/s.
+Finished in 1.701242s, 21.1610 runs/s, 65.2465 assertions/s.
 
 36 runs, 111 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 336 / 336 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 336 / 336 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports. 335 / 335 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 335 / 335 LOC (100.0%) covered.
 
 Slowest 5 tests are...
-0.1351 - 200E50:differ_client_test.rb:467:renamed file shows as all lines same   
-0.0999 - 200FDB:differ_client_test.rb:503:renamed and slightly changed file shows as mostly same lines
-0.0989 - 200960:differ_client_test.rb:228:added empty file in nested sub-dir shows as ['']
-0.0969 - 200FE9:differ_client_test.rb:142:deleted non-empty file shows as all lines deleted
-0.0702 - 200313:differ_client_test.rb:123:deleted empty file shows as empty array
-0.0642 - 200FDC:differ_client_test.rb:521:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.1622 - 200E50:differ_client_test.rb:467:renamed file shows as all lines same   
+0.1014 - 200FE9:differ_client_test.rb:142:deleted non-empty file shows as all lines deleted
+0.0993 - 200960:differ_client_test.rb:228:added empty file in nested sub-dir shows as ['']
+0.0985 - 200FDB:differ_client_test.rb:503:renamed and slightly changed file shows as mostly same lines
+0.0727 - 200313:differ_client_test.rb:123:deleted empty file shows as empty array
+0.0671 - 2007FF:differ_client_test.rb:293:unchanged empty-file in nested sub-dir shows as one empty line
 
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       1   <=     1 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.65   <=     2 | [32m true [0m
+         test:duration(s) |     1.7   <=     2 | [32m true [0m
                test:count |      36   >=     1 | [32m true [0m
-          app:lines:total |      81   <=   100 | [32m true [0m
+          app:lines:total |      80   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
