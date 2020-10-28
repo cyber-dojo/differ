@@ -1,23 +1,23 @@
-Run options: --seed 52580
+Run options: --seed 37717
 
 # Running:
 
 .............................................................................................................................
 
-Finished in 1.834872s, 68.1246 runs/s, 245.2487 assertions/s.
+Finished in 1.759007s, 71.0628 runs/s, 255.8261 assertions/s.
 
 125 runs, 450 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 1230 / 1230 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 1230 / 1230 LOC (100.0%) covered.
 
 Slowest tests are...
-0.0908 - 4DEk15:diff_summary_test.rb:53:non-empty file deleted                   
+0.0991 - 4AF136:rack_dispatcher_test.rb:59:diff_summary 200                      
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.83   <=     5 | [32m true [0m
+         test:duration(s) |    1.76   <=     5 | [32m true [0m
           app:lines:total |     438   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      68   <=    75 | [32m true [0m
