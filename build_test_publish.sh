@@ -21,6 +21,8 @@ check_embedded_env_var
 show_env_vars
 exit_zero_if_build_only "$@"
 containers_up "$@"
+exit_non_zero_unless_healthy
+exit_non_zero_unless_started_cleanly
 copy_in_saver_test_data
 test_in_containers "$@"
 containers_down

@@ -11,13 +11,12 @@ containers_up()
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
   fi
   echo; augmented_docker_compose up --detach --force-recreate "${SERVICE_NAME}"
-  echo; exit_non_zero_unless_healthy
-  echo; exit_non_zero_unless_started_cleanly
 }
 
 # - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_healthy()
 {
+  echo
   local -r MAX_TRIES=30
   printf "Waiting until ${SERVICE_NAME} is healthy"
   for _ in $(seq ${MAX_TRIES})
@@ -50,6 +49,7 @@ healthy()
 # - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_started_cleanly()
 {
+  echo
   printf "Checking ${SERVICE_NAME} started cleanly..."
   local DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
   #local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
