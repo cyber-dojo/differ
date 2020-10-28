@@ -1,5 +1,6 @@
 require_relative 'differ_test_base'
 require_relative 'rack_request_stub'
+require_relative 'http_adapter_stub'
 require_app 'rack_dispatcher'
 
 class RackDispatcherTest < DifferTestBase
@@ -8,24 +9,29 @@ class RackDispatcherTest < DifferTestBase
     '4AF'
   end
 
-  test 'ss6',
-  'ready exception is logged to its own log file (and not to stdout/stderr)' do
-    # Problem: Don't want to flood docker log with messages coming from the
-    # bash loop waiting for the container to become healthy.
-    # All I can think of right now.
-    args = {y:42}.to_json
-    response,stderr = with_captured_stderr { rack_call('ready', args) }
-    assert_equal 400, response[0], "response:#{response}"
-    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+  test 'ss6', %w[
+  |healthy? (used in Dockerfile HEALTHCHECK)
+  |logs exception to /tmp/healthy.fail.log
+  |and not to stdout/stderr
+  ] do
+    externals.instance_exec { @model_http = HttpAdapterStub.new(not_json='xxxx') }
+    log_filename = '/tmp/healthy.fail.log'
+    IO.write(log_filename, '')
+    response,stdout,stderr = with_captured_stdout_stderr { rack_call('healthy', '') }
+    logged = IO.read(log_filename)
+    assert_equal '', stdout
     assert_equal '', stderr
-    #TODO: check /tmp/ready.fail.log
+    assert_equal 500, response[0], "response:#{response}"
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    assert_json_exception(response[2][0], 'healthy', '', 'body is not JSON')
+    assert_json_exception(logged        , 'healthy', '', 'body is not JSON')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # 200
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '130', %w(
+  test '129', %w(
   allow empty body instead of {} which is
   useful for kubernetes live/ready probes ) do
     response = rack_call('ready', '')
@@ -34,10 +40,17 @@ class RackDispatcherTest < DifferTestBase
     assert_equal({"ready?" => true}, JSON.parse(response[2][0]))
   end
 
-  test '131', 'sha 200' do
+  test '130', 'sha 200' do
     args = {}
     assert_200('sha', args) do |response|
       assert_equal ENV['SHA'], response['sha']
+    end
+  end
+
+  test '131', 'healthy 200' do
+    args = {}
+    assert_200('healthy', args) do |response|
+      assert_equal true, response['healthy?']
     end
   end
 
@@ -97,12 +110,12 @@ class RackDispatcherTest < DifferTestBase
 
   test 'E20',
   'dispatch returns 400 status when body is not JSON' do
-    assert_dispatch_error('xyz', '123', 400, 'body is not JSON Hash')
+    assert_dispatch_error('sha', '123', 400, 'body is not JSON Hash')
   end
 
   test 'E21',
   'dispatch returns 400 status when body is not JSON Hash' do
-    assert_dispatch_error('xyz', [].to_json, 400, 'body is not JSON Hash')
+    assert_dispatch_error('sha', [].to_json, 400, 'body is not JSON Hash')
   end
 
   test 'E22',
@@ -211,6 +224,18 @@ class RackDispatcherTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def with_captured_stdout_stderr
+    old_stdout = $stdout
+    old_stderr = $stderr
+    $stdout = StringIO.new('', 'w')
+    $stderr = StringIO.new('', 'w')
+    response = yield
+    return [ response, $stdout.string, $stderr.string ]
+  ensure
+    $stderr = old_stderr
+    $stdout = old_stdout
+  end
 
   def with_captured_stderr
     old_stderr = $stderr

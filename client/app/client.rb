@@ -13,13 +13,14 @@ class Client
   def call(env)
     request = Rack::Request.new(env)
     path = request.path_info
+    params = request.params
     name,args = HttpJsonArgs.new.get(path)
     result = @differ.public_send(name, *args)
     html_json_pass(200, { name => result })
   rescue HttpJson::RequestError => error
-    html_json_fail(400, path, error)
+    html_json_fail(400, path, params, error)
   rescue Exception => error
-    html_json_fail(500, path, error)
+    html_json_fail(500, path, params, error)
   end
 
   private
@@ -29,10 +30,10 @@ class Client
     html_json(status, json)
   end
 
-  def html_json_fail(status, path, error)
+  def html_json_fail(status, path, params, error)
     json = JSON.pretty_generate(diagnostic(path, error))
-    if path === '/ready'
-      IO.write("/tmp#{path}.fail.log", json)
+    if path === '/ready' && params['log'] == 'file'
+      IO.write("/tmp/ready.fail.log", json, mode:'a')
     else
       $stderr.puts(json)
       $stderr.flush

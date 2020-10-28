@@ -32,8 +32,8 @@ class RackDispatcher
 
   def html_json_fail(status, path, params, body, caught)
     json = JSON.pretty_generate(diagnostic(path, params, body, caught))
-    if path === '/ready'
-      IO.write("/tmp#{path}.fail.log", json)
+    if path === '/healthy'
+      IO.write("/tmp/healthy.fail.log", json, mode:'a')
     else
       $stderr.puts(json)
       $stderr.flush

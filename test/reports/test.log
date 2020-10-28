@@ -1,28 +1,28 @@
-Run options: --seed 53026
+Run options: --seed 35810
 
 # Running:
 
-...............................................................................................................................
+................................................................................................................................
 
-Finished in 1.971972s, 64.4025 runs/s, 198.7857 assertions/s.
+Finished in 1.825070s, 70.1343 runs/s, 224.6489 assertions/s.
 
-127 runs, 392 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1237 / 1237 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1237 / 1237 LOC (100.0%) covered.
+128 runs, 410 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1262 / 1262 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1262 / 1262 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1137 - 4AF136:rack_dispatcher_test.rb:69:diff_summary 200                      
+0.1047 - 4DEk15:diff_summary_test.rb:53:non-empty file deleted                   
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.97   <=     5 | [32m true [0m
-          app:lines:total |     439   <=   500 | [32m true [0m
+         test:duration(s) |    1.83   <=     5 | [32m true [0m
+          app:lines:total |     443   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |      70   <=    75 | [32m true [0m
+       app:branches:total |      71   <=    75 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     798   <=  1000 | [32m true [0m
+         test:lines:total |     819   <=  1000 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

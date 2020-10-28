@@ -9,9 +9,10 @@ class Differ
     @externals = externals
   end
 
-  def alive?; prober.alive?; end
-  def ready?; prober.ready?; end
-  def sha; prober.sha; end
+  def sha     ; prober.sha     ; end
+  def healthy?; prober.healthy?; end
+  def alive?  ; prober.alive?  ; end
+  def ready?  ; prober.ready?  ; end
 
   def diff(id:, old_files:, new_files:)
     git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)

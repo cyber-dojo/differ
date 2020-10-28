@@ -6,22 +6,26 @@ class Prober
     @externals = externals
   end
 
-  def sha
+  def sha # identity
     { 'sha' => ENV['SHA'] }
   end
 
-  def alive?
+  def healthy? # Dockerfile HEALTHCHECK
+    { 'healthy?' => prepared? }
+  end
+
+  def alive? # k8s
     { 'alive?' => true }
   end
 
-  def ready?
-    { 'ready?' => model.ready? }
+  def ready? # k8s
+    { 'ready?' => prepared? }
   end
 
   private
 
-  def model
-    @externals.model
+  def prepared?
+    @externals.model.ready?
   end
 
 end

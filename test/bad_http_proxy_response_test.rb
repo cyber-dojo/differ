@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require_relative 'differ_test_base'
-require 'ostruct'
+require_relative 'http_adapter_stub'
 
 class BadHttpProxyResponseTest < DifferTestBase
 
@@ -57,21 +57,6 @@ class BadHttpProxyResponseTest < DifferTestBase
 
   def stub_model_http(body)
     externals.instance_exec { @model_http = HttpAdapterStub.new(body) }
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  class HttpAdapterStub
-    def initialize(body)
-      @body = body
-    end
-    def get(_uri)
-      OpenStruct.new
-    end
-    def start(_hostname, _port, _req)
-      self
-    end
-    attr_reader :body
   end
 
   # - - - - - - - - - - - - - - - - -

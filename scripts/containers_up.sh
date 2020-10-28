@@ -29,11 +29,8 @@ exit_non_zero_unless_healthy()
     fi
   done
   echo; echo "${SERVICE_NAME} not healthy after ${MAX_TRIES} tries."
-  echo "Echoing readiness log file (if it exists)"
-  local -r READY_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/ready.fail.log ]] && (cat /tmp/ready.fail.log) || true'"
-  echo "${READY_COMMAND}"
-  eval "${READY_COMMAND}"
-  echo
+  echo_health_log_if_it_exists
+  echo_docker_log
   exit 42
 }
 
@@ -41,6 +38,17 @@ exit_non_zero_unless_healthy()
 healthy()
 {
   docker ps --filter health=healthy --format '{{.Names}}' | grep -q "${CONTAINER_NAME}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+echo_health_log_if_it_exists()
+{
+  echo
+  echo "Echoing health log file (if it exists)"
+  local -r HEALTHY_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/healthy.fail.log ]] && (cat /tmp/healthy.fail.log) || true'"
+  echo "${HEALTHY_COMMAND}"
+  eval "${HEALTHY_COMMAND}"
+  echo
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -63,6 +71,12 @@ exit_non_zero_unless_started_cleanly()
     echo
     exit 42
   fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
+echo_docker_log()
+{
+  docker logs "${CONTAINER_NAME}" 2>&1
 }
 
 # - - - - - - - - - - - - - - - - - - -

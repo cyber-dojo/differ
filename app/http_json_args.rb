@@ -18,6 +18,7 @@ class HttpJsonArgs
     args = symbolized(raw_args)
     case path
     when '/sha'           then differ.sha(**args)
+    when '/healthy'       then differ.healthy?(**args)
     when '/alive'         then differ.alive?(**args)
     when '/ready'         then differ.ready?(**args)
     when '/diff'          then differ.diff(**args)
