@@ -11,7 +11,6 @@ class Prober
   end
 
   def ready?
-    #raise "SSSSS"
     { 'ready?' => model.ready? }
   end
 

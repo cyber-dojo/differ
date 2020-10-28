@@ -1,23 +1,23 @@
-Run options: --seed 56357
+Run options: --seed 9713
 
 # Running:
 
 ...............................................................................................................................
 
-Finished in 1.789052s, 70.9873 runs/s, 219.1104 assertions/s.
+Finished in 1.727252s, 73.5272 runs/s, 226.9501 assertions/s.
 
 127 runs, 392 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 1237 / 1237 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 1237 / 1237 LOC (100.0%) covered.
 
 Slowest tests are...
-0.0900 - 4DEj13:diff_summary_test.rb:18:deleted empty file                       
+0.0764 - 74CAA9:git_diff_join_test.rb:185:non-empty file is renamed <100% identical across dirs
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.79   <=     5 | [32m true [0m
+         test:duration(s) |    1.73   <=     5 | [32m true [0m
           app:lines:total |     439   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      70   <=    75 | [32m true [0m
