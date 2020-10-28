@@ -1,4 +1,3 @@
-#!/bin/bash -Eeu
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci_publish_tagged_images()

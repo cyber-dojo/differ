@@ -15,27 +15,30 @@ class Client
     path = request.path_info
     name,args = HttpJsonArgs.new.get(path)
     result = @differ.public_send(name, *args)
-    json_response(200, { name => result })
+    json_response_pass(200, { name => result })
   rescue HttpJson::RequestError => error
-    json_response(400, diagnostic(path, error))
+    json_response_fail(400, path, error)
   rescue Exception => error
-    json_response(500, diagnostic(path, error))
+    json_response_fail(500, path, error)
   end
 
   private
 
-  def json_response(status, json)
-    if status === 200
-      body = JSON.fast_generate(json)
+  def json_response_pass(status, json)
+    body = JSON.fast_generate(json)
+    [ status, CONTENT_TYPE_JSON, [ body ] ]
+  end
+
+  def json_response_fail(status, path, error)
+    json = diagnostic(path, error)
+    body = JSON.pretty_generate(json)
+    if ['/alive','/ready'].include?(path)
+      IO.write("/tmp#{path}.fail.log", body)
     else
-      body = JSON.pretty_generate(json)
       $stderr.puts(body)
       $stderr.flush
     end
-    [ status,
-      { 'Content-Type' => 'application/json' },
-      [ body ]
-    ]
+    [ status, CONTENT_TYPE_JSON, [ body ] ]
   end
 
   # - - - - - - - - - - - - - - - -
@@ -49,5 +52,9 @@ class Client
       }
     }
   end
+
+  # - - - - - - - - - - - - - - - -
+
+  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }
 
 end

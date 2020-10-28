@@ -1,4 +1,3 @@
-#!/bin/bash -Eeu
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 exit_zero_if_show_help()

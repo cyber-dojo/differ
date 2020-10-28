@@ -1,4 +1,3 @@
-#!/bin/bash -Eeu
 
 # - - - - - - - - - - - - - - - - - - -
 containers_up()
@@ -22,20 +21,24 @@ exit_non_zero_unless_healthy()
   for _ in $(seq ${MAX_TRIES})
   do
     if healthy; then
-      echo .OK
+      echo; echo "${SERVICE_NAME} is healthy."
       return
     else
       printf .
       sleep 0.1
     fi
   done
-  echo FAIL
-  echo "${SERVICE_NAME} not ready after ${MAX_TRIES} tries"
-  local -r COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c 'cat /tmp/ready.fail.log'"
-  echo Echoing readiness log file
-  echo "${COMMAND}"
+  echo; echo "${SERVICE_NAME} not healthy after ${MAX_TRIES} tries."
+  local -r ALIVE_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/alive.fail.log ]] && (cat /tmp/alive.fail.log) || true'"
   echo
-  eval "${COMMAND}"
+  echo "Echoing liveness log file (if it exists)"
+  echo "${ALIVE_COMMAND}"
+  eval "${ALIVE_COMMAND}"
+  echo
+  local -r READY_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/ready.fail.log ]] && (cat /tmp/ready.fail.log) || true'"
+  echo "Echoing readiness log file (if it exists)"
+  echo "${READY_COMMAND}"
+  eval "${READY_COMMAND}"
   echo
   exit 42
 }
@@ -55,11 +58,11 @@ exit_non_zero_unless_started_cleanly()
   #DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
   local -r LINE_COUNT=$(echo -n "${DOCKER_LOG}" | grep --count '^')
   # 3 lines on Thin (Unicorn=6, Puma=6)
-  printf "Checking ${SERVICE_NAME} started cleanly..."
+  echo "Checking if ${SERVICE_NAME} started cleanly."
   if [ "${LINE_COUNT}" == '6' ]; then
-    echo OK
+    echo "${SERVICE_NAME} started cleanly."
   else
-    echo FAIL
+    echo "${SERVICE_NAME} did not start cleanly."
     echo "docker logs ${CONTAINER_NAME}"
     echo
     echo "${DOCKER_LOG}"
@@ -75,9 +78,10 @@ strip_known_warning()
   local -r KNOWN_WARNING="${2}"
   local STRIPPED=$(echo -n "${DOCKER_LOG}" | grep --invert-match -E "${KNOWN_WARNING}")
   if [ "${DOCKER_LOG}" != "${STRIPPED}" ]; then
-    >&2 echo "Known service start-up warning found: ${KNOWN_WARNING}"
+    echo "Known service start-up warning found: ${KNOWN_WARNING}"
   else
-    >&2 echo "Known service start-up warning NOT found: ${KNOWN_WARNING}"
+    echo "Known service start-up warning NOT found: ${KNOWN_WARNING}"
+    exit 42
   fi
   echo "${STRIPPED}"
 }

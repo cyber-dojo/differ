@@ -1,4 +1,3 @@
-#!/bin/bash -Eeu
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 test_in_containers()

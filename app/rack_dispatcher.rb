@@ -27,21 +27,21 @@ class RackDispatcher
   private
 
   def json_response_pass(status, result)
-    s = JSON.fast_generate(result)
-    [ status, CONTENT_TYPE_JSON, [s] ]
+    body = JSON.fast_generate(result)
+    [ status, CONTENT_TYPE_JSON, [body] ]
   end
 
   # - - - - - - - - - - - - - - - -
 
   def json_response_fail(status, path, params, body, caught)
-    s = JSON.pretty_generate(diagnostic(path, params, body, caught))
+    body = JSON.pretty_generate(diagnostic(path, params, body, caught))
     if ['/alive','/ready'].include?(path)
-      IO.write("/tmp#{path}.fail.log", s)
+      IO.write("/tmp#{path}.fail.log", body)
     else
-      $stderr.puts(s)
+      $stderr.puts(body)
       $stderr.flush
     end
-    [ status, CONTENT_TYPE_JSON, [s] ]
+    [ status, CONTENT_TYPE_JSON, [body] ]
   end
 
   # - - - - - - - - - - - - - - - -

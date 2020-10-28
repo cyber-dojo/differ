@@ -1,4 +1,3 @@
-#/bin/bash -Eeu
 
 # - - - - - - - - - - - - - - - - - - - - - -
 echo_k8s_yaml_port_env_vars()
