@@ -8,6 +8,17 @@ class RackDispatcherTest < DifferTestBase
     '4AF'
   end
 
+  test 'ss6',
+  'alive exception is logged to its own log file (and not to stdout/stderr)' do
+    #assert_dispatch_error('alive', {y:42}.to_json, 400, 'unknown argument: :y')
+    #assert_dispatch_error('ready', {z:42}.to_json, 400, 'unknown argument: :z')
+    args = {y:42}.to_json
+    response,stderr = with_captured_stderr { rack_call('alive', args) }
+    assert_equal 400, response[0], "message:#{message},stderr:#{stderr}"
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    assert_equal '', stderr
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # 200
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -63,6 +74,21 @@ class RackDispatcherTest < DifferTestBase
     end
   end
 
+  test '137', 'diff_summary2 200 is shameless-green spike waiting to be implemented' do
+    args = { id:'RNCzUr', was_index:3, now_index:4 }
+    assert_200('diff_summary2', args) do |response|
+      actual = response['diff_summary2']
+      expected = [
+        { "old_filename" => "hiker.h",
+          "new_filename" => "hiker.hpp",
+          "counts" => { "added"=>0, "deleted"=>0, "same"=>23 },
+          "lines" => []
+        }
+      ]
+      assert_equal expected, actual
+    end
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # 400
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,8 +111,6 @@ class RackDispatcherTest < DifferTestBase
   test 'E23',
   'dispatch returns 400 when one arg is unknown' do
     assert_dispatch_error('sha',   {x:42}.to_json, 400, 'unknown argument: :x')
-    assert_dispatch_error('alive', {y:42}.to_json, 400, 'unknown argument: :y')
-    assert_dispatch_error('ready', {z:42}.to_json, 400, 'unknown argument: :z')
     assert_dispatch_error('diff', {a:0,id:1,old_files:2,new_files:3}.to_json, 400,
       'unknown argument: :a')
   end
@@ -94,8 +118,6 @@ class RackDispatcherTest < DifferTestBase
   test 'E24',
   'dispatch returns 400 when two or more args are unknown' do
     assert_dispatch_error('sha',   {x:4,y:2}.to_json, 400, 'unknown arguments: :x, :y')
-    assert_dispatch_error('alive', {y:4,a:2}.to_json, 400, 'unknown arguments: :y, :a')
-    assert_dispatch_error('ready', {z:4,b:2}.to_json, 400, 'unknown arguments: :z, :b')
     assert_dispatch_error('diff', {b:0,id:1,old_files:2,new_files:3,a:4}.to_json, 400,
       'unknown arguments: :b, :a')
   end

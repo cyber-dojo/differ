@@ -11,9 +11,9 @@ source "${SH_DIR}/containers_up.sh"
 source "${SH_DIR}/test_in_containers.sh"
 source "${SH_DIR}/containers_down.sh"
 source "${SH_DIR}/on_ci_publish_tagged_images.sh"
-source "${SH_DIR}/versioner_env_vars.sh"
+source "${SH_DIR}/echo_versioner_env_vars.sh"
+export $(echo_versioner_env_vars)
 
-export $(versioner_env_vars)
 exit_zero_if_show_help "$@"
 generate_env_var_yml_files
 build_tagged_images
@@ -21,6 +21,7 @@ check_embedded_env_var
 show_env_vars
 exit_zero_if_build_only "$@"
 containers_up "$@"
+copy_in_saver_test_data
 test_in_containers "$@"
 containers_down
 on_ci_publish_tagged_images

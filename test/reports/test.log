@@ -1,29 +1,29 @@
-Run options: --seed 11274
+Run options: --seed 56357
 
 # Running:
 
-.
+...............................................................................................................................
 
-Finished in 0.002998s, 333.5998 runs/s, 667.1995 assertions/s.
+Finished in 1.789052s, 70.9873 runs/s, 219.1104 assertions/s.
 
-1 runs, 2 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 482 / 1231 LOC (39.16%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 482 / 1231 LOC (39.16%) covered.
+127 runs, 392 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1237 / 1237 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1237 / 1237 LOC (100.0%) covered.
 
 Slowest tests are...
-0.0000 - EE7jj9:http_json_args_test.rb:10:SPIKE: /diff_summary2 using proper GET query args
+0.0900 - 4DEj13:diff_summary_test.rb:18:deleted empty file                       
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |     0.0   <=     5 | [32m true [0m
+         test:duration(s) |    1.79   <=     5 | [32m true [0m
           app:lines:total |     439   <=   500 | [32m true [0m
-         app:lines:missed |     261   <=     0 | [31m false [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      70   <=    75 | [32m true [0m
-      app:branches:missed |      68   <=     0 | [31m false [0m
-         test:lines:total |     792   <=  1000 | [32m true [0m
-        test:lines:missed |     488   <=     0 | [31m false [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     798   <=  1000 | [32m true [0m
+        test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 

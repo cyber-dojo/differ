@@ -1,47 +1,26 @@
 #!/bin/bash -Eeu
 
-server_service_name() { echo differ_server; }
-client_service_name() { echo differ_client; }
-server_container_name() { echo "${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"; }
-client_container_name() { echo "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"; }
-line() { echo ---------------------------; }
-
 # - - - - - - - - - - - - - - - - - - -
 containers_up()
 {
+
   if [ "${1:-}" == 'server' ]; then
-    container_up_healthy_and_clean $(server_service_name) $(server_container_name)
+    export SERVICE_NAME=differ_server
+    export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
   else
-    container_up_healthy_and_clean $(client_service_name) $(client_container_name)
+    export SERVICE_NAME=differ_client
+    export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
   fi
-  copy_in_saver_test_data
-}
 
-# - - - - - - - - - - - - - - - - - - -
-container_up_healthy_and_clean()
-{
-  local -r SERVICE_NAME="${1}"
-  local -r CONTAINER_NAME="${2}"
-  echo; container_up               "${SERVICE_NAME}"
-  echo; wait_briefly_until_healthy "${SERVICE_NAME}" "${CONTAINER_NAME}"
-}
-
-# - - - - - - - - - - - - - - - - - - -
-container_up()
-{
-  local -r SERVICE_NAME="${1}"
-  augmented_docker_compose \
-    up \
-    --detach \
-    --force-recreate \
-      "${SERVICE_NAME}"
+  echo
+  augmented_docker_compose up --detach --force-recreate "${SERVICE_NAME}"
+  echo
+  wait_briefly_until_healthy
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
 wait_briefly_until_healthy()
 {
-  local -r SERVICE_NAME="${1}"
-  local -r CONTAINER_NAME="${2}"
   local -r MAX_TRIES=30
   printf "Waiting until ${SERVICE_NAME} is healthy"
   for _ in $(seq ${MAX_TRIES})
@@ -64,15 +43,12 @@ wait_briefly_until_healthy()
 # - - - - - - - - - - - - - - - - - - -
 healthy()
 {
-  local -r CONTAINER_NAME="${1}"
   docker ps --filter health=healthy --format '{{.Names}}' | grep -q "${CONTAINER_NAME}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
 echo_docker_log_if_unclean()
 {
-  local -r SERVICE_NAME="${1}"
-  local -r CONTAINER_NAME="${2}"
   local DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
 
   #local -r shadow_warning="server.rb:(.*): warning: shadowing outer local variable - filename"
@@ -100,7 +76,6 @@ echo_docker_log_if_unclean()
 # - - - - - - - - - - - - - - - - - - -
 echo_probe_fail_log()
 {
-  local -r CONTAINER_NAME="${1}"
   local -r COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c 'cat /tmp/ready.fail.log'"
   echo Echoing readiness log file
   echo "${COMMAND}"
@@ -132,4 +107,10 @@ copy_in_saver_test_data()
   cd ${SRC_PATH} \
     && tar -c . \
     | docker exec -i ${SAVER_CID} tar x -C ${DEST_PATH}
+}
+
+# - - - - - - - - - - - - - - - - - - -
+line()
+{
+  echo ---------------------------
 }

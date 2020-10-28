@@ -1,23 +1,23 @@
-Run options: --seed 24836
+Run options: --seed 62428
 
 # Running:
 
 ....................................
 
-Finished in 1.895542s, 18.9919 runs/s, 58.5585 assertions/s.
+Finished in 1.924945s, 18.7018 runs/s, 57.6640 assertions/s.
 
 36 runs, 111 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 335 / 335 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 335 / 335 LOC (100.0%) covered.
 
 Slowest tests are...
-0.2119 - 200E50:differ_client_test.rb:467:renamed file shows as all lines same   
+0.2568 - 200E50:differ_client_test.rb:467:renamed file shows as all lines same   
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |     1.9   <=     5 | [32m true [0m
+         test:duration(s) |    1.92   <=     5 | [32m true [0m
           app:lines:total |      80   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
