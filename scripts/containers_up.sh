@@ -29,14 +29,8 @@ exit_non_zero_unless_healthy()
     fi
   done
   echo; echo "${SERVICE_NAME} not healthy after ${MAX_TRIES} tries."
-  local -r ALIVE_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/alive.fail.log ]] && (cat /tmp/alive.fail.log) || true'"
-  echo
-  echo "Echoing liveness log file (if it exists)"
-  echo "${ALIVE_COMMAND}"
-  eval "${ALIVE_COMMAND}"
-  echo
-  local -r READY_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/ready.fail.log ]] && (cat /tmp/ready.fail.log) || true'"
   echo "Echoing readiness log file (if it exists)"
+  local -r READY_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/ready.fail.log ]] && (cat /tmp/ready.fail.log) || true'"
   echo "${READY_COMMAND}"
   eval "${READY_COMMAND}"
   echo

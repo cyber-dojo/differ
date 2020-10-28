@@ -6,16 +6,16 @@ class Prober
     @externals = externals
   end
 
+  def sha
+    { 'sha' => ENV['SHA'] }
+  end
+
   def alive?
     { 'alive?' => true }
   end
 
   def ready?
     { 'ready?' => model.ready? }
-  end
-
-  def sha
-    { 'sha' => ENV['SHA'] }
   end
 
   private

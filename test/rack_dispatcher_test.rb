@@ -9,12 +9,16 @@ class RackDispatcherTest < DifferTestBase
   end
 
   test 'ss6',
-  'alive exception is logged to its own log file (and not to stdout/stderr)' do
+  'ready exception is logged to its own log file (and not to stdout/stderr)' do
+    # Problem: Don't want to flood docker log with messages coming from the
+    # bash loop waiting for the container to become healthy.
+    # All I can think of right now.
     args = {y:42}.to_json
-    response,stderr = with_captured_stderr { rack_call('alive', args) }
-    assert_equal 400, response[0], "message:#{message},stderr:#{stderr}"
+    response,stderr = with_captured_stderr { rack_call('ready', args) }
+    assert_equal 400, response[0], "response:#{response}"
     assert_equal({ 'Content-Type' => 'application/json' }, response[1])
     assert_equal '', stderr
+    #TODO: check /tmp/ready.fail.log
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
