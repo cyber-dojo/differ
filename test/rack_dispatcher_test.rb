@@ -10,8 +10,6 @@ class RackDispatcherTest < DifferTestBase
 
   test 'ss6',
   'alive exception is logged to its own log file (and not to stdout/stderr)' do
-    #assert_dispatch_error('alive', {y:42}.to_json, 400, 'unknown argument: :y')
-    #assert_dispatch_error('ready', {z:42}.to_json, 400, 'unknown argument: :z')
     args = {y:42}.to_json
     response,stderr = with_captured_stderr { rack_call('alive', args) }
     assert_equal 400, response[0], "message:#{message},stderr:#{stderr}"
