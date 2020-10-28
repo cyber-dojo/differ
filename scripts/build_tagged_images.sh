@@ -9,7 +9,7 @@ build_tagged_images()
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_IMAGE}"
   remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_CLIENT_IMAGE}"
   build_images
-  tag_images_to_latest  
+  tag_images_to_latest # for cache till next build_tagged_images()    
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
