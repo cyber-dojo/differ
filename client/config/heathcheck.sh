@@ -9,4 +9,4 @@
 # --retries=N      number of tries until container considered unhealthy
 # --start-period=S grace period when healthcheck fails dont count towards --retries
 
-wget localhost:${PORT}/ready?log=file -q -O - > /dev/null 2>&1
+wget localhost:${PORT}/healthy -q -O - > /dev/null 2>&1

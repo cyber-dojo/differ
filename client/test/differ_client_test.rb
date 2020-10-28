@@ -74,10 +74,8 @@ class DifferClientTest < ClientTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-  # sha
-  # - - - - - - - - - - - - - - - - - - - -
 
-  test '945', 'sha 200' do
+  test '944', 'sha 200' do
     sha = differ.sha
     assert_equal 40, sha.size, 'sha.size'
     sha.each_char do |ch|
@@ -85,17 +83,13 @@ class DifferClientTest < ClientTestBase
     end
   end
 
-  # - - - - - - - - - - - - - - - - - - - -
-  # alive?
-  # - - - - - - - - - - - - - - - - - - - -
+  test '945', 'healthy? 200' do
+    assert differ.healthy?
+  end
 
   test '946', 'alive? 200' do
     assert differ.alive?
   end
-
-  # - - - - - - - - - - - - - - - - - - - -
-  # ready?
-  # - - - - - - - - - - - - - - - - - - - -
 
   test '947', 'ready? 200' do
     assert differ.ready?

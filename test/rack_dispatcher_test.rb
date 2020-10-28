@@ -237,6 +237,8 @@ class RackDispatcherTest < DifferTestBase
     $stdout = old_stdout
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   def with_captured_stderr
     old_stderr = $stderr
     $stderr = StringIO.new('', 'w')

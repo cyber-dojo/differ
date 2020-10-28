@@ -1,28 +1,28 @@
-Run options: --seed 45672
+Run options: --seed 15913
 
 # Running:
 
-....................................
+.....................................
 
-Finished in 1.886111s, 19.0869 runs/s, 58.8512 assertions/s.
+Finished in 1.992643s, 18.5683 runs/s, 56.2067 assertions/s.
 
-36 runs, 111 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 335 / 335 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 335 / 335 LOC (100.0%) covered.
+37 runs, 112 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 339 / 339 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 339 / 339 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1554 - 200960:differ_client_test.rb:228:added empty file in nested sub-dir shows as ['']
+0.1653 - 200FDB:differ_client_test.rb:497:renamed and slightly changed file shows as mostly same lines
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.89   <=     5 | [32m true [0m
-          app:lines:total |      80   <=   100 | [32m true [0m
+         test:duration(s) |    1.99   <=     5 | [32m true [0m
+          app:lines:total |      82   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     255   <=   500 | [32m true [0m
+         test:lines:total |     257   <=   500 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

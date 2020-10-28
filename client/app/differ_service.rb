@@ -16,6 +16,10 @@ class DifferService
     @http.get(__method__, {})
   end
 
+  def healthy?
+    @http.get(__method__, {})
+  end
+
   def alive?
     @http.get(__method__, {})
   end
@@ -23,6 +27,8 @@ class DifferService
   def ready?
     @http.get(__method__, {})
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def diff(id, old_files, new_files)
     @http.get(__method__, {

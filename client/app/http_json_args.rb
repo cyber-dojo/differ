@@ -5,7 +5,8 @@ class HttpJsonArgs
 
   def get(path)
     case path
-    when '/ready' then ['ready?',[]]
+    when '/healthy' then ['healthy?',[]]
+    when '/ready'   then ['ready?'  ,[]]
     else
       raise HttpJson::RequestError, 'unknown path'
     end
