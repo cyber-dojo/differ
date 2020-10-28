@@ -38,13 +38,13 @@ run_tests()
 {
   local -r USER="${1}"           # eg nobody
   local -r CONTAINER_NAME="${2}" # eg test_differ_server
-  local -r TYPE="${3}"           # eg client|server
+  local -r TYPE="${3}"           # eg server
 
-  local -r coverage_code_tab_name=app
-  local -r coverage_test_tab_name=test
-  local -r container_tmp_dir=/tmp
-  local -r container_coverage_dir=/${container_tmp_dir}/reports
-  local -r test_log=test.log
+  local -r COVERAGE_CODE_TAB_NAME=app
+  local -r COVERAGE_TEST_TAB_NAME=test
+  local -r CONTAINER_TMP_DIR=/tmp
+  local -r CONTAINER_COVERAGE_DIR=/${CONTAINER_TMP_DIR}/reports
+  local -r TEST_LOG=test.log
 
   echo
   echo '=================================='
@@ -56,11 +56,11 @@ run_tests()
 
   set +e
   docker exec \
-    --env COVERAGE_CODE_TAB_NAME=${coverage_code_tab_name} \
-    --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
+    --env COVERAGE_CODE_TAB_NAME=${COVERAGE_CODE_TAB_NAME} \
+    --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
     --user "${USER}" \
     "${CONTAINER_NAME}" \
-      sh -c "/differ/test/lib/run.sh ${container_coverage_dir} ${test_log} ${*:4}"
+      sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:4}"
   set -e
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -68,43 +68,43 @@ run_tests()
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out
 
   if [ "${TYPE}" == 'server' ]; then
-    local -r host_test_dir="${SH_DIR}/../test"
+    local -r HOST_TEST_DIR="${SH_DIR}/../test"
   else
-    local -r host_test_dir="${SH_DIR}/../client/test"
+    local -r HOST_TEST_DIR="${SH_DIR}/../client/test"
   fi
 
   docker exec \
     "${CONTAINER_NAME}" \
     tar Ccf \
-      "$(dirname "${container_coverage_dir}")" \
-      - "$(basename "${container_coverage_dir}")" \
-        | tar Cxf "${host_test_dir}/" -
+      "$(dirname "${CONTAINER_COVERAGE_DIR}")" \
+      - "$(basename "${CONTAINER_COVERAGE_DIR}")" \
+        | tar Cxf "${HOST_TEST_DIR}/" -
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Process test-run results and coverage data.
 
-  local -r host_reports_dir=${host_test_dir}/reports
-  mkdir -p "${host_reports_dir}"
+  local -r HOST_REPORTS_DIR=${HOST_TEST_DIR}/reports
+  mkdir -p "${HOST_REPORTS_DIR}"
 
   set +e
   docker run \
-    --env COVERAGE_CODE_TAB_NAME=${coverage_code_tab_name} \
-    --env COVERAGE_TEST_TAB_NAME=${coverage_test_tab_name} \
+    --env COVERAGE_CODE_TAB_NAME=${COVERAGE_CODE_TAB_NAME} \
+    --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
     --rm \
-    --volume ${host_reports_dir}/${test_log}:${container_tmp_dir}/${test_log}:ro \
-    --volume ${host_reports_dir}/index.html:${container_tmp_dir}/index.html:ro \
-    --volume ${host_reports_dir}/coverage.json:${container_tmp_dir}/coverage.json:ro \
-    --volume ${host_test_dir}/lib/metrics.rb:/app/metrics.rb:ro \
+    --volume ${HOST_REPORTS_DIR}/${TEST_LOG}:${CONTAINER_TMP_DIR}/${TEST_LOG}:ro \
+    --volume ${HOST_REPORTS_DIR}/index.html:${CONTAINER_TMP_DIR}/index.html:ro \
+    --volume ${HOST_REPORTS_DIR}/coverage.json:${CONTAINER_TMP_DIR}/coverage.json:ro \
+    --volume ${HOST_TEST_DIR}/lib/metrics.rb:/app/metrics.rb:ro \
     cyberdojo/check-test-results:latest \
-    sh -c "ruby /app/check_test_results.rb ${container_tmp_dir}/${test_log} ${container_tmp_dir}/index.html ${container_tmp_dir}/coverage.json" \
-      | tee -a ${host_reports_dir}/${test_log}
+    sh -c "ruby /app/check_test_results.rb ${CONTAINER_TMP_DIR}/${TEST_LOG} ${CONTAINER_TMP_DIR}/index.html ${CONTAINER_TMP_DIR}/coverage.json" \
+      | tee -a ${HOST_REPORTS_DIR}/${TEST_LOG}
   local -r STATUS=${PIPESTATUS[0]}
   set -e
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Tell caller where the results are...
 
-  echo "${TYPE} test coverage at $(abs_filename "${host_reports_dir}/index.html")"
+  echo "${TYPE} test coverage at $(abs_filename "${HOST_REPORTS_DIR}/index.html")"
   echo "${TYPE} test status == ${STATUS}"
   echo
   if [ "${STATUS}" != '0' ]; then
