@@ -50,15 +50,12 @@ healthy()
 exit_non_zero_unless_started_cleanly()
 {
   echo
-  printf "Checking ${SERVICE_NAME} started cleanly..."
   local DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
   #local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   #DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
   local -r LINE_COUNT=$(echo -n "${DOCKER_LOG}" | grep --count '^')
   # 3 lines on Thin (Unicorn=6, Puma=6)
-  # Thin web server (v1.7.2 codename Bachmanity)
-  # Maximum connections set to 1024
-  # Listening on 0.0.0.0:4568, CTRL+C to stop
+  printf "Checking ${SERVICE_NAME} started cleanly..."
   if [ "${LINE_COUNT}" == '6' ]; then
     echo OK
   else
