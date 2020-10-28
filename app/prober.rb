@@ -11,9 +11,8 @@ class Prober
   end
 
   def ready?
+    #raise "SSSSS"
     { 'ready?' => model.ready? }
-  rescue Exception # Until move to standard http requesting
-    { 'ready?' => false }
   end
 
   def sha
