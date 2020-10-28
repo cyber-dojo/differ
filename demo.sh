@@ -1,7 +1,7 @@
 #!/bin/bash -Eeu
 
-export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export SH_DIR="${ROOT_DIR}/scripts"
 
 source "${SH_DIR}/generate_env_var_yml_files.sh"
 source "${SH_DIR}/build_tagged_images.sh"
@@ -21,7 +21,7 @@ exit_non_zero_unless_started_cleanly
 copy_in_saver_test_data
 
 docker exec \
-  test-differ-client \
+  "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}" \
     sh -c 'ruby /differ/app/html_demo.rb' \
       > ${TMP_HTML_FILENAME}
 
