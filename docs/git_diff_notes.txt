@@ -1,0 +1,101 @@
+
+git diff --unified=999999 --no-prefix --ignore-space-at-eol --find-copies-harder --indent-heuristic 0 1 --
+git commit --allow-empty
+
+1.new-file  (empty)
+-----------------
+diff --git empty empty
+new file mode 100644
+index ....
+
+Notes. Without trailing lines we know the file is empty. See next.
+
+
+
+2.new-file (not empty)
+--------------------
+diff --git not.empty not.empty
+new file mode 100644
+index ....
+--- /dev/null
++++ not.empty
++abcde
+
+Notes. We see the content of the new file.
+
+
+3.delete-file (empty)
+-------------------
+diff --git empty empty
+delete file mode 100644
+index ....
+
+Notes. Without trailing lines we know file was empty. See next
+
+
+
+4.delete-file (not empty)
+-----------------------
+diff --git not.empty not.empty
+delete file mode 100644
+index ....
+--- not.empty
++++ /dev/null
+-hello
+
+Notes. We see the content of the deleted file.
+
+
+
+5.rename-file, no-change to content, file may or may not be empty
+---------------------------------------------------------------
+diff --git old.name new.name
+similarity index 100%
+rename from old.name
+rename to new.name
+
+Notes. We do not see the content (similarity == 100%)
+       We need either old or new file to get content for == lines count.
+
+
+6.rename-file, from empty to not.empty
+------------------------------------
+Not seen as a rename. Seen as delete-file (empty) and new-file (not.empty)
+
+Notes. We see the content in the new not.empty file.
+
+
+7.rename-file, from not.empty to empty
+------------------------------------
+Not seen as a rename. Seen as new-file (empty) and delete-file (not empty)
+
+Notes. We see the content in the delete-file.
+
+
+8.rename-file, not-empty to not-empty with some change
+----------------------------------------------------
+diff --git old.name new.name
+similarity index 85%
+rename from old.name
+rename to new.name
+index ...
+--- old.name
++++ new.name
+@@ -1 +2,2 @@
+ hello_hello
++x
+
+Notes. We see the content (similarity < 100%)
+
+
+9.dont rename the file, not-empty to not-empty with some change
+-------------------------------------------------------------
+diff --git filename filename
+index ...
+--- filename
++++ filename
+@@ -1 +1,2 @@
+ xxxxxxx
++yyy
+
+Notes. We see the content.

@@ -20,7 +20,7 @@ class Differ
     { 'diff' => result }
   end
 
-  def diff_tip_data(id:, old_files:, new_files:)
+  def diff_tip_data(id:, old_files:, new_files:) # TODO: Dead?
     git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
     result = git_diff_tip_data(git_diff, old_files, new_files)
     { 'diff_tip_data' => result }

@@ -39,26 +39,37 @@ module GitDiffLib # mix-in
   # - - - - - - - - - - - - - - - - -
 
   def git_diff_tip_data(diff_lines, old_files, new_files)
+    #p 'Y'*60
+    #p diff_lines
     tip_data = {}
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |diff|
+      #p "X"*60
+      #p diff
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
       if deleted_file?(diff)
-        counts = added_deleted_counts(diff[:lines])
+        counts = line_counts(diff[:lines])
         if counts['added'] + counts['deleted'] > 0
           tip_data[old_filename] = counts
         end
+        # TODO: if deleted file has no changes
+        # do I need old_files to get the lines to know
+        # how many unchanged lines there were? Or is that
+        # in the diff itself?
       elsif new_file?(diff)
         if empty?(diff)
           lines = [{ :type => :added, number:1, line:'' }]
         else
           lines = diff[:lines]
         end
-        tip_data[new_filename] = added_deleted_counts(lines)
+        tip_data[new_filename] = line_counts(lines)
       elsif !unchanged_rename?(old_filename, old_files, new_filename, new_files)
+        # Note: a 100% identical file rename
+        # gives a diff without info on the file's lines.
+        # To retrieve the content we need the new_files (or old_files)
         # changed-file
-        tip_data[new_filename] = added_deleted_counts(diff[:lines])
+        tip_data[new_filename] = line_counts(diff[:lines])
       end
     end
     tip_data
@@ -66,7 +77,7 @@ module GitDiffLib # mix-in
 
   private
 
-  def added_deleted_counts(lines)
+  def line_counts(lines)
     {
       'added'   => lines.count{ |line| line[:type] === :added   },
       'deleted' => lines.count{ |line| line[:type] === :deleted }
@@ -96,6 +107,10 @@ module GitDiffLib # mix-in
   def deleted_file?(diff)
     diff[:new_filename].nil?
   end
+
+  #def renamed_file?(diff)
+  #  diff[:new_filename] != diff[:old_filename]
+  #end
 
   def all(type, lines)
     lines.collect.each.with_index(1) do |line,number|
