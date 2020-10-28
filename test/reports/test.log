@@ -1,24 +1,24 @@
-Run options: --seed 1898
+Run options: --seed 43818
 
 # Running:
 
 ................................................................................................................................
 
-Finished in 1.798504s, 71.1703 runs/s, 227.9673 assertions/s.
+Finished in 2.139083s, 59.8387 runs/s, 191.6709 assertions/s.
 
 128 runs, 410 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1262 / 1262 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1262 / 1262 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports. 1265 / 1265 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1265 / 1265 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1044 - 4DEj16:diff_summary_test.rb:39:empty file has one lines added           
+0.1138 - 4DEj15:diff_summary_test.rb:32:empty file renamed 100% identical across dirs
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |     1.8   <=     5 | [32m true [0m
-          app:lines:total |     443   <=   500 | [32m true [0m
+         test:duration(s) |    2.14   <=     5 | [32m true [0m
+          app:lines:total |     446   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |      71   <=    75 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m

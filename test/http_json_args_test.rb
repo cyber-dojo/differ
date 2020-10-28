@@ -7,7 +7,7 @@ class HttpJsonArgsTest < DifferTestBase
     'EE7'
   end
 
-  test 'jj9', 'SPIKE: /diff_summary2 using proper GET query args' do
+  test 'jj9', '/diff_summary2 uses proper GET query args' do
     path = 'diff_summary2'
     id = 'RNCzUr'
     was_index = 8
@@ -17,10 +17,9 @@ class HttpJsonArgsTest < DifferTestBase
     result = dispatch("/#{path}", differ, body, args)
     assert_equal [path], result.keys
     expected = [
-      { 'old_filename' => "hiker.h",
-        'new_filename' => "hiker.hpp",
-        'counts' => { 'added' => 0, 'deleted' => 0, 'same' => 23 },
-        'lines' => []
+      { 'old_filename' => "readme.txt",
+        'new_filename' => "readme.txt",
+        'line_counts' => { 'added' => 0, 'deleted' => 14, 'same' => 0 }
       }
     ]
     actual = result[path]

@@ -8,7 +8,7 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'jj9', 'SPIKE: /diff_summary2 using proper GET query args' do
+  test 'jj9', '/diff_summary2 uses proper GET query args' do
     name = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJson::RequestPacker.new(externals.http, name, port)
@@ -20,10 +20,9 @@ class DifferClientTest < ClientTestBase
     args = { id:id, was_index:was_index, now_index:now_index }
     actual = http.get(path, args, { gives: :query })
     expected = [
-      { 'old_filename' => "hiker.h",
-        'new_filename' => "hiker.hpp",
-        'counts' => { 'added' => 0, 'deleted' => 0, 'same' => 23 },
-        'lines' => []
+      { 'old_filename' => "readme.txt",
+        'new_filename' => "readme.txt",
+        'line_counts' => { 'added' => 0, 'deleted' => 14, 'same' => 0 }
       }
     ]
     assert_equal expected, actual

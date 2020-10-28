@@ -39,16 +39,21 @@ class Differ
   end
 
   def diff_summary2(id:, was_index:, now_index:)
-    was_index = was_index.to_i
-    now_index = now_index.to_i
-    { 'diff_summary2' => [
-        { 'old_filename' => "hiker.h",
-          'new_filename' => "hiker.hpp",
-          'counts' => { 'added' => 0, 'deleted' => 0, 'same' => 23 },
-          'lines' => []
+    old_result = diff_summary(id:id, was_index:was_index, now_index:now_index)
+    old = old_result['diff_summary']
+    result = []
+    old.keys.each do |filename|
+      result << {
+        "old_filename" => filename,
+        "new_filename" => filename,
+        "line_counts" => {
+          "deleted" => old[filename]['deleted'],
+            "added" => old[filename]['added'],
+             "same" => 0
         }
-      ]
-    }
+      }
+    end
+    { 'diff_summary2' => result }
   end
 
   private

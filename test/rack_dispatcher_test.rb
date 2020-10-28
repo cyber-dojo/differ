@@ -89,16 +89,24 @@ class RackDispatcherTest < DifferTestBase
     end
   end
 
-  test '137', 'diff_summary2 200 is shameless-green spike waiting to be implemented' do
-    args = { id:'RNCzUr', was_index:3, now_index:4 }
+  test '137', %w(
+  diff_summary2 200 is in more general format
+  to allow more information to be added, specifically
+  - old and new filenames to detect file new|delete|rename
+  - unchanged line-count
+  ) do
+    args = { id:'RNCzUr', was_index:1, now_index:2 }
     assert_200('diff_summary2', args) do |response|
       actual = response['diff_summary2']
       expected = [
-        { "old_filename" => "hiker.h",
-          "new_filename" => "hiker.hpp",
-          "counts" => { "added"=>0, "deleted"=>0, "same"=>23 },
-          "lines" => []
-        }
+        { "old_filename" => "hiker.sh",
+          "new_filename" => "hiker.sh",
+          "line_counts" => { "added"=>1, "deleted"=>1, "same"=>0 }
+        },
+        { "old_filename" => "readme.txt",
+          "new_filename" => "readme.txt",
+          "line_counts" => { "added"=>6, "deleted"=>3, "same"=>0 }
+        },
       ]
       assert_equal expected, actual
     end
