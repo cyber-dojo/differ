@@ -26,10 +26,6 @@ module GitDiffLib # mix-in
     diff[:new_filename].nil?
   end
 
-  #def renamed_file?(diff)
-  #  diff[:new_filename] != diff[:old_filename]
-  #end
-
   def all(type, lines)
     lines.collect.each.with_index(1) do |line,number|
       { type:type, line:line, number:number }

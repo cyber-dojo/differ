@@ -11,18 +11,23 @@ class GitDiffSummaryTest < DifferTestBase
   # empty file
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '3ED',
-  'empty file is unchanged' do
-    @was_files = { 'empty.py' => '' }
-    @now_files = { 'empty.py' => '' }
-    @expected = []
+  test 'A2C',
+  'empty file is created' do
+    @was_files = {}
+    @now_files = { 'empty.h' => '' }
+    @expected = [
+       { 'old_filename' => nil,
+         'new_filename' => 'empty.h',
+         'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 0 }
+       }
+     ]
     assert_diff_summary
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A5C',
-  'empty file is deleted is represented as []' do
+  'empty file is deleted' do
     @was_files = { 'empty.rb' => '' }
     @now_files = {}
     @expected = [
@@ -32,21 +37,6 @@ class GitDiffSummaryTest < DifferTestBase
         'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 0 }
       }
     ]
-    assert_diff_summary
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'A2C',
-  'empty file is created' do
-    @was_files = {}
-    @now_files = { 'empty.h' => '' }
-    @expected = [
-       { 'old_filename' => nil,
-         'new_filename' => 'empty.h',
-         'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 0 }
-       }
-     ]
     assert_diff_summary
   end
 
@@ -84,6 +74,16 @@ class GitDiffSummaryTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '3ED',
+  'empty file is unchanged' do
+    @was_files = { 'empty.py' => '' }
+    @now_files = { 'empty.py' => '' }
+    @expected = []
+    assert_diff_summary
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'F2E',
   'empty file has some content added' do
     @was_files = { 'empty.c' => '' }
@@ -116,16 +116,6 @@ class GitDiffSummaryTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '21D',
-  'non-empty file is unchanged' do
-    @was_files = { 'non-empty.h' => '#include<stdio.h>' }
-    @now_files = { 'non-empty.h' => '#include<stdio.h>' }
-    @expected = []
-    assert_diff_summary
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test '0C6',
   'non-empty file is deleted' do
     @was_files = { 'non-empty.h' => 'something' }
@@ -136,6 +126,16 @@ class GitDiffSummaryTest < DifferTestBase
         'line_counts' => { 'added' => 0, 'deleted' => 1, 'same' => 0 }
       }
     ]
+    assert_diff_summary
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '21D',
+  'non-empty file is unchanged' do
+    @was_files = { 'non-empty.h' => '#include<stdio.h>' }
+    @now_files = { 'non-empty.h' => '#include<stdio.h>' }
+    @expected = []
     assert_diff_summary
   end
 
@@ -180,7 +180,7 @@ class GitDiffSummaryTest < DifferTestBase
     @expected = [
       { 'old_filename' => 'hiker.h',
         'new_filename' => 'diamond.h',
-        'line_counts' => { 'added' => 1, 'deleted' => 1, 'same' => 0 }
+        'line_counts' => { 'added' => 1, 'deleted' => 1, 'same' => 3 }
       }
     ]
     assert_diff_summary
@@ -195,7 +195,7 @@ class GitDiffSummaryTest < DifferTestBase
     @expected = [
       { 'old_filename' => '1/2/hiker.h',
         'new_filename' => '3/4/diamond.h',
-        'line_counts' => { 'added' => 1, 'deleted' => 1, 'same' => 0 }
+        'line_counts' => { 'added' => 1, 'deleted' => 1, 'same' => 3 }
       }
     ]
     assert_diff_summary
@@ -210,7 +210,7 @@ class GitDiffSummaryTest < DifferTestBase
     @expected = [
       { 'old_filename' => 'non-empty.c',
         'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 0 }
+        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 1 }
       }
     ]
     assert_diff_summary
@@ -225,7 +225,7 @@ class GitDiffSummaryTest < DifferTestBase
     @expected = [
       { 'old_filename' => 'non-empty.c',
         'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 0 }
+        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 1 }
       }
     ]
     assert_diff_summary
@@ -240,7 +240,7 @@ class GitDiffSummaryTest < DifferTestBase
     @expected = [
       { 'old_filename' => 'non-empty.c',
         'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 0 }
+        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 2 }
       }
     ]
     assert_diff_summary
@@ -252,7 +252,7 @@ class GitDiffSummaryTest < DifferTestBase
 
   def assert_diff_summary
     git_diff = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    assert_equal @expected, git_diff_summary(git_diff, @was_files, @now_files)
+    assert_equal @expected, git_diff_summary(git_diff, @now_files)
   end
 
 end

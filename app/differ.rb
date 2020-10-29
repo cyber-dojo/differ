@@ -26,7 +26,7 @@ class Differ
     was_files = model_files(id, was_index.to_i)
     now_files = model_files(id, now_index.to_i)
     git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    { 'diff_summary2' => git_diff_summary(git_diff, was_files, now_files) }
+    { 'diff_summary2' => git_diff_summary(git_diff, now_files) }
   end
 
   private
