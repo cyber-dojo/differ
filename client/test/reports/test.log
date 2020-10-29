@@ -1,29 +1,1180 @@
-Run options: --seed 33864
+Run options: --seed 44532
 
 # Running:
 
-.....................................
+..{
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200E3E\",\"old_files\":{\"diamond.h\":\"a\"},\"new_files\":{\"diamond.h\":\"b\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200B9E\",\"old_files\":{\"diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <strin>\\n\\nvoid diamond(char)\\n\\n#endif\"},\"new_files\":{\"diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <string>\\n\\nvoid diamond(char);\\n\\n#endif\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"2007FF\",\"old_files\":{\"w/e/r/diamond.h\":\"\"},\"new_files\":{\"w/e/r/diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200E50\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200B67\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{\"hiker.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200960\",\"old_files\":{},\"new_files\":{\"a/b/c/diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200366\",\"old_files\":{\"r/t/y/diamond.h\":\"a\\nbb\\nc\\nd\"},\"new_files\":{\"r/t/y/diamond.h\":\"a\\nbb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200AEC\",\"old_files\":{},\"new_files\":{}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FE9\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"2002C4\",\"old_files\":{},\"new_files\":{\"q/w/e/diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200B68\",\"old_files\":{\"r/t/y/hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{\"r/t/y/hiker.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FDB\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"diamond.h\":\"a\\nb\\nX\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FDC\",\"old_files\":{\"a/b/c/hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"a/b/c/diamond.h\":\"a\\nb\\nX\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200365\",\"old_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"20095F\",\"old_files\":{},\"new_files\":{\"diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"2002C3\",\"old_files\":{},\"new_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"RNCzUr\",\"was_index\":8,\"now_index\":9,\"version\":1,\"avatar_index\":54,\"number\":61}",
+  "path": "/diff_summary",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown arguments: :version, :avatar_index, :number",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:33:in `rescue in dispatch'",
+    "/differ/app/http_json_args.rb:16:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"2007FE\",\"old_files\":{\"diamond.h\":\"\"},\"new_files\":{\"diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FEA\",\"old_files\":{\"4/5/6/7/hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200E51\",\"old_files\":{\"a/f/d/hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"a/f/d/diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200E3F\",\"old_files\":{\"t/y/u/diamond.h\":\"a1\"},\"new_files\":{\"t/y/u/diamond.h\":\"b2\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.{
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200B9F\",\"old_files\":{\"a/b/c/diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <strin>\\n\\nvoid diamond(char)\\n\\n#endif\"},\"new_files\":{\"a/b/c/diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <string>\\n\\nvoid diamond(char);\\n\\n#endif\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+E.....
 
-Finished in 1.990482s, 18.5885 runs/s, 56.2678 assertions/s.
+Finished in 1.192993s, 31.0144 runs/s, 71.2493 assertions/s.
 
-37 runs, 112 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 339 / 339 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 339 / 339 LOC (100.0%) covered.
+  1) Error:
+DifferClientTest#test_
+id58 'E3E',
+'changed non-empty file shows as deleted and added lines':
+DifferException: {
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200E3E\",\"old_files\":{\"diamond.h\":\"a\"},\"new_files\":{\"diamond.h\":\"b\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:339:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  2) Error:
+DifferClientTest#test_
+id58 'B9E',
+'changed non-empty file shows as deleted and added lines with each hunk in its own indexed section':
+DifferException: {
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200B9E\",\"old_files\":{\"diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <strin>\\n\\nvoid diamond(char)\\n\\n#endif\"},\"new_files\":{\"diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <string>\\n\\nvoid diamond(char);\\n\\n#endif\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:403:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  3) Error:
+DifferClientTest#test_
+id58 '7FF',
+'unchanged empty-file in nested sub-dir shows as one empty line':
+DifferException: {
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"2007FF\",\"old_files\":{\"w/e/r/diamond.h\":\"\"},\"new_files\":{\"w/e/r/diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:293:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  4) Error:
+DifferClientTest#test_
+id58 'E50',
+'renamed file shows as all lines same':
+DifferException: {
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200E50\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:472:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  5) Error:
+DifferClientTest#test_
+id58 'B67',
+'all lines deleted but file not deleted shows as all lines deleted':
+DifferException: {
+  "time": "2020-10-29 13:34:17 +0000",
+  "body": "{\"id\":\"200B67\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{\"hiker.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:187:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  6) Error:
+DifferClientTest#test_
+id58 '960',
+'added empty file in nested sub-dir shows as ['']':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200960\",\"old_files\":{},\"new_files\":{\"a/b/c/diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:226:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  7) Error:
+DifferClientTest#test_
+id58 '366',
+'unchanged non-empty file in nested sub-dir shows as all lines same':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200366\",\"old_files\":{\"r/t/y/diamond.h\":\"a\\nbb\\nc\\nd\"},\"new_files\":{\"r/t/y/diamond.h\":\"a\\nbb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:323:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  8) Error:
+DifferClientTest#test_
+id58 'AEC',
+'empty old_files and empty new_files is benign no-op':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200AEC\",\"old_files\":{},\"new_files\":{}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:269:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+  9) Error:
+DifferClientTest#test_
+id58 'FE9',
+'deleted non-empty file shows as all lines deleted':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FE9\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:146:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 10) Error:
+DifferClientTest#test_
+id58 '2C4',
+'added non-empty file in nested sub-dir shows as all lines added':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"2002C4\",\"old_files\":{},\"new_files\":{\"q/w/e/diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:259:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 11) Error:
+DifferClientTest#test_
+id58 'B68',
+'all lines deleted but nested sub-dir file not deleted shows as all lines deleted':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200B68\",\"old_files\":{\"r/t/y/hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{\"r/t/y/hiker.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:204:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 12) Error:
+DifferClientTest#test_
+id58 'FDB',
+'renamed and slightly changed file shows as mostly same lines':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FDB\",\"old_files\":{\"hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"diamond.h\":\"a\\nb\\nX\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:508:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 13) Error:
+DifferClientTest#test_
+id58 'FDC',
+'renamed and slightly changed file in nested sub-dir shows as mostly same lines':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FDC\",\"old_files\":{\"a/b/c/hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"a/b/c/diamond.h\":\"a\\nb\\nX\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:526:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 14) Error:
+DifferClientTest#test_
+id58 '365',
+'unchanged non-empty file shows as all lines same':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200365\",\"old_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:308:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 15) Error:
+DifferClientTest#test_
+id58 '95F',
+'added empty file shows as ['']':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"20095F\",\"old_files\":{},\"new_files\":{\"diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:216:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 16) Error:
+DifferClientTest#test_
+id58 '2C3',
+'added non-empty file shows as all lines added':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"2002C3\",\"old_files\":{},\"new_files\":{\"diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:243:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 17) Error:
+DifferClientTest#test_
+id58 '344',
+'add unused, defaulted, keyword-args to differ.diff_summary() to allow nginx-redirect of old route and old args':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"RNCzUr\",\"was_index\":8,\"now_index\":9,\"version\":1,\"avatar_index\":54,\"number\":61}",
+  "path": "/diff_summary",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown arguments: :version, :avatar_index, :number",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:33:in `rescue in dispatch'",
+    "/differ/app/http_json_args.rb:16:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/test/differ_client_test.rb:40:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 18) Error:
+DifferClientTest#test_
+id58 '7FE',
+'unchanged empty-file shows as one empty line':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"2007FE\",\"old_files\":{\"diamond.h\":\"\"},\"new_files\":{\"diamond.h\":\"\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:281:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 19) Error:
+DifferClientTest#test_
+id58 'FEA',
+'deleted non-empty file in nested sub-dir shows as all lines deleted':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200FEA\",\"old_files\":{\"4/5/6/7/hiker.h\":\"a\\nb\\nc\\nd\\n\"},\"new_files\":{}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:168:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 20) Error:
+DifferClientTest#test_
+id58 'E51',
+'renamed file in nested sub-dir shows as all lines same':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200E51\",\"old_files\":{\"a/f/d/hiker.h\":\"a\\nb\\nc\\nd\"},\"new_files\":{\"a/f/d/diamond.h\":\"a\\nb\\nc\\nd\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:491:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 21) Error:
+DifferClientTest#test_
+id58 'E3F',
+'changed non-empty file in nested sub-dir shows as deleted and added lines':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200E3F\",\"old_files\":{\"t/y/u/diamond.h\":\"a1\"},\"new_files\":{\"t/y/u/diamond.h\":\"b2\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:353:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+ 22) Error:
+DifferClientTest#test_
+id58 'B9F',
+'changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section':
+DifferException: {
+  "time": "2020-10-29 13:34:18 +0000",
+  "body": "{\"id\":\"200B9F\",\"old_files\":{\"a/b/c/diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <strin>\\n\\nvoid diamond(char)\\n\\n#endif\"},\"new_files\":{\"a/b/c/diamond.h\":\"#ifndef DIAMOND\\n#define DIAMOND\\n\\n#include <string>\\n\\nvoid diamond(char);\\n\\n#endif\"}}",
+  "path": "/diff_tip_data",
+  "params": {
+  },
+  "class": "DifferService",
+  "message": "unknown path",
+  "backtrace": [
+    "/differ/app/http_json_args.rb:27:in `dispatch'",
+    "/differ/app/rack_dispatcher.rb:19:in `call'",
+    "/usr/local/bundle/gems/rack-2.2.3/lib/rack/deflater.rb:44:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/configuration.rb:239:in `call'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:76:in `block in handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:337:in `with_force_shutdown'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/request.rb:75:in `handle_request'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/server.rb:430:in `process_client'",
+    "/usr/local/bundle/gems/puma-5.0.4/lib/puma/thread_pool.rb:145:in `block in spawn_thread'"
+  ]
+}
+    /differ/app/http_json/response_unpacker.rb:19:in `rescue in get'
+    /differ/app/http_json/response_unpacker.rb:15:in `get'
+    /differ/app/differ_service.rb:42:in `diff_tip_data'
+    /differ/test/differ_client_test.rb:548:in `get_diff_tip_data'
+    /differ/test/differ_client_test.rb:543:in `assert_diff_tip_data'
+    /differ/test/differ_client_test.rb:453:in `block in <class:DifferClientTest>'
+    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
+    /differ/test/lib/id58_test_base.rb:36:in `block in test'
+
+37 runs, 85 assertions, 0 failures, 22 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 331 / 339 LOC (97.64%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 331 / 339 LOC (97.64%) covered.
 
 Slowest tests are...
-0.2020 - 200E50:differ_client_test.rb:460:renamed file shows as all lines same   
+0.0780 - 200313:differ_client_test.rb:116:deleted empty file shows as empty array
 
             test:failures |       0   <=     0 | [32m true [0m
-              test:errors |       0   <=     0 | [32m true [0m
+              test:errors |      22   <=     0 | [31m false [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.99   <=     5 | [32m true [0m
+         test:duration(s) |    1.19   <=     5 | [32m true [0m
           app:lines:total |      82   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
          test:lines:total |     257   <=   500 | [32m true [0m
-        test:lines:missed |       0   <=     0 | [32m true [0m
+        test:lines:missed |       8   <=     0 | [31m false [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 

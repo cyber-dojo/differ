@@ -11,7 +11,6 @@ API
 * [GET ready?](docs/api.md#get-ready)
 * [GET sha](docs/api.md#get-sha)
 * [GET diff(id,old_files,new_files)](docs/api.md#get-diffidold_filesnew_files)
-* [GET diff_tip_data(id,old_files,new_files)](docs/api.md#get-diff_tip_dataidold_filesnew_files)
 
 ***
 

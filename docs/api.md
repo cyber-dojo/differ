@@ -57,12 +57,6 @@ The diff of two sets of files.
   ```
 
 - - - -
-## GET diff_tip_data(id,old_files,new_files)
-The summary data of a diff of the two sets of files.
-Specifically, the names of the files that have changed,
-and for each file, the number of added and deleted lines.
-
-- - - -
 # GET alive?
 Useful as a Kubernetes liveness probe.
 - returns

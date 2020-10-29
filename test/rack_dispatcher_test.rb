@@ -75,13 +75,6 @@ class RackDispatcherTest < DifferTestBase
     end
   end
 
-  test '135', 'diff_tip_data 200' do
-    args = { id:id58, old_files:{}, new_files:{} }
-    assert_200('diff_tip_data', args) do |response|
-      assert_equal({}, response['diff_tip_data'])
-    end
-  end
-
   test '136', 'diff_summary 200' do
     args = { id:'RNCzUr', was_index:3, now_index:4 }
     assert_200('diff_summary', args) do |response|

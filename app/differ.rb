@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require_relative 'git_differ'
 require_relative 'git_diff_lib'
+require_relative 'git_diff_summary'
 require_relative 'prober'
 
 class Differ
@@ -20,13 +21,7 @@ class Differ
     { 'diff' => result }
   end
 
-  def diff_tip_data(id:, old_files:, new_files:) # TODO: Dead?
-    git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
-    result = git_diff_tip_data(git_diff, old_files, new_files)
-    { 'diff_tip_data' => result }
-  end
-
-  def diff_summary(id:, was_index:, now_index:, version:nil,avatar_index:nil,number:nil)
+  def diff_summary(id:, was_index:, now_index:)
     # args from JSON body will retain their type
     # args from request query will be strings
     was_index = was_index.to_i
@@ -39,24 +34,10 @@ class Differ
   end
 
   def diff_summary2(id:, was_index:, now_index:)
-    # args from request query will be strings    
+    # args from request query will be strings
     was_files = model_files(id, was_index.to_i)
     now_files = model_files(id, now_index.to_i)
-    git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    diff = git_diff_tip_data(git_diff, was_files, now_files)
-    result = []
-    diff.keys.each do |filename|
-      result << {
-        "old_filename" => filename,
-        "new_filename" => filename,
-        "line_counts" => {
-          "deleted" => diff[filename]['deleted'],
-            "added" => diff[filename]['added'],
-             "same" => 0
-        }
-      }
-    end
-    { 'diff_summary2' => result }
+    { 'diff_summary2' => git_diff_summary(id, was_files, now_files) }
   end
 
   private

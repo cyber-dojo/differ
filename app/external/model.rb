@@ -6,9 +6,9 @@ module External
   class Model
 
     def initialize(http)
-      service = 'model'
+      name = 'model'
       port = ENV['CYBER_DOJO_MODEL_PORT'].to_i
-      @http = HttpJsonHash::service(self.class.name, http, service, port)
+      @http = HttpJsonHash::service(self.class.name, http, name, port)
     end
 
     def ready?

@@ -73,6 +73,16 @@ class GitDiffTipDataTest < DifferTestBase
   # non-empty file
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'D09',
+  'non-empty file is created' do
+    old_files = {}
+    new_files = { 'non-empty.c' => 'something' }
+    expected = { 'non-empty.c' => { 'added' => 1, 'deleted' => 0 } }
+    assert_tip_data(expected, old_files, new_files)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '21D',
   'non-empty file is unchanged' do
     old_files = { 'non-empty.h' => '#include<stdio.h>' }
@@ -88,16 +98,6 @@ class GitDiffTipDataTest < DifferTestBase
     old_files = { 'non-empty.h' => 'something' }
     new_files = {}
     expected = { 'non-empty.h' => { 'added' => 0, 'deleted' => 1 } }
-    assert_tip_data(expected, old_files, new_files)
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'D09',
-  'non-empty file is created' do
-    old_files = {}
-    new_files = { 'non-empty.c' => 'something' }
-    expected = { 'non-empty.c' => { 'added' => 1, 'deleted' => 0 } }
     assert_tip_data(expected, old_files, new_files)
   end
 

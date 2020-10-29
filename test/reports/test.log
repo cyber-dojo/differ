@@ -1,28 +1,28 @@
-Run options: --seed 55591
+Run options: --seed 44743
 
 # Running:
 
 ................................................................................................................................
 
-Finished in 1.943184s, 65.8713 runs/s, 210.9939 assertions/s.
+Finished in 2.086917s, 61.3345 runs/s, 195.5037 assertions/s.
 
-128 runs, 410 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1265 / 1265 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1265 / 1265 LOC (100.0%) covered.
+128 runs, 408 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1266 / 1266 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1266 / 1266 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1025 - 4DEj15:diff_summary_test.rb:32:empty file renamed 100% identical across dirs
+0.1013 - 4DEk17:diff_summary_test.rb:72:non-empty file renamed <100% identical   
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.94   <=     5 | [32m true [0m
-          app:lines:total |     446   <=   500 | [32m true [0m
+         test:duration(s) |    2.09   <=     5 | [32m true [0m
+          app:lines:total |     450   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |      71   <=    75 | [32m true [0m
+       app:branches:total |      70   <=    75 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     819   <=  1000 | [32m true [0m
+         test:lines:total |     816   <=  1000 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

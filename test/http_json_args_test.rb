@@ -31,9 +31,14 @@ class HttpJsonArgsTest < DifferTestBase
   # return hash with single key matching the path
   # - - - - - - - - - - - - - - - - -
 
-  test 'e12', '/sha has no args' do
+  test 'e11', '/sha has no args' do
     result = dispatch('/sha', differ, '{}')
     assert_equal ['sha'], result.keys
+  end
+
+  test 'e12', '/heathy has no args' do
+    result = dispatch('/healthy', differ, '{}')
+    assert_equal({'healthy?' => true}, result)
   end
 
   test 'e13', '/alive has no args' do
@@ -59,19 +64,6 @@ class HttpJsonArgsTest < DifferTestBase
     assert_equal ['diff'], result.keys
   end
 
-  test 'e16',
-  %w( /diff_tip_data has three keyword args; id:,old_files:,new_files: ) do
-    old_files = { 'hiker.h' => "a\nb" }
-    new_files = { 'hiker.h' => "a\nb\nc" }
-    body = {
-      id:id58,
-      old_files:old_files,
-      new_files:new_files
-    }.to_json
-    result = dispatch('/diff_tip_data', differ, body)
-    assert_equal ['diff_tip_data'], result.keys
-  end
-
   test 'e17',
   %w( /diff_summary has three keyword args; id:, was_index:, now_index: ) do
     body = {
@@ -81,6 +73,17 @@ class HttpJsonArgsTest < DifferTestBase
     }.to_json
     result = dispatch('/diff_summary', differ, body)
     assert_equal ['diff_summary'], result.keys
+  end
+
+  test 'e18',
+  %w( /diff_summary2 has three keyword args; id:, was_index:, now_index: ) do
+    body = {
+      id:'RNCzUr',
+      was_index:1,
+      now_index:2
+    }.to_json
+    result = dispatch('/diff_summary2', differ, body)
+    assert_equal ['diff_summary2'], result.keys
   end
 
   # - - - - - - - - - - - - - - - - -
