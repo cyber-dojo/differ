@@ -6,12 +6,12 @@ class GitDiffer
     @external = external
   end
 
-  def diff(id, old_files, new_files)
-    Dir.mktmpdir(id, '/tmp') do |git_dir|
+  def diff(old_files, new_files)
+    Dir.mktmpdir('/tmp') do |git_dir|
       git.setup(git_dir)
       save(git_dir, old_files)
       git.add_commit_tag_0(git_dir)
-      remove_content_from(git_dir, id)
+      remove_content_from(git_dir)
       save(git_dir, new_files)
       git.add_commit_tag_1(git_dir)
       git.diff_0_1(git_dir)
@@ -20,8 +20,8 @@ class GitDiffer
 
   private
 
-  def remove_content_from(git_dir, id)
-    Dir.mktmpdir(id, '/tmp') do |tmp_dir|
+  def remove_content_from(git_dir)
+    Dir.mktmpdir('/tmp') do |tmp_dir|
       shell.assert_exec(
         "mv #{git_dir}/.git #{tmp_dir}",
         "rm -rf #{git_dir}",

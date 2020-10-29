@@ -16,7 +16,7 @@ class Differ
   def ready?  ; prober.ready?  ; end
 
   def diff(id:, old_files:, new_files:)
-    git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
+    git_diff = GitDiffer.new(@externals).diff(old_files, new_files)
     result = git_diff_join(git_diff, old_files, new_files)
     { 'diff' => result }
   end
@@ -28,7 +28,7 @@ class Differ
     now_index = now_index.to_i
     was_files = model_files(id, was_index)
     now_files = model_files(id, now_index)
-    git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
+    git_diff = GitDiffer.new(@externals).diff(was_files, now_files)
     result = git_diff_tip_data(git_diff, was_files, now_files)
     { 'diff_summary' => result }
   end
@@ -37,7 +37,7 @@ class Differ
     # args from request query will be strings
     was_files = model_files(id, was_index.to_i)
     now_files = model_files(id, now_index.to_i)
-    { 'diff_summary2' => git_diff_summary(id, was_files, now_files) }
+    { 'diff_summary2' => git_diff_summary(was_files, now_files) }
   end
 
   private

@@ -6,8 +6,8 @@ module GitDiffLib # mix-in
 
   module_function
 
-  def git_diff_summary(id, was_files, now_files)
-    git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
+  def git_diff_summary(was_files, now_files)
+    git_diff = GitDiffer.new(@externals).diff(was_files, now_files)
     diff = git_diff_tip_data(git_diff, was_files, now_files)
     result = []
     diff.keys.each do |filename|
