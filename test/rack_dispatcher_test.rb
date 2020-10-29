@@ -75,10 +75,10 @@ class RackDispatcherTest < DifferTestBase
     end
   end
 
-  test '136', 'diff_summary 200' do
+  test '136', 'diff_summary2 200' do
     args = { id:'RNCzUr', was_index:3, now_index:4 }
-    assert_200('diff_summary', args) do |response|
-      assert_equal({}, response['diff_summary'])
+    assert_200('diff_summary2', args) do |response|
+      assert_equal([], response['diff_summary2'])
     end
   end
 

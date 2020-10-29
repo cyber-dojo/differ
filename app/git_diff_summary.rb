@@ -1,13 +1,11 @@
 # frozen_string_literal: true
-require_relative 'git_differ'
 require_relative 'git_diff_lib'
 
 module GitDiffLib # mix-in
 
   module_function
 
-  def git_diff_summary(was_files, now_files)
-    git_diff = GitDiffer.new(@externals).diff(was_files, now_files)
+  def git_diff_summary(git_diff, was_files, now_files)
     diff = git_diff_tip_data(git_diff, was_files, now_files)
     result = []
     diff.keys.each do |filename|

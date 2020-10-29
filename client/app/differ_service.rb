@@ -38,15 +38,15 @@ class DifferService
     })
   end
 
-  def diff_tip_data(id, old_files, new_files)
+  def diff_summary(id, was_index, now_index)
     @http.get(__method__, {
       id:id,
-      old_files:old_files,
-      new_files:new_files
+      was_index:was_index,
+      now_index:now_index
     })
   end
 
-  def diff_summary(id, was_index, now_index)
+  def diff_summary2(id, was_index, now_index)
     @http.get(__method__, {
       id:id,
       was_index:was_index,
