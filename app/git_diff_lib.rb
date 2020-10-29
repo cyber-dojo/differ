@@ -39,13 +39,9 @@ module GitDiffLib # mix-in
   # - - - - - - - - - - - - - - - - -
 
   def git_diff_tip_data(diff_lines, old_files, new_files)
-    #p 'Y'*60
-    #p diff_lines
     tip_data = {}
     diffs = GitDiffParser.new(diff_lines).parse_all
     diffs.each do |diff|
-      #p "X"*60
-      #p diff
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
       if deleted_file?(diff)
