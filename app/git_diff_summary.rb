@@ -51,8 +51,7 @@ module GitDiffLib # mix-in
         # Note: a 100% identical file rename
         # gives a diff without info on the file's lines.
         # To retrieve the content we need the new_files (or old_files)
-        # changed-file
-        tip_data[new_filename] = line_counts(diff[:lines])
+        tip_data[new_filename] = line_counts(diff[:lines]) # changed-file
       end
     end
     tip_data
