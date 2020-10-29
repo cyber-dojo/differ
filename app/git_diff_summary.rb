@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 require_relative 'git_diff_lib'
+require_relative 'git_diff_parser'
 
 module GitDiffLib # mix-in
 
   module_function
 
   def git_diff_summary(git_diff, was_files, now_files)
-    diff = git_diff_tip_data(git_diff, was_files, now_files)
+    diff = git_diff_summary_data(git_diff, was_files, now_files)
     result = []
     diff.keys.each do |filename|
       result << {
@@ -20,6 +21,48 @@ module GitDiffLib # mix-in
       }
     end
     result
+  end
+
+  private
+
+  def git_diff_summary_data(diff_lines, old_files, new_files)
+    tip_data = {}
+    diffs = GitDiffParser.new(diff_lines).parse_all
+    diffs.each do |diff|
+      old_filename = diff[:old_filename]
+      new_filename = diff[:new_filename]
+      if deleted_file?(diff)
+        counts = line_counts(diff[:lines])
+        if counts['added'] + counts['deleted'] > 0
+          tip_data[old_filename] = counts
+        end
+        # TODO: if deleted file has no changes
+        # do I need old_files to get the lines to know
+        # how many unchanged lines there were? Or is that
+        # in the diff itself?
+      elsif new_file?(diff)
+        if empty?(diff)
+          lines = [{ :type => :added, number:1, line:'' }]
+        else
+          lines = diff[:lines]
+        end
+        tip_data[new_filename] = line_counts(lines)
+      elsif !unchanged_rename?(old_filename, old_files, new_filename, new_files)
+        # Note: a 100% identical file rename
+        # gives a diff without info on the file's lines.
+        # To retrieve the content we need the new_files (or old_files)
+        # changed-file
+        tip_data[new_filename] = line_counts(diff[:lines])
+      end
+    end
+    tip_data
+  end
+
+  def line_counts(lines)
+    {
+      'added'   => lines.count{ |line| line[:type] === :added   },
+      'deleted' => lines.count{ |line| line[:type] === :deleted }
+    }
   end
 
 end

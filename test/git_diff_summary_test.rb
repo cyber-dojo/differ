@@ -1,5 +1,4 @@
 require_relative 'differ_test_base'
-require_app 'git_diff_lib'
 require_app 'git_diff_summary'
 
 class GitDiffSummaryTest < DifferTestBase
