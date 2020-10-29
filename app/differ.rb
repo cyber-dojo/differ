@@ -39,16 +39,19 @@ class Differ
   end
 
   def diff_summary2(id:, was_index:, now_index:)
-    old_result = diff_summary(id:id, was_index:was_index, now_index:now_index)
-    old = old_result['diff_summary']
+    # args from request query will be strings    
+    was_files = model_files(id, was_index.to_i)
+    now_files = model_files(id, now_index.to_i)
+    git_diff = GitDiffer.new(@externals).diff(id, was_files, now_files)
+    diff = git_diff_tip_data(git_diff, was_files, now_files)
     result = []
-    old.keys.each do |filename|
+    diff.keys.each do |filename|
       result << {
         "old_filename" => filename,
         "new_filename" => filename,
         "line_counts" => {
-          "deleted" => old[filename]['deleted'],
-            "added" => old[filename]['added'],
+          "deleted" => diff[filename]['deleted'],
+            "added" => diff[filename]['added'],
              "same" => 0
         }
       }
