@@ -75,6 +75,7 @@ class DiffSummaryTest < DifferTestBase
 
   test 'k17',
   'non-empty file renamed <100% identical' do
+    # TODO: test data error. No rename here.
     assert_diff_summary('RNCzUr', 13, 14,
       "bats_help.txt", "bats_help.txt",
       1,1,19

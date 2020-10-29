@@ -1,29 +1,39 @@
-Run options: --seed 40709
+Run options: --seed 64901
 
 # Running:
 
 ....................................
 
-Finished in 1.023133s, 35.1860 runs/s, 82.1008 assertions/s.
+Finished in 1.262505s, 28.5147 runs/s, 70.4948 assertions/s.
 
-36 runs, 84 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 296 / 302 LOC (98.01%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 296 / 302 LOC (98.01%) covered.
+36 runs, 89 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 304 / 304 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 304 / 304 LOC (100.0%) covered.
 
 Slowest tests are...
-0.0760 - 2q0366:differ_client_test.rb:291:unchanged non-empty file in nested sub-dir shows as all lines same
+0.1495 - 2q0FE9:differ_client_test.rb:113:deleted non-empty file shows as all lines deleted
+0.0975 - 2q0313:differ_client_test.rb:94:deleted empty file                      
+0.0921 - 2q0FDC:differ_client_test.rb:487:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.0813 - 2q0E50:differ_client_test.rb:433:renamed file shows as all lines same   
+0.0787 - 2q0960:differ_client_test.rb:194:added empty file in nested sub-dir shows as ['']
+0.0775 - 2q0FDB:differ_client_test.rb:468:renamed and slightly changed file shows as mostly same lines
+0.0509 - 2q0jj9:differ_client_test.rb:11:/diff_summary2 uses proper GET query args
+0.0490 - 2q0314:differ_client_test.rb:104:deleted empty file in nested sub-dir   
+0.0364 - 2q0FEA:differ_client_test.rb:130:deleted non-empty file in nested sub-dir shows as all lines deleted
+0.0330 - 2q0366:differ_client_test.rb:286:unchanged non-empty file in nested sub-dir shows as all lines same
+0.0324 - 2q07FF:differ_client_test.rb:259:unchanged empty-file in nested sub-dir shows as one empty line
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.02   <=     5 | [32m true [0m
+         test:duration(s) |    1.26   <=     5 | [32m true [0m
           app:lines:total |      80   <=   100 | [32m true [0m
-         app:lines:missed |       1   <=     0 | [31m false [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     222   <=   500 | [32m true [0m
-        test:lines:missed |       5   <=     0 | [31m false [0m
+         test:lines:total |     224   <=   500 | [32m true [0m
+        test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 

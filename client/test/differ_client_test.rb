@@ -92,17 +92,17 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '313',
-  'deleted empty file shows as empty array' do
+  'deleted empty file' do
     @old_files = { 'hiker.h' => '' }
     @new_files = { }
     assert_diff 'hiker.h', []
-    #assert_diff_summary('RNCzUr',3,4, {})
+    assert_diff_summary('RNCzUr',3,4) { [ 'empty.file', nil, 0,0,0] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   test '314',
-  'deleted empty file in nested sub-dir shows as empty array' do
+  'deleted empty file in nested sub-dir' do
     @old_files = { '6/7/8/hiker.h' => '' }
     @new_files = { }
     assert_diff '6/7/8/hiker.h', []
@@ -122,12 +122,7 @@ class DifferClientTest < ClientTestBase
       deleted(4, 'd')
     ]
     #assert_diff_tip_data('hiker.h', { 'added' => 0, 'deleted' => 4 })
-    #assert_diff_summary('RNCzUr',8,9, {
-    #  'readme.txt' => {
-    #    'added' => 0,
-    #    'deleted' => 14
-    #  }
-    #})
+    assert_diff_summary('RNCzUr',8,9) { [ 'readme.txt',nil, 0,14,0 ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -143,7 +138,7 @@ class DifferClientTest < ClientTestBase
       deleted(3, 'c'),
       deleted(4, 'd')
     ]
-    #assert_diff_tip_data('4/5/6/7/hiker.h', { 'added' => 0, 'deleted' => 4 })
+    #assert_diff_tip_data('4/5/6/7/hiker.h') { [ '4/5/6/7/hiker.h', nil, 0,4,0 ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -202,7 +197,7 @@ class DifferClientTest < ClientTestBase
     @new_files = { 'a/b/c/diamond.h' => '' }
     assert_diff 'a/b/c/diamond.h', [ added(1,'') ]
     #assert_diff_tip_data('a/b/c/diamond.h', { 'added' => 1, 'deleted' => 0 })
-    #assert_diff_summary('RNCzUr',2,3, { 'empty.file' => { 'added'=>1, 'deleted'=>0} })
+    assert_diff_summary('RNCzUr',2,3) { [ nil, 'empty.file', 0,0,0 ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -448,7 +443,7 @@ class DifferClientTest < ClientTestBase
       same(4, 'd')
     ]
     #assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
-    #assert_diff_summary('RNCzUr',5,6, {})
+    assert_diff_summary('RNCzUr',5,6) { [ 'empty.file', 'empty.file.rename', 0,0,0 ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -483,7 +478,8 @@ class DifferClientTest < ClientTestBase
       same(   4, 'd')
     ]
     #assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
-    #assert_diff_summary('RNCzUr',13,14, { 'bats_help.txt' => { 'added' => 1, 'deleted' => 1 } })
+    # TODO: test data error. No rename here.
+    assert_diff_summary('RNCzUr',13,14) { [ 'bats_help.txt','bats_help.txt', 1,1,19 ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -516,21 +512,16 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  def assert_diff_tip_data(filename, expected)
-    json = get_diff_tip_data
-    assert_equal expected, json[filename]
+def assert_diff_summary(id, was_index, now_index)
+  expected = *yield.each_slice(5).to_a.map do |diff|
+    { 'old_filename' => diff[0],
+      'new_filename' => diff[1],
+      'line_counts' => { 'added' => diff[2], 'deleted' => diff[3], 'same' => diff[4] }
+    }
   end
-
-  def get_diff_tip_data
-    differ.diff_tip_data(id58, @old_files, @new_files)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def assert_diff_summary(id, was_index, now_index, expected)
-    actual = differ.diff_summary(id, was_index, now_index)
-    assert_equal expected, actual
-  end
+  actual = differ.diff_summary2(id, was_index, now_index)
+  assert_equal expected, actual
+end
 
   # - - - - - - - - - - - - - - - - - - - -
 
