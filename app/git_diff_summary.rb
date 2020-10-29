@@ -6,7 +6,8 @@ module GitDiffLib # mix-in
 
   module_function
 
-  def git_diff_summary(git_diff, was_files, now_files)
+=begin
+  def XX_git_diff_summary(git_diff, was_files, now_files)
     diff = git_diff_summary_data(git_diff, was_files, now_files)
     result = []
     diff.keys.each do |filename|
@@ -22,19 +23,23 @@ module GitDiffLib # mix-in
     end
     result
   end
+=end
 
-  private
-
-  def git_diff_summary_data(diff_lines, old_files, new_files)
-    tip_data = {}
-    diffs = GitDiffParser.new(diff_lines).parse_all
-    diffs.each do |diff|
+  def git_diff_summary(diff_lines, old_files, new_files)
+    diffs = []
+    GitDiffParser.new(diff_lines).parse_all.each do |diff|
       old_filename = diff[:old_filename]
       new_filename = diff[:new_filename]
+      d = {
+        'old_filename' => old_filename,
+        'new_filename' => new_filename
+      }
+
       if deleted_file?(diff)
         counts = line_counts(diff[:lines])
         if counts['added'] + counts['deleted'] > 0
-          tip_data[old_filename] = counts
+          #tip_data[old_filename] = counts
+          d['line_counts'] = counts
         end
         # TODO: if deleted file has no changes
         # do I need old_files to get the lines to know
@@ -46,21 +51,23 @@ module GitDiffLib # mix-in
         else
           lines = diff[:lines]
         end
-        tip_data[new_filename] = line_counts(lines)
+        d['line_counts'] = line_counts(lines)
       elsif !unchanged_rename?(old_filename, old_files, new_filename, new_files)
         # Note: a 100% identical file rename
         # gives a diff without info on the file's lines.
         # To retrieve the content we need the new_files (or old_files)
-        tip_data[new_filename] = line_counts(diff[:lines]) # changed-file
+        d['line_counts'] = line_counts(diff[:lines]) # changed-file
       end
+      diffs << d
     end
-    tip_data
+    diffs
   end
 
   def line_counts(lines)
     {
       'added'   => lines.count{ |line| line[:type] === :added   },
-      'deleted' => lines.count{ |line| line[:type] === :deleted }
+      'deleted' => lines.count{ |line| line[:type] === :deleted },
+      'same' => 0
     }
   end
 

@@ -18,7 +18,7 @@ class HttpJsonArgsTest < DifferTestBase
     assert_equal [path], result.keys
     expected = [
       { 'old_filename' => "readme.txt",
-        'new_filename' => "readme.txt",
+        'new_filename' => nil,
         'line_counts' => { 'added' => 0, 'deleted' => 14, 'same' => 0 }
       }
     ]
