@@ -21,20 +21,6 @@ class Differ
     { 'diff' => result }
   end
 
-=begin
-  def diff_summary(id:, was_index:, now_index:)
-    # args from JSON body will retain their type
-    # args from request query will be strings
-    was_index = was_index.to_i
-    now_index = now_index.to_i
-    was_files = model_files(id, was_index)
-    now_files = model_files(id, now_index)
-    git_diff = GitDiffer.new(@externals).diff(was_files, now_files)
-    result = git_diff_tip_data(git_diff, was_files, now_files)
-    { 'diff_summary' => result }
-  end
-=end
-
   def diff_summary2(id:, was_index:, now_index:)
     # args from request query will be strings
     was_files = model_files(id, was_index.to_i)
