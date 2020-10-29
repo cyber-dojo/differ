@@ -104,11 +104,11 @@ class GitDiffSummaryTest < DifferTestBase
   test 'D09',
   'non-empty file is created' do
     @was_files = {}
-    @now_files = { 'non-empty.c' => 'something' }
+    @now_files = { 'non-empty.c' => "once\nupon\na\ntime" }
     @expected = [
       { 'old_filename' => nil,
         'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 0 }
+        'line_counts' => { 'added' => 4, 'deleted' => 0, 'same' => 0 }
       }
     ]
     assert_diff_summary
@@ -118,12 +118,12 @@ class GitDiffSummaryTest < DifferTestBase
 
   test '0C6',
   'non-empty file is deleted' do
-    @was_files = { 'non-empty.h' => 'something' }
+    @was_files = { 'non-empty.h' => "and\nthey\nall\nlived\nhappily\n" }
     @now_files = {}
     @expected = [
       { 'old_filename' => 'non-empty.h',
         'new_filename' => nil,
-        'line_counts' => { 'added' => 0, 'deleted' => 1, 'same' => 0 }
+        'line_counts' => { 'added' => 0, 'deleted' => 5, 'same' => 0 }
       }
     ]
     assert_diff_summary
@@ -143,13 +143,13 @@ class GitDiffSummaryTest < DifferTestBase
 
   test 'AA7',
   'non-empty file is renamed 100% identical' do
-    @was_files = { 'plain' => 'xxx' }
-    @now_files = { 'copy' => 'xxx' }
+    @was_files = { 'plain' => "xxx\nyyy" }
+    @now_files = { 'copy' => "xxx\nyyy" }
     @expected = [
       {
         'old_filename' => 'plain',
         'new_filename' => 'copy',
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 1 }
+        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 2 }
       }
     ]
     assert_diff_summary
@@ -159,13 +159,13 @@ class GitDiffSummaryTest < DifferTestBase
 
   test 'BA7',
   'non-empty file is renamed 100% identical across dirs' do
-    @was_files = { 'a/b/plain' => 'zzz' }
-    @now_files = { 'copy' => 'zzz' }
+    @was_files = { 'a/b/plain' => "a\nb\nc" }
+    @now_files = { 'copy' => "a\nb\nc" }
     @expected = [
       {
         'old_filename' => 'a/b/plain',
         'new_filename' => 'copy',
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 1 }
+        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 3 }
       }
     ]
     assert_diff_summary
