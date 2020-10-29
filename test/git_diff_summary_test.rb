@@ -15,12 +15,7 @@ class GitDiffSummaryTest < DifferTestBase
   'empty file is created' do
     @was_files = {}
     @now_files = { 'empty.h' => '' }
-    @expected = [
-       { 'old_filename' => nil,
-         'new_filename' => 'empty.h',
-         'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 0 }
-       }
-     ]
+    @expected = [ nil, 'empty.h', 0,0,0 ]
     assert_diff_summary
   end
 
@@ -30,13 +25,7 @@ class GitDiffSummaryTest < DifferTestBase
   'empty file is deleted' do
     @was_files = { 'empty.rb' => '' }
     @now_files = {}
-    @expected = [
-      {
-        'old_filename' => 'empty.rb',
-        'new_filename' => nil,
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 0 }
-      }
-    ]
+    @expected = [ 'empty.rb', nil, 0,0,0 ]
     assert_diff_summary
   end
 
@@ -46,13 +35,7 @@ class GitDiffSummaryTest < DifferTestBase
   'empty file is renamed 100% identical' do
     @was_files = { 'plain' => '' }
     @now_files = { 'copy'  => '' }
-    @expected = [
-      {
-        'old_filename' => 'plain',
-        'new_filename' => 'copy',
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 0 }
-      }
-    ]
+    @expected = [ 'plain', 'copy', 0,0,0 ]
     assert_diff_summary
   end
 
@@ -62,13 +45,7 @@ class GitDiffSummaryTest < DifferTestBase
   'empty file is renamed 100% identical across dirs' do
     @was_files = { 'plain'    => '' }
     @now_files = { 'a/b/copy' => '' }
-    @expected = [
-      {
-        'old_filename' => 'plain',
-        'new_filename' => 'a/b/copy',
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 0 }
-      }
-    ]
+    @expected = [ 'plain', 'a/b/copy', 0,0,0 ]
     assert_diff_summary
   end
 
@@ -88,12 +65,7 @@ class GitDiffSummaryTest < DifferTestBase
   'empty file has some content added' do
     @was_files = { 'empty.c' => '' }
     @now_files = { 'empty.c' => 'something added' }
-    @expected = [
-      { 'old_filename' => 'empty.c',
-        'new_filename' => 'empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 0 }
-      }
-    ]
+    @expected = [ 'empty.c', 'empty.c', 1,0,0 ]
     assert_diff_summary
   end
 
@@ -105,12 +77,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is created' do
     @was_files = {}
     @now_files = { 'non-empty.c' => "once\nupon\na\ntime" }
-    @expected = [
-      { 'old_filename' => nil,
-        'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 4, 'deleted' => 0, 'same' => 0 }
-      }
-    ]
+    @expected = [ nil, 'non-empty.c', 4,0,0 ]
     assert_diff_summary
   end
 
@@ -120,12 +87,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is deleted' do
     @was_files = { 'non-empty.h' => "and\nthey\nall\nlived\nhappily\n" }
     @now_files = {}
-    @expected = [
-      { 'old_filename' => 'non-empty.h',
-        'new_filename' => nil,
-        'line_counts' => { 'added' => 0, 'deleted' => 5, 'same' => 0 }
-      }
-    ]
+    @expected = [ 'non-empty.h', nil, 0,5,0 ]
     assert_diff_summary
   end
 
@@ -145,13 +107,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is renamed 100% identical' do
     @was_files = { 'plain' => "xxx\nyyy" }
     @now_files = { 'copy' => "xxx\nyyy" }
-    @expected = [
-      {
-        'old_filename' => 'plain',
-        'new_filename' => 'copy',
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 2 }
-      }
-    ]
+    @expected = [ 'plain', 'copy', 0,0,2 ]
     assert_diff_summary
   end
 
@@ -161,13 +117,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is renamed 100% identical across dirs' do
     @was_files = { 'a/b/plain' => "a\nb\nc" }
     @now_files = { 'copy' => "a\nb\nc" }
-    @expected = [
-      {
-        'old_filename' => 'a/b/plain',
-        'new_filename' => 'copy',
-        'line_counts' => { 'added' => 0, 'deleted' => 0, 'same' => 3 }
-      }
-    ]
+    @expected = [ 'a/b/plain', 'copy', 0,0,3 ]
     assert_diff_summary
   end
 
@@ -177,12 +127,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is renamed <100% identical' do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }
-    @expected = [
-      { 'old_filename' => 'hiker.h',
-        'new_filename' => 'diamond.h',
-        'line_counts' => { 'added' => 1, 'deleted' => 1, 'same' => 3 }
-      }
-    ]
+    @expected = [ 'hiker.h', 'diamond.h', 1,1,3 ]
     assert_diff_summary
   end
 
@@ -192,12 +137,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is renamed <100% identical across dirs' do
     @was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
     @now_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
-    @expected = [
-      { 'old_filename' => '1/2/hiker.h',
-        'new_filename' => '3/4/diamond.h',
-        'line_counts' => { 'added' => 1, 'deleted' => 1, 'same' => 3 }
-      }
-    ]
+    @expected = [ '1/2/hiker.h', '3/4/diamond.h', 1,1,3 ]
     assert_diff_summary
   end
 
@@ -207,12 +147,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file has some content added at the start' do
     @was_files = { 'non-empty.c' => 'something' }
     @now_files = { 'non-empty.c' => "more\nsomething" }
-    @expected = [
-      { 'old_filename' => 'non-empty.c',
-        'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 1 }
-      }
-    ]
+    @expected = [ 'non-empty.c', 'non-empty.c', 1,0,1 ]
     assert_diff_summary
   end
 
@@ -222,12 +157,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file has some content added at the end' do
     @was_files = { 'non-empty.c' => 'something' }
     @now_files = { 'non-empty.c' => "something\nmore" }
-    @expected = [
-      { 'old_filename' => 'non-empty.c',
-        'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 1 }
-      }
-    ]
+    @expected = [ 'non-empty.c', 'non-empty.c', 1,0,1 ]
     assert_diff_summary
   end
 
@@ -237,12 +167,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file has some content added in the middle' do
     @was_files = { 'non-empty.c' => "a\nc"}
     @now_files = { 'non-empty.c' => "a\nB\nc" }
-    @expected = [
-      { 'old_filename' => 'non-empty.c',
-        'new_filename' => 'non-empty.c',
-        'line_counts' => { 'added' => 1, 'deleted' => 0, 'same' => 2 }
-      }
-    ]
+    @expected = [ 'non-empty.c', 'non-empty.c', 1,0,2 ]
     assert_diff_summary
   end
 
@@ -251,8 +176,14 @@ class GitDiffSummaryTest < DifferTestBase
   include GitDiffLib
 
   def assert_diff_summary
+    expected = @expected.each_slice(5).to_a.map do |diff|
+      { 'old_filename' => diff[0],
+        'new_filename' => diff[1],
+        'line_counts' => { 'added' => diff[2], 'deleted' => diff[3], 'same' => diff[4] }
+      }
+    end
     git_diff = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    assert_equal @expected, git_diff_summary(git_diff, @now_files)
+    assert_equal expected, git_diff_summary(git_diff, @now_files)
   end
 
 end
