@@ -51,6 +51,7 @@ class Id58TestBase < MiniTest::Test
   ObjectSpace.define_finalizer(self, proc {
     slow = @@timings.select{ |_name,secs| secs > 0.000 }
     sorted = slow.sort_by{ |name,secs| -secs }.to_h
+    size = [sorted.size, 10].min
     puts
     puts "Slowest tests are..." unless sorted.empty?
     sorted.each_with_index { |(name,secs),index|
