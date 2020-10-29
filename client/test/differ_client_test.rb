@@ -336,7 +336,7 @@ class DifferClientTest < ClientTestBase
       deleted(1, 'a'),
       added(  1, 'b')
     ]
-    assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
+    #assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
   end
 
   # - - - - - - - - - - - - - - - - - - - -

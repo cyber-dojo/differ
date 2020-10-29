@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require_relative 'git_differ'
+require_relative 'git_diff_join'
 require_relative 'git_diff_lib'
 require_relative 'git_diff_summary'
 require_relative 'prober'
