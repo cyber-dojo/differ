@@ -7,7 +7,7 @@ module GitDiffLib # mix-in
   module_function
 
   def git_diff_summary(diff_lines, new_files)
-    GitDiffParser.new(diff_lines).parse_all.map do |diff|
+    summary = GitDiffParser.new(diff_lines).parse_all.map do |diff|
       diff_type = type_of(diff)
       {
         'type' => diff_type,
@@ -20,11 +20,28 @@ module GitDiffLib # mix-in
         }
       }
     end
+    changed_filenames = summary.collect{ |file| file['new_filename'] }
+    unchanged_filenames = new_files.keys - changed_filenames
+    unchanged_filenames.each do |filename|
+      summary << {
+        'type' => :unchanged,
+        'old_filename' => filename,
+        'new_filename' => filename,
+        'line_counts' => {
+          'same'    => new_files[filename].lines.count,
+          'added'   => 0,
+          'deleted' => 0
+        }
+      }
+    end
+    summary
   end
+
+  private
 
   def count_lines_same(diff, diff_type, new_files)
     # $ git diff --unified=9999999 ...
-    # produces no file content for a 100% identical rename.
+    # prints no content for a 100% identical rename.
     if diff_type === :renamed && empty?(diff)
       new_files[diff[:new_filename]].lines.count
     else

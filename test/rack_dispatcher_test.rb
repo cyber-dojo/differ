@@ -94,6 +94,26 @@ class RackDispatcherTest < DifferTestBase
           "old_filename" => "hiker.sh",
           "new_filename" => "hiker.sh",
           "line_counts"  => { "added"=>1, "deleted"=>1, "same"=>5 }
+        },
+        { "type" => "unchanged",
+          "old_filename" => "test_hiker.sh",
+          "new_filename" => "test_hiker.sh",
+          "line_counts" => { "same"=>8, "added"=>0, "deleted"=>0 }
+        },
+        { "type" => "unchanged",
+          "old_filename" => "bats_help.txt",
+          "new_filename" => "bats_help.txt",
+          "line_counts" => { "same"=>3, "added"=>0, "deleted"=>0 }
+        },
+        { "type" => "unchanged",
+          "old_filename" => "cyber-dojo.sh",
+          "new_filename" => "cyber-dojo.sh",
+          "line_counts" => { "same"=>2, "added"=>0, "deleted"=>0 }
+        },
+        { "type" => "unchanged",
+          "old_filename" => "readme.txt",
+          "new_filename" => "readme.txt",
+          "line_counts" => { "same"=>14, "added"=>0, "deleted"=>0 }
         }
       ]
       assert_equal expected, response['diff_summary2']
@@ -112,6 +132,21 @@ class RackDispatcherTest < DifferTestBase
           "new_filename" => "readme.txt",
           "line_counts" => { "added"=>6, "deleted"=>3, "same"=>8 }
         },
+        { "type" => "unchanged",
+          "old_filename" => "test_hiker.sh",
+          "new_filename" => "test_hiker.sh",
+          "line_counts" => { "same"=>8, "added"=>0, "deleted"=>0 }
+        },
+        { "type" => "unchanged",
+          "old_filename" => "bats_help.txt",
+          "new_filename" => "bats_help.txt",
+          "line_counts" => { "same"=>3, "added"=>0, "deleted"=>0 }
+        },
+        { "type" => "unchanged",
+          "old_filename" => "cyber-dojo.sh",
+          "new_filename" => "cyber-dojo.sh",
+          "line_counts" => { "same"=>2, "added"=>0, "deleted"=>0 }
+        }
       ]
       assert_equal expected, response['diff_summary2']
     end

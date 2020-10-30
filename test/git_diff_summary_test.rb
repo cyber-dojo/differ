@@ -55,7 +55,7 @@ class GitDiffSummaryTest < DifferTestBase
   'empty file is unchanged' do
     @was_files = { 'empty.py' => '' }
     @now_files = { 'empty.py' => '' }
-    @expected = []
+    @expected = [ :unchanged, 'empty.py', 'empty.py', 0,0,0 ]
     assert_diff_summary
   end
 
@@ -97,7 +97,7 @@ class GitDiffSummaryTest < DifferTestBase
   'non-empty file is unchanged' do
     @was_files = { 'non-empty.h' => '#include<stdio.h>' }
     @now_files = { 'non-empty.h' => '#include<stdio.h>' }
-    @expected = []
+    @expected = [ :unchanged, 'non-empty.h', 'non-empty.h', 0,0,1 ]
     assert_diff_summary
   end
 
