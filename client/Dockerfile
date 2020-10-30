@@ -11,8 +11,6 @@ ENV SHA=${COMMIT_SHA}
 ENV PORT=${CYBER_DOJO_DIFFER_CLIENT_PORT}
 
 EXPOSE ${PORT}
-
-
 USER nobody
 HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/heathcheck.sh
 ENTRYPOINT ["/sbin/tini", "-g", "--"]
