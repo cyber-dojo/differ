@@ -24,6 +24,32 @@ class DifferClientTest < ClientTestBase
         'old_filename' => "readme.txt",
         'new_filename' => nil,
         'line_counts' => { 'added' => 0, 'deleted' => 14, 'same' => 0 }
+      },
+      {
+        "type" => "unchanged",
+        "old_filename" => "test_hiker.sh",
+        "new_filename" => "test_hiker.sh",
+        "line_counts" => { "same"=>8, "added"=>0, "deleted"=>0 }
+      },
+      { "type" => "unchanged",
+        "old_filename" => "bats_help.txt",
+        "new_filename" => "bats_help.txt",
+        "line_counts" => { "same"=>3, "added"=>0, "deleted"=>0 }
+      },
+      { "type" => "unchanged",
+        "old_filename" => "hiker.sh",
+        "new_filename" => "hiker.sh",
+        "line_counts" => { "same"=>6, "added"=>0, "deleted"=>0 }
+      },
+      { "type" => "unchanged",
+        "old_filename" => "cyber-dojo.sh",
+        "new_filename" => "cyber-dojo.sh",
+        "line_counts" => { "same"=>2, "added"=>0, "deleted"=>0 }
+      },
+      { "type" => "unchanged",
+        "old_filename" => "sub_dir/empty.file.rename",
+        "new_filename" => "sub_dir/empty.file.rename",
+        "line_counts" => { "same"=>1, "added"=>0, "deleted"=>0 }
       }
     ]
     assert_equal expected, actual
@@ -95,7 +121,14 @@ class DifferClientTest < ClientTestBase
     @old_files = { 'hiker.h' => '' }
     @new_files = { }
     assert_diff 'hiker.h', []
-    assert_diff_summary('RNCzUr',3,4) { [ :deleted, 'empty.file', nil, 0,0,0] }
+    assert_diff_summary('RNCzUr',3,4) { [
+      :deleted, 'empty.file', nil, 0,0,0,
+      :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
+      :unchanged, "bats_help.txt", "bats_help.txt", 0,0,3,
+      :unchanged, "hiker.sh", "hiker.sh", 0,0,6,
+      :unchanged, "cyber-dojo.sh", "cyber-dojo.sh", 0,0,2,
+      :unchanged, "readme.txt", "readme.txt", 0,0,14
+    ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -121,7 +154,14 @@ class DifferClientTest < ClientTestBase
       deleted(4, 'd')
     ]
     #assert_diff_tip_data('hiker.h', { 'added' => 0, 'deleted' => 4 })
-    assert_diff_summary('RNCzUr',8,9) { [ :deleted, 'readme.txt', nil, 0,14,0 ] }
+    assert_diff_summary('RNCzUr',8,9) { [
+      :deleted, 'readme.txt', nil, 0,14,0,
+      :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
+      :unchanged, "bats_help.txt", "bats_help.txt", 0,0,3,
+      :unchanged, "hiker.sh", "hiker.sh", 0,0,6,
+      :unchanged, "cyber-dojo.sh", "cyber-dojo.sh", 0,0,2,
+      :unchanged, "sub_dir/empty.file.rename", "sub_dir/empty.file.rename", 0,0,1
+    ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -196,7 +236,14 @@ class DifferClientTest < ClientTestBase
     @new_files = { 'a/b/c/diamond.h' => '' }
     assert_diff 'a/b/c/diamond.h', [ added(1,'') ]
     #assert_diff_tip_data('a/b/c/diamond.h', { 'added' => 1, 'deleted' => 0 })
-    assert_diff_summary('RNCzUr',2,3) { [ :created, nil, 'empty.file', 0,0,0 ] }
+    assert_diff_summary('RNCzUr',2,3) { [
+      :created, nil, 'empty.file', 0,0,0,
+      :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
+      :unchanged, "bats_help.txt", "bats_help.txt", 0,0,3,
+      :unchanged, "hiker.sh"     , "hiker.sh"     , 0,0,6,
+      :unchanged, "cyber-dojo.sh", "cyber-dojo.sh", 0,0,2,
+      :unchanged, "readme.txt"   , "readme.txt"   , 0,0,14
+    ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -442,7 +489,14 @@ class DifferClientTest < ClientTestBase
       same(4, 'd')
     ]
     #assert_equal({}, differ.diff_tip_data(id58,@old_files,@new_files))
-    assert_diff_summary('RNCzUr',5,6) { [ :renamed, 'empty.file', 'empty.file.rename', 0,0,0 ] }
+    assert_diff_summary('RNCzUr',5,6) { [
+      :renamed, 'empty.file', 'empty.file.rename', 0,0,0,
+      :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
+      :unchanged, "bats_help.txt", "bats_help.txt", 0,0,3,
+      :unchanged, "hiker.sh"     , "hiker.sh"     , 0,0,6,
+      :unchanged, "cyber-dojo.sh", "cyber-dojo.sh", 0,0,2,
+      :unchanged, "readme.txt"   , "readme.txt"   , 0,0,14
+    ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -478,7 +532,13 @@ class DifferClientTest < ClientTestBase
     ]
     #assert_diff_tip_data('diamond.h', { 'added' => 1, 'deleted' => 1 })
     # TODO: test data error. No rename here.
-    assert_diff_summary('RNCzUr',13,14) { [ :changed, 'bats_help.txt','bats_help.txt', 1,1,19 ] }
+    assert_diff_summary('RNCzUr',13,14) { [
+      :changed, 'bats_help.txt','bats_help.txt', 1,1,19,
+      :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
+      :unchanged, "hiker.sh", "hiker.sh", 0,0,6,
+      :unchanged, "cyber-dojo.sh", "cyber-dojo.sh", 0,0,2,
+      :unchanged, "sub_dir/empty.file.rename", "sub_dir/empty.file.rename", 0,0,1
+    ] }
   end
 
   # - - - - - - - - - - - - - - - - - - - -
