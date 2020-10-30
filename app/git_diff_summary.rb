@@ -8,39 +8,32 @@ module GitDiffLib # mix-in
 
   def git_diff_summary(diff_lines, new_files)
     GitDiffParser.new(diff_lines).parse_all.map do |diff|
+      diff_type = type_of(diff)
       {
+        'type' => diff_type,
         'old_filename' => diff[:old_filename],
         'new_filename' => diff[:new_filename],
-        'line_counts' => line_counts(diff, new_files)
+        'line_counts' => {
+          'same'    => count_lines_same(diff, diff_type, new_files),
+          'added'   => count_lines(:added, diff),
+          'deleted' => count_lines(:deleted, diff)
+        }
       }
     end
   end
 
-  def line_counts(diff, new_files)
-    {
-      'added'   => diff[:lines].count{ |line| line[:type] === :added   },
-      'deleted' => diff[:lines].count{ |line| line[:type] === :deleted },
-      'same' => count_same_lines(diff, new_files)
-    }
-  end
-
-  def count_same_lines(diff, new_files)
-    if identical_rename?(diff)
+  def count_lines_same(diff, diff_type, new_files)
+    # $ git diff --unified=9999999 ...
+    # produces no file content for a 100% identical rename.
+    if diff_type === :renamed && empty?(diff)
       new_files[diff[:new_filename]].lines.count
     else
-      diff[:lines].count{ |line| line[:type] === :same }
+      count_lines(:same, diff)
     end
   end
 
-  def identical_rename?(diff)
-    renamed_file?(diff) && empty?(diff)
-  end
-
-  def renamed_file?(diff)
-    [ !new_file?(diff),
-      !deleted_file?(diff),
-      diff[:new_filename] != diff[:old_filename]
-    ].all?
+  def count_lines(line_type, diff)
+    diff[:lines].count{ |line| line[:type] === line_type }
   end
 
 end

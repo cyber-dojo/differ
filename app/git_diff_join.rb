@@ -12,7 +12,7 @@ module GitDiffLib # mix-in
       new_filename = diff[:new_filename]
       if deleted_file?(diff)
         joined[old_filename] = diff[:lines]
-      elsif new_file?(diff)
+      elsif created_file?(diff)
         if empty?(diff)
           lines = [{ :type => :added, number:1, line:'' }]
         else

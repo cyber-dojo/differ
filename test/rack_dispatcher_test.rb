@@ -84,11 +84,13 @@ class RackDispatcherTest < DifferTestBase
     args = { id:'RNCzUr', was_index:4, now_index:5 }
     assert_200('diff_summary2', args) do |response|
       expected = [
-        { "old_filename" => nil,
+        { "type" => "created",
+          "old_filename" => nil,
           "new_filename" => "empty.file",
           "line_counts" => { "added"=>0, "deleted"=>0, "same"=>0 }
         },
         {
+          "type" => "changed",
           "old_filename" => "hiker.sh",
           "new_filename" => "hiker.sh",
           "line_counts"  => { "added"=>1, "deleted"=>1, "same"=>5 }
@@ -100,11 +102,13 @@ class RackDispatcherTest < DifferTestBase
     args = { id:'RNCzUr', was_index:1, now_index:2 }
     assert_200('diff_summary2', args) do |response|
       expected = [
-        { "old_filename" => "hiker.sh",
+        { "type" => "changed",
+          "old_filename" => "hiker.sh",
           "new_filename" => "hiker.sh",
           "line_counts" => { "added"=>1, "deleted"=>1, "same"=>5 }
         },
-        { "old_filename" => "readme.txt",
+        { "type" => "changed",
+          "old_filename" => "readme.txt",
           "new_filename" => "readme.txt",
           "line_counts" => { "added"=>6, "deleted"=>3, "same"=>8 }
         },
