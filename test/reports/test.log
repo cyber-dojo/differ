@@ -1,36 +1,36 @@
-Run options: --seed 2609
+Run options: --seed 42740
 
 # Running:
 
 ..............................................................................................................................
 
-Finished in 1.815772s, 69.3920 runs/s, 224.1471 assertions/s.
+Finished in 1.860724s, 67.7156 runs/s, 218.7320 assertions/s.
 
 126 runs, 407 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1249 / 1249 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1249 / 1249 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports. 1274 / 1274 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1274 / 1274 LOC (100.0%) covered.
 
 Slowest tests are...
-0.0893 - 4AF137:rack_dispatcher_test.rb:78:diff_summary2 200 is in more general format to allow more information to be added, specifically - old and new filenames to detect file new|delete|rename - unchanged line-count
-0.0768 - 74C4D2:git_diff_join_test.rb:243:non-empty file has some content added in the middle
-0.0658 - 74D5D0:git_diff_summary_test.rb:146:non-empty file has some content added at the start
-0.0574 - 74CA2C:git_diff_join_test.rb:35:empty file is created                   
-0.0563 - 74D3ED:git_diff_summary_test.rb:54:empty file is unchanged              
-0.0542 - EE7jj9:http_json_args_test.rb:10:/diff_summary2 uses proper GET query args
-0.0523 - EE7e18:http_json_args_test.rb:93:/diff_summary2 has three keyword args; id:, was_index:, now_index:
-0.0518 - 4DEk17:diff_summary_test.rb:108:non-empty file renamed <100% identical  
-0.0510 - 4DEj16:diff_summary_test.rb:67:empty file has one lines added           
-0.0491 - 4DEk15:diff_summary_test.rb:81:non-empty file deleted                   
-0.0472 - 4DEj15:diff_summary_test.rb:53:empty file renamed 100% identical across dirs
+0.1126 - 4DEj16:diff_summary_test.rb:67:empty file has one lines added           
+0.0952 - 4AF137:rack_dispatcher_test.rb:78:diff_summary2 200 is in more general format to allow more information to be added, specifically - old and new filenames to detect file new|delete|rename - unchanged line-count
+0.0748 - 74DAA6:git_diff_summary_test.rb:34:empty file is renamed 100% identical 
+0.0677 - 4DEj13:diff_summary_test.rb:25:deleted empty file                       
+0.0625 - 4DEk15:diff_summary_test.rb:81:non-empty file deleted                   
+0.0554 - 4DEk17:diff_summary_test.rb:108:non-empty file renamed <100% identical  
+0.0525 - 4DEj15:diff_summary_test.rb:53:empty file renamed 100% identical across dirs
+0.0514 - 4DEk18:diff_summary_test.rb:121:two non-empty files both edited         
+0.0510 - 4DEk16:diff_summary_test.rb:95:non-empty file renamed 100% identical    
+0.0505 - EE7jj9:http_json_args_test.rb:10:/diff_summary2 uses proper GET query args
+0.0502 - 4DEj14:diff_summary_test.rb:39:renamed empty file                       
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.82   <=     5 | [32m true [0m
-          app:lines:total |     449   <=   500 | [32m true [0m
+         test:duration(s) |    1.86   <=     5 | [32m true [0m
+          app:lines:total |     474   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |      67   <=    75 | [32m true [0m
+       app:branches:total |      73   <=    75 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
          test:lines:total |     800   <=  1000 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m

@@ -6,9 +6,10 @@ class GitDiffParser
   # Assumes the --unified=99999999999 option has been used
   # so there is always a single @@ range and all context lines
 
-  def initialize(diff_text)
+  def initialize(diff_text, mode = :lines)
     @lines = diff_text.split("\n")
     @n = 0
+    @mode = mode
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -26,12 +27,17 @@ class GitDiffParser
   def parse_one
     old_filename,new_filename = parse_old_new_filenames(parse_header)
     parse_range
-    {
+    one = {
               type: file_type(old_filename, new_filename),
       new_filename: new_filename,
       old_filename: old_filename,
-             lines: parse_lines
+#             lines: parse_lines
     }
+    if @mode === :lines
+      parse_lines_into(one)
+    else # :summary
+      parse_counts_into(one)
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -49,6 +55,11 @@ class GitDiffParser
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def parse_lines_into(one)
+    one[:lines] = parse_lines
+    one
+  end
 
   def parse_lines
     lines = []
@@ -75,6 +86,34 @@ class GitDiffParser
       parse_newline_at_eof
     end
     lines
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def parse_counts_into(one)
+    one[:line_counts] = parse_counts
+    one
+  end
+
+  def parse_counts
+    same,deleted,added = 0,0,0
+    while line && !line.start_with?('diff --git') do
+      while same?(line) do
+        same += 1
+        next_line
+      end
+      while deleted?(line) do
+        deleted += 1
+        next_line
+      end
+      parse_newline_at_eof
+      while added?(line) do
+        added += 1
+        next_line
+      end
+      parse_newline_at_eof
+    end
+    { same:same, deleted:deleted, added:added }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
