@@ -32,11 +32,13 @@ class GitDiffParser
       new_filename: new_filename,
       old_filename: old_filename,
     }
-    if @mode === :lines
-      parse_lines_into(one)
-    else # :summary
+    if @mode === :summary || @mode === :both
       parse_counts_into(one)
     end
+    if @mode === :lines || @mode === :both
+      parse_lines_into(one)
+    end
+    one
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -57,7 +59,6 @@ class GitDiffParser
 
   def parse_lines_into(one)
     one[:lines] = parse_lines
-    one
   end
 
   def parse_lines
@@ -91,7 +92,6 @@ class GitDiffParser
 
   def parse_counts_into(one)
     one[:line_counts] = parse_counts
-    one
   end
 
   def parse_counts
@@ -112,7 +112,7 @@ class GitDiffParser
       end
       parse_newline_at_eof
     end
-    { same:same, deleted:deleted, added:added }
+    { added:added, deleted:deleted, same:same }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

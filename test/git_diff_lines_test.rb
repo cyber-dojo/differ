@@ -16,7 +16,7 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'empty.rb' => '' }
     @now_files = {}
     assert_git_diff_lines [
-      :deleted, 'empty.rb', nil, [ deleted(1,'') ]
+      :deleted, 'empty.rb', nil, 0,0,0, []
     ]
   end
 
@@ -27,7 +27,7 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = {}
     @now_files = { 'empty.h' => '' }
     assert_git_diff_lines [
-      :created, nil, 'empty.h', [ added(1,'') ]
+      :created, nil, 'empty.h', 0,0,0, []
     ]
   end
 
@@ -38,7 +38,7 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'empty.py' => '' }
     @now_files = { 'empty.py' => '' }
     assert_git_diff_lines [
-        :unchanged, 'empty.py', 'empty.py', [ same(1,'') ]
+        :unchanged, 'empty.py', 'empty.py', 0,0,0, []
     ]
   end
 
@@ -49,7 +49,7 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'plain' => '' }
     @now_files = { 'copy'  => '' }
     assert_git_diff_lines [
-      :renamed, 'plain', 'copy', [ same(1,'') ]
+      :renamed, 'plain', 'copy', 0,0,0, []
     ]
   end
 
@@ -60,26 +60,26 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'plain'    => '' }
     @now_files = { 'a/b/copy' => '' }
     assert_git_diff_lines [
-      :renamed, 'plain', 'a/b/copy', [ same(1,'') ]
+      :renamed, 'plain', 'a/b/copy', 0,0,0, []
     ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+=begin
 
   test 'F2E',
   'empty file has some content added' do
     @was_files = { 'empty.c' => '' }
     @now_files = { 'empty.c' => 'something added' }
     assert_git_diff_lines [
-      :changed, 'empty.c', 'empty.c',
+      :changed, 'empty.c', 'empty.c', 1,0,0,
       [
         section(0),
         added(1, 'something added')
       ]
     ]
   end
-
-=begin
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # non-empty file
@@ -269,22 +269,17 @@ class GitDiffLinesTest < DifferTestBase
 
 
   def assert_git_diff_lines(raw_expected)
-    expected = raw_expected.each_slice(4).to_a.map do |diff|
+    expected = raw_expected.each_slice(7).to_a.map do |diff|
       {         type: diff[0],
         old_filename: diff[1],
         new_filename: diff[2],
-               lines: diff[3]
+         line_counts: { added:diff[3], deleted:diff[4], same:diff[5] },
+               lines: diff[6]
       }
     end
     diff_lines = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    diffs = GitDiffParser.new(diff_lines, :lines).parse_all
+    diffs = GitDiffParser.new(diff_lines, :both).parse_all
     actual = git_diff_lines(diffs, @now_files)
-    assert_equal expected, actual
-  end
-
-  def XXX_assert_join(expected, old_files, new_files)
-    diff_lines = GitDiffer.new(externals).diff(id58, old_files, new_files)
-    actual = git_diff_join(diff_lines, old_files, new_files)
     assert_equal expected, actual
   end
 
