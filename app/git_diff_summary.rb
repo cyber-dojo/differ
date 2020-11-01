@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative 'git_diff_lib'
 
 module GitDiffLib # mix-in
 
