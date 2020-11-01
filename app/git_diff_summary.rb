@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 require_relative 'git_diff_lib'
-require_relative 'git_diff_parser'
 
 module GitDiffLib # mix-in
 
   module_function
 
-  def git_diff_summary(diff_lines, new_files)
-    changed = changed_summary(diff_lines, new_files)
+  def git_diff_summary(diffs, new_files)
+    changed = changed_summary(diffs, new_files)
     unchanged = unchanged_summary(new_files, changed)
     changed + unchanged
   end
 
   private
 
-  def changed_summary(diff_lines, new_files)
-    diffs = GitDiffParser.new(diff_lines,:summary).parse_all
+  def changed_summary(diffs, new_files)
     diffs.each do |diff|
       if identical_rename?(diff)
         filename = diff[:new_filename]
@@ -31,14 +29,13 @@ module GitDiffLib # mix-in
     changed_filenames = changed.collect{ |file| file[:new_filename] }
     unchanged_filenames = all_filenames - changed_filenames
     unchanged_filenames.map do |filename|
-      {
-        type: :unchanged,
+      {         type: :unchanged,
         old_filename: filename,
         new_filename: filename,
-        line_counts: {
-          same: new_files[filename].lines.count,
-          deleted:0,
-          added: 0
+         line_counts: {
+             same: new_files[filename].lines.count,
+          deleted: 0,
+            added: 0
         }
       }
     end

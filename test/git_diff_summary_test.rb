@@ -1,4 +1,5 @@
 require_relative 'differ_test_base'
+require_app 'git_diff_parser'
 require_app 'git_diff_summary'
 
 class GitDiffSummaryTest < DifferTestBase
@@ -183,8 +184,9 @@ class GitDiffSummaryTest < DifferTestBase
         line_counts: { added: diff[3], deleted: diff[4], same: diff[5] }
       }
     end
-    git_diff = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    actual = git_diff_summary(git_diff, @now_files)
+    diff_lines = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
+    diffs = GitDiffParser.new(diff_lines, :summary).parse_all
+    actual = git_diff_summary(diffs, @now_files)
     assert_equal expected, actual
   end
 
