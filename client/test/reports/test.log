@@ -1,33 +1,33 @@
-Run options: --seed 2327
+Run options: --seed 13260
 
 # Running:
 
 ....................................
 
-Finished in 1.358114s, 26.5073 runs/s, 65.5320 assertions/s.
+Finished in 1.229080s, 29.2902 runs/s, 72.4119 assertions/s.
 
 36 runs, 89 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 309 / 309 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 309 / 309 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1615 - 2q0960:differ_client_test.rb:233:added empty file in nested sub-dir shows as ['']
-0.1078 - 2q0FDB:differ_client_test.rb:521:renamed and slightly changed file shows as mostly same lines
-0.0971 - 2q0FE9:differ_client_test.rb:145:deleted non-empty file shows as all lines deleted
-0.0951 - 2q0E50:differ_client_test.rb:479:renamed file shows as all lines same   
-0.0805 - 2q0313:differ_client_test.rb:119:deleted empty file                     
-0.0703 - 2q07FE:differ_client_test.rb:293:unchanged empty-file shows as one empty line
-0.0694 - 2q07FF:differ_client_test.rb:305:unchanged empty-file in nested sub-dir shows as one empty line
-0.0586 - 2q0B68:differ_client_test.rb:204:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
-0.0467 - 2q0jj9:differ_client_test.rb:11:/diff_summary2 uses proper GET query args
-0.0370 - 2q0E3E:differ_client_test.rb:349:changed non-empty file shows as deleted and added lines
-0.0360 - 2q0FDC:differ_client_test.rb:546:renamed and slightly changed file in nested sub-dir shows as mostly same lines
+0.1350 - 2q0E50:differ_client_test.rb:479:renamed file shows as all lines same   
+0.1106 - 2q0313:differ_client_test.rb:119:deleted empty file                     
+0.0773 - 2q0FE9:differ_client_test.rb:145:deleted non-empty file shows as all lines deleted
+0.0749 - 2q0FDB:differ_client_test.rb:521:renamed and slightly changed file shows as mostly same lines
+0.0742 - 2q0960:differ_client_test.rb:233:added empty file in nested sub-dir shows as ['']
+0.0691 - 2q0jj9:differ_client_test.rb:11:/diff_summary2 uses proper GET query args
+0.0683 - 2q0366:differ_client_test.rb:332:unchanged non-empty file in nested sub-dir shows as all lines same
+0.0369 - 2q02C3:differ_client_test.rb:251:added non-empty file shows as all lines added
+0.0348 - 2q07FF:differ_client_test.rb:305:unchanged empty-file in nested sub-dir shows as one empty line
+0.0343 - 2q0348:differ_client_test.rb:70:>10K query in nested sub-dir is not rejected by web-server
+0.0342 - 2q0E3F:differ_client_test.rb:363:changed non-empty file in nested sub-dir shows as deleted and added lines
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.36   <=     5 | [32m true [0m
+         test:duration(s) |    1.23   <=     5 | [32m true [0m
           app:lines:total |      80   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m

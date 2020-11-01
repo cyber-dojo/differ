@@ -18,40 +18,37 @@ module GitDiffLib # mix-in
     diffs = GitDiffParser.new(diff_lines,:summary).parse_all
     diffs.each do |diff|
       if identical_rename?(diff)
-        # $ git diff --unified=9999999 ... prints no content
-        # for a 100% identical rename.
-        same = new_files[diff[:new_filename]].lines.count
-        diff[:line_counts][:same] = same
+        filename = diff[:new_filename]
+        file = new_files[filename]
+        diff[:line_counts][:same] = file.lines.count
       end
     end
     diffs
   end
 
   def unchanged_summary(new_files, changed)
-    unchanged_filenames(new_files.keys, new_filenames(changed)).map do |filename|
+    all_filenames = new_files.keys
+    changed_filenames = changed.collect{ |file| file[:new_filename] }
+    unchanged_filenames = all_filenames - changed_filenames
+    unchanged_filenames.map do |filename|
       {
         type: :unchanged,
         old_filename: filename,
         new_filename: filename,
         line_counts: {
           same: new_files[filename].lines.count,
-          added: 0,
-          deleted: 0
+          deleted:0,
+          added: 0
         }
       }
     end
   end
 
-  def unchanged_filenames(new_filenames, changed_filenames)
-    new_filenames - changed_filenames
-  end
-
-  def new_filenames(summary)
-    summary.collect{ |file| file[:new_filename] }
-  end
-
   def identical_rename?(diff)
-    diff[:type] === :renamed && diff[:line_counts] === { same:0, deleted:0, added:0 }
+    # $ git diff --unified=9999999 ...
+    # prints no content for identical renames.
+    diff[:type] === :renamed &&
+      diff[:line_counts] === { same:0, deleted:0, added:0 }
   end
 
 end
