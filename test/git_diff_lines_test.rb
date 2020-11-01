@@ -66,8 +66,6 @@ class GitDiffLinesTest < DifferTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-=begin
-
   test 'F2E',
   'empty file has some content added' do
     @was_files = { 'empty.c' => '' }
@@ -81,6 +79,7 @@ class GitDiffLinesTest < DifferTestBase
     ]
   end
 
+=begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # non-empty file
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

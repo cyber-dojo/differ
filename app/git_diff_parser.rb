@@ -32,10 +32,12 @@ class GitDiffParser
       new_filename: new_filename,
       old_filename: old_filename,
     }
+    n = @n
     if @mode === :summary || @mode === :both
       parse_counts_into(one)
     end
     if @mode === :lines || @mode === :both
+      @n = n
       parse_lines_into(one)
     end
     one
