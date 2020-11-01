@@ -1,80 +1,85 @@
 require_relative 'differ_test_base'
-require_app 'git_diff_join'
-require_app 'git_diff_lib'
+require_app 'git_diff_lines'
 
-class GitDiffJoinTest < DifferTestBase
+class GitDiffLinesTest < DifferTestBase
 
   def self.id58_prefix
-    '74C'
+    'C9s'
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
   # empty file
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '3ED',
-  'empty file is unchanged' do
-    old_files = { 'empty.py' => '' }
-    new_files = { 'empty.py' => '' }
-    expected = { 'empty.py' => [ same(1,'') ] }
-    assert_join(expected, old_files, new_files)
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test 'A5C',
   'empty file is deleted' do
-    old_files = { 'empty.rb' => '' }
-    new_files = {}
-    expected = { 'empty.rb' => [] }
-    assert_join(expected, old_files, new_files)
+    @was_files = { 'empty.rb' => '' }
+    @now_files = {}
+    assert_git_diff_lines [
+      :deleted, 'empty.rb', nil, [ deleted(1,'') ]
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A2C',
   'empty file is created' do
-    old_files = {}
-    new_files = { 'empty.h' => '' }
-    expected = { 'empty.h' => [ added(1,'') ] }
-    assert_join(expected, old_files, new_files)
+    @was_files = {}
+    @now_files = { 'empty.h' => '' }
+    assert_git_diff_lines [
+      :created, nil, 'empty.h', [ added(1,'') ]
+    ]
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '3ED',
+  'empty file is unchanged' do
+    @was_files = { 'empty.py' => '' }
+    @now_files = { 'empty.py' => '' }
+    assert_git_diff_lines [
+        :unchanged, 'empty.py', 'empty.py', [ same(1,'') ]
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA6',
   'empty file is renamed 100% identical' do
-    old_files = { 'plain' => '' }
-    new_files = { 'copy'  => '' }
-    expected = { 'copy' => [ same(1,'') ] }
-    assert_join(expected, old_files, new_files)
+    @was_files = { 'plain' => '' }
+    @now_files = { 'copy'  => '' }
+    assert_git_diff_lines [
+      :renamed, 'plain', 'copy', [ same(1,'') ]
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A2D',
   'empty file is renamed 100% identical across dirs' do
-    old_files = { 'plain'    => '' }
-    new_files = { 'a/b/copy' => '' }
-    expected = { 'a/b/copy' => [ same(1,'') ] }
-    assert_join(expected, old_files, new_files)
+    @was_files = { 'plain'    => '' }
+    @now_files = { 'a/b/copy' => '' }
+    assert_git_diff_lines [
+      :renamed, 'plain', 'a/b/copy', [ same(1,'') ]
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F2E',
   'empty file has some content added' do
-    old_files = { 'empty.c' => '' }
-    new_files = { 'empty.c' => 'something added' }
-    expected = {
-      'empty.c' =>
+    @was_files = { 'empty.c' => '' }
+    @now_files = { 'empty.c' => 'something added' }
+    assert_git_diff_lines [
+      :changed, 'empty.c', 'empty.c',
       [
         section(0),
         added(1, 'something added')
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
+
+=begin
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # non-empty file
@@ -258,10 +263,26 @@ class GitDiffJoinTest < DifferTestBase
   end
 
   private
+=end
 
   include GitDiffLib
 
-  def assert_join(expected, old_files, new_files)
+
+  def assert_git_diff_lines(raw_expected)
+    expected = raw_expected.each_slice(4).to_a.map do |diff|
+      {         type: diff[0],
+        old_filename: diff[1],
+        new_filename: diff[2],
+               lines: diff[3]
+      }
+    end
+    diff_lines = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
+    diffs = GitDiffParser.new(diff_lines, :lines).parse_all
+    actual = git_diff_lines(diffs, @now_files)
+    assert_equal expected, actual
+  end
+
+  def XXX_assert_join(expected, old_files, new_files)
     diff_lines = GitDiffer.new(externals).diff(id58, old_files, new_files)
     actual = git_diff_join(diff_lines, old_files, new_files)
     assert_equal expected, actual

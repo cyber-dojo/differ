@@ -23,6 +23,14 @@ class Differ
     { 'diff' => result }
   end
 
+=begin
+  def diff_lines2(id:, old_files:, new_files:)
+    diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
+    diffs = GitDiffParser.new(diff_lines, :lines).parse_all
+    { 'diff_lines2' => git_diff_lines(diffs, now_files) }
+  end
+=end
+
   def diff_summary2(id:, was_index:, now_index:)
     # args from request query will be strings
     was_files = model_files(id, was_index.to_i)

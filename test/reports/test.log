@@ -1,39 +1,34 @@
-Run options: --seed 36954
+Run options: --seed 35457
 
 # Running:
 
-..............................................................................................................................
+......
 
-Finished in 1.809756s, 69.6227 runs/s, 224.8923 assertions/s.
+Finished in 0.171468s, 34.9919 runs/s, 34.9919 assertions/s.
 
-126 runs, 407 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1271 / 1271 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1271 / 1271 LOC (100.0%) covered.
+6 runs, 6 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 670 / 1352 LOC (49.56%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 670 / 1352 LOC (49.56%) covered.
 
 Slowest tests are...
-0.1050 - 4DEj14:diff_summary_test.rb:39:renamed empty file                       
-0.0896 - 4AF137:rack_dispatcher_test.rb:78:diff_summary2 200 is in more general format to allow more information to be added, specifically - old and new filenames to detect file new|delete|rename - unchanged line-count
-0.0836 - EE7e18:http_json_args_test.rb:93:/diff_summary2 has three keyword args; id:, was_index:, now_index:
-0.0750 - EE7jj9:http_json_args_test.rb:10:/diff_summary2 uses proper GET query args
-0.0662 - 4DEj15:diff_summary_test.rb:53:empty file renamed 100% identical across dirs
-0.0587 - 4DEk17:diff_summary_test.rb:108:non-empty file renamed <100% identical  
-0.0520 - 4DEj13:diff_summary_test.rb:25:deleted empty file                       
-0.0491 - 4DEk16:diff_summary_test.rb:95:non-empty file renamed 100% identical    
-0.0490 - 4DEj16:diff_summary_test.rb:67:empty file has one lines added           
-0.0486 - 4DEk15:diff_summary_test.rb:81:non-empty file deleted                   
-0.0471 - 4DEj12:diff_summary_test.rb:11:created empty file                       
+0.0339 - C9sA2C:git_diff_lines_test.rb:25:empty file is created                  
+0.0291 - C9sA5C:git_diff_lines_test.rb:14:empty file is deleted                  
+0.0272 - C9sA2D:git_diff_lines_test.rb:58:empty file is renamed 100% identical across dirs
+0.0257 - C9s3ED:git_diff_lines_test.rb:36:empty file is unchanged                
+0.0253 - C9sF2E:git_diff_lines_test.rb:69:empty file has some content added      
+0.0239 - C9sAA6:git_diff_lines_test.rb:47:empty file is renamed 100% identical   
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    1.81   <=     5 | [32m true [0m
-          app:lines:total |     468   <=   500 | [32m true [0m
-         app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |      73   <=    75 | [32m true [0m
-      app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     803   <=  1000 | [32m true [0m
-        test:lines:missed |       0   <=     0 | [32m true [0m
+         test:duration(s) |    0.17   <=     5 | [32m true [0m
+          app:lines:total |     498   <=   500 | [32m true [0m
+         app:lines:missed |     174   <=     0 | [31m false [0m
+       app:branches:total |      83   <=    75 | [31m false [0m
+      app:branches:missed |      48   <=     0 | [31m false [0m
+         test:lines:total |     854   <=  1000 | [32m true [0m
+        test:lines:missed |     508   <=     0 | [31m false [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 
