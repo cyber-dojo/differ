@@ -15,22 +15,30 @@ module GitDiffLib # mix-in
   private
 
   def changed_summary(diff_lines, new_files)
-    GitDiffParser.new(diff_lines,:summary).parse_all.map do |diff|
-      same = count_lines_same(diff, new_files)
-      added = diff[:line_counts][:added]
-      deleted = diff[:line_counts][:deleted]
-      one_file(same, added, deleted, diff)
+    diffs = GitDiffParser.new(diff_lines,:summary).parse_all
+    diffs.each do |diff|
+      if identical_rename?(diff)
+        # $ git diff --unified=9999999 ... prints no content
+        # for a 100% identical rename.
+        same = new_files[diff[:new_filename]].lines.count
+        diff[:line_counts][:same] = same
+      end
     end
+    diffs
   end
 
   def unchanged_summary(new_files, changed)
     unchanged_filenames(new_files.keys, new_filenames(changed)).map do |filename|
-      same = new_files[filename].lines.count
-      one_file(same, 0, 0, {
+      {
         type: :unchanged,
         old_filename: filename,
-        new_filename: filename
-      })
+        new_filename: filename,
+        line_counts: {
+          same: new_files[filename].lines.count,
+          added: 0,
+          deleted: 0
+        }
+      }
     end
   end
 
@@ -39,33 +47,11 @@ module GitDiffLib # mix-in
   end
 
   def new_filenames(summary)
-    summary.collect{ |file| file['new_filename'] }
+    summary.collect{ |file| file[:new_filename] }
   end
 
-  def one_file(same, added, deleted, diff)
-    {
-      'type' => diff[:type],
-      'old_filename' => diff[:old_filename],
-      'new_filename' => diff[:new_filename],
-      'line_counts' => {
-        'same'    => same,
-        'added'   => added,
-        'deleted' => deleted
-      }
-    }
-  end
-
-  def count_lines_same(diff, new_files)
-    # $ git diff --unified=9999999 ... prints no content for a 100% identical rename.
-    if diff[:type] === :renamed && zero?(diff[:line_counts])
-      new_files[diff[:new_filename]].lines.count
-    else
-      diff[:line_counts][:same]
-    end
-  end
-
-  def zero?(counts)
-    counts[:same] === 0 && counts[:deleted] === 0 && counts[:added] === 0
+  def identical_rename?(diff)
+    diff[:type] === :renamed && diff[:line_counts] === { same:0, deleted:0, added:0 }
   end
 
 end

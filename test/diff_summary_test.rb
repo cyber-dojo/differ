@@ -133,10 +133,10 @@ class DiffSummaryTest < DifferTestBase
 
   def assert_diff_summary(id, was_index, now_index, *diffs)
     expected = diffs.each_slice(6).to_a.map do |diff|
-      { 'type' => diff[0],
-        'old_filename' => diff[1],
-        'new_filename' => diff[2],
-        'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
+      { type: diff[0],
+        old_filename: diff[1],
+        new_filename: diff[2],
+        line_counts: { added:diff[3], deleted:diff[4], same:diff[5] }
       }
     end
     actual = diff_summary(id, was_index, now_index)

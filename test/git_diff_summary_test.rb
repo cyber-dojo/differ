@@ -177,14 +177,15 @@ class GitDiffSummaryTest < DifferTestBase
 
   def assert_diff_summary
     expected = @expected.each_slice(6).to_a.map do |diff|
-      { 'type' => diff[0],
-        'old_filename' => diff[1],
-        'new_filename' => diff[2],
-        'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
+      { type: diff[0],
+        old_filename: diff[1],
+        new_filename: diff[2],
+        line_counts: { added: diff[3], deleted: diff[4], same: diff[5] }
       }
     end
     git_diff = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    assert_equal expected, git_diff_summary(git_diff, @now_files)
+    actual = git_diff_summary(git_diff, @now_files)
+    assert_equal expected, actual
   end
 
 end

@@ -17,35 +17,35 @@ class HttpJsonArgsTest < DifferTestBase
     result = dispatch("/#{path}", differ, body, args)
     assert_equal [path], result.keys
     expected = [
-      { "type" => :deleted,
-        "old_filename" => "readme.txt",
-        "new_filename" => nil,
-        "line_counts" => { "added" => 0, "deleted" => 14, "same" => 0 }
+      { type: :deleted,
+        old_filename: "readme.txt",
+        new_filename: nil,
+        line_counts: { added:0, deleted:14, same:0 }
       },
-      { "type" => :unchanged,
-        "old_filename" => "test_hiker.sh",
-        "new_filename" => "test_hiker.sh",
-        "line_counts" => { "same"=>8, "added"=>0, "deleted"=>0 }
+      { type: :unchanged,
+        old_filename: "test_hiker.sh",
+        new_filename: "test_hiker.sh",
+        line_counts: { same:8, added:0, deleted:0 }
       },
-      { "type" => :unchanged,
-        "old_filename" => "bats_help.txt",
-        "new_filename" => "bats_help.txt",
-        "line_counts" => { "same"=>3, "added"=>0, "deleted"=>0 }
+      { type: :unchanged,
+        old_filename: "bats_help.txt",
+        new_filename: "bats_help.txt",
+        line_counts: { same:3, added:0, deleted:0 }
       },
-      { "type" => :unchanged,
-        "old_filename" => "hiker.sh",
-        "new_filename" => "hiker.sh",
-        "line_counts" => { "same"=>6, "added"=>0, "deleted"=>0 }
+      { type: :unchanged,
+        old_filename: "hiker.sh",
+        new_filename: "hiker.sh",
+        line_counts: { same:6, added:0, deleted:0 }
       },
-      { "type" => :unchanged,
-        "old_filename" => "cyber-dojo.sh",
-        "new_filename" => "cyber-dojo.sh",
-        "line_counts" => { "same"=>2, "added"=>0, "deleted"=>0 }
+      { type: :unchanged,
+        old_filename: "cyber-dojo.sh",
+        new_filename: "cyber-dojo.sh",
+        line_counts: { same:2, added:0, deleted:0 }
       },
-      { "type" => :unchanged,
-        "old_filename" => "sub_dir/empty.file.rename",
-        "new_filename" => "sub_dir/empty.file.rename",
-        "line_counts" => { "same"=>1, "added"=>0, "deleted"=>0 }
+      { type: :unchanged,
+        old_filename: "sub_dir/empty.file.rename",
+        new_filename: "sub_dir/empty.file.rename",
+        line_counts: { same:1, added:0, deleted:0 }
       }
     ]
     actual = result[path]

@@ -31,7 +31,6 @@ class GitDiffParser
               type: file_type(old_filename, new_filename),
       new_filename: new_filename,
       old_filename: old_filename,
-#             lines: parse_lines
     }
     if @mode === :lines
       parse_lines_into(one)
