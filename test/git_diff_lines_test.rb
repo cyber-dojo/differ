@@ -11,23 +11,25 @@ class GitDiffLinesTest < DifferTestBase
   # empty file
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'A5C',
-  'empty file is deleted' do
-    @was_files = { 'empty.rb' => '' }
-    @now_files = {}
-    assert_git_diff_lines [
-      :deleted, 'empty.rb', nil, 0,0,0, []
-    ]
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test 'A2C',
   'empty file is created' do
     @was_files = {}
     @now_files = { 'empty.h' => '' }
     assert_git_diff_lines [
-      :created, nil, 'empty.h', 0,0,0, []
+      :created, nil, 'empty.h', 0,0,0,
+      []
+    ]
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'A5C',
+  'empty file is deleted' do
+    @was_files = { 'empty.rb' => '' }
+    @now_files = {}
+    assert_git_diff_lines [
+      :deleted, 'empty.rb', nil, 0,0,0,
+      []
     ]
   end
 
@@ -38,7 +40,8 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'empty.py' => '' }
     @now_files = { 'empty.py' => '' }
     assert_git_diff_lines [
-        :unchanged, 'empty.py', 'empty.py', 0,0,0, []
+        :unchanged, 'empty.py', 'empty.py', 0,0,0,
+        []
     ]
   end
 
@@ -49,7 +52,8 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'plain' => '' }
     @now_files = { 'copy'  => '' }
     assert_git_diff_lines [
-      :renamed, 'plain', 'copy', 0,0,0, []
+      :renamed, 'plain', 'copy', 0,0,0,
+      []
     ]
   end
 
@@ -60,7 +64,8 @@ class GitDiffLinesTest < DifferTestBase
     @was_files = { 'plain'    => '' }
     @now_files = { 'a/b/copy' => '' }
     assert_git_diff_lines [
-      :renamed, 'plain', 'a/b/copy', 0,0,0, []
+      :renamed, 'plain', 'a/b/copy', 0,0,0,
+      []
     ]
   end
 
@@ -69,101 +74,97 @@ class GitDiffLinesTest < DifferTestBase
   test 'F2E',
   'empty file has some content added' do
     @was_files = { 'empty.c' => '' }
-    @now_files = { 'empty.c' => 'something added' }
+    @now_files = { 'empty.c' => "three\nlines\nadded" }
     assert_git_diff_lines [
-      :changed, 'empty.c', 'empty.c', 1,0,0,
+      :changed, 'empty.c', 'empty.c', 3,0,0,
       [
         section(0),
-        added(1, 'something added')
+        added(1, 'three'),
+        added(2, 'lines'),
+        added(3, 'added')
       ]
     ]
   end
 
-=begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # non-empty file
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '21D',
-  'non-empty file is unchanged' do
-    old_files = { 'non-empty.h' => '#include<stdio.h>' }
-    new_files = { 'non-empty.h' => '#include<stdio.h>' }
-    expected =
-    {
-      'non-empty.h' =>
+  test 'D09',
+  'non-empty file is created' do
+    @was_files = {}
+    @now_files = { 'non-empty.c' => 'something' }
+    assert_git_diff_lines [
+      :created, nil, 'non-empty.c', 1,0,0,
       [
-        same(1, '#include<stdio.h>'),
+        section(0),
+        added(1, 'something'),
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '0C6',
   'non-empty file is deleted' do
-    old_files = { 'non-empty.h' => 'something' }
-    new_files = {}
-    expected =
-    {
-      'non-empty.h' =>
+    @was_files = { 'non-empty.h' => "two\nlines" }
+    @now_files = {}
+    assert_git_diff_lines [
+      :deleted, 'non-empty.h', nil, 0,2,0,
       [
         section(0),
-        deleted(1, 'something'),
+        deleted(1, 'two'),
+        deleted(2, 'lines')
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'D09',
-  'non-empty file is created' do
-    old_files = {}
-    new_files = { 'non-empty.c' => 'something' }
-    expected =
-    {
-      'non-empty.c' =>
+  test '21D',
+  'non-empty file is unchanged' do
+    @was_files = { 'non-empty.h' => '#include<stdio.h>' }
+    @now_files = { 'non-empty.h' => '#include<stdio.h>' }
+    assert_git_diff_lines [
+      :unchanged, 'non-empty.h', 'non-empty.h', 0,0,1,
       [
-        section(0),
-        added(1, 'something'),
+        same(1, '#include<stdio.h>'),
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA7',
   'non-empty file is renamed 100% identical' do
-    old_files = { 'plain' => 'xxx' }
-    new_files = { 'copy' => 'xxx' }
-    expected =
-    {
-      'copy' =>
+    @was_files = { 'plain' => 'xxx' }
+    @now_files = { 'copy' => 'xxx' }
+    assert_git_diff_lines [
+      :renamed, 'plain', 'copy', 0,0,1,
       [
         same(1, 'xxx'),
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'BA7',
   'non-empty file is renamed 100% identical across dirs' do
-    old_files = { 'a/b/plain' => 'zzz' }
-    new_files = { 'copy' => 'zzz' }
-    expected =
-    {
-      'copy' =>
+    @was_files = { 'a/b/plain' => "a\nb\nc\nd" }
+    @now_files = { 'copy' => "a\nb\nc\nd" }
+    assert_git_diff_lines [
+      :renamed, 'a/b/plain', 'copy', 0,0,4,
       [
-        same(1, 'zzz'),
+        same(1, 'a'),
+        same(2, 'b'),
+        same(3, 'c'),
+        same(4, 'd')
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
+=begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA8',
