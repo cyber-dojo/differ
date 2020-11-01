@@ -22,6 +22,7 @@ class HttpJsonArgs
     when '/alive'         then differ.alive?(**args)
     when '/ready'         then differ.ready?(**args)
     when '/diff'          then differ.diff(**args)
+    #when '/diff_lines2'   then differ.diff_lines2(**args)
     when '/diff_summary2' then differ.diff_summary2(**args)
     else raise RequestError, 'unknown path'
     end

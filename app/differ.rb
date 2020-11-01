@@ -2,6 +2,7 @@
 require_relative 'git_differ'
 require_relative 'git_diff_join'
 require_relative 'git_diff_lib'
+#require_relative 'git_diff_lines'
 require_relative 'git_diff_parser'
 require_relative 'git_diff_summary'
 require_relative 'prober'
@@ -25,9 +26,9 @@ class Differ
 
 =begin
   def diff_lines2(id:, old_files:, new_files:)
-    diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    diffs = GitDiffParser.new(diff_lines, :lines).parse_all
-    { 'diff_lines2' => git_diff_lines(diffs, now_files) }
+    diff_lines = GitDiffer.new(@externals).diff(id, old_files, new_files)
+    diffs = GitDiffParser.new(diff_lines, :both).parse_all
+    { 'diff_lines2' => git_diff_lines(diffs, new_files) }
   end
 =end
 
