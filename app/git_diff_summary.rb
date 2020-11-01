@@ -19,14 +19,14 @@ module GitDiffLib # mix-in
       same = count_lines_same(diff, new_files)
       added = count_lines(:added, diff)
       deleted = count_lines(:deleted, diff)
-      one_file(diff[:type], diff[:old_filename], diff[:new_filename], same, added, deleted)
+      one_file(same, added, deleted, diff[:type], diff[:old_filename], diff[:new_filename])
     end
   end
 
   def unchanged_summary(new_files, changed)
     unchanged_filenames(new_files.keys, new_filenames(changed)).map do |filename|
       same = new_files[filename].lines.count
-      one_file(:unchanged, filename, filename, same, 0, 0)
+      one_file(same, 0, 0, :unchanged, filename, filename)
     end
   end
 
@@ -38,7 +38,7 @@ module GitDiffLib # mix-in
     summary.collect{ |file| file['new_filename'] }
   end
 
-  def one_file(diff_type, old_filename, new_filename, same, added, deleted)
+  def one_file(same, added, deleted, diff_type, old_filename, new_filename)
     {
       'type' => diff_type,
       'old_filename' => old_filename,
