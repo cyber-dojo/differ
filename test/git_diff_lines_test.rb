@@ -164,16 +164,14 @@ class GitDiffLinesTest < DifferTestBase
     ]
   end
 
-=begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA8',
   'non-empty file is renamed <100% identical' do
-    old_files = { 'hiker.h'   => "a\nb\nc\nd" }
-    new_files = { 'diamond.h' => "a\nb\nX\nd" }
-    expected =
-    {
-      'diamond.h' =>
+    @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { 'diamond.h' => "a\nb\nX\nd" }
+    assert_git_diff_lines [
+      :renamed, 'hiker.h', 'diamond.h', 1,1,3,
       [
         same(1, 'a'),
         same(2, 'b'),
@@ -182,19 +180,17 @@ class GitDiffLinesTest < DifferTestBase
         added(3, 'X'),
         same(4, 'd')
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA9',
   'non-empty file is renamed <100% identical across dirs' do
-    old_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
-    new_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
-    expected =
-    {
-      '3/4/diamond.h' =>
+    @was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
+    @now_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
+    assert_git_diff_lines [
+      :renamed, '1/2/hiker.h', '3/4/diamond.h', 1,1,3,
       [
         same(1, 'a'),
         same(2, 'b'),
@@ -203,70 +199,61 @@ class GitDiffLinesTest < DifferTestBase
         added(3, 'X'),
         same(4, 'd')
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D0',
   'non-empty file has some content added at the start' do
-    old_files = { 'non-empty.c' => 'something' }
-    new_files = { 'non-empty.c' => "more\nsomething" }
-    expected =
-    {
-      'non-empty.c' =>
+    @was_files = { 'non-empty.c' => 'something' }
+    @now_files = { 'non-empty.c' => "more\nsomething" }
+    assert_git_diff_lines [
+      :changed, 'non-empty.c', 'non-empty.c', 1,0,1,
       [
         section(0),
         added(1, 'more'),
         same(2, 'something'),
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D1',
   'non-empty file has some content added at the end' do
-    old_files = { 'non-empty.c' => 'something' }
-    new_files = { 'non-empty.c' => "something\nmore" }
-    expected =
-    {
-      'non-empty.c' =>
+    @was_files = { 'non-empty.c' => 'something' }
+    @now_files = { 'non-empty.c' => "something\nmore" }
+    assert_git_diff_lines [
+      :changed, 'non-empty.c', 'non-empty.c', 1,0,1,
       [
         same(1, 'something'),
         section(0),
         added(2, 'more'),
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D2',
   'non-empty file has some content added in the middle' do
-    old_files = { 'non-empty.c' => "a\nc"}
-    new_files = { 'non-empty.c' => "a\nB\nc" }
-    expected =
-    {
-      'non-empty.c' =>
+    @was_files = { 'non-empty.c' => "a\nc"}
+    @now_files = { 'non-empty.c' => "a\nB\nc" }
+    assert_git_diff_lines [
+      :changed, 'non-empty.c', 'non-empty.c', 1,0,2,
       [
         same(1, 'a'),
         section(0),
         added(2, 'B'),
         same(3, 'c')
       ]
-    }
-    assert_join(expected, old_files, new_files)
+    ]
   end
 
   private
-=end
 
   include GitDiffLib
-
 
   def assert_git_diff_lines(raw_expected)
     expected = raw_expected.each_slice(7).to_a.map do |diff|
@@ -288,18 +275,18 @@ class GitDiffLinesTest < DifferTestBase
   end
 
   def same(number, line)
-    src(:same, number, line)
+    one_line(:same, number, line)
   end
 
   def deleted(number, line)
-    src(:deleted, number, line)
+    one_line(:deleted, number, line)
   end
 
   def added(number, line)
-    src(:added, number, line)
+    one_line(:added, number, line)
   end
 
-  def src(type, number, line)
+  def one_line(type, number, line)
     { type:type, number:number, line:line }
   end
 

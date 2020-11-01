@@ -1,38 +1,38 @@
-Run options: --seed 29066
+Run options: --seed 45470
 
 # Running:
 
-.........................................................................................................................................
+..............................................................................................................................................
 
-Finished in 2.116812s, 64.7200 runs/s, 197.4668 assertions/s.
+Finished in 2.287578s, 62.0744 runs/s, 184.9118 assertions/s.
 
-137 runs, 418 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1369 / 1369 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1369 / 1369 LOC (100.0%) covered.
+142 runs, 423 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1385 / 1385 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1385 / 1385 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1272 - 4DEk16:diff_summary_test.rb:95:non-empty file renamed 100% identical    
-0.1153 - EE7jj9:http_json_args_test.rb:10:/diff_summary2 uses proper GET query args
-0.0985 - 4AF137:rack_dispatcher_test.rb:78:diff_summary2 200 is in more general format to allow more information to be added, specifically - old and new filenames to detect file new|delete|rename - unchanged line-count
-0.0527 - 4DEj16:diff_summary_test.rb:67:empty file has one lines added           
-0.0502 - 4DEk17:diff_summary_test.rb:108:non-empty file renamed <100% identical  
-0.0502 - 4DEj15:diff_summary_test.rb:53:empty file renamed 100% identical across dirs
-0.0487 - 4DEk15:diff_summary_test.rb:81:non-empty file deleted                   
-0.0480 - 4DEk18:diff_summary_test.rb:121:two non-empty files both edited         
-0.0472 - 4DEj13:diff_summary_test.rb:25:deleted empty file                       
-0.0457 - EE7e18:http_json_args_test.rb:93:/diff_summary2 has three keyword args; id:, was_index:, now_index:
-0.0453 - 4DEj14:diff_summary_test.rb:39:renamed empty file                       
+0.1096 - 4AF137:rack_dispatcher_test.rb:78:diff_summary2 200 is in more general format to allow more information to be added, specifically - old and new filenames to detect file new|delete|rename - unchanged line-count
+0.0824 - 4AF134:rack_dispatcher_test.rb:71:diff 200                              
+0.0773 - 74C3ED:git_diff_join_test.rb:15:empty file is unchanged                 
+0.0556 - 74CAA6:git_diff_join_test.rb:45:empty file is renamed 100% identical    
+0.0537 - 4DEk16:diff_summary_test.rb:95:non-empty file renamed 100% identical    
+0.0515 - EE7e18:http_json_args_test.rb:93:/diff_summary2 has three keyword args; id:, was_index:, now_index:
+0.0498 - 4DEj16:diff_summary_test.rb:67:empty file has one lines added           
+0.0495 - EE7jj9:http_json_args_test.rb:10:/diff_summary2 uses proper GET query args
+0.0486 - 4DEk15:diff_summary_test.rb:81:non-empty file deleted                   
+0.0475 - 4DEj15:diff_summary_test.rb:53:empty file renamed 100% identical across dirs
+0.0471 - 4DEj12:diff_summary_test.rb:11:created empty file                       
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    2.12   <=     5 | [32m true [0m
-          app:lines:total |     499   <=   500 | [32m true [0m
+         test:duration(s) |    2.29   <=     5 | [32m true [0m
+          app:lines:total |     494   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |      87   <=    75 | [31m false [0m
-      app:branches:missed |       1   <=     0 | [31m false [0m
-         test:lines:total |     870   <=  1000 | [32m true [0m
+       app:branches:total |      81   <=    75 | [31m false [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     891   <=  1000 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

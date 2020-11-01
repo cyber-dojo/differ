@@ -15,17 +15,11 @@ module GitDiffLib # mix-in
 
   def changed_lines(diffs, new_files)
     diffs.each do |diff|
-      if diff[:lines] === []
-        if diff[:type] === :renamed
-          filename = diff[:new_filename]
-          file = new_files[filename]
-          lines = (file === '') ? [] : all(:same, file.split("\n"))
-          diff[:line_counts][:same] = lines.count
-        elsif diff[:type] === :deleted
-          lines = []
-        elsif diff[:type] === :created
-          lines = []
-        end
+      if diff[:type] === :renamed && diff[:lines] === []
+        filename = diff[:new_filename]
+        file = new_files[filename]
+        lines = (file === '') ? [] : all(:same, file.split("\n"))
+        diff[:line_counts][:same] = lines.count
         diff[:lines] = lines
       end
     end
