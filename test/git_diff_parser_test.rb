@@ -206,6 +206,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :deleted,
         old_filename: '\\was_newfile_FIU', # <-- single backslash
         new_filename: nil,
         lines:
@@ -232,6 +233,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :deleted,
         old_filename: 'original',
         new_filename: nil,
         lines: []
@@ -260,6 +262,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :deleted,
         old_filename: 'untitled.rb',
         new_filename: nil,
         lines:
@@ -289,6 +292,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :renamed,
         old_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
         new_filename: '\\was_newfile_FIU',      # <-- single backslash
         lines: []
@@ -312,6 +316,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :renamed,
         old_filename: 'oldname',
         new_filename: 'newname',
         lines: []
@@ -350,6 +355,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :renamed,
         old_filename: 'instructions',
         new_filename: 'instructions_new',
         lines:
@@ -401,6 +407,7 @@ class GitDiffParserTest < DifferTestBase
     expected =
     [
       {
+                type: :changed,
         old_filename: 'lines',
         new_filename: 'lines',
         lines:
@@ -411,6 +418,7 @@ class GitDiffParserTest < DifferTestBase
         ]
       },
       {
+                type: :changed,
         old_filename: 'other',
         new_filename: 'other',
         lines:
@@ -450,6 +458,7 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
+              type: :changed,
       old_filename: 'lines',
       new_filename: 'lines',
       lines:
@@ -484,6 +493,7 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
+              type: :changed,
       old_filename: 'lines',
       new_filename: 'lines',
       lines:
@@ -514,6 +524,7 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
+              type: :changed,
       old_filename: 'gapper.rb',
       new_filename: 'gapper.rb',
       lines:
@@ -571,6 +582,7 @@ class GitDiffParserTest < DifferTestBase
 
     expected =
     {
+              type: :renamed,
       old_filename: "hiker.h",
       new_filename: "hiker.txt",
       lines: []

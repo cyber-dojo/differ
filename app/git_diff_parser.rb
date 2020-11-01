@@ -27,10 +27,25 @@ class GitDiffParser
     old_filename,new_filename = parse_old_new_filenames(parse_header)
     parse_range
     {
+              type: file_type(old_filename, new_filename),
       new_filename: new_filename,
       old_filename: old_filename,
              lines: parse_lines
     }
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def file_type(old_filename, new_filename)
+    if old_filename.nil?
+      :created
+    elsif new_filename.nil?
+      :deleted
+    elsif old_filename != new_filename
+      :renamed
+    else
+      :changed
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
