@@ -7,6 +7,51 @@ class HttpJsonArgsTest < DifferTestBase
     'EE7'
   end
 
+  test 'jj8', '/diff_summary uses proper GET query args' do
+    path = 'diff_summary'
+    id = 'RNCzUr'
+    was_index = 8
+    now_index = 9
+    args = { id:id, was_index:was_index, now_index:now_index }
+    body = ''
+    actual = dispatch("/#{path}", differ, body, args)
+    expected = [
+      { type: :deleted,
+        old_filename: "readme.txt",
+        new_filename: nil,
+        line_counts: { added:0, deleted:14, same:0 }
+      },
+      { type: :unchanged,
+        old_filename: "test_hiker.sh",
+        new_filename: "test_hiker.sh",
+        line_counts: { same:8, added:0, deleted:0 }
+      },
+      { type: :unchanged,
+        old_filename: "bats_help.txt",
+        new_filename: "bats_help.txt",
+        line_counts: { same:3, added:0, deleted:0 }
+      },
+      { type: :unchanged,
+        old_filename: "hiker.sh",
+        new_filename: "hiker.sh",
+        line_counts: { same:6, added:0, deleted:0 }
+      },
+      { type: :unchanged,
+        old_filename: "cyber-dojo.sh",
+        new_filename: "cyber-dojo.sh",
+        line_counts: { same:2, added:0, deleted:0 }
+      },
+      { type: :unchanged,
+        old_filename: "sub_dir/empty.file.rename",
+        new_filename: "sub_dir/empty.file.rename",
+        line_counts: { same:1, added:0, deleted:0 }
+      }
+    ]
+    assert_equal expected, actual
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'jj9', '/diff_summary2 uses proper GET query args' do
     path = 'diff_summary2'
     id = 'RNCzUr'
@@ -165,9 +210,14 @@ class HttpJsonArgsTest < DifferTestBase
   # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
-  test 'c51',
+  test 'c50',
   %w( sha() unknown arg raises HttpJsonArgs::RequestError ) do
     assert_unknown_arg('/sha', {bad:21}, 'bad')
+  end
+
+  test 'c51',
+  %w( healthy?() unknown arg raises HttpJsonArgs::RequestError ) do
+    assert_unknown_arg('/healthy', {bad:21}, 'bad')
   end
 
   test 'c52',
@@ -199,9 +249,14 @@ class HttpJsonArgsTest < DifferTestBase
   # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
-  test 'd51',
+  test 'd50',
   %w( sha() unknown args raises HttpJsonArgs::RequestError ) do
     assert_unknown_args('/sha', {xxx:true, bad:21}, 'xxx', 'bad')
+  end
+
+  test 'd51',
+  %w( healthy() unknown args raises HttpJsonArgs::RequestError ) do
+    assert_unknown_args('/healthy', {xxx:true, bad:21}, 'xxx', 'bad')
   end
 
   test 'd52',

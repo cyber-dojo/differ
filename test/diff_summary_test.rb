@@ -139,12 +139,18 @@ class DiffSummaryTest < DifferTestBase
         line_counts: { added:diff[3], deleted:diff[4], same:diff[5] }
       }
     end
+    actual2 = diff_summary2(id, was_index, now_index)
+    assert_equal expected, actual2
     actual = diff_summary(id, was_index, now_index)
     assert_equal expected, actual
   end
 
-  def diff_summary(id, was_index, now_index)
+  def diff_summary2(id, was_index, now_index)
     differ.diff_summary2(id:id, was_index:was_index, now_index:now_index)['diff_summary2']
+  end
+
+  def diff_summary(id, was_index, now_index)
+    differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
   end
 
 end
