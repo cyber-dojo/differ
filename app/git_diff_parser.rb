@@ -35,34 +35,16 @@ class GitDiffParser
     }
     n = @n
     if @mode === :summary || @mode === :both
-      parse_counts_into(one)
+      one[:line_counts] = parse_counts
     end
     if @mode === :lines || @mode === :both
       @n = n
-      parse_lines_into(one)
+      one[:lines] = parse_lines
     end
     one
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def file_type(old_filename, new_filename)
-    if old_filename.nil?
-      :created
-    elsif new_filename.nil?
-      :deleted
-    elsif old_filename != new_filename
-      :renamed
-    else
-      :changed
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_lines_into(one)
-    one[:lines] = parse_lines
-  end
 
   def parse_lines
     lines = []
@@ -92,10 +74,6 @@ class GitDiffParser
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def parse_counts_into(one)
-    one[:line_counts] = parse_counts
-  end
 
   def parse_counts
     same,deleted,added = 0,0,0
@@ -133,6 +111,20 @@ class GitDiffParser
   private
 
   include GitDiffParserLib
+
+  def file_type(old_filename, new_filename)
+    if old_filename.nil?
+      :created
+    elsif new_filename.nil?
+      :deleted
+    elsif old_filename != new_filename
+      :renamed
+    else
+      :changed
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def in_header?(line)
     line &&                             # still more lines
