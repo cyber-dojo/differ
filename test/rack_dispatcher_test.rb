@@ -11,8 +11,10 @@ class RackDispatcherTest < DifferTestBase
 
   test 'ss6', %w[
   |healthy? (used in Dockerfile HEALTHCHECK)
+  |but not by kubernetes
   |logs exception to /tmp/healthy.fail.log
   |and not to stdout/stderr
+  |to keep stdout/stderr clean during dev cycle startup
   ] do
     externals.instance_exec { @model_http = HttpAdapterStub.new(not_json='xxxx') }
     log_filename = '/tmp/healthy.fail.log'
@@ -76,13 +78,13 @@ class RackDispatcherTest < DifferTestBase
   end
 
   test '137', %w(
-  diff_summary2 200 is in more general format
+  diff_summary 200 is in more general format
   to allow more information to be added, specifically
   - old and new filenames to detect file new|delete|rename
   - unchanged line-count
   ) do
     args = { id:'RNCzUr', was_index:4, now_index:5 }
-    assert_200('diff_summary2', args) do |response|
+    assert_200('diff_summary', args) do |response|
       expected = [
         { "type" => "created",
           "old_filename" => nil,
@@ -116,11 +118,11 @@ class RackDispatcherTest < DifferTestBase
           "line_counts" => { "same"=>14, "added"=>0, "deleted"=>0 }
         }
       ]
-      assert_equal expected, response['diff_summary2']
+      assert_equal expected, response
     end
 
     args = { id:'RNCzUr', was_index:1, now_index:2 }
-    assert_200('diff_summary2', args) do |response|
+    assert_200('diff_summary', args) do |response|
       expected = [
         { "type" => "changed",
           "old_filename" => "hiker.sh",
@@ -148,7 +150,7 @@ class RackDispatcherTest < DifferTestBase
           "line_counts" => { "same"=>2, "added"=>0, "deleted"=>0 }
         }
       ]
-      assert_equal expected, response['diff_summary2']
+      assert_equal expected, response
     end
   end
 

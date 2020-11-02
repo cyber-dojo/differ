@@ -50,53 +50,6 @@ class HttpJsonArgsTest < DifferTestBase
     assert_equal expected, actual
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'jj9', '/diff_summary2 uses proper GET query args' do
-    path = 'diff_summary2'
-    id = 'RNCzUr'
-    was_index = 8
-    now_index = 9
-    args = { id:id, was_index:was_index, now_index:now_index }
-    body = ''
-    result = dispatch("/#{path}", differ, body, args)
-    assert_equal [path], result.keys
-    expected = [
-      { type: :deleted,
-        old_filename: "readme.txt",
-        new_filename: nil,
-        line_counts: { added:0, deleted:14, same:0 }
-      },
-      { type: :unchanged,
-        old_filename: "test_hiker.sh",
-        new_filename: "test_hiker.sh",
-        line_counts: { same:8, added:0, deleted:0 }
-      },
-      { type: :unchanged,
-        old_filename: "bats_help.txt",
-        new_filename: "bats_help.txt",
-        line_counts: { same:3, added:0, deleted:0 }
-      },
-      { type: :unchanged,
-        old_filename: "hiker.sh",
-        new_filename: "hiker.sh",
-        line_counts: { same:6, added:0, deleted:0 }
-      },
-      { type: :unchanged,
-        old_filename: "cyber-dojo.sh",
-        new_filename: "cyber-dojo.sh",
-        line_counts: { same:2, added:0, deleted:0 }
-      },
-      { type: :unchanged,
-        old_filename: "sub_dir/empty.file.rename",
-        new_filename: "sub_dir/empty.file.rename",
-        line_counts: { same:1, added:0, deleted:0 }
-      }
-    ]
-    actual = result[path]
-    assert_equal expected, actual
-  end
-
   # - - - - - - - - - - - - - - - - -
   # dispatch calls with correct number of args
   # return hash with single key matching the path
@@ -136,14 +89,17 @@ class HttpJsonArgsTest < DifferTestBase
   end
 
   test 'e18',
-  %w( /diff_summary2 has three keyword args; id:, was_index:, now_index: ) do
+  %w( /diff_summary has three keyword args; id:, was_index:, now_index: ) do
     body = {
       id:'RNCzUr',
       was_index:1,
       now_index:2
     }.to_json
-    result = dispatch('/diff_summary2', differ, body)
-    assert_equal ['diff_summary2'], result.keys
+    result = dispatch('/diff_summary', differ, body)
+    assert_equal 'Array', result.class.name
+    assert_equal 5, result.size
+    assert_equal 'Hash', result[0].class.name
+    assert result[0].keys.include?(:new_filename)
   end
 
   # - - - - - - - - - - - - - - - - -

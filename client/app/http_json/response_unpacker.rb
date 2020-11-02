@@ -5,9 +5,10 @@ module HttpJson
 
   class ResponseUnpacker
 
-    def initialize(requester, exception_class)
+    def initialize(requester, exception_class, options = {})
       @requester = requester
       @exception_class = exception_class
+      @options = options
     end
 
     # - - - - - - - - - - - - - - - - - - - - -
@@ -23,16 +24,19 @@ module HttpJson
 
     def unpacked(body, path)
       json = json_parse(body)
-      unless json.is_a?(Hash)
-        fail error_msg(body, 'is not JSON Hash')
+      unless json.is_a?(Hash) || json.is_a?(Array)
+        fail error_msg(body, 'is not JSON Hash|Array')
       end
-      if json.has_key?('exception')
+      if json.is_a?(Hash) && json.has_key?('exception')
         fail JSON.pretty_generate(json['exception'])
       end
-      unless json.has_key?(path)
-        fail error_msg(body, "has no key for '#{path}'")
+      if @options[:keyed]
+        unless json.has_key?(path)
+          fail error_msg(body, "has no key for '#{path}'")
+        end
+        json[path]
       end
-      json[path]
+      json
     end
 
     # - - - - - - - - - - - - - - - - - - - - -

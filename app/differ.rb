@@ -60,17 +60,6 @@ class Differ
     git_diff_summary(diffs, now_files)
   end
 
-  def diff_summary2(id:, was_index:, now_index:)
-    # args from request query will be strings
-    was = model.kata_event(id, was_index.to_i)
-    now = model.kata_event(id, now_index.to_i)
-    was_files = files(was)
-    now_files = files(now)
-    diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    diffs = GitDiffParser.new(diff_lines, counts:true).parse_all
-    { 'diff_summary2' => git_diff_summary(diffs, now_files) }
-  end
-
   private
 
   include GitDiffLib

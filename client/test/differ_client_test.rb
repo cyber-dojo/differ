@@ -8,7 +8,7 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'jj9', '/diff_summary2 uses proper GET query args' do
+  test 'jj9', '/diff_summary uses proper GET query args' do
     name = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJson::RequestPacker.new(externals.http, name, port)
@@ -16,7 +16,7 @@ class DifferClientTest < ClientTestBase
     id = 'RNCzUr'
     was_index = 8
     now_index = 9
-    path = 'diff_summary2'
+    path = 'diff_summary'
     args = { id:id, was_index:was_index, now_index:now_index }
     actual = http.get(path, args, { gives: :query })
     expected = [
@@ -86,15 +86,15 @@ class DifferClientTest < ClientTestBase
   end
 
   test '945', 'healthy? 200' do
-    assert differ.healthy?
+    assert differ.healthy?.is_a?(TrueClass)
   end
 
   test '946', 'alive? 200' do
-    assert differ.alive?
+    assert differ.alive?.is_a?(TrueClass)
   end
 
   test '947', 'ready? 200' do
-    assert differ.ready?
+    assert differ.ready?.is_a?(TrueClass)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -579,7 +579,7 @@ def assert_diff_summary(id, was_index, now_index)
       'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
     }
   end
-  actual = differ.diff_summary2(id, was_index, now_index)
+  actual = differ.diff_summary(id, was_index, now_index)
   assert_equal expected, actual
 end
 

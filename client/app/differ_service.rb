@@ -9,23 +9,23 @@ class DifferService
     name = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJson::RequestPacker.new(externals.http, name, port)
-    @http = HttpJson::ResponseUnpacker.new(requester, DifferException)
+    @http = HttpJson::ResponseUnpacker.new(requester, DifferException, keyed:false)
   end
 
   def sha
-    @http.get(__method__, {})
+    @http.get(__method__, {})['sha']
   end
 
   def healthy?
-    @http.get(__method__, {})
+    @http.get(__method__, {})['healthy?']
   end
 
   def alive?
-    @http.get(__method__, {})
+    @http.get(__method__, {})['alive?']
   end
 
   def ready?
-    @http.get(__method__, {})
+    @http.get(__method__, {})['ready?']
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -35,10 +35,10 @@ class DifferService
       id:id,
       old_files:old_files,
       new_files:new_files
-    })
+    })['diff']
   end
 
-  def diff_summary2(id, was_index, now_index)
+  def diff_summary(id, was_index, now_index)
     @http.get(__method__, {
       id:id,
       was_index:was_index,
