@@ -37,7 +37,7 @@ class Differ
     was_files = model_files(id, was_index.to_i)
     now_files = model_files(id, now_index.to_i)
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    diffs = GitDiffParser.new(diff_lines, :summary).parse_all
+    diffs = GitDiffParser.new(diff_lines, counts:true).parse_all
     { 'diff_summary2' => git_diff_summary(diffs, now_files) }
   end
 

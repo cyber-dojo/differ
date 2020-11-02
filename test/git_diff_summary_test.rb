@@ -169,7 +169,7 @@ class GitDiffSummaryTest < DifferTestBase
       }
     end
     diff_lines = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    diffs = GitDiffParser.new(diff_lines, :summary).parse_all
+    diffs = GitDiffParser.new(diff_lines, lines:false, counts:true).parse_all
     actual = git_diff_summary(diffs, @now_files)
     assert_equal expected, actual
   end

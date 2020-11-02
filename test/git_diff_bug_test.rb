@@ -18,7 +18,7 @@ class GitDiffBugTest < DifferTestBase
       'copy to was_recently_used_list.test.cpp',
     ].join("\n")
 
-    diff = GitDiffParser.new(bad_diff_lines).parse_all
+    diff = GitDiffParser.new(bad_diff_lines, lines:true).parse_all
 
     expected =
     [

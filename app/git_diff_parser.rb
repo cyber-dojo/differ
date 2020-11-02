@@ -7,10 +7,10 @@ class GitDiffParser
   # Assumes the --unified=99999999999 option has been used
   # so there is always a single @@ range and all context lines
 
-  def initialize(diff_text, mode = :lines)
+  def initialize(diff_text, options = {})
     @lines = diff_text.split("\n")
     @n = 0
-    @mode = mode
+    @options = options
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -34,10 +34,10 @@ class GitDiffParser
       old_filename: old_filename,
     }
     n = @n
-    if @mode === :summary || @mode === :both
+    if @options[:counts]
       one[:line_counts] = parse_counts
     end
-    if @mode === :lines || @mode === :both
+    if @options[:lines]
       @n = n
       one[:lines] = parse_lines
     end
