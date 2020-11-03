@@ -9,7 +9,7 @@ class GitDiffParser
 
   def initialize(diff_text, options = {})
     @lines = diff_text.split("\n")
-    @n = 0
+    @n = 0 # index into @lines
     @options = options
   end
 

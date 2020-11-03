@@ -41,13 +41,13 @@ class Differ
   end
 =end
 
-=begin
+#=begin
   def diff_lines2(id:, old_files:, new_files:)
     diff_lines = GitDiffer.new(@externals).diff(id, old_files, new_files)
     diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
     { 'diff_lines2' => git_diff_lines(diffs, new_files) }
   end
-=end
+#=end
 
   def diff_summary(id:, was_index:, now_index:)
     # args from request query will be strings

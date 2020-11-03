@@ -260,13 +260,15 @@ class GitDiffLinesTest < DifferTestBase
       {         type: diff[0],
         old_filename: diff[1],
         new_filename: diff[2],
-         line_counts: { added:diff[3], deleted:diff[4], same:diff[5] },
-               lines: diff[6]
+               lines: diff[6],
+         line_counts: {
+             added:diff[3],
+           deleted:diff[4],
+              same:diff[5] 
+         },
       }
     end
-    diff_lines = GitDiffer.new(externals).diff(id58, @was_files, @now_files)
-    diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
-    actual = git_diff_lines(diffs, @now_files)
+    actual = differ.diff_lines2(id:id58, old_files:@was_files, new_files:@now_files)['diff_lines2']
     assert_equal expected, actual
   end
 
