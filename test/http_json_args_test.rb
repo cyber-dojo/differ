@@ -75,19 +75,6 @@ class HttpJsonArgsTest < DifferTestBase
     assert_equal({ 'ready?' => true }, result)
   end
 
-  test 'e15',
-  %w( /diff has three keyword args; id:,old_files:,new_files: ) do
-    old_files = { 'hiker.h' => "a\nb" }
-    new_files = { 'hiker.h' => "a\nb\nc" }
-    body = {
-      id:id58,
-      old_files:old_files,
-      new_files:new_files
-    }.to_json
-    result = dispatch('/diff', differ, body)
-    assert_equal ['diff'], result.keys
-  end
-
   test 'e18',
   %w( /diff_summary has three keyword args; id:, was_index:, now_index: ) do
     body = {
@@ -128,116 +115,30 @@ class HttpJsonArgsTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - -
-  # dispatch diff with one missing argument
-  # raise HttpJsonArgs::RequestError
-  # - - - - - - - - - - - - - - - - -
-
-  test '7B1',
-  %w( diff() missing id raises HttpJsonArgs::RequestError ) do
-    assert_missing_arg(:id)
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '7B2',
-  %w( diff() missing old_files raises HttpJsonArgs::RequestError ) do
-    assert_missing_arg(:old_files)
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '7B3',
-  %w( diff() missing new_files raises HttpJsonArgs::RequestError ) do
-    assert_missing_arg(:new_files)
-  end
-
-  # - - - - - - - - - - - - - - - - -
-  # dispatch diff with more than one missing argument
-  # raise HttpJsonArgs::RequestError
-  # - - - - - - - - - - - - - - - - -
-
-  test 'd97',
-  %w( diff() missing old_files and new_files raises HttpJsonArgs::RequestError ) do
-    assert_missing_args(:old_files, :new_files)
-  end
-
-  # - - - - - - - - - - - - - - - - -
-  # dispatch calls with one unknown argument
-  # raise HttpJsonArgs::RequestError
-  # - - - - - - - - - - - - - - - - -
 
   test 'c50',
-  %w( sha() unknown arg raises HttpJsonArgs::RequestError ) do
+  %w( one unknown arg raises HttpJsonArgs::RequestError ) do
     assert_unknown_arg('/sha', {bad:21}, 'bad')
-  end
-
-  test 'c51',
-  %w( healthy?() unknown arg raises HttpJsonArgs::RequestError ) do
     assert_unknown_arg('/healthy', {bad:21}, 'bad')
-  end
-
-  test 'c52',
-  %w( alive?() unknown arg raises HttpJsonArgs::RequestError ) do
     assert_unknown_arg('/alive', {none:'sd'}, 'none')
+    args = { flag:true }
+    none = {}
+    assert_unknown_arg('/ready', args, 'flag', none)
+    assert_unknown_arg('/ready', none, 'flag', args)
+    params = { id:id58, was_index:'23', now_index:'24', nope:42 }
+    assert_unknown_arg('/diff_summary', {}, 'nope', params)
   end
 
-  test 'c53',
-  %w( ready?() unknown arg raises HttpJsonArgs::RequestError ) do
-    assert_unknown_arg('/ready', {flag:true}, 'flag')
-  end
-
-  test 'c54',
-  %w( diff() unknown arg raises HttpJsonArgs::RequestError ) do
-    args = {
-      id:id58,
-      old_files:{ 'hiker.h' => "a\nb" },
-      new_files:{ 'hiker.h' => "a\nb\nc" },
-      nope:42
-    }
-    error = assert_raises(HttpJsonArgs::RequestError) {
-      dispatch('/diff', differ, args.to_json)
-    }
-    assert_equal 'unknown argument: :nope', error.message
-  end
-
-  # - - - - - - - - - - - - - - - - -
-  # dispatch calls with more than one unknown argument
-  # raise HttpJsonArgs::RequestError
   # - - - - - - - - - - - - - - - - -
 
   test 'd50',
-  %w( sha() unknown args raises HttpJsonArgs::RequestError ) do
+  %w( two or more unknown args raises HttpJsonArgs::RequestError ) do
     assert_unknown_args('/sha', {xxx:true, bad:21}, 'xxx', 'bad')
-  end
-
-  test 'd51',
-  %w( healthy() unknown args raises HttpJsonArgs::RequestError ) do
     assert_unknown_args('/healthy', {xxx:true, bad:21}, 'xxx', 'bad')
-  end
-
-  test 'd52',
-  %w( alive?() unknown args raises HttpJsonArgs::RequestError ) do
     assert_unknown_args('/alive', {none:'sd', z:nil}, 'none', 'z')
-  end
-
-  test 'd53',
-  %w( ready?() unknown arg raises HttpJsonArgs::RequestError ) do
     assert_unknown_args('/ready', {flag:true,a:'dfg'}, 'flag', 'a')
-  end
-
-  test 'd54',
-  %w( diff() unknown args raises HttpJsonArgs::RequestError ) do
-    args = {
-      id:id58,
-      old_files:{ 'hiker.h' => "a\nb" },
-      new_files:{ 'hiker.h' => "a\nb\nc" },
-      nope:42,
-      zz:false
-    }
-    error = assert_raises(HttpJsonArgs::RequestError) {
-      dispatch('/diff', differ, args.to_json)
-    }
-    assert_equal 'unknown arguments: :nope, :zz', error.message
+    args = { id:id58, was_index:23, now_index:24, nope:42, zz:false }
+    assert_unknown_args('/diff_summary', args, 'nope', 'zz')
   end
 
   private
@@ -248,9 +149,9 @@ class HttpJsonArgsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  def assert_unknown_arg(path, args, name)
+  def assert_unknown_arg(path, args, name, params={})
     error = assert_raises(HttpJsonArgs::RequestError) {
-      dispatch(path, differ, args.to_json)
+      dispatch(path, differ, args.to_json, params)
     }
     assert_equal "unknown argument: :#{name}", error.message
   end
@@ -267,6 +168,7 @@ class HttpJsonArgsTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+=begin
   def assert_missing_arg(name)
     args = {
       id:id58,
@@ -295,5 +197,6 @@ class HttpJsonArgsTest < DifferTestBase
     names.map!{ |name| ":#{name}" }
     assert_equal "missing arguments: #{names.join(', ')}", error.message
   end
+=end
 
 end

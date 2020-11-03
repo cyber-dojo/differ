@@ -42,38 +42,19 @@ class RackDispatcherTest < DifferTestBase
     assert_equal({"ready?" => true}, JSON.parse(response[2][0]))
   end
 
-  test '130', 'sha 200' do
+  test '130', 'probes 200' do
     args = {}
     assert_200('sha', args) do |response|
       assert_equal ENV['SHA'], response['sha']
     end
-  end
-
-  test '131', 'healthy 200' do
-    args = {}
     assert_200('healthy', args) do |response|
       assert_equal true, response['healthy?']
     end
-  end
-
-  test '132', 'alive 200' do
-    args = {}
     assert_200('alive', args) do |response|
       assert_equal true, response['alive?']
     end
-  end
-
-  test '133', 'ready 200' do
-    args = {}
     assert_200('ready', args) do |response|
       assert_equal true, response['ready?']
-    end
-  end
-
-  test '134', 'diff 200' do
-    args = { id:id58, old_files:{}, new_files:{} }
-    assert_200('diff', args) do |response|
-      assert_equal({}, response['diff'])
     end
   end
 
@@ -183,27 +164,17 @@ class RackDispatcherTest < DifferTestBase
   test 'E23',
   'dispatch returns 400 when one arg is unknown' do
     assert_dispatch_error('sha',   {x:42}.to_json, 400, 'unknown argument: :x')
-    assert_dispatch_error('diff', {a:0,id:1,old_files:2,new_files:3}.to_json, 400,
+    assert_dispatch_error('ready', {y:true}.to_json, 400, 'unknown argument: :y')
+    assert_dispatch_error('diff_summary', {a:0,id:1,was_index:2,now_index:3}.to_json, 400,
       'unknown argument: :a')
   end
 
   test 'E24',
   'dispatch returns 400 when two or more args are unknown' do
     assert_dispatch_error('sha',   {x:4,y:2}.to_json, 400, 'unknown arguments: :x, :y')
-    assert_dispatch_error('diff', {b:0,id:1,old_files:2,new_files:3,a:4}.to_json, 400,
+    assert_dispatch_error('alive',   {q:4,r:2}.to_json, 400, 'unknown arguments: :q, :r')
+    assert_dispatch_error('diff_summary', {b:0,id:1,was_index:2,now_index:3,a:4}.to_json, 400,
       'unknown arguments: :b, :a')
-  end
-
-  test 'E25',
-  'diff returns 400 when one arg is missing' do
-    args = { old_files:{}, new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'missing argument: :id')
-  end
-
-  test 'E26',
-  'diff returns 400 when two or more args are missing' do
-    args = { new_files:{} }
-    assert_dispatch_error('diff', args.to_json, 400, 'missing arguments: :id, :old_files')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 require_relative 'git_differ'
-require_relative 'git_diff_join'
-require_relative 'git_diff_lib'
 require_relative 'git_diff_lines'
 require_relative 'git_diff_parser'
 require_relative 'git_diff_summary'
@@ -18,19 +16,11 @@ class Differ
   def alive?  ; prober.alive?  ; end
   def ready?  ; prober.ready?  ; end
 
-  def diff(id:, old_files:, new_files:) # TODO: Delete
-    git_diff = GitDiffer.new(@externals).diff(id, old_files, new_files)
-    result = git_diff_join(git_diff, old_files, new_files)
-    { 'diff' => result }
+  def diff_lines2(id:, old_files:, new_files:)
+    diff_lines = GitDiffer.new(@externals).diff(id, old_files, new_files)
+    diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
+    { 'diff_lines2' => git_diff_lines(diffs, new_files) }
   end
-
-  #=begin
-    def diff_lines2(id:, old_files:, new_files:)
-      diff_lines = GitDiffer.new(@externals).diff(id, old_files, new_files)
-      diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
-      { 'diff_lines2' => git_diff_lines(diffs, new_files) }
-    end
-  #=end
 
 =begin
   def diff_lines(id:, was_index:, now_index:)

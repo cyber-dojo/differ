@@ -30,12 +30,12 @@ class DifferService
 
   # - - - - - - - - - - - - - - - - - - -
 
-  def diff(id, old_files, new_files)
+  def diff_lines2(id, old_files, new_files)
     @http.get(__method__, {
       id:id,
       old_files:old_files,
       new_files:new_files
-    })['diff']
+    })['diff_lines2']
   end
 
   def diff_summary(id, was_index, now_index)

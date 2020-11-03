@@ -22,8 +22,8 @@ class HttpResponseUnpackerTest < ClientTestBase
 
   test 'AE3',
   %w( returns response-body's entry for the path ) do
-    json = unpacker({ diff:42 }.to_json).get('diff', [])
-    assert_equal({'diff'=>42}, json)
+    json = unpacker({ diff_summary:42 }.to_json).get('diff', [])
+    assert_equal({'diff_summary'=>42}, json)
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -61,25 +61,25 @@ class HttpResponseUnpackerTest < ClientTestBase
     error = assert_raises(ResponseException) {
       stub = HttpJsonResponseBodyStubber.new(body)
       unpacker = HttpJson::ResponseUnpacker.new(stub, ResponseException, keyed:true)
-      unpacker.get('diff', [])
+      unpacker.get('diff_summary', [])
     }
-    expected = "http response.body has no key for 'diff':{\"x\":42}"
+    expected = "http response.body has no key for 'diff_summary':{\"x\":42}"
     assert_equal expected, error.message
   end
 
   test 'AE8',
   %w( returns value when response-body is JSON Hash, keyed:true is set, and there is a key for path ) do
-    body = {diff:42}.to_json
+    body = {diff_summary:42}.to_json
     stub = HttpJsonResponseBodyStubber.new(body)
     unpacker = HttpJson::ResponseUnpacker.new(stub, ResponseException, keyed:true)
-    response = unpacker.get('diff', [])
-    assert_equal({'diff'=>42}, response)
+    response = unpacker.get('diff_summary', [])
+    assert_equal({'diff_summary'=>42}, response)
   end
 
   private
 
   def assert_get_raises(body)
-    assert_raises(ResponseException) { unpacker(body).get('diff', [])}
+    assert_raises(ResponseException) { unpacker(body).get('diff_summary', [])}
   end
 
   def unpacker(body)

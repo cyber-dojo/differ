@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative 'git_diff_lib' # all, line_split
 
 module GitDiffLib # mix-in
 
@@ -47,6 +46,12 @@ module GitDiffLib # mix-in
       []
     else
       all(:same, file.split("\n"))
+    end
+  end
+
+  def all(type, lines)
+    lines.collect.each.with_index(1) do |line,number|
+      { type:type, line:line, number:number }
     end
   end
 
