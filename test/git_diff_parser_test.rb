@@ -7,6 +7,44 @@ class GitDiffParserTest < DifferTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'sP3',
+  'empty options in ctor gives no lines and no line_counts' do
+    diff = [
+      'diff --git instructions instructions_new',
+      'similarity index 87%',
+      'rename from instructions',
+      'rename to instructions_new',
+      'index dc12fc4..08a6241 100644',
+      '--- instructions',
+      '+++ instructions_new',
+      '@@ -1,10 +1,10 @@',
+      ' Write a program to generate all potential',
+      ' anagrams of an input string.',
+      ' ',
+      ' For example, the potential anagrams of "biro" are',
+      ' ',
+      ' biro bior brio broi boir bori',
+      ' ibro ibor irbo irob iobr iorb',
+      ' rbio rboi ribo riob roib robi',
+      '-obir obri oibr oirb orbi orib',
+      '+obir obri oibr oirb orbi oribx',
+      ' ',
+    ].join("\n")
+
+    expected =
+    [
+      {
+                type: :renamed,
+        old_filename: 'instructions',
+        new_filename: 'instructions_new'
+      }
+    ]
+
+    assert_equal expected, GitDiffParser.new(diff,{}).parse_all
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_all
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
 
