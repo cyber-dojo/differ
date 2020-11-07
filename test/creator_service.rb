@@ -7,9 +7,9 @@ module External
   class CreatorService
 
     def initialize
-      name = 'creator'
+      hostname = 'creator'
       port = ENV['CYBER_DOJO_CREATOR_PORT'].to_i
-      @http = Test::HttpJsonHash::service(self.class.name, name, port)
+      @http = Test::HttpJsonHash::service(hostname, port)
     end
 
     # - - - - - - - - - - - - - - - - - - -
@@ -25,11 +25,15 @@ module External
         exercise_name:exercise_name,
         language_name:language_name
       }
-      encoded = args.map{|name,value|
+      @http.get("#{__method__}?#{cgi_escaped(args)}", {})
+    end
+
+    private
+
+    def cgi_escaped(args)
+      args.map{|name,value|
         "#{name}=#{CGI::escape(value)}"
       }.join('&')
-      path = __method__.to_s + '?' + encoded
-      @http.get(path, {})
     end
 
   end
