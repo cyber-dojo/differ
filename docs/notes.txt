@@ -3,11 +3,20 @@ Planned refactorings...
 
 1)
 diff_lines() does not squash stdout/stderr/status into the diff.
-Instead web handles these separately as non-files.
+Instead web's diff/review page handles these separately as non-files
+via a $.getJSON('/model/kata_event') call from the browser.
 
 2)
 diff_lines() and diff_summary() collapse into a single diff()
-function which can be passed options lines:true, counts:true
+function which can be passed options {lines:true, counts:true}
+- diff_lines()   == diff(..., {lines:true, counts:true})
+- diff_summary() == diff(..., {counts:true})
 
 3)
 Update the readme and docs/api.md
+
+4)
+returned json is not keyed on the name of the calling method.
+
+5)
+differ service is based on Sinatra
