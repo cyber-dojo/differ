@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 require 'net/http'
 
-module Test module HttpJsonHash
+module Test; end
+module Test::HttpJsonHash
 
   class Http
 
@@ -25,4 +26,4 @@ module Test module HttpJsonHash
 
   end
 
-end end
+end

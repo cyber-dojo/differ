@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-module Test module HttpJsonHash
+module Test; end
+module Test::HttpJsonHash
 
   class ServiceError < RuntimeError
 
@@ -16,4 +17,4 @@ module Test module HttpJsonHash
 
   end
 
-end end
+end

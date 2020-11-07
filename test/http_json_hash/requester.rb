@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+require_relative 'http'
 require 'json'
 require 'uri'
 
-module Test module HttpJsonHash
+module Test::HttpJsonHash
 
   class Requester
 
-    def initialize(http, hostname, port)
-      @http = http
+    def initialize(hostname, port)
+      @http = Http.new
       @hostname = hostname
       @port = port
     end
@@ -36,4 +37,4 @@ module Test module HttpJsonHash
 
   end
 
-end end
+end

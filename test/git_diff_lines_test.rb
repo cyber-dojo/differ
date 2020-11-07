@@ -23,13 +23,16 @@ class GitDiffLinesTest < DifferTestBase
     language_name = 'C (gcc), assert'
     manifest = creator.build_manifest(exercise_name, language_name)
     id = model.kata_create(manifest)
-    p id
+    p id # WORKING...
+    # TODO: Normally files have at least cyber-dojo.sh....
+    # TODO: What goes in the summary?
+    # TODO: Is was_files|now_files in correct format? 'truncated' ?
+    # TODO: diff result will contain diffs for stdout/stderr/status
+    #    
     # model.kata_ran_tests(id, was_index=1, was_files, stdout, stderr, status, summary={...})
     # model.kata_ran_tests(id, was_index=2, now_files, stdout, stderr, status, summary={...})
     # diff = differ.diff_lines(id, was_index, now_index)['diff_lines']
     #
-    # o) Is was_files|now_files in correct format? 'truncated' ?
-    # o) diff result will contain diffs for stdout/stderr/status
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
