@@ -13,9 +13,7 @@ module External
 
     # - - - - - - - - - - - - - - - - - - -
 
-    def ready?
-      @http.get(__method__, {})
-    end
+    #def ready?; @http.get(__method__, {}); end
 
     # - - - - - - - - - - - - - - - - - - -
 

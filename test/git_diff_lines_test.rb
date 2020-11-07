@@ -15,24 +15,11 @@ class GitDiffLinesTest < DifferTestBase
   'empty file is created' do
     @was_files = {}
     @now_files = { 'empty.h' => '' }
+
     assert_git_diff_lines [
       :created, nil, 'empty.h', 0,0,0,
       []
     ]
-    exercise_name = 'Fizz Buzz'
-    language_name = 'C (gcc), assert'
-    manifest = creator.build_manifest(exercise_name, language_name)
-    id = model.kata_create(manifest)
-    p id # WORKING...
-    # TODO: Normally files have at least cyber-dojo.sh....
-    # TODO: What goes in the summary?
-    # TODO: Is was_files|now_files in correct format? 'truncated' ?
-    # TODO: diff result will contain diffs for stdout/stderr/status
-    #    
-    # model.kata_ran_tests(id, was_index=1, was_files, stdout, stderr, status, summary={...})
-    # model.kata_ran_tests(id, was_index=2, now_files, stdout, stderr, status, summary={...})
-    # diff = differ.diff_lines(id, was_index, now_index)['diff_lines']
-    #
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -267,10 +254,80 @@ class GitDiffLinesTest < DifferTestBase
 
   private
 
-  include GitDiffLib
-
   def assert_git_diff_lines(raw_expected)
-    expected = raw_expected.each_slice(7).to_a.map do |diff|
+
+    expected = expected_diff(raw_expected)[0]
+
+    exercise_name = 'Fizz Buzz'
+    language_name = 'C (gcc), assert'
+    manifest = creator.build_manifest(exercise_name, language_name)
+    id = model.kata_create(manifest)['kata_create']
+
+    model.kata_ran_tests(
+      id,
+      was_index=1,
+      plain(@was_files),
+      stdout={
+        'content' => 'this is stdout',
+        'truncated' => false
+      },
+      stderr={
+        'content' => 'this is stderr',
+        'truncated' => false
+      },
+      status='0',
+      summary = {
+        'duration' => 0.45634,
+        'colour' => 'red',
+        'predicted' => 'none'
+      }
+    )
+
+    model.kata_ran_tests(
+      id,
+      now_index=2,
+      plain(@now_files),
+      stdout={
+        'content' => 'this is stdout',
+        'truncated' => false
+      },
+      stderr={
+        'content' => 'this is stderr',
+        'truncated' => false
+      },
+      status='0',
+      summary = {
+        'duration' => 0.457764,
+        'colour' => 'green',
+        'predicted' => 'none'
+      }
+    )
+
+    diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
+
+    diagnostic = [
+      "expected=#{JSON.pretty_generate(expected)}",
+      "diff=#{JSON.pretty_generate(diff)}"
+    ].join("\n")
+
+    assert diff.include?(expected), diagnostic
+  end
+
+  # - - - - - - - - - - - - -
+
+  def plain(files)
+    files.map{|filename,content|
+      [filename,{
+        'content' => content,
+        'truncated' => false
+      }]
+    }.to_h
+  end
+
+  # - - - - - - - - - - - - -
+
+  def expected_diff(raw_expected)
+    raw_expected.each_slice(7).to_a.map do |diff|
       {         type: diff[0],
         old_filename: diff[1],
         new_filename: diff[2],
@@ -282,8 +339,6 @@ class GitDiffLinesTest < DifferTestBase
          },
       }
     end
-    actual = differ.diff_lines2(id:id58, old_files:@was_files, new_files:@now_files)['diff_lines2']
-    assert_equal expected, actual
   end
 
   def section(index)
