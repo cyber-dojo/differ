@@ -2,13 +2,14 @@
 require_relative 'service_error'
 require 'json'
 
-module HttpJsonHash
+module Test module HttpJsonHash
 
   class Unpacker
 
-    def initialize(name, requester)
+    def initialize(name, requester, options = {})
       @name = name
       @requester = requester
+      @options = options
     end
 
     # - - - - - - - - - - - - - - - - - - - - -
@@ -18,22 +19,31 @@ module HttpJsonHash
       unpacked(response.body, path.to_s, args)
     end
 
+    def post(path, args)
+      response = @requester.post(path, args)
+      unpacked(response.body, path.to_s, args)
+    end
+
     # - - - - - - - - - - - - - - - - - - - - -
 
     private
 
     def unpacked(body, path, args)
       json = JSON.parse!(body)
-      unless json.instance_of?(Hash)
-        service_error(path, args, body, 'body is not JSON Hash')
+      unless json.instance_of?(Hash) || json.instance_of?(Array)
+        service_error(path, args, body, 'body is not JSON Hash|Array')
       end
-      if json.has_key?('exception')
+      if json.is_a?(Hash) && json.has_key?('exception')
         service_error(path, args, body, 'body has embedded exception')
       end
-      unless json.has_key?(path)
-        service_error(path, args, body, 'body is missing :path key')
+      if @options[:keyed]
+        unless json.has_key?(path)
+          service_error(path, args, body, 'body is missing :path key')
+        end
+        json[path]
+      else
+        json
       end
-      json[path]
     rescue JSON::ParserError
       service_error(path, args, body, 'body is not JSON')
     end
@@ -46,4 +56,4 @@ module HttpJsonHash
 
   end
 
-end
+end end

@@ -19,6 +19,17 @@ class GitDiffLinesTest < DifferTestBase
       :created, nil, 'empty.h', 0,0,0,
       []
     ]
+    exercise_name = 'Fizz Buzz'
+    language_name = 'C (gcc), assert'
+    manifest = creator.build_manifest(exercise_name, language_name)
+    id = model.kata_create(manifest)
+    p id
+    # model.kata_ran_tests(id, was_index=1, was_files, stdout, stderr, status, summary={...})
+    # model.kata_ran_tests(id, was_index=2, now_files, stdout, stderr, status, summary={...})
+    # diff = differ.diff_lines(id, was_index, now_index)['diff_lines']
+    #
+    # o) Is was_files|now_files in correct format? 'truncated' ?
+    # o) diff result will contain diffs for stdout/stderr/status
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -264,7 +275,7 @@ class GitDiffLinesTest < DifferTestBase
          line_counts: {
              added:diff[3],
            deleted:diff[4],
-              same:diff[5] 
+              same:diff[5]
          },
       }
     end

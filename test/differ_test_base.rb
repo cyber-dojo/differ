@@ -1,4 +1,6 @@
 require_relative 'lib/id58_test_base'
+require_relative 'creator_service'
+require_relative 'model_service'
 require_app 'externals'
 require_app 'differ'
 require_app 'prober'
@@ -21,6 +23,14 @@ class DifferTestBase < Id58TestBase
 
   def externals
     @externals ||= Externals.new
+  end
+
+  def creator
+    @creator ||= External::CreatorService.new
+  end
+
+  def model
+    @model ||= External::ModelService.new
   end
 
   def disk

@@ -2,7 +2,7 @@
 require 'json'
 require 'uri'
 
-module HttpJsonHash
+module Test module HttpJsonHash
 
   class Requester
 
@@ -18,6 +18,12 @@ module HttpJsonHash
       end
     end
 
+    def post(path, args)
+      request(path, args) do |uri|
+        @http.post(uri)
+      end
+    end
+
     private
 
     def request(path, args)
@@ -30,4 +36,4 @@ module HttpJsonHash
 
   end
 
-end
+end end

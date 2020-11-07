@@ -18,10 +18,7 @@ module External
     # - - - - - - - - - - - - - - - - - - -
 
     def kata_event(id, index)
-      @http.get(__method__, {
-        id:id,
-        index:index
-      })
+      @http.get(__method__, { id:id, index:index })
     end
 
   end

@@ -15,4 +15,7 @@ echo_versioner_env_vars()
   #
   echo CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME=test_differ_client
   echo CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME=test_differ_server
+
+  echo CYBER_DOJO_CREATOR_SHA=2d3cd1c4069f6fe47a9c792296924801afe3bfc3
+  echo CYBER_DOJO_CREATOR_TAG=2d3cd1c
 }

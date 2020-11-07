@@ -9,9 +9,14 @@ augmented_docker_compose()
   local -r project_name=cyber_dojo
   cd "${ROOT_DIR}" && cat "./docker-compose.yml" \
     | docker run --rm --interactive cyberdojo/service-yaml \
+                       creator \
+                       custom-start-points \
+                       exercises-start-points \
+                       languages-start-points \
+                       runner \
                        model \
                        saver \
-    | tee /tmp/augmented-docker-compose.model.peek.yml \
+    | tee /tmp/augmented-docker-compose.differ.peek.yml \
     | docker-compose \
         --project-name cyber_dojo \
         --file -       \

@@ -9,14 +9,17 @@ containers_up()
     export SERVICE_NAME=differ_client
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
   fi
-  echo; augmented_docker_compose up --detach --force-recreate "${SERVICE_NAME}"
+  echo; augmented_docker_compose up \
+    --detach \
+    --force-recreate \
+    "${SERVICE_NAME}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_healthy()
 {
   echo
-  local -r MAX_TRIES=30
+  local -r MAX_TRIES=50
   printf "Waiting until ${SERVICE_NAME} is healthy"
   for _ in $(seq ${MAX_TRIES})
   do
