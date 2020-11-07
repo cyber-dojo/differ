@@ -256,8 +256,6 @@ class GitDiffLinesTest < DifferTestBase
 
   def assert_git_diff_lines(raw_expected)
 
-    expected = expected_diff(raw_expected)[0]
-
     exercise_name = 'Fizz Buzz'
     language_name = 'C (gcc), assert'
     manifest = creator.build_manifest(exercise_name, language_name)
@@ -305,12 +303,17 @@ class GitDiffLinesTest < DifferTestBase
 
     diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
 
+    expected = expected_diff(raw_expected)
+
     diagnostic = [
       "expected=#{JSON.pretty_generate(expected)}",
       "diff=#{JSON.pretty_generate(diff)}"
     ].join("\n")
 
-    assert diff.include?(expected), diagnostic
+    assert diff.include?(expected[0]), diagnostic
+
+    diff2 = differ.diff_lines2(id:id, old_files:@was_files, new_files:@now_files)['diff_lines2']
+    assert_equal expected, diff2
   end
 
   # - - - - - - - - - - - - -

@@ -89,6 +89,20 @@ class HttpJsonArgsTest < DifferTestBase
     assert result[0].keys.include?(:new_filename)
   end
 
+  test 'e19',
+  %w( /diff_lines has three keyword args; id:, was_index:, now_index: ) do
+    body = {
+      id:'RNCzUr',
+      was_index:1,
+      now_index:2
+    }.to_json
+    result = dispatch('/diff_lines', differ, body)
+    assert_equal 'Array', result.class.name
+    assert_equal 5+3, result.size # +stdout +stderr +stdout
+    assert_equal 'Hash', result[0].class.name
+    assert result[0].keys.include?(:new_filename)
+  end
+
   # - - - - - - - - - - - - - - - - -
   # dispatch calls with body that is not JSON
   # raise HttpJsonArgs::RequestError
