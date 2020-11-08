@@ -14,12 +14,12 @@ module GitDiffLib # mix-in
 
   def changed_lines(diffs, new_files)
     diffs.each do |diff|
-      if diff[:type] === :renamed && diff[:lines] === []
+      if diff[:type] === :renamed && diff[:line_counts] === { same:0, deleted:0, added:0 }
+        # $ git diff --unified=9999999 ... prints no content for identical renames.
         filename = diff[:new_filename]
         file = new_files[filename]
-        lines = same_lines(file)
-        diff[:line_counts][:same] = lines.count
-        diff[:lines] = lines
+        diff[:line_counts][:same] = file.lines.count
+        diff[:lines] = same_lines(file)
       end
     end
     diffs
@@ -31,12 +31,11 @@ module GitDiffLib # mix-in
     unchanged_filenames = all_filenames - changed_filenames
     unchanged_filenames.map do |filename|
       file = new_files[filename]
-      lines = same_lines(file)
       {         type: :unchanged,
         old_filename: filename,
         new_filename: filename,
-         line_counts: { added:0, deleted:0, same:lines.count },
-               lines: lines
+         line_counts: { added:0, deleted:0, same:file.lines.count },
+               lines: same_lines(file)
       }
     end
   end
