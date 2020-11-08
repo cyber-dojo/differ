@@ -11,11 +11,7 @@ module External
       @http = Test::HttpJsonHash::service(hostname, port)
     end
 
-    # - - - - - - - - - - - - - - - - - - -
-
     #def ready?; @http.get(__method__, {}); end
-
-    # - - - - - - - - - - - - - - - - - - -
 
     def kata_create(manifest)
       @http.post(__method__, {
@@ -24,7 +20,11 @@ module External
       })
     end
 
-    # - - - - - - - - - - - - - - - - - - -
+    def kata_manifest(id)
+      @http.get(__method__, {
+        id:id
+      })
+    end
 
     def kata_ran_tests(id, index, files, stdout, stderr, status, summary)
       @http.post(__method__, {

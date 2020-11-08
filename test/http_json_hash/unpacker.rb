@@ -11,12 +11,25 @@ module Test::HttpJsonHash
 
     def get(path, args)
       response = @requester.get(path, args)
-      JSON.parse!(response.body)
+      json = JSON.parse!(response.body)
+      keyed_for_now(json, path)
     end
 
     def post(path, args)
       response = @requester.post(path, args)
-      JSON.parse!(response.body)
+      json = JSON.parse!(response.body)
+      keyed_for_now(json, path)
+    end
+
+    private
+
+    def keyed_for_now(json, path)
+      path = path.to_s
+      if json.has_key?(path)
+        json[path]
+      else
+        json
+      end
     end
 
   end

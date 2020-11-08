@@ -254,13 +254,14 @@ class GitDiffLinesTest < DifferTestBase
 
   private
 
+  def starter_manifest
+    manifest = model.kata_manifest('5U2J18') # from test-data copied into saver
+    %w( id created group_id group_index ).each {|key| manifest.delete(key) }
+    manifest
+  end
+
   def assert_git_diff_lines(raw_expected)
-
-    exercise_name = 'Fizz Buzz'
-    language_name = 'C (gcc), assert'
-    manifest = creator.build_manifest(exercise_name, language_name)
-    id = model.kata_create(manifest)['kata_create']
-
+    id = model.kata_create(starter_manifest)
     model.kata_ran_tests(
       id,
       was_index=1,
@@ -280,7 +281,6 @@ class GitDiffLinesTest < DifferTestBase
         'predicted' => 'none'
       }
     )
-
     model.kata_ran_tests(
       id,
       now_index=2,
