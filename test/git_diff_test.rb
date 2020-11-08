@@ -254,12 +254,6 @@ class GitDiffTest < DifferTestBase
 
   private
 
-  def starter_manifest
-    manifest = model.kata_manifest('5U2J18') # from test-data copied into saver
-    %w( id created group_id group_index ).each {|key| manifest.delete(key) }
-    manifest
-  end
-
   def assert_git_diff_lines(raw_expected)
     id = model.kata_create(starter_manifest)
     model.kata_ran_tests(
@@ -318,6 +312,14 @@ class GitDiffTest < DifferTestBase
     ].join("\n")
 
     assert diff.include?(expected[0]), diagnostic
+  end
+
+  # - - - - - - - - - - - - -
+
+  def starter_manifest
+    manifest = model.kata_manifest('5U2J18') # from test-data copied into saver
+    %w( id created group_id group_index ).each {|key| manifest.delete(key) }
+    manifest
   end
 
   # - - - - - - - - - - - - -

@@ -11,12 +11,22 @@ module HttpJsonHash
 
     def get(path, args)
       response = @requester.get(path, args)
-      JSON.parse!(response.body)
+      unpacked(response.body)
     end
 
     def post(path, args)
       response = @requester.post(path, args)
-      JSON.parse!(response.body)
+      unpacked(response.body)
+    end
+
+    private
+
+    def unpacked(body)
+      json = JSON.parse!(body)
+      if json.is_a?(Hash) && json.has_key?('exception')
+        fail JSON.pretty_generate(json['exception'])
+      end
+      json
     end
 
   end

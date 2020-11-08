@@ -8,7 +8,7 @@ MAX = {
   warnings:0,
   skips:0,
 
-  duration:5,
+  duration:10,
 
   app: {
     lines: {
@@ -23,7 +23,7 @@ MAX = {
 
   test: {
     lines: {
-       total:500,
+       total:300,
       missed:0,
     },
     branches: {

@@ -1,5 +1,4 @@
 require_relative 'lib/id58_test_base'
-require_app 'creator_service'
 require_app 'differ_service'
 require_app 'model_service'
 
@@ -11,10 +10,6 @@ class ClientTestBase < Id58TestBase
 
   def differ
     @differ ||= External::DifferService.new
-  end
-
-  def creator
-    @creator ||= External::CreatorService.new
   end
 
   def model
