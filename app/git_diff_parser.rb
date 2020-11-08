@@ -49,7 +49,7 @@ class GitDiffParser
     index,old_number,new_number = 0,1,1
     while line && !line.start_with?('diff --git') do
       while same?(line) do
-        lines << src(:same, line, new_number)
+        lines << source_line(:same, line, new_number)
         old_number += 1
         new_number += 1
       end
@@ -58,12 +58,12 @@ class GitDiffParser
         index += 1
       end
       while deleted?(line) do
-        lines << src(:deleted, line, old_number)
+        lines << source_line(:deleted, line, old_number)
         old_number += 1
       end
       parse_newline_at_eof
       while added?(line) do
-        lines << src(:added, line, new_number)
+        lines << source_line(:added, line, new_number)
         new_number += 1
       end
       parse_newline_at_eof
@@ -140,7 +140,7 @@ class GitDiffParser
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def src(type, line, number)
+  def source_line(type, line, number)
     next_line
     { type:type, line:line[1..-1], number:number }
   end
