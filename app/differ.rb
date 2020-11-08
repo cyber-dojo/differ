@@ -26,9 +26,7 @@ class Differ
     was_files['stdout'] = now_files['stdout'] = stdout(now)
     was_files['stderr'] = now_files['stderr'] = stderr(now)
     was_files['status'] = now_files['status'] = status(now)
-    diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
-    git_diff(diffs, now_files, lines:true)
+    git_diff_files(id, was_files, now_files, lines:true)
   end
 
   def diff_summary(id:, was_index:, now_index:)
@@ -36,14 +34,18 @@ class Differ
     now = model.kata_event(id, now_index.to_i)
     was_files = files(was)
     now_files = files(now)
-    diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
-    diffs = GitDiffParser.new(diff_lines, counts:true).parse_all
-    git_diff(diffs, now_files, lines:false)
+    git_diff_files(id, was_files, now_files, lines:false)
   end
 
   private
 
   include GitDiffLib
+
+  def git_diff_files(id, was_files, now_files, options)
+    diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
+    diffs = GitDiffParser.new(diff_lines, options).parse_all
+    git_diff(diffs, now_files, options)
+  end
 
   def files(event)
     event['files'].map{ |filename, file|

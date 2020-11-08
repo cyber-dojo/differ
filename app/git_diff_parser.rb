@@ -7,7 +7,7 @@ class GitDiffParser
   # Assumes the --unified=99999999999 option has been used
   # so there is always a single @@ range and all context lines
 
-  def initialize(diff_text, options = {})
+  def initialize(diff_text, options)
     @lines = diff_text.split("\n")
     @n = 0 # index into @lines
     @options = options
@@ -28,15 +28,13 @@ class GitDiffParser
   def parse_one
     old_filename,new_filename = parse_old_new_filenames(parse_header)
     parse_range
+    n = @n
     one = {
               type: file_type(old_filename, new_filename),
       new_filename: new_filename,
       old_filename: old_filename,
+       line_counts: parse_counts
     }
-    n = @n
-    if @options[:counts]
-      one[:line_counts] = parse_counts
-    end
     if @options[:lines]
       @n = n
       one[:lines] = parse_lines

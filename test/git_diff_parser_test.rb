@@ -37,7 +37,8 @@ class GitDiffParserTest < DifferTestBase
       {
                 type: :renamed,
         old_filename: 'instructions',
-        new_filename: 'instructions_new'
+        new_filename: 'instructions_new',
+         line_counts: { added:1, deleted:1, same:9 }
       }
     ]
 
@@ -67,11 +68,11 @@ class GitDiffParserTest < DifferTestBase
                 type: :deleted,
         old_filename: '\\was_newfile_FIU', # <-- single backslash
         new_filename: nil,
-        lines:
-        [
-          section(0),
-          deleted(1, 'Please rename me!'),
-        ]
+         line_counts: { added:0, deleted:1, same:0},
+               lines: [
+                 section(0),
+                 deleted(1, 'Please rename me!'),
+               ]
       }
     ]
 
@@ -94,7 +95,8 @@ class GitDiffParserTest < DifferTestBase
                 type: :deleted,
         old_filename: 'original',
         new_filename: nil,
-        lines: []
+         line_counts: { added:0, deleted:0, same:0 },
+               lines: []
       }
     ]
 
@@ -123,13 +125,13 @@ class GitDiffParserTest < DifferTestBase
                 type: :deleted,
         old_filename: 'untitled.rb',
         new_filename: nil,
-        lines:
-        [
-          section(0),
-          deleted(1, 'def answer'),
-          deleted(2, '  42'),
-          deleted(3, 'end'),
-        ]
+         line_counts: { added:0, deleted:3, same:0 },
+               lines: [
+                 section(0),
+                 deleted(1, 'def answer'),
+                 deleted(2, '  42'),
+                 deleted(3, 'end'),
+               ]
       }
     ]
 
@@ -153,7 +155,8 @@ class GitDiffParserTest < DifferTestBase
                 type: :renamed,
         old_filename: 'was_\\wa s_newfile_FIU', # <-- single backslash
         new_filename: '\\was_newfile_FIU',      # <-- single backslash
-        lines: []
+         line_counts: { added:0, deleted:0, same:0 },
+               lines: []
       }
     ]
 
@@ -177,7 +180,8 @@ class GitDiffParserTest < DifferTestBase
                 type: :renamed,
         old_filename: 'oldname',
         new_filename: 'newname',
-        lines: []
+         line_counts: { added:0, deleted:0, same:0 },
+               lines: []
       }
     ]
 
@@ -216,21 +220,21 @@ class GitDiffParserTest < DifferTestBase
                 type: :renamed,
         old_filename: 'instructions',
         new_filename: 'instructions_new',
-        lines:
-        [
-            same(1, 'Write a program to generate all potential'),
-            same(2, 'anagrams of an input string.'),
-            same(3, ''),
-            same(4, 'For example, the potential anagrams of "biro" are'),
-            same(5, ''),
-            same(6, 'biro bior brio broi boir bori'),
-            same(7, 'ibro ibor irbo irob iobr iorb'),
-            same(8, 'rbio rboi ribo riob roib robi'),
-            section(0),
-            deleted(9, 'obir obri oibr oirb orbi orib'),
-            added(9, 'obir obri oibr oirb orbi oribx'),
-            same(10, ''),
-        ]
+         line_counts: { added:1, deleted:1, same:9 },
+               lines: [
+                   same(1, 'Write a program to generate all potential'),
+                   same(2, 'anagrams of an input string.'),
+                   same(3, ''),
+                   same(4, 'For example, the potential anagrams of "biro" are'),
+                   same(5, ''),
+                   same(6, 'biro bior brio broi boir bori'),
+                   same(7, 'ibro ibor irbo irob iobr iorb'),
+                   same(8, 'rbio rboi ribo riob roib robi') ,
+                   section(0),
+                   deleted(9, 'obir obri oibr oirb orbi orib'),
+                   added(9, 'obir obri oibr oirb orbi oribx'),
+                   same(10, ''),
+               ]
       }
     ]
 
@@ -268,27 +272,27 @@ class GitDiffParserTest < DifferTestBase
                 type: :changed,
         old_filename: 'lines',
         new_filename: 'lines',
-        lines:
-        [
-          section(0),
-          deleted(1, 'ddd'),
-          added(1, 'eee'),
-        ]
+         line_counts: { added:1, deleted:1, same:0 },
+               lines: [
+                 section(0),
+                 deleted(1, 'ddd'),
+                 added(1, 'eee'),
+               ]
       },
       {
                 type: :changed,
         old_filename: 'other',
         new_filename: 'other',
-        lines:
-        [
-          same(1, 'AAA'),
-          same(2, 'BBB'),
-          section(0),
-          deleted(3, 'CCC'),
-          deleted(4, 'DDD'),
-          added(3, 'EEE'),
-          added(4, 'FFF'),
-        ]
+         line_counts: { added:2, deleted:2, same:2 },
+               lines: [
+                 same(1, 'AAA'),
+                 same(2, 'BBB'),
+                 section(0),
+                 deleted(3, 'CCC'),
+                 deleted(4, 'DDD'),
+                 added(3, 'EEE'),
+                 added(4, 'FFF'),
+               ]
       }
     ]
 
@@ -319,17 +323,17 @@ class GitDiffParserTest < DifferTestBase
               type: :changed,
       old_filename: 'lines',
       new_filename: 'lines',
-      lines:
-      [
-        same(1, 'aaa'),
-        section(0),
-        deleted(2, 'bbb'),
-        added(2, 'BBB'),
-        same(3, 'ccc'),
-        same(4, 'ddd'),
-        section(1),
-        added(5, 'EEE'),
-      ]
+       line_counts: { added:2, deleted:1, same:3 },
+             lines: [
+               same(1, 'aaa'),
+               section(0),
+               deleted(2, 'bbb'),
+               added(2, 'BBB'),
+               same(3, 'ccc'),
+               same(4, 'ddd'),
+               section(1),
+               added(5, 'EEE'),
+             ]
     }
 
     assert_equal expected, GitDiffParser.new(diff, lines:true).parse_one
@@ -354,12 +358,12 @@ class GitDiffParserTest < DifferTestBase
               type: :changed,
       old_filename: 'lines',
       new_filename: 'lines',
-      lines:
-      [
-        section(0),
-        deleted(1, 'aaa'),
-        added(1, 'bbb'),
-      ]
+       line_counts: { added:1, deleted:1, same:0 },
+             lines: [
+               section(0),
+               deleted(1, 'aaa'),
+               added(1, 'bbb'),
+             ]
     }
 
     assert_equal expected, GitDiffParser.new(diff, lines:true).parse_one
@@ -385,13 +389,13 @@ class GitDiffParserTest < DifferTestBase
               type: :changed,
       old_filename: 'gapper.rb',
       new_filename: 'gapper.rb',
-      lines:
-      [
-        section(0),
-        deleted(1, 'XXX'),
-        added(1, 'YYY'),
-        added(2, 'ZZZ'),
-      ]
+       line_counts: { added:2, deleted:1, same:0 },
+             lines: [
+               section(0),
+               deleted(1, 'XXX'),
+               added(1, 'YYY'),
+               added(2, 'ZZZ'),
+             ]
     }
 
     assert_equal expected, GitDiffParser.new(diff, lines:true).parse_one
@@ -410,7 +414,7 @@ class GitDiffParserTest < DifferTestBase
       '--- hiker.h',
       '+++ diamond.h'
     ]
-    assert_equal diff, GitDiffParser.new(diff.join("\n")).parse_header
+    assert_equal diff, GitDiffParser.new(diff.join("\n"),lines:true).parse_header
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -443,7 +447,8 @@ class GitDiffParserTest < DifferTestBase
               type: :renamed,
       old_filename: "hiker.h",
       new_filename: "hiker.txt",
-      lines: []
+       line_counts: { added:0, deleted:0, same:0 },
+             lines: []
     }
 
     assert_equal expected, GitDiffParser.new(diff, lines:true).parse_one
