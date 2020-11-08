@@ -1,7 +1,7 @@
 require_relative 'differ_test_base'
 require_app 'git_diff_lines'
 
-class GitDiffLinesTest < DifferTestBase
+class GitDiffTest < DifferTestBase
 
   def self.id58_prefix
     'C9s'
@@ -301,13 +301,20 @@ class GitDiffLinesTest < DifferTestBase
       }
     )
 
-    diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
-
     expected = expected_diff(raw_expected)
-
+    diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
     diagnostic = [
-      "expected=#{JSON.pretty_generate(expected)}",
-      "diff=#{JSON.pretty_generate(diff)}"
+      "lines:expected=#{JSON.pretty_generate(expected)}",
+      "lines:diff=#{JSON.pretty_generate(diff)}"
+    ].join("\n")
+
+    assert diff.include?(expected[0]), diagnostic
+
+    expected[0].delete(:lines)
+    diff = differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
+    diagnostic = [
+      "summary:expected=#{JSON.pretty_generate(expected)}",
+      "summary:diff=#{JSON.pretty_generate(diff)}"
     ].join("\n")
 
     assert diff.include?(expected[0]), diagnostic

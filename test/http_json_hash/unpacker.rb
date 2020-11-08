@@ -25,11 +25,7 @@ module Test::HttpJsonHash
 
     def keyed_for_now(json, path)
       path = path.to_s
-      if json.has_key?(path)
-        json[path]
-      else
-        json
-      end
+      json[path]
     end
 
   end

@@ -12,6 +12,7 @@ services:
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     depends_on:
       - differ_server
+      - model      
     env_file:
       - .env
     ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
@@ -29,7 +30,6 @@ services:
     container_name: ${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}
     user: ${CYBER_DOJO_DIFFER_SERVER_USER}
     depends_on:
-      - creator
       - model
     env_file:
       - .env
