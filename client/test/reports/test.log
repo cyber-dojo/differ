@@ -1,87 +1,39 @@
-Run options: --seed 59128
+Run options: --seed 63826
 
 # Running:
 
-....uninitialized constant DifferClientTest::HttpJson
-Did you mean?  HttpJsonHash
-E......undefined method `diff_lines2' for #<External::DifferService:0x00005610772b1f78>
-Did you mean?  diff_lines
-E.uninitialized constant DifferClientTest::HttpJson
-Did you mean?  HttpJsonHash
-E........undefined method `diff_lines2' for #<External::DifferService:0x0000561076ff2cb0>
-Did you mean?  diff_lines
-E.....
+............................
 
-Finished in 2.720894s, 10.2907 runs/s, 26.0944 assertions/s.
+Finished in 5.010929s, 5.5878 runs/s, 19.5573 assertions/s.
 
-  1) Error:
-DifferClientTest#test_
-id58 'jj9',
-'/diff_summary uses proper GET query args':
-NameError: uninitialized constant DifferClientTest::HttpJson
-Did you mean?  HttpJsonHash
-    /differ/test/differ_client_test.rb:14:in `block in <class:DifferClientTest>'
-    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
-    /differ/test/lib/id58_test_base.rb:36:in `block in test'
-
-  2) Error:
-DifferClientTest#test_
-id58 '348',
-'>10K query in nested sub-dir is not rejected by web-server':
-NoMethodError: undefined method `diff_lines2' for #<External::DifferService:0x00005610772b1f78>
-Did you mean?  diff_lines
-    /differ/test/differ_client_test.rb:73:in `block in <class:DifferClientTest>'
-    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
-    /differ/test/lib/id58_test_base.rb:36:in `block in test'
-
-  3) Error:
-DifferClientTest#test_
-id58 '7C0',
-'calling unknown method raises':
-NameError: uninitialized constant DifferClientTest::HttpJson
-Did you mean?  HttpJsonHash
-    /differ/test/differ_client_test.rb:97:in `block in <class:DifferClientTest>'
-    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
-    /differ/test/lib/id58_test_base.rb:36:in `block in test'
-
-  4) Error:
-DifferClientTest#test_
-id58 '347',
-'>10K query is not rejected by web server':
-NoMethodError: undefined method `diff_lines2' for #<External::DifferService:0x0000561076ff2cb0>
-Did you mean?  diff_lines
-    /differ/test/differ_client_test.rb:66:in `block in <class:DifferClientTest>'
-    /differ/test/lib/id58_test_base.rb:36:in `instance_eval'
-    /differ/test/lib/id58_test_base.rb:36:in `block in test'
-
-28 runs, 71 assertions, 0 failures, 4 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 273 / 289 LOC (94.46%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 273 / 289 LOC (94.46%) covered.
+28 runs, 98 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 295 / 295 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 295 / 295 LOC (100.0%) covered.
 
 Slowest tests are...
-0.1985 - 2q0FDB:differ_client_test.rb:559:<100% identical rename                 
-0.1757 - 2q0E3F:differ_client_test.rb:370:changed non-empty file in nested sub-dir
-0.1709 - 2q0E50:differ_client_test.rb:507:100% identical renamed file            
-0.1533 - 2q0313:differ_client_test.rb:111:deleted empty file                     
-0.1526 - 2q0FEA:differ_client_test.rb:184:deleted non-empty file in nested sub-dir shows as all lines deleted
-0.1495 - 2q0AEC:differ_client_test.rb:616:unchanged empty files                  
-0.1460 - 2q0FE9:differ_client_test.rb:153:deleted non-empty file shows as all lines deleted
-0.1453 - 2q0FDC:differ_client_test.rb:590:<100% identical renamed in nested sub-dir
-0.1365 - 2q0960:differ_client_test.rb:276:created empty file in nested sub-dir   
-0.1353 - 2q0B9E:differ_client_test.rb:391:changed non-empty file shows as deleted and added lines with each hunk in its own indexed section
-0.1193 - 2q02C3:differ_client_test.rb:301:created non-empty file                 
+0.2943 - 2q0E50:differ_client_test.rb:518:100% identical renamed file            
+0.2923 - 2q0313:differ_client_test.rb:116:deleted empty file                     
+0.2608 - 2q0FEA:differ_client_test.rb:191:deleted non-empty file in nested sub-dir shows as all lines deleted
+0.2601 - 2q0FDC:differ_client_test.rb:596:<100% identical renamed in nested sub-dir
+0.2541 - 2q0E3F:differ_client_test.rb:379:changed non-empty file in nested sub-dir
+0.2536 - 2q02C3:differ_client_test.rb:310:created non-empty file                 
+0.2516 - 2q0FDB:differ_client_test.rb:572:<100% identical rename                 
+0.2453 - 2q0E3E:differ_client_test.rb:358:changed non-empty file                 
+0.2275 - 2q0FE9:differ_client_test.rb:158:deleted non-empty file shows as all lines deleted
+0.2232 - 2q0960:differ_client_test.rb:283:created empty file in nested sub-dir   
+0.2172 - 2q0B9E:differ_client_test.rb:400:changed non-empty file shows as deleted and added lines with each hunk in its own indexed section
 
             test:failures |       0   <=     0 | [32m true [0m
-              test:errors |       4   <=     0 | [31m false [0m
+              test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    2.72   <=     5 | [32m true [0m
-          app:lines:total |      96   <=   100 | [32m true [0m
+         test:duration(s) |    5.01   <=    10 | [32m true [0m
+          app:lines:total |      89   <=   100 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |       0   <=    10 | [32m true [0m
+       app:branches:total |       2   <=    10 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     193   <=   500 | [32m true [0m
-        test:lines:missed |      16   <=     0 | [31m false [0m
+         test:lines:total |     206   <=   300 | [32m true [0m
+        test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 

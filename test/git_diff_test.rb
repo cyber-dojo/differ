@@ -16,7 +16,7 @@ class GitDiffTest < DifferTestBase
     @was_files = {}
     @now_files = { 'empty.h' => '' }
 
-    assert_git_diff_lines [
+    assert_diff [
       :created, nil, 'empty.h', 0,0,0,
       []
     ]
@@ -28,7 +28,7 @@ class GitDiffTest < DifferTestBase
   'empty file is deleted' do
     @was_files = { 'empty.rb' => '' }
     @now_files = {}
-    assert_git_diff_lines [
+    assert_diff [
       :deleted, 'empty.rb', nil, 0,0,0,
       []
     ]
@@ -40,7 +40,7 @@ class GitDiffTest < DifferTestBase
   'empty file is unchanged' do
     @was_files = { 'empty.py' => '' }
     @now_files = { 'empty.py' => '' }
-    assert_git_diff_lines [
+    assert_diff [
         :unchanged, 'empty.py', 'empty.py', 0,0,0,
         []
     ]
@@ -52,7 +52,7 @@ class GitDiffTest < DifferTestBase
   'empty file is renamed 100% identical' do
     @was_files = { 'plain' => '' }
     @now_files = { 'copy'  => '' }
-    assert_git_diff_lines [
+    assert_diff [
       :renamed, 'plain', 'copy', 0,0,0,
       []
     ]
@@ -64,7 +64,7 @@ class GitDiffTest < DifferTestBase
   'empty file is renamed 100% identical across dirs' do
     @was_files = { 'plain'    => '' }
     @now_files = { 'a/b/copy' => '' }
-    assert_git_diff_lines [
+    assert_diff [
       :renamed, 'plain', 'a/b/copy', 0,0,0,
       []
     ]
@@ -76,7 +76,7 @@ class GitDiffTest < DifferTestBase
   'empty file has some content added' do
     @was_files = { 'empty.c' => '' }
     @now_files = { 'empty.c' => "three\nlines\nadded" }
-    assert_git_diff_lines [
+    assert_diff [
       :changed, 'empty.c', 'empty.c', 3,0,0,
       [
         section(0),
@@ -95,7 +95,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is created' do
     @was_files = {}
     @now_files = { 'non-empty.c' => 'something' }
-    assert_git_diff_lines [
+    assert_diff [
       :created, nil, 'non-empty.c', 1,0,0,
       [
         section(0),
@@ -110,7 +110,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is deleted' do
     @was_files = { 'non-empty.h' => "two\nlines" }
     @now_files = {}
-    assert_git_diff_lines [
+    assert_diff [
       :deleted, 'non-empty.h', nil, 0,2,0,
       [
         section(0),
@@ -126,7 +126,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is unchanged' do
     @was_files = { 'non-empty.h' => '#include<stdio.h>' }
     @now_files = { 'non-empty.h' => '#include<stdio.h>' }
-    assert_git_diff_lines [
+    assert_diff [
       :unchanged, 'non-empty.h', 'non-empty.h', 0,0,1,
       [
         same(1, '#include<stdio.h>'),
@@ -140,7 +140,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is renamed 100% identical' do
     @was_files = { 'plain' => 'xxx' }
     @now_files = { 'copy' => 'xxx' }
-    assert_git_diff_lines [
+    assert_diff [
       :renamed, 'plain', 'copy', 0,0,1,
       [
         same(1, 'xxx'),
@@ -154,7 +154,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is renamed 100% identical across dirs' do
     @was_files = { 'a/b/plain' => "a\nb\nc\nd" }
     @now_files = { 'copy' => "a\nb\nc\nd" }
-    assert_git_diff_lines [
+    assert_diff [
       :renamed, 'a/b/plain', 'copy', 0,0,4,
       [
         same(1, 'a'),
@@ -171,7 +171,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is renamed <100% identical' do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }
-    assert_git_diff_lines [
+    assert_diff [
       :renamed, 'hiker.h', 'diamond.h', 1,1,3,
       [
         same(1, 'a'),
@@ -190,7 +190,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file is renamed <100% identical across dirs' do
     @was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
     @now_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
-    assert_git_diff_lines [
+    assert_diff [
       :renamed, '1/2/hiker.h', '3/4/diamond.h', 1,1,3,
       [
         same(1, 'a'),
@@ -209,7 +209,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file has some content added at the start' do
     @was_files = { 'non-empty.c' => 'something' }
     @now_files = { 'non-empty.c' => "more\nsomething" }
-    assert_git_diff_lines [
+    assert_diff [
       :changed, 'non-empty.c', 'non-empty.c', 1,0,1,
       [
         section(0),
@@ -225,7 +225,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file has some content added at the end' do
     @was_files = { 'non-empty.c' => 'something' }
     @now_files = { 'non-empty.c' => "something\nmore" }
-    assert_git_diff_lines [
+    assert_diff [
       :changed, 'non-empty.c', 'non-empty.c', 1,0,1,
       [
         same(1, 'something'),
@@ -241,7 +241,7 @@ class GitDiffTest < DifferTestBase
   'non-empty file has some content added in the middle' do
     @was_files = { 'non-empty.c' => "a\nc"}
     @now_files = { 'non-empty.c' => "a\nB\nc" }
-    assert_git_diff_lines [
+    assert_diff [
       :changed, 'non-empty.c', 'non-empty.c', 1,0,2,
       [
         same(1, 'a'),
@@ -254,31 +254,60 @@ class GitDiffTest < DifferTestBase
 
   private
 
-  def assert_git_diff_lines(raw_expected)
+  def assert_diff(raw_expected)
+    expected = expected_diff(raw_expected)
+    assert_diff_lines(expected)
+    expected[0].delete(:lines)
+    assert_diff_summary(expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def assert_diff_lines(expected)
+    id,was_index,now_index = *run_diff_prepare
+    diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
+    assert diff.include?(expected[0]), diagnostic('lines',expected, diff)
+  end
+
+  def assert_diff_summary(expected)
+    id,was_index,now_index = *run_diff_prepare
+    diff = differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
+    assert diff.include?(expected[0]), diagnostic('summary',expected, diff)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def diagnostic(type, expected, diff)
+    [
+      "#{name}:expected=#{JSON.pretty_generate(expected)}",
+      "#{name}:diff=#{JSON.pretty_generate(diff)}"
+    ].join("\n")
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def run_diff_prepare
     id = model.kata_create(starter_manifest)
+    kata_ran_tests(id, was_index=1, @was_files)
+    kata_ran_tests(id, now_index=2, @now_files)
+    [id, was_index, now_index]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def starter_manifest
+    manifest = model.kata_manifest('5U2J18') # from test-data copied into saver
+    %w( id created group_id group_index ).each {|key| manifest.delete(key) }
+    manifest
+  end
+
+  # - - - - - - - - - - - - -
+
+  def kata_ran_tests(id, index, files)
     model.kata_ran_tests(
       id,
-      was_index=1,
-      plain(@was_files),
-      stdout={
-        'content' => 'this is stdout',
-        'truncated' => false
-      },
-      stderr={
-        'content' => 'this is stderr',
-        'truncated' => false
-      },
-      status='0',
-      summary = {
-        'duration' => 0.45634,
-        'colour' => 'red',
-        'predicted' => 'none'
-      }
-    )
-    model.kata_ran_tests(
-      id,
-      now_index=2,
-      plain(@now_files),
+      index,
+      plain(files),
       stdout={
         'content' => 'this is stdout',
         'truncated' => false
@@ -294,32 +323,6 @@ class GitDiffTest < DifferTestBase
         'predicted' => 'none'
       }
     )
-
-    expected = expected_diff(raw_expected)
-    diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
-    diagnostic = [
-      "lines:expected=#{JSON.pretty_generate(expected)}",
-      "lines:diff=#{JSON.pretty_generate(diff)}"
-    ].join("\n")
-
-    assert diff.include?(expected[0]), diagnostic
-
-    expected[0].delete(:lines)
-    diff = differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
-    diagnostic = [
-      "summary:expected=#{JSON.pretty_generate(expected)}",
-      "summary:diff=#{JSON.pretty_generate(diff)}"
-    ].join("\n")
-
-    assert diff.include?(expected[0]), diagnostic
-  end
-
-  # - - - - - - - - - - - - -
-
-  def starter_manifest
-    manifest = model.kata_manifest('5U2J18') # from test-data copied into saver
-    %w( id created group_id group_index ).each {|key| manifest.delete(key) }
-    manifest
   end
 
   # - - - - - - - - - - - - -

@@ -64,14 +64,16 @@ class DifferClientTest < ClientTestBase
   '>10K query is not rejected by web server' do
     @old_files = { 'wibble.h' => 'X'*45*1024 }
     @new_files = {}
-    run_diff_summary
+    id,was_index,now_index = *run_diff_prepare
+    differ.diff_summary(id, was_index, now_index)
   end
 
   test '348',
   '>10K query in nested sub-dir is not rejected by web-server' do
     @old_files = { 'gh/jk/wibble.h' => 'X'*45*1024 }
     @new_files = {}
-    run_diff_summary
+    id,was_index,now_index = *run_diff_prepare
+    differ.diff_summary(id, was_index, now_index)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -704,9 +706,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff_lines(expected)
-    id = model.kata_create(starter_manifest)['kata_create']
-    ran_tests(id, was_index=1, @old_files)
-    ran_tests(id, now_index=2, @new_files)
+    id,was_index,now_index = *run_diff_prepare
     diff = differ.diff_lines(id, was_index, now_index)
     assert diff.include?(expected), diff
   end
@@ -714,21 +714,23 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff_summary(expected)
-    id,was_index,now_index = *run_diff_summary
+    id,was_index,now_index = *run_diff_prepare
     diff = differ.diff_summary(id, was_index, now_index)
     assert diff.include?(expected), diff
   end
 
-  def run_diff_summary
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def run_diff_prepare
     id = model.kata_create(starter_manifest)['kata_create']
-    ran_tests(id, was_index=1, @old_files)
-    ran_tests(id, now_index=2, @new_files)
+    kata_ran_tests(id, was_index=1, @old_files)
+    kata_ran_tests(id, now_index=2, @new_files)
     [id, was_index, now_index]
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  def ran_tests(id, index, files)
+  def kata_ran_tests(id, index, files)
     model.kata_ran_tests(
       id,
       index,
