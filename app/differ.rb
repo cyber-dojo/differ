@@ -1,8 +1,7 @@
 # frozen_string_literal: true
+require_relative 'git_diff'
 require_relative 'git_differ'
-require_relative 'git_diff_lines'
 require_relative 'git_diff_parser'
-require_relative 'git_diff_summary'
 require_relative 'prober'
 
 class Differ
@@ -29,7 +28,7 @@ class Differ
     was_files['status'] = now_files['status'] = status(now)
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
     diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
-    git_diff_lines(diffs, now_files)
+    git_diff(diffs, now_files, lines:true)
   end
 
   def diff_summary(id:, was_index:, now_index:)
@@ -39,7 +38,7 @@ class Differ
     now_files = files(now)
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
     diffs = GitDiffParser.new(diff_lines, counts:true).parse_all
-    git_diff_summary(diffs, now_files)
+    git_diff(diffs, now_files, lines:false)
   end
 
   private

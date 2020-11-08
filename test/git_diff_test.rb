@@ -1,5 +1,4 @@
 require_relative 'differ_test_base'
-require_app 'git_diff_lines'
 
 class GitDiffTest < DifferTestBase
 
