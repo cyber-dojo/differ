@@ -29,7 +29,7 @@ class Differ
     now_files = files(now)
     # Ensure stdout/stderr/status show no diff. Drop once web's
     # review handles stdout/stderr/status separately, ideally by
-    # make a $.getJSON('/model/kata_event') call from the browser.
+    # making a $.getJSON('/model/kata_event') call from the browser.
     was_files['stdout'] = now_files['stdout'] = now['stdout']['content']
     was_files['stderr'] = now_files['stderr'] = now['stderr']['content']
     was_files['status'] = now_files['status'] = now['status']
