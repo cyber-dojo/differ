@@ -30,9 +30,9 @@ class Differ
     # Ensure stdout/stderr/status show no diff. Drop once web's
     # review handles stdout/stderr/status separately, ideally by
     # making a $.getJSON('/model/kata_event') call from the browser.
-    was_files['stdout'] = now_files['stdout'] = now['stdout']['content']
-    was_files['stderr'] = now_files['stderr'] = now['stderr']['content']
-    was_files['status'] = now_files['status'] = now['status'].to_s
+    was_files['stdout'] = now_files['stdout'] = stdout(now)
+    was_files['stderr'] = now_files['stderr'] = stderr(now)
+    was_files['status'] = now_files['status'] = status(now)
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
     diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
     git_diff_lines(diffs, now_files)
@@ -64,6 +64,32 @@ class Differ
 
   def prober
     @externals.prober
+  end
+
+  # - - - - - - - - - - - -
+
+  def stdout(now)
+    if now['stdout']
+      now['stdout']['content']
+    else
+      # :nocov:
+      ''
+      # :nocov:
+    end
+  end
+
+  def stderr(now)
+    if now['stderr']
+      now['stderr']['content']
+    else
+      # :nocov:
+      ''
+      # :nocov:
+    end
+  end
+
+  def status(now)
+    now['status'].to_s || ''
   end
 
 end
