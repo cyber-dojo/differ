@@ -311,9 +311,6 @@ class GitDiffLinesTest < DifferTestBase
     ].join("\n")
 
     assert diff.include?(expected[0]), diagnostic
-
-    diff2 = differ.diff_lines2(id:id, old_files:@was_files, new_files:@now_files)['diff_lines2']
-    assert_equal expected, diff2
   end
 
   # - - - - - - - - - - - - -

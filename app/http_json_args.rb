@@ -21,7 +21,6 @@ class HttpJsonArgs
     when '/healthy'       then differ.healthy?(**args)
     when '/alive'         then differ.alive?(**args)
     when '/ready'         then differ.ready?(**args)
-    when '/diff_lines2'   then differ.diff_lines2(**args) # deprecated
     when '/diff_lines'    then differ.diff_lines(**args)
     when '/diff_summary'  then differ.diff_summary(**args)
     else raise RequestError, 'unknown path'

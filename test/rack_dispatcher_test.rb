@@ -58,13 +58,8 @@ class RackDispatcherTest < DifferTestBase
     end
   end
 
-  test '135', 'diff_lines2 200' do
-    args = { id:id58, old_files:{}, new_files:{} }
-    assert_200('diff_lines2', args) do |response|
-      assert_equal([], response['diff_lines2'])
-    end
-  end
-
+  # - - - - - - - - - - - - - - - - - - - -
+  
   test '137', %w(
   diff_summary 200 is in more general format
   to allow more information to be added, specifically

@@ -112,7 +112,7 @@ class DifferClientTest < ClientTestBase
   'deleted empty file' do
     @old_files = { 'hiker.h' => '' }
     @new_files = { }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "deleted",
         "old_filename" => 'hiker.h',
@@ -120,7 +120,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "added"=>0, "deleted"=>0, "same"=> 0 },
         "lines" => []
       }
-    ]
+    )
     assert_diff_summary('RNCzUr',3,4) { [
       :deleted, 'empty.file', nil, 0,0,0,
       :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
@@ -137,7 +137,7 @@ class DifferClientTest < ClientTestBase
   'deleted empty file in nested sub-dir' do
     @old_files = { '6/7/8/hiker.h' => '' }
     @new_files = { }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "deleted",
         "old_filename" => '6/7/8/hiker.h',
@@ -145,7 +145,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "added"=>0, "deleted"=>0, "same"=> 0 },
         "lines" => []
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -154,7 +154,7 @@ class DifferClientTest < ClientTestBase
   'deleted non-empty file shows as all lines deleted' do
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "deleted",
         "old_filename" => 'hiker.h',
@@ -168,7 +168,7 @@ class DifferClientTest < ClientTestBase
           deleted(4, 'd')
         ]
       }
-    ]
+    )
     assert_diff_summary('RNCzUr',8,9) { [
       :deleted, 'readme.txt', nil, 0,14,0,
       :unchanged, "test_hiker.sh"            , "test_hiker.sh"            , 0,0,8,
@@ -185,7 +185,7 @@ class DifferClientTest < ClientTestBase
   'deleted non-empty file in nested sub-dir shows as all lines deleted' do
     @old_files = { '4/5/6/7/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "deleted",
         "old_filename" => '4/5/6/7/hiker.h',
@@ -199,7 +199,7 @@ class DifferClientTest < ClientTestBase
           deleted(4, 'd')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -211,7 +211,7 @@ class DifferClientTest < ClientTestBase
   'shows as all lines deleted' do
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'hiker.h' => '' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "changed",
         "old_filename" => 'hiker.h',
@@ -225,7 +225,7 @@ class DifferClientTest < ClientTestBase
           deleted(4, 'd'),
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -235,7 +235,7 @@ class DifferClientTest < ClientTestBase
   'shows as all lines deleted' do
     @old_files = { 'r/t/y/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'r/t/y/hiker.h' => '' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "changed",
         "old_filename" => 'r/t/y/hiker.h',
@@ -249,7 +249,7 @@ class DifferClientTest < ClientTestBase
           deleted(4, 'd'),
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -260,7 +260,7 @@ class DifferClientTest < ClientTestBase
   %w( created new empty file ) do
     @old_files = { }
     @new_files = { 'diamond.h' => '' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "created",
         "old_filename" => nil,
@@ -268,7 +268,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "added"=>0, "deleted"=>0, "same"=> 0 },
         "lines" => []
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -277,7 +277,7 @@ class DifferClientTest < ClientTestBase
   %w( created empty file in nested sub-dir ) do
     @old_files = { }
     @new_files = { 'a/b/c/diamond.h' => '' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "created",
         "old_filename" => nil,
@@ -285,7 +285,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "added"=>0, "deleted"=>0, "same"=> 0 },
         "lines" => []
       }
-    ]
+    )
     assert_diff_summary('RNCzUr',2,3) { [
       :created, nil, 'empty.file', 0,0,0,
       :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
@@ -302,7 +302,7 @@ class DifferClientTest < ClientTestBase
   %w( created non-empty file ) do
     @old_files = { }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "created",
         "old_filename" => nil,
@@ -316,7 +316,7 @@ class DifferClientTest < ClientTestBase
           added(4, 'd')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -325,7 +325,7 @@ class DifferClientTest < ClientTestBase
   %w( created non-empty file in nested sub-dir ) do
     @old_files = { }
     @new_files = { 'q/w/e/diamond.h' => "a\nb\nc\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "created",
         "old_filename" => nil,
@@ -339,7 +339,7 @@ class DifferClientTest < ClientTestBase
           added(4, 'd')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -350,7 +350,7 @@ class DifferClientTest < ClientTestBase
   %w( changed non-empty file ) do
     @old_files = { 'diamond.h' => 'a' }
     @new_files = { 'diamond.h' => 'b' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "changed",
         "old_filename" => 'diamond.h',
@@ -362,7 +362,7 @@ class DifferClientTest < ClientTestBase
           added(  1, 'b')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -371,7 +371,7 @@ class DifferClientTest < ClientTestBase
   %w( changed non-empty file in nested sub-dir ) do
     @old_files = { 't/y/u/diamond.h' => 'a1' }
     @new_files = { 't/y/u/diamond.h' => 'b2' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "changed",
         "old_filename" => 't/y/u/diamond.h',
@@ -383,7 +383,7 @@ class DifferClientTest < ClientTestBase
           added(  1, 'b2')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -417,7 +417,7 @@ class DifferClientTest < ClientTestBase
         '#endif',
         ].join("\n")
     }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "changed",
         "old_filename" => 'diamond.h',
@@ -440,7 +440,7 @@ class DifferClientTest < ClientTestBase
           same(   8, '#endif'),
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -474,7 +474,7 @@ class DifferClientTest < ClientTestBase
         '#endif',
         ].join("\n")
     }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "changed",
         "old_filename" => 'a/b/c/diamond.h',
@@ -497,7 +497,7 @@ class DifferClientTest < ClientTestBase
           same(   8, '#endif'),
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -508,7 +508,7 @@ class DifferClientTest < ClientTestBase
   '100% identical renamed file' do
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "renamed",
         "old_filename" => 'hiker.h',
@@ -521,7 +521,7 @@ class DifferClientTest < ClientTestBase
           same(4, 'd')
         ]
       }
-    ]
+    )
     assert_diff_summary('RNCzUr',5,6) { [
       :renamed, 'empty.file', 'empty.file.rename', 0,0,0,
       :unchanged, "test_hiker.sh", "test_hiker.sh", 0,0,8,
@@ -538,7 +538,7 @@ class DifferClientTest < ClientTestBase
   '100% identical renamed file in nested sub-dir' do
     @old_files = { 'a/f/d/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'a/f/d/diamond.h' => "a\nb\nc\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "renamed",
         "old_filename" => 'a/f/d/hiker.h',
@@ -551,7 +551,7 @@ class DifferClientTest < ClientTestBase
           same(4, 'd')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -560,7 +560,7 @@ class DifferClientTest < ClientTestBase
   '<100% identical rename' do
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nX\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "renamed",
         "old_filename" => 'hiker.h',
@@ -575,7 +575,7 @@ class DifferClientTest < ClientTestBase
           same(   4, 'd')
         ]
       }
-    ]
+    )
     assert_diff_summary('RNCzUr',13,14) { [ # TODO: test data error. No rename here.
       :changed, 'bats_help.txt','bats_help.txt', 1,1,19,
       :unchanged, "test_hiker.sh"            , "test_hiker.sh"            , 0,0,8,
@@ -591,7 +591,7 @@ class DifferClientTest < ClientTestBase
   '<100% identical renamed in nested sub-dir' do
     @old_files = { 'a/b/c/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'a/b/c/diamond.h' => "a\nb\nX\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "renamed",
         "old_filename" => 'a/b/c/hiker.h',
@@ -605,8 +605,8 @@ class DifferClientTest < ClientTestBase
           added(  3, 'X'),
           same(   4, 'd')
         ]
-      }
-    ]
+     }
+   )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -617,7 +617,7 @@ class DifferClientTest < ClientTestBase
   'unchanged empty files' do
     @old_files = { 'diamond.h' => '' }
     @new_files = { 'diamond.h' => '' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "unchanged",
         "old_filename" => 'diamond.h',
@@ -625,7 +625,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "added"=>0, "deleted"=>0, "same"=>0 },
         "lines" => []
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -634,7 +634,7 @@ class DifferClientTest < ClientTestBase
   'unchanged empty-file in nested sub-dir' do
     @old_files = { 'w/e/r/diamond.h' => '' }
     @new_files = { 'w/e/r/diamond.h' => '' }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "unchanged",
         "old_filename" => 'w/e/r/diamond.h',
@@ -642,7 +642,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "added"=>0, "deleted"=>0, "same"=>0 },
         "lines" => []
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -651,7 +651,7 @@ class DifferClientTest < ClientTestBase
   'unchanged non-empty file' do
     @old_files = { 'diamond.h' => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "unchanged",
         "old_filename" => 'diamond.h',
@@ -664,7 +664,7 @@ class DifferClientTest < ClientTestBase
           same(4, 'd')
         ]
       }
-    ]
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -673,7 +673,7 @@ class DifferClientTest < ClientTestBase
   'unchanged non-empty file in nested sub-dir shows as all lines same' do
     @old_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
     @new_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
-    assert_get_diff_lines2 [
+    assert_get_diff_lines(
       {
         "type" => "unchanged",
         "old_filename" => 'r/t/y/diamond.h',
@@ -686,29 +686,85 @@ class DifferClientTest < ClientTestBase
           same(4, 'd')
         ]
       }
-    ]
+    )
   end
 
   private
 
-  def assert_get_diff_lines2(expected)
-    actual = differ.diff_lines2(id58, @old_files, @new_files)
-    assert_equal expected, actual
+  def assert_get_diff_lines(expected_diff)
+    exercise_name = 'Fizz Buzz'
+    language_name = 'C (gcc), assert'
+    manifest = creator.build_manifest(exercise_name, language_name)
+    id = model.kata_create(manifest)['kata_create']
+
+    model.kata_ran_tests(
+      id,
+      was_index=1,
+      plain(@old_files),
+      stdout={
+        'content' => 'this is stdout',
+        'truncated' => false
+      },
+      stderr={
+        'content' => 'this is stderr',
+        'truncated' => false
+      },
+      status='0',
+      summary = {
+        'duration' => 0.45634,
+        'colour' => 'red',
+        'predicted' => 'none'
+      }
+    )
+
+    model.kata_ran_tests(
+      id,
+      now_index=2,
+      plain(@new_files),
+      stdout={
+        'content' => 'this is stdout',
+        'truncated' => false
+      },
+      stderr={
+        'content' => 'this is stderr',
+        'truncated' => false
+      },
+      status='0',
+      summary = {
+        'duration' => 0.457764,
+        'colour' => 'green',
+        'predicted' => 'none'
+      }
+    )
+
+    diffs = differ.diff_lines(id, was_index, now_index)
+    assert diffs.include?(expected_diff), diffs
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
-def assert_diff_summary(id, was_index, now_index)
-  expected = *yield.each_slice(6).to_a.map do |diff|
-    { 'type' => diff[0].to_s,
-      'old_filename' => diff[1],
-      'new_filename' => diff[2],
-      'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
-    }
+  def plain(files)
+    files.map{|filename,content|
+      [filename,{
+        'content' => content,
+        'truncated' => false
+      }]
+    }.to_h
   end
-  actual = differ.diff_summary(id, was_index, now_index)
-  assert_equal expected, actual
-end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  def assert_diff_summary(id, was_index, now_index)
+    expected = *yield.each_slice(6).to_a.map do |diff|
+      { 'type' => diff[0].to_s,
+        'old_filename' => diff[1],
+        'new_filename' => diff[2],
+        'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
+      }
+    end
+    actual = differ.diff_summary(id, was_index, now_index)
+    assert_equal expected, actual
+  end
 
   # - - - - - - - - - - - - - - - - - - - -
 

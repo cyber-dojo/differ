@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative 'http_json/request_error'
 
 class HttpJsonArgs
 
@@ -8,7 +7,7 @@ class HttpJsonArgs
     when '/healthy' then ['healthy?',[]]
     when '/ready'   then ['ready?'  ,[]]
     else
-      raise HttpJson::RequestError, 'unknown path'
+      raise 'unknown path'
     end
   end
 

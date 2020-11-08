@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative 'http_json/request_error'
 require_relative 'http_json_args'
 require 'json'
 require 'rack'
@@ -16,8 +15,6 @@ class Client
     name,args = HttpJsonArgs.new.get(path)
     result = @differ.public_send(name, *args)
     html_json_pass(200, { name => result })
-  rescue HttpJson::RequestError => error
-    html_json_fail(400, path, error)
   rescue Exception => error
     html_json_fail(500, path, error)
   end
@@ -48,7 +45,7 @@ class Client
 
   def diagnostic(path, error)
     { 'exception' => {
-        'time' => Time.now,      
+        'time' => Time.now,
         'path' => path,
         'class' => 'DifferService',
         'message' => error.message,
