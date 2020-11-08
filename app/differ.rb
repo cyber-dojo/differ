@@ -32,7 +32,7 @@ class Differ
     # making a $.getJSON('/model/kata_event') call from the browser.
     was_files['stdout'] = now_files['stdout'] = now['stdout']['content']
     was_files['stderr'] = now_files['stderr'] = now['stderr']['content']
-    was_files['status'] = now_files['status'] = now['status']
+    was_files['status'] = now_files['status'] = now['status'].to_s
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
     diffs = GitDiffParser.new(diff_lines, lines:true, counts:true).parse_all
     git_diff_lines(diffs, now_files)
