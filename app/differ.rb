@@ -16,32 +16,22 @@ class Differ
   def ready?  ; prober.ready?  ; end
 
   def diff_lines(id:, was_index:, now_index:)
-    was = model.kata_event(id, was_index.to_i)
-    now = model.kata_event(id, now_index.to_i)
-    was_files = files(was)
-    now_files = files(now)
-    # Ensure stdout/stderr/status show no diff. Drop once web's
-    # review handles stdout/stderr/status separately, ideally by
-    # making a $.getJSON('/model/kata_event') call from the browser.
-    was_files['stdout'] = now_files['stdout'] = stdout(now)
-    was_files['stderr'] = now_files['stderr'] = stderr(now)
-    was_files['status'] = now_files['status'] = status(now)
-    git_diff_files(id, was_files, now_files, lines:true)
+    git_diff_files(id, was_index, now_index, lines:true)
   end
 
   def diff_summary(id:, was_index:, now_index:)
-    was = model.kata_event(id, was_index.to_i)
-    now = model.kata_event(id, now_index.to_i)
-    was_files = files(was)
-    now_files = files(now)
-    git_diff_files(id, was_files, now_files, lines:false)
+    git_diff_files(id, was_index, now_index, lines:false)
   end
 
   private
 
   include GitDiffLib
 
-  def git_diff_files(id, was_files, now_files, options)
+  def git_diff_files(id, was_index, now_index, options)
+    was = model.kata_event(id, was_index.to_i)
+    now = model.kata_event(id, now_index.to_i)
+    was_files = files(was)
+    now_files = files(now)
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
     diffs = GitDiffParser.new(diff_lines, options).parse_all
     git_diff(diffs, now_files, options)
@@ -59,32 +49,6 @@ class Differ
 
   def prober
     @externals.prober
-  end
-
-  # - - - - - - - - - - - -
-
-  def stdout(now)
-    if now['stdout']
-      now['stdout']['content']
-    else
-      # :nocov:
-      ''
-      # :nocov:
-    end
-  end
-
-  def stderr(now)
-    if now['stderr']
-      now['stderr']['content']
-    else
-      # :nocov:
-      ''
-      # :nocov:
-    end
-  end
-
-  def status(now)
-    now['status'].to_s || ''
   end
 
 end

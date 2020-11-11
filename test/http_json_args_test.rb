@@ -98,7 +98,7 @@ class HttpJsonArgsTest < DifferTestBase
     }.to_json
     result = dispatch('/diff_lines', differ, body)
     assert_equal 'Array', result.class.name
-    assert_equal 5+3, result.size # +stdout +stderr +stdout
+    assert_equal 5, result.size
     assert_equal 'Hash', result[0].class.name
     assert result[0].keys.include?(:new_filename)
   end
