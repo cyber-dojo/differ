@@ -1,38 +1,38 @@
-Run options: --seed 30959
+Run options: --seed 12903
 
 # Running:
 
-.............................................................................................
+............................................................................................
 
-Finished in 4.019016s, 23.1400 runs/s, 101.0198 assertions/s.
+Finished in 4.334719s, 21.2240 runs/s, 93.4317 assertions/s.
 
-93 runs, 406 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 1182 / 1182 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 1182 / 1182 LOC (100.0%) covered.
+92 runs, 405 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 1178 / 1178 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 1178 / 1178 LOC (100.0%) covered.
 
 Slowest tests are...
-0.2615 - C9sA2D:git_diff_test.rb:62:empty file is renamed 100% identical across dirs
-0.2465 - C9sAA8:git_diff_test.rb:169:non-empty file is renamed <100% identical   
-0.2463 - C9sA2C:git_diff_test.rb:13:empty file is created                        
-0.2401 - C9s3ED:git_diff_test.rb:38:empty file is unchanged                      
-0.2347 - C9s4D2:git_diff_test.rb:239:non-empty file has some content added in the middle
-0.2194 - C9sD09:git_diff_test.rb:93:non-empty file is created                    
-0.1922 - C9sAA9:git_diff_test.rb:188:non-empty file is renamed <100% identical across dirs
-0.1899 - C9sAA6:git_diff_test.rb:50:empty file is renamed 100% identical         
-0.1661 - C9sBA7:git_diff_test.rb:152:non-empty file is renamed 100% identical across dirs
-0.1649 - C9s21D:git_diff_test.rb:124:non-empty file is unchanged                 
-0.1645 - C9sAA7:git_diff_test.rb:138:non-empty file is renamed 100% identical    
+0.2844 - C9sAA7:git_diff_test.rb:138:non-empty file is renamed 100% identical    
+0.2693 - C9s3ED:git_diff_test.rb:38:empty file is unchanged                      
+0.2623 - C9sAA8:git_diff_test.rb:169:non-empty file is renamed <100% identical   
+0.2612 - C9sAA6:git_diff_test.rb:50:empty file is renamed 100% identical         
+0.2537 - C9sAA9:git_diff_test.rb:188:non-empty file is renamed <100% identical across dirs
+0.2359 - C9sD09:git_diff_test.rb:93:non-empty file is created                    
+0.1974 - C9s4D0:git_diff_test.rb:207:non-empty file has some content added at the start
+0.1804 - C9sA2D:git_diff_test.rb:62:empty file is renamed 100% identical across dirs
+0.1784 - 4AF137:rack_dispatcher_test.rb:63:diff_summary 200 is in more general format to allow more information to be added, specifically - old and new filenames to detect file new|delete|rename - unchanged line-count
+0.1774 - C9s21D:git_diff_test.rb:124:non-empty file is unchanged                 
+0.1719 - C9sBA7:git_diff_test.rb:152:non-empty file is renamed 100% identical across dirs
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    4.02   <=    10 | [32m true [0m
-          app:lines:total |     436   <=   500 | [32m true [0m
+         test:duration(s) |    4.33   <=    10 | [32m true [0m
+          app:lines:total |     434   <=   500 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |      69   <=    85 | [32m true [0m
+       app:branches:total |      67   <=    85 | [32m true [0m
       app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     746   <=   850 | [32m true [0m
+         test:lines:total |     744   <=   850 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

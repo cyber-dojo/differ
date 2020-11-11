@@ -5,8 +5,8 @@ require_relative 'unpacker'
 module Test::HttpJsonHash
 
   def self.service(hostname, port)
-    requester = Requester.new(hostname, port)
-    Unpacker.new(requester)
+    requester = ::Test::HttpJsonHash::Requester.new(hostname, port)
+    ::Test::HttpJsonHash::Unpacker.new(requester)
   end
 
 end

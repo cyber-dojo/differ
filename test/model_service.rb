@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 require_relative 'http_json_hash/service'
 
-module External
+module Test
 
   class ModelService
 
     def initialize
       hostname = 'model'
       port = ENV['CYBER_DOJO_MODEL_PORT'].to_i
-      @http = Test::HttpJsonHash::service(hostname, port)
+      @http = ::Test::HttpJsonHash::service(hostname, port)
     end
-
-    #def ready?; @http.get(__method__, {}); end
 
     def kata_create(manifest)
       @http.post(__method__, {

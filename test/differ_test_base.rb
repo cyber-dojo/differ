@@ -12,6 +12,10 @@ class DifferTestBase < Id58TestBase
 
   # Don't create a diff() method here as it interferes with MiniTest::Test!
 
+  def externals
+    @externals ||= Externals.new
+  end
+
   def differ
     @differ ||= Differ.new(externals)
   end
@@ -20,12 +24,9 @@ class DifferTestBase < Id58TestBase
     @prober ||= Prober.new(externals)
   end
 
-  def externals
-    @externals ||= Externals.new
-  end
-
   def model
-    @model ||= External::ModelService.new
+    # local because tests need more of model's API.
+    @model ||= ::Test::ModelService.new
   end
 
   def disk

@@ -8,7 +8,7 @@ module Test::HttpJsonHash
   class Requester
 
     def initialize(hostname, port)
-      @http = Http.new
+      @http = ::Test::HttpJsonHash::Http.new
       @hostname = hostname
       @port = port
     end
