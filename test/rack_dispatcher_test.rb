@@ -59,7 +59,7 @@ class RackDispatcherTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - -
-  
+
   test '137', %w(
   diff_summary 200 is in more general format
   to allow more information to be added, specifically
@@ -101,7 +101,7 @@ class RackDispatcherTest < DifferTestBase
           "line_counts" => { "same"=>14, "added"=>0, "deleted"=>0 }
         }
       ]
-      assert_equal expected, response
+      assert_equal expected, response['diff_summary']
     end
 
     args = { id:'RNCzUr', was_index:1, now_index:2 }
@@ -133,7 +133,7 @@ class RackDispatcherTest < DifferTestBase
           "line_counts" => { "same"=>2, "added"=>0, "deleted"=>0 }
         }
       ]
-      assert_equal expected, response
+      assert_equal expected, response['diff_summary']
     end
   end
 

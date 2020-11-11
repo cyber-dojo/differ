@@ -144,7 +144,7 @@ class DiffSummaryTest < DifferTestBase
   end
 
   def diff_summary(id, was_index, now_index)
-    differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
+    differ.diff_summary(id:id, was_index:was_index, now_index:now_index)['diff_summary']
   end
 
 end

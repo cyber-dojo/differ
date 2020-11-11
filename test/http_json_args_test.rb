@@ -14,7 +14,7 @@ class HttpJsonArgsTest < DifferTestBase
     now_index = 9
     args = { id:id, was_index:was_index, now_index:now_index }
     body = ''
-    actual = dispatch("/#{path}", differ, body, args)
+    json = dispatch("/#{path}", differ, body, args)
     expected = [
       { type: :deleted,
         old_filename: "readme.txt",
@@ -47,7 +47,7 @@ class HttpJsonArgsTest < DifferTestBase
         line_counts: { same:1, added:0, deleted:0 }
       }
     ]
-    assert_equal expected, actual
+    assert_equal expected, json['diff_summary']
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -82,7 +82,8 @@ class HttpJsonArgsTest < DifferTestBase
       was_index:1,
       now_index:2
     }.to_json
-    result = dispatch('/diff_summary', differ, body)
+    json = dispatch('/diff_summary', differ, body)
+    result = json['diff_summary']
     assert_equal 'Array', result.class.name
     assert_equal 5, result.size
     assert_equal 'Hash', result[0].class.name
@@ -96,7 +97,8 @@ class HttpJsonArgsTest < DifferTestBase
       was_index:1,
       now_index:2
     }.to_json
-    result = dispatch('/diff_lines', differ, body)
+    json = dispatch('/diff_lines', differ, body)
+    result = json['diff_lines']
     assert_equal 'Array', result.class.name
     assert_equal 5, result.size
     assert_equal 'Hash', result[0].class.name

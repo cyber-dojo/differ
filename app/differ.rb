@@ -16,11 +16,11 @@ class Differ
   def ready?  ; prober.ready?  ; end
 
   def diff_lines(id:, was_index:, now_index:)
-    git_diff_files(id, was_index, now_index, lines:true)
+    { 'diff_lines' => git_diff_files(id, was_index, now_index, lines:true) }
   end
 
   def diff_summary(id:, was_index:, now_index:)
-    git_diff_files(id, was_index, now_index, lines:false)
+    { 'diff_summary' => git_diff_files(id, was_index, now_index, lines:false) }
   end
 
   private

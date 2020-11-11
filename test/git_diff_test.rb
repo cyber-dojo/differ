@@ -264,13 +264,15 @@ class GitDiffTest < DifferTestBase
 
   def assert_diff_lines(expected)
     id,was_index,now_index = *run_diff_prepare
-    diff = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
+    json = differ.diff_lines(id:id, was_index:was_index, now_index:now_index)
+    diff = json['diff_lines']
     assert diff.include?(expected[0]), diagnostic('lines',expected, diff)
   end
 
   def assert_diff_summary(expected)
     id,was_index,now_index = *run_diff_prepare
-    diff = differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
+    json = differ.diff_summary(id:id, was_index:was_index, now_index:now_index)
+    diff = json['diff_summary']
     assert diff.include?(expected[0]), diagnostic('summary',expected, diff)
   end
 

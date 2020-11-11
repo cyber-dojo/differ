@@ -19,7 +19,7 @@ class DifferClientTest < ClientTestBase
       "#{name}=#{CGI.escape(value.to_s)}"
     }.join('&')
     path = "diff_summary?#{encoded}"
-    actual = http.get(path, {})
+    json = http.get(path, {})
     expected = [
       { 'type' => 'deleted',
         'old_filename' => "readme.txt",
@@ -53,7 +53,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "same"=>1, "added"=>0, "deleted"=>0 }
       }
     ]
-    assert_equal expected, actual
+    assert_equal expected, json['diff_summary']
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -707,7 +707,8 @@ class DifferClientTest < ClientTestBase
 
   def assert_diff_lines(expected)
     id,was_index,now_index = *run_diff_prepare
-    diff = differ.diff_lines(id, was_index, now_index)
+    json = differ.diff_lines(id, was_index, now_index)
+    diff = json['diff_lines']
     assert diff.include?(expected), diff
   end
 
@@ -715,7 +716,8 @@ class DifferClientTest < ClientTestBase
 
   def assert_diff_summary(expected)
     id,was_index,now_index = *run_diff_prepare
-    diff = differ.diff_summary(id, was_index, now_index)
+    json = differ.diff_summary(id, was_index, now_index)
+    diff = json['diff_summary']
     assert diff.include?(expected), diff
   end
 
@@ -781,8 +783,8 @@ class DifferClientTest < ClientTestBase
         'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
       }
     end
-    actual = differ.diff_summary(id, was_index, now_index)
-    assert_equal expected, actual
+    json = differ.diff_summary(id, was_index, now_index)
+    assert_equal expected, json['diff_summary']
   end
 
   # - - - - - - - - - - - - - - - - - - - -
