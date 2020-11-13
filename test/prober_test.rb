@@ -15,16 +15,16 @@ class ProberTest < DifferTestBase
     end
   end
 
-  test '601', %w( alive? ) do
-    assert true?(prober.alive?)
+  test '601', %w( alive ) do
+    assert true?(prober.alive)
   end
 
-  test '602', %w( healthy? ) do
-    assert true?(prober.healthy?)
+  test '602', %w( healthy ) do
+    assert true?(prober.healthy)
   end
 
-  test '603', %w( ready? ) do
-    assert true?(prober.ready?)
+  test '603', %w( ready ) do
+    assert true?(prober.ready)
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -34,7 +34,7 @@ class ProberTest < DifferTestBase
   |then ready? is false
   ) do
     externals.instance_exec { @model=STUB_READY_FALSE }
-    assert false?(prober.ready?)
+    assert false?(prober.ready)
   end
 
   private

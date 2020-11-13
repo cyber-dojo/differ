@@ -48,8 +48,7 @@ class Client
         'time' => Time.now,
         'path' => path,
         'class' => 'DifferService',
-        'message' => error.message,
-        'backtrace' => error.backtrace
+        'message' => error.message
       }
     }
   end

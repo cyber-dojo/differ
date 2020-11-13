@@ -15,15 +15,15 @@ module External
       @http.get(__method__, {})
     end
 
-    def healthy?
+    def healthy
       @http.get(__method__, {})
     end
 
-    def alive?
+    def alive
       @http.get(__method__, {})
     end
 
-    def ready?
+    def ready
       @http.get(__method__, {})
     end
 

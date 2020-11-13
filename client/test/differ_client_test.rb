@@ -10,17 +10,15 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'jj8', %w(
-  alive? healthy? ready? all require the trailing question mark in their path
-  which is overly cute and not good, but until the service supports versions
-  with and without a ? (to allow transition away from ?) then thats how it is
-  One possible fix is for alive to return a Hash with keys for both alive and alive?
+  clients use probes with a trailing question mark in their path which is overly cute
+  so support both with and without ? until all clients have switched to non ? 
   ) do
     hostname = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
     assert http.get('alive?', {}).instance_of?(TrueClass)
-    #assert http.get('alive', {}).instance_of?(TrueClass)
+    assert http.get('alive', {}).instance_of?(TrueClass)
   end
 
   # - - - - - - - - - - - - - - - - - - - -

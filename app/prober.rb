@@ -10,15 +10,15 @@ class Prober
     ENV['SHA']
   end
 
-  def healthy? # Dockerfile HEALTHCHECK
+  def healthy # Dockerfile HEALTHCHECK
     prepared?
   end
 
-  def alive? # k8s
+  def alive # k8s
     true
   end
 
-  def ready? # k8s
+  def ready # k8s
     prepared?
   end
 

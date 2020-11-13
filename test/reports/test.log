@@ -1,37 +1,37 @@
-Run options: --seed 33981
+Run options: --seed 62653
 
 # Running:
 
 ..........................................................................
 
-Finished in 3.523102s, 21.0042 runs/s, 43.1438 assertions/s.
+Finished in 3.985241s, 18.5685 runs/s, 38.1407 assertions/s.
 
 74 runs, 152 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 896 / 896 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 896 / 896 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports. 886 / 896 LOC (98.88%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 886 / 896 LOC (98.88%) covered.
 
 Slowest tests are...
-0.2588 - C9sA5C:git_diff_test.rb:26:empty file is deleted                        
-0.2455 - C9s4D0:git_diff_test.rb:207:non-empty file has some content added at the start
-0.2394 - C9s3ED:git_diff_test.rb:38:empty file is unchanged                      
-0.2311 - C9sD09:git_diff_test.rb:93:non-empty file is created                    
-0.2282 - C9s4D2:git_diff_test.rb:239:non-empty file has some content added in the middle
-0.1886 - C9sBA7:git_diff_test.rb:152:non-empty file is renamed 100% identical across dirs
-0.1687 - C9sF2E:git_diff_test.rb:74:empty file has some content added            
-0.1635 - C9sAA9:git_diff_test.rb:188:non-empty file is renamed <100% identical across dirs
-0.1619 - C9sAA8:git_diff_test.rb:169:non-empty file is renamed <100% identical   
-0.1591 - C9sA2D:git_diff_test.rb:62:empty file is renamed 100% identical across dirs
-0.1589 - C9sA2C:git_diff_test.rb:13:empty file is created                        
+0.4098 - C9sAA7:git_diff_test.rb:138:non-empty file is renamed 100% identical    
+0.3303 - C9s21D:git_diff_test.rb:124:non-empty file is unchanged                 
+0.2862 - C9s0C6:git_diff_test.rb:108:non-empty file is deleted                   
+0.2472 - C9s4D1:git_diff_test.rb:223:non-empty file has some content added at the end
+0.2379 - C9sF2E:git_diff_test.rb:74:empty file has some content added            
+0.2322 - C9sAA8:git_diff_test.rb:169:non-empty file is renamed <100% identical   
+0.2266 - C9sAA6:git_diff_test.rb:50:empty file is renamed 100% identical         
+0.1731 - C9sAA9:git_diff_test.rb:188:non-empty file is renamed <100% identical across dirs
+0.1693 - C9sA2C:git_diff_test.rb:13:empty file is created                        
+0.1633 - C9sD09:git_diff_test.rb:93:non-empty file is created                    
+0.1623 - C9s3ED:git_diff_test.rb:38:empty file is unchanged                      
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    3.52   <=    10 | [32m true [0m
+         test:duration(s) |    3.99   <=    10 | [32m true [0m
           app:lines:total |     368   <=   400 | [32m true [0m
-         app:lines:missed |       0   <=     0 | [32m true [0m
+         app:lines:missed |      10   <=     0 | [31m false [0m
        app:branches:total |      54   <=    60 | [32m true [0m
-      app:branches:missed |       0   <=     0 | [32m true [0m
+      app:branches:missed |       3   <=     0 | [31m false [0m
          test:lines:total |     528   <=   600 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m

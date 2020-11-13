@@ -25,9 +25,9 @@ class AppBase < Sinatra::Base
       respond_to do |format|
         format.json {
           target = klass.new(@externals)
-          result = target.public_send(name, **args)
-          content_type :json
-          json({ name => result })
+          result = { name => target.public_send(name, **named_args) }
+          probe_compatible(name, result)
+          json(result)
         }
       end
     end
@@ -37,7 +37,7 @@ class AppBase < Sinatra::Base
 
   include JsonAdapter
 
-  def args
+  def named_args
     body = request.body.read
     if empty?(body)
       from = request.params
@@ -64,6 +64,15 @@ class AppBase < Sinatra::Base
     json
   rescue JSON::ParserError
     fail 'body is not JSON'
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - -
+
+  def probe_compatible(name, result)
+    if [:alive, :healthy, :ready].include?(name)
+      sym = (name.to_s + '?').to_sym
+      result[sym] = result[name]
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -

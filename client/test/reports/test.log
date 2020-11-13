@@ -1,39 +1,29 @@
-Run options: --seed 61745
+Run options: --seed 41656
 
 # Running:
 
-.............................
+.
 
-Finished in 4.876476s, 5.9469 runs/s, 19.6863 assertions/s.
+Finished in 0.007906s, 126.4916 runs/s, 252.9832 assertions/s.
 
-29 runs, 96 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 314 / 317 LOC (99.05%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 314 / 317 LOC (99.05%) covered.
+1 runs, 2 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 152 / 318 LOC (47.8%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 152 / 318 LOC (47.8%) covered.
 
 Slowest tests are...
-0.2966 - 2q0313:differ_client_test.rb:143:deleted empty file                     
-0.2795 - 2q0FE9:differ_client_test.rb:185:deleted non-empty file shows as all lines deleted
-0.2769 - 2q0E3F:differ_client_test.rb:406:changed non-empty file in nested sub-dir
-0.2569 - 2q0314:differ_client_test.rb:168:deleted empty file in nested sub-dir   
-0.2470 - 2q0AEC:differ_client_test.rb:649:unchanged empty files                  
-0.2450 - 2q0E51:differ_client_test.rb:577:100% identical renamed file in nested sub-dir
-0.2326 - 2q0FDB:differ_client_test.rb:599:<100% identical rename                 
-0.2200 - 2q0E50:differ_client_test.rb:545:100% identical renamed file            
-0.2193 - 2q02C4:differ_client_test.rb:360:created non-empty file in nested sub-dir
-0.2142 - 2q0960:differ_client_test.rb:310:created empty file in nested sub-dir   
-0.2101 - 2q0B9F:differ_client_test.rb:485:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
+0.0066 - 2q0jj8:differ_client_test.rb:12:alive? healthy? ready? all require the trailing question mark in their path which is overly cute and not good, but until the service supports versions with and without a ? (to allow transition away from ?) then thats how it is One possible fix is for alive to return a Hash with keys for both alive and alive?
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    4.88   <=    10 | [32m true [0m
+         test:duration(s) |    0.01   <=    10 | [32m true [0m
           app:lines:total |     107   <=   100 | [31m false [0m
-         app:lines:missed |       3   <=     0 | [31m false [0m
+         app:lines:missed |      28   <=     0 | [31m false [0m
        app:branches:total |       8   <=    10 | [32m true [0m
       app:branches:missed |       3   <=     0 | [31m false [0m
-         test:lines:total |     210   <=   300 | [32m true [0m
-        test:lines:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     211   <=   300 | [32m true [0m
+        test:lines:missed |     138   <=     0 | [31m false [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 
