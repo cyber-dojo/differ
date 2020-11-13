@@ -11,7 +11,7 @@ class DifferClientTest < ClientTestBase
 
   test 'jj8', %w(
   clients use probes with a trailing question mark in their path which is overly cute
-  so support both with and without ? until all clients have switched to non ? 
+  so support both with and without ? until all clients have switched to non ?
   ) do
     hostname = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
@@ -105,9 +105,9 @@ class DifferClientTest < ClientTestBase
   end
 
   test '945', 'probes 200' do
-    assert differ.alive?.instance_of?(TrueClass)
-    assert differ.healthy?.instance_of?(TrueClass)
-    assert differ.ready?.instance_of?(TrueClass)
+    assert differ.alive.instance_of?(TrueClass)
+    assert differ.healthy.instance_of?(TrueClass)
+    assert differ.ready.instance_of?(TrueClass)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
