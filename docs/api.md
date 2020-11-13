@@ -197,17 +197,15 @@ Useful as a Kubernetes readyness probe.
 
 - - - -
 ## JSON in
-- All methods pass any arguments as a json hash in the http request body.
-- If there are no arguments you can use `''` (which is the default
-  for `curl --data`) instead of `'{}'`.
+- All methods can pass any arguments either as a JSON Hash in the http request body,
+  or in the query string of the URL.
 
 - - - -
 ## JSON out      
-- All methods return a json hash in the http response body.
+- All methods return a JSON Hash in the http response body.
 - If the method completes, a key equals the method's name. eg
   ```bash
   $ curl --silent --request GET http://${IP_ADDRESS}:${PORT}/ready
-  { "ready":true}
+  { "ready":true }
   ```
-- If the method raises an exception, a key equals `"exception"`, with
-  a json-hash as its value.
+- If the method raises an exception, a key equals `"exception"`.
