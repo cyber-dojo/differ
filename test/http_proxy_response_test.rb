@@ -37,7 +37,7 @@ class HttpProxyResponseTest < DifferTestBase
   test 'QN5', %w(
   |when an http-proxy
   |receives JSON (but not a Hash) in its response.body
-  |it raises an exeption
+  |it raises an exception
   ) do
     stub_model_http('[]')
     ready_raises_exception('body is not JSON Hash')
@@ -48,7 +48,7 @@ class HttpProxyResponseTest < DifferTestBase
   test 'QN6', %w(
   |when an http-proxy
   |receives JSON-Hash with an 'exception' key in its response.body
-  |it raises an exeption
+  |it raises an exception
   ) do
     stub_model_http(response='{"exception":42}')
     ready_raises_exception('body has embedded exception')
@@ -60,7 +60,7 @@ class HttpProxyResponseTest < DifferTestBase
   |when an http-proxy
   |receives JSON-Hash in its response.body
   |which does not contain the requested method's key
-  |it raises an exeption
+  |it raises an exception
   ) do
     stub_model_http(response='{"wibble":42}')
     ready_raises_exception('body is missing ready? key')
