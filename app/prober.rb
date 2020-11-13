@@ -7,19 +7,19 @@ class Prober
   end
 
   def sha # identity
-    { 'sha' => ENV['SHA'] }
+    ENV['SHA']
   end
 
   def healthy? # Dockerfile HEALTHCHECK
-    { 'healthy?' => prepared? }
+    prepared?
   end
 
   def alive? # k8s
-    { 'alive?' => true }
+    true
   end
 
   def ready? # k8s
-    { 'ready?' => prepared? }
+    prepared?
   end
 
   private

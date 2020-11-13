@@ -11,10 +11,6 @@ if ENV['CYBER_DOJO_PROMETHEUS'] === 'true'
   use Prometheus::Middleware::Exporter
 end
 
+require_relative '../app/app'
 require_relative '../app/externals'
-require_relative '../app/differ'
-require_relative '../app/rack_dispatcher'
-externals = Externals.new
-differ = Differ.new(externals)
-dispatcher = RackDispatcher.new(differ, Rack::Request)
-run dispatcher
+run App.new(Externals.new)

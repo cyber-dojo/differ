@@ -8,12 +8,8 @@ module External
     def initialize
       hostname = 'model'
       port = ENV['CYBER_DOJO_MODEL_PORT'].to_i
-      @http = HttpJsonHash::service(hostname, port)
+      @http = HttpJsonHash::service('model', hostname, port)
     end
-
-    # - - - - - - - - - - - - - - - - - - -
-
-    #def ready?; @http.get(__method__, {}); end
 
     # - - - - - - - - - - - - - - - - - - -
 

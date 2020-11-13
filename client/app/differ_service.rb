@@ -8,23 +8,23 @@ module External
     def initialize
       hostname = 'differ_server'
       port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
-      @http = HttpJsonHash::service(hostname, port)
+      @http = HttpJsonHash::service('differ', hostname, port)
     end
 
     def sha
-      @http.get(__method__, {})['sha']
+      @http.get(__method__, {})
     end
 
     def healthy?
-      @http.get(__method__, {})['healthy?']
+      @http.get(__method__, {})
     end
 
     def alive?
-      @http.get(__method__, {})['alive?']
+      @http.get(__method__, {})
     end
 
     def ready?
-      @http.get(__method__, {})['ready?']
+      @http.get(__method__, {})
     end
 
     # - - - - - - - - - - - - - - - - - - -

@@ -2,7 +2,6 @@
 require_relative 'git_diff'
 require_relative 'git_differ'
 require_relative 'git_diff_parser'
-require_relative 'prober'
 
 class Differ
 
@@ -10,17 +9,12 @@ class Differ
     @externals = externals
   end
 
-  def sha     ; prober.sha     ; end
-  def healthy?; prober.healthy?; end
-  def alive?  ; prober.alive?  ; end
-  def ready?  ; prober.ready?  ; end
-
   def diff_lines(id:, was_index:, now_index:)
-    { 'diff_lines' => git_diff_files(id, was_index, now_index, lines:true) }
+    git_diff_files(id, was_index, now_index, lines:true)
   end
 
   def diff_summary(id:, was_index:, now_index:)
-    { 'diff_summary' => git_diff_files(id, was_index, now_index, lines:false) }
+    git_diff_files(id, was_index, now_index, lines:false)
   end
 
   private
@@ -45,10 +39,6 @@ class Differ
 
   def model
     @externals.model
-  end
-
-  def prober
-    @externals.prober
   end
 
 end

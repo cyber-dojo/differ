@@ -1,20 +1,11 @@
 # frozen_string_literal: true
-require_relative 'external/http'
-require_relative 'external/model'
 require_relative 'external/disk_writer'
 require_relative 'external/gitter'
+require_relative 'external/http'
+require_relative 'external/model'
 require_relative 'external/sheller'
 
 class Externals
-
-  def model
-    @model ||= External::Model.new(model_http)
-  end
-  def model_http
-    @model_http ||= External::Http.new
-  end
-
-  # - - - - - - - - - - - - - - - - -
 
   def disk
     @disk ||= External::DiskWriter.new
@@ -24,12 +15,17 @@ class Externals
     @git ||= External::Gitter.new(self)
   end
 
-  def prober
-    @prober ||= Prober.new(self)
-  end
-
   def shell
     @shell ||= External::Sheller.new
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  def model
+    @model ||= External::Model.new(model_http)
+  end
+  def model_http
+    @model_http ||= External::Http.new
   end
 
 end

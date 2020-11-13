@@ -9,17 +9,37 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'jj9', '/diff_summary uses proper GET query args' do
+  test 'jj8', %w(
+  alive? healthy? ready? all require the trailing question mark in their path
+  which is overly cute and not good, but until the service supports versions
+  with and without a ? (to allow transition away from ?) then thats how it is
+  One possible fix is for alive to return a Hash with keys for both alive and alive?
+  ) do
     hostname = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
-    http = HttpJsonHash::Unpacker.new(requester)
+    http = HttpJsonHash::Unpacker.new('differ', requester)
+    assert http.get('alive?', {}).instance_of?(TrueClass)
+    #assert http.get('alive', {}).instance_of?(TrueClass)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'jj9', %w(
+  /diff_summary can use GET query args
+  which is important since in jQuery a $.getJSON() call
+  always passes its arguments in the query string
+  ) do
+    hostname = 'differ_server'
+    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
+    requester = HttpJsonHash::Requester.new(hostname, port)
+    http = HttpJsonHash::Unpacker.new('differ', requester)
     args = { id:'RNCzUr', was_index:8, now_index:9 }
     encoded = args.map{|name,value|
       "#{name}=#{CGI.escape(value.to_s)}"
     }.join('&')
     path = "diff_summary?#{encoded}"
-    json = http.get(path, {})
+    diff_summary = http.get(path, {})
     expected = [
       { 'type' => 'deleted',
         'old_filename' => "readme.txt",
@@ -53,7 +73,7 @@ class DifferClientTest < ClientTestBase
         "line_counts" => { "same"=>1, "added"=>0, "deleted"=>0 }
       }
     ]
-    assert_equal expected, json['diff_summary']
+    assert_equal expected, diff_summary
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -87,9 +107,9 @@ class DifferClientTest < ClientTestBase
   end
 
   test '945', 'probes 200' do
-    assert differ.healthy?.is_a?(TrueClass)
-    assert differ.alive?.is_a?(TrueClass)
-    assert differ.ready?.is_a?(TrueClass)
+    assert differ.alive?.instance_of?(TrueClass)
+    assert differ.healthy?.instance_of?(TrueClass)
+    assert differ.ready?.instance_of?(TrueClass)
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -100,13 +120,21 @@ class DifferClientTest < ClientTestBase
     hostname = 'differ_server'
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
-    http = HttpJsonHash::Unpacker.new(requester)
+    http = HttpJsonHash::Unpacker.new('differ', requester)
     error = assert_raises(RuntimeError) { http.get(:shar, {"x":42}) }
     json = JSON.parse(error.message)
-    assert_equal '/shar', json['path']
-    assert_equal '{"x":42}', json['body']
-    assert_equal 'DifferService', json['class']
-    assert_equal 'unknown path', json['message']
+    expected = {
+      "request" => {
+        "service" => "differ",
+        "path" => "shar",
+        "args" => { "x" => 42 }
+      },
+      "response" => {
+        "body" => "GET /shar"
+      },
+      "message" => "body is not JSON"
+    }
+    assert_equal expected, json
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -707,8 +735,7 @@ class DifferClientTest < ClientTestBase
 
   def assert_diff_lines(expected)
     id,was_index,now_index = *run_diff_prepare
-    json = differ.diff_lines(id, was_index, now_index)
-    diff = json['diff_lines']
+    diff = differ.diff_lines(id, was_index, now_index)
     assert diff.include?(expected), diff
   end
 
@@ -716,15 +743,14 @@ class DifferClientTest < ClientTestBase
 
   def assert_diff_summary(expected)
     id,was_index,now_index = *run_diff_prepare
-    json = differ.diff_summary(id, was_index, now_index)
-    diff = json['diff_summary']
+    diff = differ.diff_summary(id, was_index, now_index)
     assert diff.include?(expected), diff
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   def run_diff_prepare
-    id = model.kata_create(starter_manifest)['kata_create']
+    id = model.kata_create(starter_manifest)
     kata_ran_tests(id, was_index=1, @old_files)
     kata_ran_tests(id, now_index=2, @new_files)
     [id, was_index, now_index]
@@ -783,8 +809,8 @@ class DifferClientTest < ClientTestBase
         'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] }
       }
     end
-    json = differ.diff_summary(id, was_index, now_index)
-    assert_equal expected, json['diff_summary']
+    diff_summary = differ.diff_summary(id, was_index, now_index)
+    assert_equal expected, diff_summary
   end
 
   # - - - - - - - - - - - - - - - - - - - -

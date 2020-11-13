@@ -1,38 +1,38 @@
-Run options: --seed 20745
+Run options: --seed 61745
 
 # Running:
 
-............................
+.............................
 
-Finished in 5.197228s, 5.3875 runs/s, 18.8562 assertions/s.
+Finished in 4.876476s, 5.9469 runs/s, 19.6863 assertions/s.
 
-28 runs, 98 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 295 / 295 LOC (100.0%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 295 / 295 LOC (100.0%) covered.
+29 runs, 96 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 314 / 317 LOC (99.05%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 314 / 317 LOC (99.05%) covered.
 
 Slowest tests are...
-0.3063 - 2q0960:differ_client_test.rb:283:created empty file in nested sub-dir   
-0.2911 - 2q0FE9:differ_client_test.rb:158:deleted non-empty file shows as all lines deleted
-0.2756 - 2q0E3F:differ_client_test.rb:379:changed non-empty file in nested sub-dir
-0.2751 - 2q0E51:differ_client_test.rb:550:100% identical renamed file in nested sub-dir
-0.2680 - 2q0B9F:differ_client_test.rb:458:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
-0.2572 - 2q02C4:differ_client_test.rb:333:created non-empty file in nested sub-dir
-0.2548 - 2q0AEC:differ_client_test.rb:622:unchanged empty files                  
-0.2494 - 2q0313:differ_client_test.rb:116:deleted empty file                     
-0.2483 - 2q0B9E:differ_client_test.rb:400:changed non-empty file shows as deleted and added lines with each hunk in its own indexed section
-0.2354 - 2q0E3E:differ_client_test.rb:358:changed non-empty file                 
-0.2194 - 2q0E50:differ_client_test.rb:518:100% identical renamed file            
+0.2966 - 2q0313:differ_client_test.rb:143:deleted empty file                     
+0.2795 - 2q0FE9:differ_client_test.rb:185:deleted non-empty file shows as all lines deleted
+0.2769 - 2q0E3F:differ_client_test.rb:406:changed non-empty file in nested sub-dir
+0.2569 - 2q0314:differ_client_test.rb:168:deleted empty file in nested sub-dir   
+0.2470 - 2q0AEC:differ_client_test.rb:649:unchanged empty files                  
+0.2450 - 2q0E51:differ_client_test.rb:577:100% identical renamed file in nested sub-dir
+0.2326 - 2q0FDB:differ_client_test.rb:599:<100% identical rename                 
+0.2200 - 2q0E50:differ_client_test.rb:545:100% identical renamed file            
+0.2193 - 2q02C4:differ_client_test.rb:360:created non-empty file in nested sub-dir
+0.2142 - 2q0960:differ_client_test.rb:310:created empty file in nested sub-dir   
+0.2101 - 2q0B9F:differ_client_test.rb:485:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |     5.2   <=    10 | [32m true [0m
-          app:lines:total |      89   <=   100 | [32m true [0m
-         app:lines:missed |       0   <=     0 | [32m true [0m
-       app:branches:total |       2   <=    10 | [32m true [0m
-      app:branches:missed |       0   <=     0 | [32m true [0m
-         test:lines:total |     206   <=   300 | [32m true [0m
+         test:duration(s) |    4.88   <=    10 | [32m true [0m
+          app:lines:total |     107   <=   100 | [31m false [0m
+         app:lines:missed |       3   <=     0 | [31m false [0m
+       app:branches:total |       8   <=    10 | [32m true [0m
+      app:branches:missed |       3   <=     0 | [31m false [0m
+         test:lines:total |     210   <=   300 | [32m true [0m
         test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m

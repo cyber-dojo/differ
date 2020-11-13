@@ -4,9 +4,9 @@ require_relative 'unpacker'
 
 module HttpJsonHash
 
-  def self.service(hostname, port)
+  def self.service(name, hostname, port)
     requester = Requester.new(hostname, port)
-    Unpacker.new(requester)
+    Unpacker.new(name, requester)
   end
 
 end
