@@ -75,7 +75,7 @@ class HttpProxyResponseTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   def ready_raises_exception
-    assert_raises { prober.ready? }
+    assert_raises { prober.ready }
   end
 
 end
