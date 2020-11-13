@@ -32,7 +32,6 @@ exit_non_zero_unless_healthy()
     fi
   done
   echo; echo "${SERVICE_NAME} not healthy after ${MAX_TRIES} tries."
-  echo_health_log_if_it_exists
   echo_docker_log
   echo
   exit 42
@@ -45,36 +44,47 @@ healthy()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-echo_health_log_if_it_exists()
-{
-  echo
-  echo "Echoing health log file (if it exists)"
-  local -r HEALTHY_COMMAND="docker exec -it "${CONTAINER_NAME}" bash -c '[[ -f /tmp/healthy.fail.log ]] && (cat /tmp/healthy.fail.log) || true'"
-  echo "${HEALTHY_COMMAND}"
-  eval "${HEALTHY_COMMAND}"
-  echo
-}
-
-# - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_started_cleanly()
 {
   echo
   local DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
+
+  # Handle known warnings (typically waiting on Gem upgrade)
   #local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   #DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
-  local -r LINE_COUNT=$(echo -n "${DOCKER_LOG}" | grep --count '^')
-  # 3 lines on Thin (Unicorn=6, Puma=6)
+
   echo "Checking if ${SERVICE_NAME} started cleanly."
-  if [ "${LINE_COUNT}" == '6' ]; then
+  local -r top6=$(echo "${DOCKER_LOG}" | head -6)
+  if [ "${top6}" == "$(clean_top_6)" ]; then
     echo "${SERVICE_NAME} started cleanly."
   else
     echo "${SERVICE_NAME} did not start cleanly."
-    echo "docker logs ${CONTAINER_NAME}"
+    echo "First 6 lines of: docker logs ${CONTAINER_NAME}"
     echo
-    echo "${DOCKER_LOG}"
+    echo "${top6}"
     echo
     exit 42
   fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
+clean_top_6()
+{
+  if [ "${SERVICE_NAME}" == differ_server ]; then
+    local -r port="${CYBER_DOJO_DIFFER_PORT}"
+  else
+    local -r port="${CYBER_DOJO_DIFFER_CLIENT_PORT}"
+  fi
+  # 6 lines on Puma
+  local -r L1="Puma starting in single mode..."
+  local -r L2="* Version 5.0.4 (ruby 2.7.2-p137), codename: Spoony Bard"
+  local -r L3="* Min threads: 0, max threads: 5"
+  local -r L4="* Environment: production"
+  local -r L5="* Listening on http://0.0.0.0:${port}"
+  local -r L6="Use Ctrl-C to stop"
+  #
+  local -r top6="$(printf "%s\n%s\n%s\n%s\n%s\n%s" "${L1}" "${L2}" "${L3}" "${L4}" "${L5}" "${L6}")"
+  echo "${top6}"
 }
 
 # - - - - - - - - - - - - - - - - - - -

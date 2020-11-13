@@ -28,15 +28,11 @@ class Client
 
   def html_json_fail(status, path, error)
     json = JSON.pretty_generate(diagnostic(path, error))
-    if path === '/healthy'
-      IO.write("/tmp/healthy.fail.log", json, mode:'a')
-    else
-      $stderr.puts(json)
-      $stderr.flush
-    end
+    $stderr.puts(json)
+    $stderr.flush
     html_json(status, json)
   end
-    
+
   def html_json(status, json)
     [ status, { 'Content-Type' => 'application/json' }, [json] ]
   end

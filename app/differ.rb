@@ -14,7 +14,7 @@ class Differ
   end
 
   def diff_summary(id:, was_index:, now_index:)
-    git_diff_files(id, was_index, now_index, lines:false) 
+    git_diff_files(id, was_index, now_index, lines:false)
   end
 
   private
