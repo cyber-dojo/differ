@@ -2,7 +2,7 @@
 
 - The source for the [cyberdojo/differ](https://hub.docker.com/r/cyberdojo/differ/tags) Docker image.
 - A docker-containerized stateless micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
-- An http service (rack based) for diffing two sets of files.
+- An http service (sinatra based) for diffing two sets of files.
 
 ***
 API
