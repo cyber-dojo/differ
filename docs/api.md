@@ -2,21 +2,27 @@
 
 - - - -
 ## GET diff_files(id,was_index,now_index)
-A diff of two sets of files from the kata with id **id**,
-the first set of files has index **was_index**,
-the second set of files has index **now_index**.
+A diff of two sets of files (designated with **was_index** and **now_index**) from the kata with id **id**.
 Also includes unchanged files and the content of files renamed but with identical content.
+- parameters
+  * **id:String** the id of the kata.
+  * **was_index:Integer** the test-submission index of the first set of files.
+  * **now_index:Integer** the test-submission index of the second set of files.
+  * eg the diff between the 3rd and 4th test submissions of kata "qs34Rk"
+  ```json
+  { "id":"qs34Rk", "was_index":3, "now_index":4 }
+  ```
 - returns an Array of Hashes with each Hash being the diff of a single file. Each Hash has the following keys:
   * "type" - one of the Strings [ "created", "deleted", "renamed", "changed", "unchanged" ].
-  * "old_filename" - the String name of the file, unless "type" is "created" in which case **null**.
-  * "new_filename" - the String name of the file, unless "type" is "deleted" in which case **null**.
+  * "old_filename" - the String name of the **was_index** file, unless "type" is "created" in which case **null**.
+  * "new_filename" - the String name of the **now_index** file, unless "type" is "deleted" in which case **null**.
   * "lines" - an Array of Hashes, each Hash detailing an "added", "deleted", or "same" line, or
     a "section" marker before a diff-chunk.
-  * "added" - line numbers index into **now_index**'s file.
-  * "deleted" - line numbers index into **was_index**'s file.
-  * "same" - line numbers index into **now_index**'s file.
+  * "added" - line numbers index into **now_index**'s "new_filename" file.
+  * "deleted" - line numbers index into **was_index**'s "old_filename" file.
+  * "same" - line numbers index into **now_index**'s "new_filename" file.
   *
-  * eg a created file.
+  * eg a created file, which always has a single "section" marker.
   ```json
   [
     {
@@ -35,7 +41,7 @@ Also includes unchanged files and the content of files renamed but with identica
     ...
   ]
   ```
-  * eg a deleted file.
+  * eg a deleted file, which always has a single "section" marker.
   ```json
   [
     {
@@ -54,7 +60,7 @@ Also includes unchanged files and the content of files renamed but with identica
     ...
   ]
   ```
-  * eg a renamed file with identical content.
+  * eg a renamed file with identical content, which always has zero "section" markers.
   ```json
   [
     {
@@ -73,7 +79,7 @@ Also includes unchanged files and the content of files renamed but with identica
     ...
   ]
   ```
-  * eg a file with two diff-chunks.
+  * eg a changed file with two diff-chunks.
   ```json
   [
     {
@@ -99,14 +105,6 @@ Also includes unchanged files and the content of files renamed but with identica
     ,
     ...
   ]
-  ```
-- parameters
-  * **id:String** the id of the kata.
-  * **was_index:Integer** the test index of the first set of files.
-  * **now_index:Integer** the test index of the second set of files.
-  * eg the diff between the 3rd and 4th test submissions of kata "qs34Rk"
-  ```json
-  { "id":"qs34Rk", "was_index":3, "now_index":4 }
   ```
 
 - - - -
@@ -212,4 +210,4 @@ Useful as a Kubernetes readyness probe.
   { "ready":true}
   ```
 - If the method raises an exception, a key equals `"exception"`, with
-  a json-hash as its value. 
+  a json-hash as its value.
