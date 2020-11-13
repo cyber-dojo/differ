@@ -7,10 +7,12 @@
 ***
 API
 
-* [GET alive?](docs/api.md#get-alive)  
-* [GET ready?](docs/api.md#get-ready)
 * [GET sha](docs/api.md#get-sha)
-* [GET diff(id,old_files,new_files)](docs/api.md#get-diffidold_filesnew_files)
+* [GET alive](docs/api.md#get-alive)  
+* [GET healthy](docs/api.md#get-healthy)
+* [GET ready](docs/api.md#get-ready)
+* [GET diff_files(id,was_index,now_index)](docs/api.md#get-diff_filesidwas_indexnow_index)
+* [GET diff_summary(id,was_index,now_index)](docs/api.md#get-diff_summaryidwas_indexnow_index)
 
 ***
 
