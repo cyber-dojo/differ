@@ -38,17 +38,12 @@ class AppBase < Sinatra::Base
   include JsonAdapter
 
   def named_args
-    body = request.body.read
-    if empty?(body)
-      from = request.params
+    if params.empty?
+      from = json_hash_parse(request.body.read)
     else
-      from = json_hash_parse(body)
+      from = params
     end
     symbolized(from)
-  end
-
-  def empty?(body)
-    body === '' || body === '{}'
   end
 
   def symbolized(h)
@@ -57,6 +52,9 @@ class AppBase < Sinatra::Base
   end
 
   def json_hash_parse(body)
+    if body === ''
+      body = '{}'
+    end
     json = JSON.parse!(body)
     unless json.instance_of?(Hash)
       fail 'body is not JSON Hash'
