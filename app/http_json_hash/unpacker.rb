@@ -26,16 +26,22 @@ module HttpJsonHash
       if json.has_key?('exception')
         fail service_error(path, args, body, 'body has embedded exception')
       end
-      unless json.has_key?(path)
-        fail service_error(path, args, body, 'body is missing :path key')
+      name = argless(path)
+      unless json.has_key?(name)
+        fail service_error(path, args, body, "body is missing #{name} key")
       end
-      json[path]
+      json[name]
     rescue JSON::ParserError
       fail service_error(path, args, body, 'body is not JSON')
     end
 
+    def argless(path)
+      s = path.split('?')[0]
+      path === s+'?' ? path : s
+    end
+
     def service_error(path, args, body, message)
-      ::HttpJsonHash::ServiceError.new(path, args, @name, body, message)
+      ::HttpJsonHash::ServiceError.new(@name, path, args, body, message)
     end
 
   end

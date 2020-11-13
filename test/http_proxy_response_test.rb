@@ -10,13 +10,26 @@ class HttpProxyResponseTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test 'QN3', %w(
+  |when an http-proxy
+  |receives a JSON-Hash in its response.body
+  |which has a key matching the query-string (without the args)
+  |then it returns the value for that key in the JSON-Hash
+  ) do
+    http = ::HttpAdapterStub.new('{"ready?":[42]}')
+    model = ::External::Model.new(http)
+    assert_equal [42], model.ready?
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
   test 'QN4', %w(
   |when an http-proxy
   |receives non-JSON in its response.body
   |it raises an exception
   ) do
     stub_model_http('xxxx')
-    ready_raises_exception
+    ready_raises_exception('body is not JSON')
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -27,7 +40,7 @@ class HttpProxyResponseTest < DifferTestBase
   |it raises an exeption
   ) do
     stub_model_http('[]')
-    ready_raises_exception
+    ready_raises_exception('body is not JSON Hash')
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -38,7 +51,7 @@ class HttpProxyResponseTest < DifferTestBase
   |it raises an exeption
   ) do
     stub_model_http(response='{"exception":42}')
-    ready_raises_exception
+    ready_raises_exception('body has embedded exception')
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -50,20 +63,7 @@ class HttpProxyResponseTest < DifferTestBase
   |it raises an exeption
   ) do
     stub_model_http(response='{"wibble":42}')
-    ready_raises_exception
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'QN8', %w(
-  |when an http-proxy
-  |receives a JSON-Hash in its response.body
-  |which has a key matching the path
-  |then it returns the value for that key
-  ) do
-    http = ::HttpAdapterStub.new('{"ready?":[42]}')
-    model = ::External::Model.new(http)
-    assert_equal [42], model.ready?
+    ready_raises_exception('body is missing ready? key')
   end
 
   private
@@ -74,8 +74,9 @@ class HttpProxyResponseTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  def ready_raises_exception
-    assert_raises { prober.ready }
+  def ready_raises_exception(expected_message)
+    error = assert_raises(HttpJsonHash::ServiceError) { prober.ready }
+    assert_equal expected_message, error.message
   end
 
 end

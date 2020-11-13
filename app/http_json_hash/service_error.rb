@@ -4,15 +4,15 @@ module HttpJsonHash
 
   class ServiceError < RuntimeError
 
-    def initialize(path, args, name, body, message)
+    def initialize(name, path, args, body, message)
+      @name = name
       @path = path
       @args = args
-      @name = name
       @body = body
       super(message)
     end
 
-    attr_reader :path, :args, :name, :body
+    attr_reader :name, :path, :args, :body
 
   end
 
