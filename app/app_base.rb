@@ -3,7 +3,6 @@ require_relative 'silently'
 silently { require 'sinatra/contrib' } # N x "warning: method redefined"
 require 'sinatra/contrib'
 require_relative 'http_json_hash/service'
-require_relative 'lib/json_adapter'
 require 'json'
 require 'sprockets'
 
@@ -34,8 +33,6 @@ class AppBase < Sinatra::Base
   end
 
   private
-
-  include JsonAdapter
 
   def named_args
     if params.empty?
