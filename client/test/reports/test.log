@@ -1,29 +1,39 @@
-Run options: --seed 41656
+Run options: --seed 41263
 
 # Running:
 
-.
+..................................
 
-Finished in 0.007906s, 126.4916 runs/s, 252.9832 assertions/s.
+Finished in 4.941144s, 6.8810 runs/s, 21.4525 assertions/s.
 
-1 runs, 2 assertions, 0 failures, 0 errors, 0 skips
-Coverage report generated for Minitest to //tmp/reports. 152 / 318 LOC (47.8%) covered.
-Coverage report generated for Minitest to //tmp/reports/coverage.json. 152 / 318 LOC (47.8%) covered.
+34 runs, 106 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Minitest to //tmp/reports. 351 / 351 LOC (100.0%) covered.
+Coverage report generated for Minitest to //tmp/reports/coverage.json. 351 / 351 LOC (100.0%) covered.
 
 Slowest tests are...
-0.0066 - 2q0jj8:differ_client_test.rb:12:alive? healthy? ready? all require the trailing question mark in their path which is overly cute and not good, but until the service supports versions with and without a ? (to allow transition away from ?) then thats how it is One possible fix is for alive to return a Hash with keys for both alive and alive?
+0.3174 - 2q0FE9:differ_client_test.rb:184:deleted non-empty file shows as all lines deleted
+0.3126 - 2q0E50:differ_client_test.rb:544:100% identical renamed file            
+0.2821 - 2q0960:differ_client_test.rb:309:created empty file in nested sub-dir   
+0.2490 - 2q0B68:differ_client_test.rb:266:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.2329 - 2q0B9E:differ_client_test.rb:426:changed non-empty file shows as deleted and added lines with each hunk in its own indexed section
+0.2301 - 2q02C3:differ_client_test.rb:336:created non-empty file                 
+0.2203 - 2q095F:differ_client_test.rb:292:created new empty file                 
+0.2048 - 2q0313:differ_client_test.rb:142:deleted empty file                     
+0.1943 - 2q07FF:differ_client_test.rb:665:unchanged empty-file in nested sub-dir 
+0.1904 - 2q0FDC:differ_client_test.rb:622:<100% identical renamed in nested sub-dir
+0.1839 - 2q0E3F:differ_client_test.rb:405:changed non-empty file in nested sub-dir
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    0.01   <=    10 | [32m true [0m
-          app:lines:total |     107   <=   100 | [31m false [0m
-         app:lines:missed |      28   <=     0 | [31m false [0m
+         test:duration(s) |    4.94   <=    10 | [32m true [0m
+          app:lines:total |     107   <=   125 | [32m true [0m
+         app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m
-      app:branches:missed |       3   <=     0 | [31m false [0m
-         test:lines:total |     211   <=   300 | [32m true [0m
-        test:lines:missed |     138   <=     0 | [31m false [0m
+      app:branches:missed |       0   <=     0 | [32m true [0m
+         test:lines:total |     244   <=   300 | [32m true [0m
+        test:lines:missed |       0   <=     0 | [32m true [0m
       test:branches:total |       0   <=     0 | [32m true [0m
      test:branches:missed |       0   <=     0 | [32m true [0m
 
