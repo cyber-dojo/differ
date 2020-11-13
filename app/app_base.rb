@@ -85,19 +85,20 @@ class AppBase < Sinatra::Base
     content_type('application/json')
     info = {
       exception: {
+        time: Time.now,
         request: {
           path:request.path,
-          body:request.body.read,
-          params:request.params
+          params:request.params,
+          body:request.body.read
         }
       }
     }
     exception = info[:exception]
     if error.instance_of?(::HttpJsonHash::ServiceError)
       exception[:http_service] = {
+        name:error.name,
         path:error.path,
         args:error.args,
-        name:error.name,
         body:error.body,
         message:error.message
       }
