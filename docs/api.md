@@ -3,20 +3,20 @@
 - - - -
 ## GET diff_files(id,was_index,now_index)
 A diff of two sets of files from the kata with id **id**,
-the set is the files with index **was_index**,
-the set is the files with index **now_index**.
-Also includes unchanged files and the content of identically renamed files.
+the first set of files has index **was_index**,
+the second set of files has index **now_index**.
+Also includes unchanged files and the content of files renamed but with identical content.
 - returns an Array of Hashes with each Hash being the diff of a single file. Each Hash has the following keys:
   * "type" - one of the Strings [ "created", "deleted", "renamed", "changed", "unchanged" ].
-  * "old_filename" - the String name of the file, unless "type" is "created" in which case it is **null**.
-  * "new_filename" - the String name of the file, unless "type" is "deleted" in which case it is **null**.
+  * "old_filename" - the String name of the file, unless "type" is "created" in which case **null**.
+  * "new_filename" - the String name of the file, unless "type" is "deleted" in which case **null**.
   * "lines" - an Array of Hashes, each Hash detailing an "added", "deleted", or "same" line, or
     a "section" marker before a diff-chunk.
   * "added" - line numbers index into **now_index**'s file.
   * "deleted" - line numbers index into **was_index**'s file.
   * "same" - line numbers index into **now_index**'s file.
   *
-  * eg a newly created file
+  * eg a created file.
   ```json
   [
     {
@@ -35,7 +35,7 @@ Also includes unchanged files and the content of identically renamed files.
     ...
   ]
   ```
-  * eg a deleted file
+  * eg a deleted file.
   ```json
   [
     {
@@ -54,7 +54,7 @@ Also includes unchanged files and the content of identically renamed files.
     ...
   ]
   ```
-  * eg a 100% identical renamed file
+  * eg a renamed file with identical content.
   ```json
   [
     {
@@ -73,7 +73,7 @@ Also includes unchanged files and the content of identically renamed files.
     ...
   ]
   ```
-  * eg a file with two diff-chunks
+  * eg a file with two diff-chunks.
   ```json
   [
     {
@@ -100,27 +100,44 @@ Also includes unchanged files and the content of identically renamed files.
     ...
   ]
   ```
-
 - parameters
-  * **id:String** for tracing
-  * **was_index:Integer**
-  * **now_index:Integer**
-  * eg
+  * **id:String** the id of the kata.
+  * **was_index:Integer** the test index of the first set of files.
+  * **now_index:Integer** the test index of the second set of files.
+  * eg the diff between the 3rd and 4th test submissions of kata "qs34Rk"
   ```json
   { "id":"qs34Rk", "was_index":3, "now_index":4 }
   ```
 
 - - - -
 ## GET diff_summary(id,was_index,now_index)
-The same as `diff_lines` except its Hash entries does *not* include "lines".
+The same as `diff_lines` except its Hash entries do *not* include "lines".
+* eg a file with changes spread across one or more diff-chunks.
+```json
+[
+  {
+    "type": "changed",
+    "old_filename": "hiker.cpp",
+    "new_filename": "hiker.cpp",
+    "line_counts": { "added":22, "deleted":29, "same":57 }
+  }
+  ,
+  ...
+]
+```
+
 
 - - - -
 # GET sha
 The git commit sha used to create the Docker image.
-Present inside the image as the environment variable COMMIT_SHA.
+Present inside the image as the environment variable SHA.
 - returns
   * The 40 character sha string.
   * eg
+  ```bash
+  $ docker run --rm cyberdojo/differ:latest bash -c 'echo ${SHA}'
+  b28b3e13c0778fe409a50d23628f631f87920ce5
+  ```
   ```json
   { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
   ```
@@ -191,8 +208,8 @@ Useful as a Kubernetes readyness probe.
 - All methods return a json hash in the http response body.
 - If the method completes, a key equals the method's name. eg
   ```bash
-  $ curl --silent --request GET http://${IP_ADDRESS}:${PORT}/ready?
-  { "ready?":true}
+  $ curl --silent --request GET http://${IP_ADDRESS}:${PORT}/ready
+  { "ready":true}
   ```
 - If the method raises an exception, a key equals `"exception"`, with
-  a json-hash as its value. eg
+  a json-hash as its value. 
