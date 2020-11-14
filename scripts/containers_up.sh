@@ -5,11 +5,13 @@ containers_up()
   if [ "${1:-}" == 'server' ]; then
     export SERVICE_NAME=differ_server
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
+    export CONTAINER_PORT="${CYBER_DOJO_DIFFER_PORT}"
   else
     export SERVICE_NAME=differ_client
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
+    export CONTAINER_PORT="${CYBER_DOJO_DIFFER_CLIENT_PORT}"
   fi
-  echo; augmented_docker_compose up \
+  augmented_docker_compose up \
     --detach \
     --force-recreate \
     "${SERVICE_NAME}"
@@ -49,7 +51,7 @@ exit_non_zero_unless_started_cleanly()
   echo
   local DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
 
-  # Handle known warnings (typically waiting on Gem upgrade)
+  # Handle known warnings (eg waiting on Gem upgrade)
   #local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   #DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
 
@@ -59,9 +61,9 @@ exit_non_zero_unless_started_cleanly()
     echo "${SERVICE_NAME} started cleanly."
   else
     echo "${SERVICE_NAME} did not start cleanly."
-    echo "First 6 lines of: docker logs ${CONTAINER_NAME}"
+    echo "First 10 lines of: docker logs ${CONTAINER_NAME}"
     echo
-    echo "${top6}"
+    echo "${DOCKER_LOG}" | head -10
     echo
     exit 42
   fi
@@ -70,17 +72,12 @@ exit_non_zero_unless_started_cleanly()
 # - - - - - - - - - - - - - - - - - - -
 clean_top_6()
 {
-  if [ "${SERVICE_NAME}" == differ_server ]; then
-    local -r port="${CYBER_DOJO_DIFFER_PORT}"
-  else
-    local -r port="${CYBER_DOJO_DIFFER_CLIENT_PORT}"
-  fi
-  # 6 lines on Puma
+  # 1st 6 lines on Puma
   local -r L1="Puma starting in single mode..."
   local -r L2="* Version 5.0.4 (ruby 2.7.2-p137), codename: Spoony Bard"
   local -r L3="* Min threads: 0, max threads: 5"
   local -r L4="* Environment: production"
-  local -r L5="* Listening on http://0.0.0.0:${port}"
+  local -r L5="* Listening on http://0.0.0.0:${CONTAINER_PORT}"
   local -r L6="Use Ctrl-C to stop"
   #
   local -r top6="$(printf "%s\n%s\n%s\n%s\n%s\n%s" "${L1}" "${L2}" "${L3}" "${L4}" "${L5}" "${L6}")"
