@@ -55,7 +55,7 @@ module GitDiffLib # mix-in
   end
 
   def all(type, lines)
-    lines.collect.each.with_index(1) do |line,number|
+    lines.collect.with_index(1) do |line,number|
       { type:type, line:line, number:number }
     end
   end
