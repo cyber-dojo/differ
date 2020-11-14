@@ -4,29 +4,6 @@ source "${SH_DIR}/augmented_docker_compose.sh"
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
-  build_images "${1:-}"
-  tag_images_to_latest "${1:-}" # for cache till next build_tagged_images()
-}
-
-# - - - - - - - - - - - - - - - - - - - - - -
-remove_all_but_latest()
-{
-  local -r docker_image_ls="${1}"
-  local -r name="${2}"
-  for image_name in `echo "${docker_image_ls}" | grep "${name}:"`
-  do
-    if [ "${image_name}" != "${name}:latest" ]; then
-      if [ "${image_name}" != "${name}:<none>" ]; then
-        docker image rm "${image_name}"
-      fi
-    fi
-  done
-  docker system prune --force
-}
-
-# - - - - - - - - - - - - - - - - - - - - - -
-build_images()
-{
   if [ "${1:-}" == server ]; then
     local -r target=differ_server
   fi
@@ -59,7 +36,7 @@ show_env_vars()
 tag_images_to_latest()
 {
   docker tag $(image_name):$(image_tag) $(image_name):latest
-  if [ "${1}" != server ]; then
+  if [ "${1:-}" != server ]; then
     docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
   fi
 }

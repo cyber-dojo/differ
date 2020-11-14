@@ -25,6 +25,7 @@ exit_non_zero_unless_installed docker-compose
 remove_old_images
 generate_env_var_yml_files
 build_tagged_images "$@"
+tag_images_to_latest "$@"
 check_embedded_sha_env_var
 exit_zero_if_build_only "$@"
 server_up_healthy_and_clean
