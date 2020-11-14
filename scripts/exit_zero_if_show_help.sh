@@ -11,8 +11,8 @@ exit_zero_if_show_help()
     Use: ${my_name} [-do|--demo-only]
 
     Options:
-       client  - run tests from inside the client only
-       server  - run tests from inside the server only
+       client  - run tests inside the client container only
+       server  - run tests inside the server container only
        ID...   - run tests matching these identifiers only
 
 EOF
