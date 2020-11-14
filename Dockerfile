@@ -14,6 +14,6 @@ ENV PORT=${CYBER_DOJO_DIFFER_PORT}
 
 EXPOSE ${PORT}
 USER nobody
-HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/heathcheck.sh
+HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/healthcheck.sh
 ENTRYPOINT ["/sbin/tini", "-g", "--"]
 CMD [ "/differ/config/up.sh" ]
