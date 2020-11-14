@@ -9,16 +9,16 @@ class Differ
   end
 
   def diff_lines(id:, was_index:, now_index:)
-    git_diff_files(id, was_index, now_index, lines:true)
+    diff_plus(id, was_index, now_index, lines:true)
   end
 
   def diff_summary(id:, was_index:, now_index:)
-    git_diff_files(id, was_index, now_index, lines:false)
+    diff_plus(id, was_index, now_index, lines:false)
   end
 
   private
 
-  def git_diff_files(id, was_index, now_index, options)
+  def diff_plus(id, was_index, now_index, options)
     was = model.kata_event(id, was_index.to_i)
     now = model.kata_event(id, now_index.to_i)
     was_files = files(was)
