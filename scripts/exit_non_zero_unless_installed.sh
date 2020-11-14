@@ -2,10 +2,12 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_installed()
 {
-  echo "Checking ${1} is installed"
+  printf "Checking ${1} is installed..."
   if ! installed "${1}" ; then
     stderr 'ERROR: ${1} is not installed!'
     exit 42
+  else
+    echo It is
   fi
 }
 

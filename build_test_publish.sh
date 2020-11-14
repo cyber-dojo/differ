@@ -22,8 +22,8 @@ exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
 generate_env_var_yml_files
 remove_old_images
-build_tagged_images
-check_embedded_env_var
+build_tagged_images "$@"
+check_embedded_sha_env_var
 exit_zero_if_build_only "$@"
 server_up_healthy_and_clean
 client_up_healthy_and_clean "$@"

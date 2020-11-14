@@ -4,8 +4,8 @@ source "${SH_DIR}/augmented_docker_compose.sh"
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
-  build_images
-  tag_images_to_latest # for cache till next build_tagged_images()
+  build_images "${1}"
+  tag_images_to_latest "${1}" # for cache till next build_tagged_images()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
@@ -27,14 +27,17 @@ remove_all_but_latest()
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images()
 {
+  if [ "${1}" == server ]; then
+    local -r target=differ_server
+  fi
   echo
   augmented_docker_compose \
     build \
-    --build-arg COMMIT_SHA=$(git_commit_sha)
+    --build-arg COMMIT_SHA=$(git_commit_sha) "${target:-}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
-check_embedded_env_var()
+check_embedded_sha_env_var()
 {
   if [ "$(git_commit_sha)" != "$(sha_in_image)" ]; then
     echo "ERROR: unexpected env-var inside image $(image_name):$(image_tag)"
@@ -56,7 +59,9 @@ show_env_vars()
 tag_images_to_latest()
 {
   docker tag $(image_name):$(image_tag) $(image_name):latest
-  docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
+  if [ "${1}" != server ]; then
+    docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -

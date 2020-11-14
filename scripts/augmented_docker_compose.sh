@@ -1,5 +1,5 @@
 
-# cyberdojo/service-yaml image lives at
+# cyberdojo/service-yaml image repo lives at
 # https://github.com/cyber-dojo-tools/service-yaml
 
 augmented_docker_compose()
