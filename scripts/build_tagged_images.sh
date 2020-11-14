@@ -4,9 +4,6 @@ source "${SH_DIR}/augmented_docker_compose.sh"
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
-  local -r dil=$(docker image ls --format "{{.Repository}}:{{.Tag}}")
-  remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_IMAGE}"
-  remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_CLIENT_IMAGE}"
   build_images
   tag_images_to_latest # for cache till next build_tagged_images()
 }
