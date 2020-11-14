@@ -4,18 +4,18 @@ module GitDiffLib # mix-in
 
   module_function
 
-  def git_diff(diffs, new_files, options)
-    changed = diff_changed(diffs, new_files, options)
-    unchanged = diff_unchanged(new_files, changed, options)
-    changed + unchanged
+  def git_diff(changed, new_files, options)
+    fill_identical_renamed_files(changed, new_files, options)
+    changed + unchanged_files(new_files, changed, options)
   end
 
   private
 
-  def diff_changed(diffs, new_files, options)
+  def fill_identical_renamed_files(diffs, new_files, options)
+    # Created entries for identical renames.
+    # $ git diff ... prints no content in this case.
     diffs.each do |diff|
       if diff[:type] === :renamed && diff[:line_counts] === { same:0, deleted:0, added:0 }
-        # $ git diff --unified=9999999 ... prints no content for identical renames.
         filename = diff[:new_filename]
         file = new_files[filename]
         diff[:line_counts][:same] = file.lines.count
@@ -24,10 +24,10 @@ module GitDiffLib # mix-in
         end
       end
     end
-    diffs
   end
 
-  def diff_unchanged(new_files, changed, options)
+  def unchanged_files(new_files, changed, options)
+    # Creates entries for unchanged files.
     all_filenames = new_files.keys
     changed_filenames = changed.collect{ |file| file[:new_filename] }
     unchanged_filenames = all_filenames - changed_filenames
@@ -50,13 +50,9 @@ module GitDiffLib # mix-in
     if file === ''
       []
     else
-      all(:same, file.split("\n"))
-    end
-  end
-
-  def all(type, lines)
-    lines.collect.with_index(1) do |line,number|
-      { type:type, line:line, number:number }
+      file.split("\n").collect.with_index(1) do |line,number|
+        { type: :same, line:line, number:number }
+      end
     end
   end
 
