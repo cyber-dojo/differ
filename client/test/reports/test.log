@@ -1,33 +1,33 @@
-Run options: --seed 6826
+Run options: --seed 53989
 
 # Running:
 
 ..................................
 
-Finished in 4.982590s, 6.8238 runs/s, 21.2741 assertions/s.
+Finished in 5.280177s, 6.4392 runs/s, 20.0751 assertions/s.
 
 34 runs, 106 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to //tmp/reports. 351 / 351 LOC (100.0%) covered.
 Coverage report generated for Minitest to //tmp/reports/coverage.json. 351 / 351 LOC (100.0%) covered.
 
 Slowest tests are...
-0.3287 - 2q0313:differ_client_test.rb:142:deleted empty file                     
-0.2629 - 2q0B9F:differ_client_test.rb:484:changed non-empty file in nested sub-dir shows as deleted and added lines with each hunk in its own indexed section
-0.2534 - 2q0FEA:differ_client_test.rb:217:deleted non-empty file in nested sub-dir shows as all lines deleted
-0.2533 - 2q0314:differ_client_test.rb:167:deleted empty file in nested sub-dir   
-0.2531 - 2q0365:differ_client_test.rb:682:unchanged non-empty file               
-0.2312 - 2q095F:differ_client_test.rb:292:created new empty file                 
-0.2289 - 2q0FE9:differ_client_test.rb:184:deleted non-empty file shows as all lines deleted
-0.2263 - 2q02C3:differ_client_test.rb:336:created non-empty file                 
-0.2144 - 2q0960:differ_client_test.rb:309:created empty file in nested sub-dir   
-0.2063 - 2q0E50:differ_client_test.rb:544:100% identical renamed file            
-0.1976 - 2q07FF:differ_client_test.rb:665:unchanged empty-file in nested sub-dir 
+0.4120 - 2q0E50:differ_client_test.rb:544:100% identical renamed file            
+0.3909 - 2q0313:differ_client_test.rb:142:deleted empty file                     
+0.2917 - 2q02C3:differ_client_test.rb:336:created non-empty file                 
+0.2883 - 2q0314:differ_client_test.rb:167:deleted empty file in nested sub-dir   
+0.2847 - 2q0FDB:differ_client_test.rb:598:<100% identical rename                 
+0.2572 - 2q0B68:differ_client_test.rb:266:all lines deleted but nested sub-dir file not deleted shows as all lines deleted
+0.2375 - 2q0E3F:differ_client_test.rb:405:changed non-empty file in nested sub-dir
+0.2246 - 2q02C4:differ_client_test.rb:359:created non-empty file in nested sub-dir
+0.2231 - 2q0960:differ_client_test.rb:309:created empty file in nested sub-dir   
+0.2196 - 2q0FDC:differ_client_test.rb:622:<100% identical renamed in nested sub-dir
+0.2124 - 2q0FE9:differ_client_test.rb:184:deleted non-empty file shows as all lines deleted
 
             test:failures |       0   <=     0 | [32m true [0m
               test:errors |       0   <=     0 | [32m true [0m
             test:warnings |       0   <=     0 | [32m true [0m
                test:skips |       0   <=     0 | [32m true [0m
-         test:duration(s) |    4.98   <=    10 | [32m true [0m
+         test:duration(s) |    5.28   <=    10 | [32m true [0m
           app:lines:total |     107   <=   125 | [32m true [0m
          app:lines:missed |       0   <=     0 | [32m true [0m
        app:branches:total |       8   <=    10 | [32m true [0m

@@ -36,11 +36,11 @@ class AppBase < Sinatra::Base
 
   def named_args
     if params.empty?
-      from = json_hash_parse(request.body.read)
+      args = json_hash_parse(request.body.read)
     else
-      from = params
+      args = params
     end
-    symbolized(from)
+    symbolized(args)
   end
 
   def symbolized(h)
