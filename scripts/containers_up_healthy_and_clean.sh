@@ -1,20 +1,30 @@
 
 # - - - - - - - - - - - - - - - - - - -
-containers_up()
+server_up_healthy_and_clean()
 {
-  if [ "${1:-}" == 'server' ]; then
-    export SERVICE_NAME=differ_server
-    export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
-    export CONTAINER_PORT="${CYBER_DOJO_DIFFER_PORT}"
-  else
+  export SERVICE_NAME=differ_server
+  export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
+  export CONTAINER_PORT="${CYBER_DOJO_DIFFER_PORT}"
+  augmented_docker_compose up \
+    --detach \
+    "${SERVICE_NAME}"
+  exit_non_zero_unless_healthy
+  exit_non_zero_unless_started_cleanly
+}
+
+# - - - - - - - - - - - - - - - - - - -
+client_up_healthy_and_clean()
+{
+  if [ "${1:-}" != 'server' ]; then
     export SERVICE_NAME=differ_client
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
     export CONTAINER_PORT="${CYBER_DOJO_DIFFER_CLIENT_PORT}"
+    augmented_docker_compose up \
+      --detach \
+      "${SERVICE_NAME}"
+    exit_non_zero_unless_healthy
+    exit_non_zero_unless_started_cleanly
   fi
-  augmented_docker_compose up \
-    --detach \
-    --force-recreate \
-    "${SERVICE_NAME}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -59,6 +69,7 @@ exit_non_zero_unless_started_cleanly()
   local -r top6=$(echo "${DOCKER_LOG}" | head -6)
   if [ "${top6}" == "$(clean_top_6)" ]; then
     echo "${SERVICE_NAME} started cleanly."
+    echo
   else
     echo "${SERVICE_NAME} did not start cleanly."
     echo "First 10 lines of: docker logs ${CONTAINER_NAME}"

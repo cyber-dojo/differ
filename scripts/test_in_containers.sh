@@ -45,7 +45,6 @@ run_tests()
   local -r CONTAINER_COVERAGE_DIR=/${CONTAINER_TMP_DIR}/reports
   local -r TEST_LOG=test.log
 
-  echo
   echo '=================================='
   echo "Running ${TYPE} tests"
   echo '=================================='
