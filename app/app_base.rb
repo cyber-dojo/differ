@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 require_relative 'silently'
 silently { require 'sinatra/contrib' } # N x "warning: method redefined"
-require 'sinatra/contrib'
 require_relative 'http_json_hash/service'
 require 'json'
-require 'sprockets'
 
 class AppBase < Sinatra::Base
 
@@ -13,11 +11,8 @@ class AppBase < Sinatra::Base
     super(nil)
   end
 
-  silently { register Sinatra::Contrib }
+  silently { register Sinatra::Contrib } # respond_to
   set :port, ENV['PORT']
-  set :environment, Sprockets::Environment.new
-
-  # - - - - - - - - - - - - - - - - - - - - - -
 
   def self.get_json(name, klass)
     get "/#{name}", provides:[:json] do
@@ -40,13 +35,10 @@ class AppBase < Sinatra::Base
     else
       args = params
     end
-    symbolized(args)
+    Hash[args.map{ |key,value| [key.to_sym, value] }]
   end
 
-  def symbolized(h)
-    # named-args require symbolization
-    Hash[h.map{ |key,value| [key.to_sym, value] }]
-  end
+  # - - - - - - - - - - - - - - - - - - - - - -
 
   def json_hash_parse(body)
     if body === ''

@@ -456,8 +456,6 @@ class GitDiffParserTest < DifferTestBase
 
   private
 
-  include GitDiffParserLib
-
   def section(index)
     { :type => :section, index:index }
   end

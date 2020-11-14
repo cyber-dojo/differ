@@ -1,7 +1,7 @@
 require_relative 'differ_test_base'
-require_app 'git_diff_parser_lib'
+require_app 'git_diff_parse_filenames'
 
-class GitDiffParserLibTest < DifferTestBase
+class GitDiffParseFilenamesTest < DifferTestBase
 
   def self.id58_prefix
     'wK7'
@@ -187,6 +187,6 @@ class GitDiffParserLibTest < DifferTestBase
 
   private
 
-  include GitDiffParserLib
+  include GitDiffParseFilenames
 
 end

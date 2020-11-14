@@ -1,6 +1,6 @@
 require_relative 'differ_test_base'
 
-class GitDiffTest < DifferTestBase
+class DifferTest < DifferTestBase
 
   def self.id58_prefix
     'C9s'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GitDiffParserLib
+module GitDiffParseFilenames
 
   def parse_old_new_filenames(header)
     old_filename,new_filename = old_new_filenames(header[0])
@@ -71,20 +71,6 @@ module GitDiffParserLib
     str.gsub(/\\(?:([#{unescapes.keys.join}]))/) {
       $1 === '\\' ? '\\' : unescapes[$1]
     }
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def same?(line)
-    line && line[0] === ' '
-  end
-
-  def deleted?(line)
-    line && line[0] === '-'
-  end
-
-  def added?(line)
-    line && line[0] === '+'
   end
 
 end
