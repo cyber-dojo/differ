@@ -11,7 +11,7 @@ class Prober
   end
 
   def healthy # Dockerfile HEALTHCHECK
-    prepared?
+    ready
   end
 
   def alive # k8s
@@ -19,12 +19,6 @@ class Prober
   end
 
   def ready # k8s
-    prepared?
-  end
-
-  private
-
-  def prepared?
     @externals.model.ready?
   end
 
