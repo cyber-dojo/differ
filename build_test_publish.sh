@@ -19,12 +19,12 @@ exit_zero_if_show_help "$@"
 generate_env_var_yml_files
 build_tagged_images
 check_embedded_env_var
-show_env_vars
 exit_zero_if_build_only "$@"
-server_up_healthy_and_clean 
+server_up_healthy_and_clean
 client_up_healthy_and_clean "$@"
 copy_in_saver_test_data
 exit_zero_if_demo_only "$@"
 test_in_containers "$@"
 containers_down
 on_ci_publish_tagged_images
+show_env_vars
