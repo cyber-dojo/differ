@@ -14,34 +14,6 @@ build_tagged_images()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
-check_embedded_sha_env_var()
-{
-  if [ "$(git_commit_sha)" != "$(sha_in_image)" ]; then
-    echo "ERROR: unexpected env-var inside image $(image_name):$(image_tag)"
-    echo "expected: 'SHA=$(git_commit_sha)'"
-    echo "  actual: 'SHA=$(sha_in_image)'"
-    exit 42
-  fi
-}
-
-#- - - - - - - - - - - - - - - - - - - - - - - -
-show_env_vars()
-{
-  echo "echo CYBER_DOJO_DIFFER_SHA=$(image_sha)"
-  echo "echo CYBER_DOJO_DIFFER_TAG=$(image_tag)"
-  echo
-}
-
-#- - - - - - - - - - - - - - - - - - - - - - - -
-tag_images_to_latest()
-{
-  docker tag $(image_name):$(image_tag) $(image_name):latest
-  if [ "${1:-}" != server ]; then
-    docker tag ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:$(image_tag) ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:latest
-  fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - -
 git_commit_sha()
 {
   echo $(cd "${ROOT_DIR}" && git rev-parse HEAD)

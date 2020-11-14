@@ -7,10 +7,8 @@ on_ci_publish_tagged_images()
     echo 'not on CI so not publishing tagged images'
   else
     echo 'on CI so publishing tagged images'
-    local -r name="${CYBER_DOJO_DIFFER_IMAGE}"
-    local -r tag="${CYBER_DOJO_DIFFER_TAG}"
-    docker push ${name}:${tag}
-    docker push ${name}:latest
+    docker push $(image_name):$(image_tag)
+    docker push $(image_name):latest
   fi
   echo
 }
