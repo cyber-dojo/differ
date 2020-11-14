@@ -4,8 +4,8 @@ source "${SH_DIR}/augmented_docker_compose.sh"
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
-  build_images "${1}"
-  tag_images_to_latest "${1}" # for cache till next build_tagged_images()
+  build_images "${1:-}"
+  tag_images_to_latest "${1:-}" # for cache till next build_tagged_images()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
@@ -27,13 +27,13 @@ remove_all_but_latest()
 # - - - - - - - - - - - - - - - - - - - - - -
 build_images()
 {
-  if [ "${1}" == server ]; then
+  if [ "${1:-}" == server ]; then
     local -r target=differ_server
   fi
   echo
   augmented_docker_compose \
     build \
-    --build-arg COMMIT_SHA=$(git_commit_sha) "${target:-}"
+    --build-arg COMMIT_SHA=$(git_commit_sha) ${target:-}
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
