@@ -160,26 +160,8 @@ Useful as a Kubernetes liveness probe.
   ```
 
 - - - -
-# GET healthy
-Useful as a Docker heathcheck probe.
-- returns
-  * **true** if the service is healthy
-  ```json
-  { "healthy": true }
-  ```
-  * **false** if the service is not healthy
-  ```json
-  { "healthy": false }
-  ```
-- parameters
-  * none
-  ```json
-  {}
-  ```
-
-- - - -
 # GET ready
-Useful as a Kubernetes readyness probe.
+Useful as a Docker heathcheck or Kubernetes readyness probe.
 - returns
   * **true** if the service is ready
   ```json

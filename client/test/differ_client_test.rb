@@ -106,7 +106,6 @@ class DifferClientTest < ClientTestBase
 
   test '945', 'probes 200' do
     assert differ.alive.instance_of?(TrueClass)
-    assert differ.healthy.instance_of?(TrueClass)
     assert differ.ready.instance_of?(TrueClass)
   end
 

@@ -9,7 +9,6 @@ API
 
 * [GET sha](docs/api.md#get-sha)
 * [GET alive](docs/api.md#get-alive)  
-* [GET healthy](docs/api.md#get-healthy)
 * [GET ready](docs/api.md#get-ready)
 * [GET diff_files(id,was_index,now_index)](docs/api.md#get-diff_filesidwas_indexnow_index)
 * [GET diff_summary(id,was_index,now_index)](docs/api.md#get-diff_summaryidwas_indexnow_index)

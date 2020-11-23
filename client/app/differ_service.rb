@@ -15,10 +15,6 @@ module External
       @http.get(__method__, {})
     end
 
-    def healthy
-      @http.get(__method__, {})
-    end
-
     def alive
       @http.get(__method__, {})
     end

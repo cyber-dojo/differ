@@ -19,10 +19,6 @@ class ProberTest < DifferTestBase
     assert true?(prober.alive)
   end
 
-  test '602', %w( healthy ) do
-    assert true?(prober.healthy)
-  end
-
   test '603', %w( ready ) do
     assert true?(prober.ready)
   end

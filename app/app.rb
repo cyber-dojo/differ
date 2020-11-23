@@ -10,7 +10,6 @@ class App < AppBase
   end
 
    get_json(:sha,     Prober)
-   get_json(:healthy, Prober)
    get_json(:alive,   Prober)
    get_json(:ready,   Prober)
 

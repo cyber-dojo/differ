@@ -56,7 +56,7 @@ class AppBase < Sinatra::Base
   # - - - - - - - - - - - - - - - - - - - - - -
 
   def probe_compatible(name, result)
-    if [:alive, :healthy, :ready].include?(name)
+    if [:alive, :ready].include?(name)
       sym = (name.to_s + '?').to_sym
       result[sym] = result[name]
     end
