@@ -12,4 +12,8 @@
 # --retries=N      number of tries until container considered unhealthy
 # --start-period=S grace period when healthcheck fails dont count towards --retries
 
-wget localhost:${PORT}/ready -q -O - > /dev/null 2>&1
+readonly READY_LOG_FILENAME=/tmp/ready.log
+
+wget localhost:${PORT}/ready -q -O - > "${READY_LOG_FILENAME}" 2>&1
+
+sed -i '501,$ d' "${READY_LOG_FILENAME}"
