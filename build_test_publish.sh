@@ -26,7 +26,7 @@ exit_zero_if_show_help "$@"
 exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
 remove_old_images
-#generate_env_var_yml_files
+generate_env_var_yml_files
 build_tagged_images "$@"
 tag_images_to_latest "$@"
 check_embedded_sha_env_var
