@@ -13,7 +13,7 @@ source "${SH_DIR}/exit_non_zero_unless_installed.sh"
 source "${SH_DIR}/exit_zero_if_build_only.sh"
 source "${SH_DIR}/exit_zero_if_demo_only.sh"
 source "${SH_DIR}/exit_zero_if_show_help.sh"
-source "${SH_DIR}/generate_env_var_yml_files.sh"
+#source "${SH_DIR}/generate_env_var_yml_files.sh"
 source "${SH_DIR}/on_ci_publish_tagged_images.sh"
 source "${SH_DIR}/remove_old_images.sh"
 source "${SH_DIR}/tag_images_to_latest.sh"
@@ -31,6 +31,9 @@ build_tagged_images "$@"
 tag_images_to_latest "$@"
 check_embedded_sha_env_var
 exit_zero_if_build_only "$@"
+echo '~~~~~~~~~~~~~~~~~~'
+cat "${ROOT_DIR}/.env"
+echo '~~~~~~~~~~~~~~~~~~'
 server_up_healthy_and_clean
 client_up_healthy_and_clean "$@"
 copy_in_saver_test_data

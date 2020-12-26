@@ -15,7 +15,7 @@ server_up_healthy_and_clean()
 # - - - - - - - - - - - - - - - - - - -
 client_up_healthy_and_clean()
 {
-  if [ "${1:-}" != 'server' ]; then
+  if [ "${1:-}" != server ]; then
     export SERVICE_NAME=differ_client
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
     export CONTAINER_PORT="${CYBER_DOJO_DIFFER_CLIENT_PORT}"
