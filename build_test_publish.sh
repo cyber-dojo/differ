@@ -31,9 +31,6 @@ build_tagged_images "$@"
 tag_images_to_latest "$@"
 check_embedded_sha_env_var
 exit_zero_if_build_only "$@"
-echo '~~~~~~~~~~~~~~~~~~'
-cat "${ROOT_DIR}/.env"
-echo '~~~~~~~~~~~~~~~~~~'
 server_up_healthy_and_clean
 client_up_healthy_and_clean "$@"
 copy_in_saver_test_data
