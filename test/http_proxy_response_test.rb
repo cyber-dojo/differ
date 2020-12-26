@@ -16,8 +16,8 @@ class HttpProxyResponseTest < DifferTestBase
   |which has a key matching the query-string (without the args)
   |then it returns the value for that key in the JSON-Hash
   ) do
-    http = ::HttpAdapterStub.new('{"ready?":[42]}')
-    model = ::External::Model.new(http)
+    externals.instance_exec { @model_http = ::HttpAdapterStub.new('{"ready?":[42]}') }
+    model = ::External::Model.new(externals)
     assert_equal [42], model.ready?
   end
 

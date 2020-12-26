@@ -22,7 +22,7 @@ class Externals
   # - - - - - - - - - - - - - - - - -
 
   def model
-    @model ||= External::Model.new(model_http)
+    @model ||= External::Model.new(self)
   end
   def model_http
     @model_http ||= External::Http.new
