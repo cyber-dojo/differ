@@ -25,7 +25,7 @@ class ExternalShellerTest < DifferTestBase
     error = assert_raises { shell.assert_exec('zzzz') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
-    assert_equal "sh: zzzz: not found\n", json['stderr']
+    assert json['stderr'].end_with?("sh: zzzz: not found\n"), json['stderr']
     assert_equal 127,  json['exit_status']
   end
 
@@ -34,7 +34,8 @@ class ExternalShellerTest < DifferTestBase
     error = assert_raises { shell.assert_cd_exec('zzzz', 'echo -n Hello') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
-    assert_equal "sh: cd: line 1: can't cd to zzzz: No such file or directory\n", json['stderr']
+    expected_stderr = "sh: cd: line 1: can't cd to zzzz: No such file or directory\n"
+    assert json['stderr'].end_with?(expected_stderr), json['stderr']
     assert_equal 2,  json['exit_status']
   end
 
@@ -43,7 +44,7 @@ class ExternalShellerTest < DifferTestBase
     error = assert_raises { shell.assert_cd_exec('.', 'zzzz') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
-    assert_equal "sh: zzzz: not found\n", json['stderr']
+    assert json['stderr'].end_with?("sh: zzzz: not found\n"), json['stderr']
     assert_equal 127,  json['exit_status']
   end
 
