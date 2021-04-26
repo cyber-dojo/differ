@@ -5,7 +5,7 @@ MERKELY_OWNER=cyber-dojo
 MERKELY_PIPELINE=differ
 
 # - - - - - - - - - - - - - - - - - - -
-merkely_declare_pipeline()
+on_ci_merkely_declare_pipeline()
 {
   if ! on_ci ; then
     return
@@ -21,7 +21,7 @@ merkely_declare_pipeline()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-merkely_log_artifact()
+on_ci_merkely_log_artifact()
 {
   if ! on_ci ; then
     return

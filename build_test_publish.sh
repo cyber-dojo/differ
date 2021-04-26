@@ -28,9 +28,8 @@ exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
 remove_old_images
 #generate_env_var_yml_files
-merkely_declare_pipeline
+on_ci_merkely_declare_pipeline
 build_tagged_images "$@"
-merkely_log_artifact
 tag_images_to_latest "$@"
 check_embedded_sha_env_var
 exit_zero_if_build_only "$@"
@@ -41,4 +40,5 @@ exit_zero_if_demo_only "$@"
 test_in_containers "$@"
 containers_down
 on_ci_publish_tagged_images
+on_ci_merkely_log_artifact
 echo_env_vars
