@@ -38,6 +38,7 @@ jobs:
           username: sami-alajrami
           password: ${GITHUB_REGISTRY_PASSWORD}
     steps:
+      - checkout
       - run:
           name: Connect to K8S
           command: ./.circleci/connect-to-k8s.sh      
