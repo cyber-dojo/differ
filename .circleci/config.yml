@@ -64,10 +64,10 @@ workflows:
           context: cyberdojo-context
           requires: [ approve-to-prod ]
 
-  every-1-hour:
+  every-3-mins:
     triggers:
       - schedule:
-          cron: "*/3 * * * *"
+          cron: "3 * * * *"
           filters:
             branches:
               only: [ master ]
