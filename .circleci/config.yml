@@ -41,7 +41,7 @@ jobs:
       - checkout
       - run:
           name: Connect to K8S
-          command: ./.circleci/connect-to-k8s.sh      
+          command: apk update && apk add curl && ./.circleci/connect-to-k8s.sh      
       - run:
           name: Scrape cluster production environment
           command: ls $HOME/.kube && watcher report env production --namespace prod --dry-run        
