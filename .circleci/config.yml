@@ -31,6 +31,20 @@ jobs:
           name: Authenticate with gcloud, deploy to prod with helm
           command: ./.circleci/deploy_to_namespace.sh prod
 
+  scrape-cluster:
+    docker:
+      - image: ghcr.io/merkely-development/watcher
+        auth:
+          username: sami-alajrami
+          password: ${GITHUB_REGISTRY_PASSWORD}
+    steps:
+      - run:
+          name: Connect to K8S
+          command: ./.circleci/connect-to-k8s.sh      
+      - run:
+          name: Scrape cluster production environment
+          command: ls $HOME/.kube && watcher report env production --namespace prod --dry-run        
+
 workflows:
   version: 2
   build-publish-deploy:
@@ -49,3 +63,17 @@ workflows:
       - deploy-to-prod:
           context: cyberdojo-context
           requires: [ approve-to-prod ]
+
+  every-1-hour:
+    triggers:
+      - schedule:
+          cron: "*/3 * * * *"
+          filters:
+            branches:
+              only: [ master ]
+    jobs:
+      - scrape-cluster:
+          context: cyberdojo-context
+          filters:
+            branches:
+              only: [ master ]        
