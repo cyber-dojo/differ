@@ -33,7 +33,7 @@ jobs:
 
   scrape-cluster:
     docker:
-      - image: ghcr.io/merkely-development/watcher
+      - image: ghcr.io/merkely-development/watcher:d04f383
         auth:
           username: sami-alajrami
           password: ${GITHUB_REGISTRY_PASSWORD}
