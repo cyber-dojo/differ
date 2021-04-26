@@ -14,6 +14,7 @@ source "${SH_DIR}/exit_zero_if_build_only.sh"
 source "${SH_DIR}/exit_zero_if_demo_only.sh"
 source "${SH_DIR}/exit_zero_if_show_help.sh"
 #source "${SH_DIR}/generate_env_var_yml_files.sh"
+source "${SH_DIR}/merkely.sh"
 source "${SH_DIR}/on_ci_publish_tagged_images.sh"
 source "${SH_DIR}/remove_old_images.sh"
 source "${SH_DIR}/tag_images_to_latest.sh"
@@ -27,7 +28,9 @@ exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
 remove_old_images
 #generate_env_var_yml_files
+merkely_declare_pipeline
 build_tagged_images "$@"
+merkely_log_artifact
 tag_images_to_latest "$@"
 check_embedded_sha_env_var
 exit_zero_if_build_only "$@"

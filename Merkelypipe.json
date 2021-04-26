@@ -1,0 +1,9 @@
+{
+    "owner": "cyber-dojo",
+    "name": "differ",
+    "description": "Pipeline Controls for Merkely",
+    "visibility": "public",
+    "template": [
+        "artifact",
+    ]
+}
