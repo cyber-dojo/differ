@@ -41,10 +41,10 @@ jobs:
       - checkout
       - run:
           name: Connect to K8S
-          command: ./.circleci/connect-to-k8s.sh      
+          command: ./.circleci/connect-to-k8s.sh
       - run:
           name: Scrape cluster production environment
-          command: watcher report env production --owner cyber-dojo --namespace prod --dry-run        
+          command: watcher report env production --owner cyber-dojo --namespace prod --dry-run
 
 workflows:
   version: 2
@@ -68,7 +68,7 @@ workflows:
   every-3-mins:
     triggers:
       - schedule:
-          cron: "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57 * * * *"
+          cron: "0,10,20,30,40,50 * * * *"
           filters:
             branches:
               only: [ master ]
@@ -77,4 +77,4 @@ workflows:
           context: cyberdojo-context
           filters:
             branches:
-              only: [ master ]        
+              only: [ master ]
