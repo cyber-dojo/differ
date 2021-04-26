@@ -4,6 +4,6 @@
     "description": "Pipeline Controls for Merkely",
     "visibility": "public",
     "template": [
-        "artifact",
+        "artifact"
     ]
 }
