@@ -2,8 +2,7 @@
 
 apk update
 apk add curl
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.t
-ar.gz
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.tar.gz
 tar -xf google-cloud-sdk-337.0.0-linux-x86_64.tar.gz
 cd google-cloud-sdk
 ./install.sh -q
