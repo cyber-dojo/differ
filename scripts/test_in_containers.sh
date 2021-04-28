@@ -45,7 +45,7 @@ run_tests()
   echo '=================================='
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Run tests (with coverage) inside the container.
+  # Run tests (with branch coverage) inside the container.
 
   local -r COVERAGE_CODE_TAB_NAME=app
   local -r COVERAGE_TEST_TAB_NAME=test

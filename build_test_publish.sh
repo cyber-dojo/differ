@@ -37,8 +37,9 @@ server_up_healthy_and_clean
 client_up_healthy_and_clean "$@"
 copy_in_saver_test_data
 exit_zero_if_demo_only "$@"
-test_in_containers "$@"
-containers_down
 on_ci_publish_tagged_images
 on_ci_merkely_log_artifact
+test_in_containers "$@"
+on_ci_merkely_log_evidence
+containers_down
 echo_env_vars
