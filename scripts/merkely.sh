@@ -90,27 +90,6 @@ evidence_json_path()
   echo "${ROOT_DIR}/test/reports/evidence.json"
 }
 
-# - - - - - - - - - - - - - - - - - - -
-on_ci_merkely_log_deployment()
-{
-  if ! on_ci ; then
-    return
-  fi
-  local -r environment="${1}"
-	docker run \
-    --env MERKELY_COMMAND=log_deployment \
-    --env MERKELY_OWNER=${MERKELY_OWNER} \
-    --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
-    --env MERKELY_FINGERPRINT=$(merkely_fingerprint) \
-    --env MERKELY_DESCRIPTION="Deployed to ${environment} in circleci pipeline" \
-    --env MERKELY_ENVIRONMENT="${environment}" \
-    --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
-    --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
-    --rm \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
-    ${MERKELY_CHANGE}
-}
-
 # - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci()
 {
