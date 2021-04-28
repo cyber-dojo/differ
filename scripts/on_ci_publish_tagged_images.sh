@@ -13,8 +13,3 @@ on_ci_publish_tagged_images()
   echo
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - -
-on_ci()
-{
-  [ -n "${CIRCLECI:-}" ]
-}

@@ -1,5 +1,7 @@
 #!/bin/bash -Eeu
 
+# ROOT_DIR must be set
+
 MERKELY_CHANGE=merkely/change:latest
 MERKELY_OWNER=cyber-dojo
 MERKELY_PIPELINE=differ
@@ -109,3 +111,8 @@ on_ci_merkely_log_deployment()
     ${MERKELY_CHANGE}
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - -
+on_ci()
+{
+  [ -n "${CIRCLECI:-}" ]
+}
