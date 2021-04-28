@@ -19,3 +19,5 @@ helm_upgrade_probe_yes_prometheus_yes \
    "${CYBER_DOJO_DIFFER_TAG}" \
    "${CYBER_DOJO_DIFFER_PORT}" \
    "${YAML_VALUES_FILE}"
+
+on_ci_merkely_log_deployment "${NAMESPACE}"
