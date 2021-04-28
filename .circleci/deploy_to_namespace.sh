@@ -22,6 +22,3 @@ helm_upgrade_probe_yes_prometheus_yes \
    "${CYBER_DOJO_DIFFER_PORT}" \
    "${YAML_VALUES_FILENAME}"
 
-source "${ROOT_DIR}/scripts/merkely.sh"
-
-on_ci_merkely_log_deployment "${NAMESPACE}"

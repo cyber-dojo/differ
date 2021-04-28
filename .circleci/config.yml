@@ -31,6 +31,21 @@ jobs:
           name: Authenticate with gcloud, deploy to prod with helm
           command: ./.circleci/deploy_to_namespace.sh prod
 
+  merkely-log-deploy-to-prod:
+    machine:
+      image: ubuntu-2004:202008-01
+    steps:
+      - checkout
+      - run:
+          name: Log deployment to beta in Merkely
+          command: |
+            VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
+            export $(curl "${VERSIONER_URL}/app/.env")
+            export CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
+            export ROOT_DIR="${PWD}"
+            source "${ROOT_DIR}/scripts/merkely.sh"
+            on_ci_merkely_log_deployment beta
+
   scrape-cluster:
     docker:
       - image: ghcr.io/merkely-development/watcher:d04f383
@@ -58,6 +73,9 @@ workflows:
       - deploy-to-beta:
           context: cyberdojo-context
           requires: [ build-publish ]
+      - merkely-log-deployment-to-prod:
+          context: cyberdojo-context
+          requires: [ deploy-to-beta ]
       - approve-to-prod:
           type: approval
           requires: [ deploy-to-beta ]
