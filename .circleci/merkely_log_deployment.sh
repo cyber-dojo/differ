@@ -36,3 +36,4 @@ merkely_log_deployment()
     ${MERKELY_CHANGE}
 }
 
+merkely_log_deployment "${1}"
