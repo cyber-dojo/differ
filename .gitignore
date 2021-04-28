@@ -1,2 +1,4 @@
+client/test/reports/*
+client/test/reports/.*
 test/reports/*
 test/reports/.*
