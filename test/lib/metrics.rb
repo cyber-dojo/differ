@@ -8,7 +8,7 @@ MAX = {
   warnings:0,
   skips:0,
 
-  duration:25,
+  duration:50,
 
   app: {
     lines: {
