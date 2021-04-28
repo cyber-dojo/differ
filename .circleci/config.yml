@@ -47,6 +47,23 @@ jobs:
             docker pull ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
             on_ci_merkely_log_deployment beta
 
+  merkely-log-deployment-to-prod:
+    machine:
+      image: ubuntu-2004:202008-01
+    steps:
+      - checkout
+      - run:
+          name: Log deployment to prod in Merkely
+          command: |
+            VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
+            export $(curl "${VERSIONER_URL}/app/.env")
+            export CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
+            export ROOT_DIR="${PWD}"
+            source "${ROOT_DIR}/scripts/merkely.sh"
+            docker pull ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
+            on_ci_merkely_log_deployment prod
+
+
   scrape-cluster:
     docker:
       - image: ghcr.io/merkely-development/watcher:d04f383
@@ -83,6 +100,9 @@ workflows:
       - deploy-to-prod:
           context: cyberdojo-context
           requires: [ approve-to-prod ]
+      - merkely-log-deployment-to-prod:
+          context: cyberdojo-context
+          requires: [ deploy-to-prod ]
 
   every-3-mins:
     triggers:
