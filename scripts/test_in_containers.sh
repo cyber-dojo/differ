@@ -108,7 +108,7 @@ run_tests()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Tell caller where the results are...
 
-  echo "${TYPE} test coverage at $(abs_filename "${HOST_REPORTS_DIR}/index.html")"
+  echo "${TYPE} test branch-coverage report is at $(abs_filename "${HOST_REPORTS_DIR}/index.html")"
   echo "${TYPE} test status == ${STATUS}"
   echo
   if [ "${STATUS}" != 0 ]; then
