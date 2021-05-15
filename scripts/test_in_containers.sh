@@ -108,7 +108,7 @@ run_tests()
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Tell caller where the results are...
 
-  echo "${TYPE} test branch-coverage report is at $(abs_filename "${HOST_REPORTS_DIR}/index.html")"
+  echo "${TYPE} test branch-coverage report is at ${HOST_REPORTS_DIR}/index.html"
   echo "${TYPE} test status == ${STATUS}"
   echo
   if [ "${STATUS}" != 0 ]; then
@@ -117,10 +117,4 @@ run_tests()
     docker logs "${CONTAINER_NAME}" 2>&1
   fi
   return ${STATUS}
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-abs_filename()
-{
-  echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 }
