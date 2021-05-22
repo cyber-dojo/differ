@@ -41,7 +41,7 @@ on_ci_merkely_log_artifact()
     --env MERKELY_FINGERPRINT=$(merkely_fingerprint) \
     --env MERKELY_IS_COMPLIANT=TRUE \
     --env MERKELY_ARTIFACT_GIT_COMMIT=${CYBER_DOJO_DIFFER_SHA} \
-    --env MERKELY_ARTIFACT_GIT_URL=https://github.com/cyber-dojo/differ/commit/${CYBER_DOJO_DIFFER_SHA} \
+    --env MERKELY_ARTIFACT_GIT_URL=https://github.com/${MERKELY_OWNER}/${MERKELY_PIPELINE}/commit/${CYBER_DOJO_DIFFER_SHA} \
     --env MERKELY_CI_BUILD_NUMBER=${CIRCLE_BUILD_NUM} \
     --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
     --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
