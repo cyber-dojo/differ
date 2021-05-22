@@ -79,13 +79,13 @@ workflows:
           requires: [ deploy-to-beta ]
       - approve-to-prod:
           type: approval
-          requires: [ merkely-log-deployment-to-beta ]
+          requires: [ deploy-to-beta ]
       - deploy-to-prod:
           context: cyberdojo-context
           requires: [ approve-to-prod ]
       - merkely-log-deployment-to-prod:
           context: cyberdojo-context
-          requires: [ deploy-to-prod ]
+          requires: [ approve-to-prod ]
 
   every-hour:
     triggers:
