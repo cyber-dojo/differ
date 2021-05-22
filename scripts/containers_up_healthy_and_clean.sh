@@ -59,23 +59,29 @@ healthy()
 exit_non_zero_unless_started_cleanly()
 {
   echo
-  local DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
+  local -r log=$(docker logs "${CONTAINER_NAME}" 2>&1)
 
   # Handle known warnings (eg waiting on Gem upgrade)
   #local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   #DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
 
+
+  local -r line_count=$(echo -n "${log}" | grep -c '^')
+  if [ "${CONTAINER_NAME}" == "${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}" ]; then
+    local -r lines=6
+  fi
+  if [ "${CONTAINER_NAME}" == "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}" ]; then
+    local -r lines=6
+  fi
+
   echo "Checking if ${SERVICE_NAME} started cleanly."
-  local -r top6=$(echo "${DOCKER_LOG}" | head -6)
-  if [ "${top6}" == "$(clean_top_6)" ]; then
-    echo "${SERVICE_NAME} started cleanly."
-    echo
+  if [ "${line_count}" == "${lines}" ]; then
+    echo 'OK'
   else
-    echo "${SERVICE_NAME} did not start cleanly."
-    echo "First 10 lines of: docker logs ${CONTAINER_NAME}"
-    echo
-    echo "${DOCKER_LOG}" | head -10
-    echo
+    echo 'FAIL'
+    echo "Expecting ${lines} lines"
+    echo "   Actual ${line_count} lines"
+    echo_docker_log
     exit 42
   fi
 }

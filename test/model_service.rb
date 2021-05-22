@@ -6,8 +6,8 @@ module Test
   class ModelService
 
     def initialize
-      hostname = 'model'
-      port = ENV['CYBER_DOJO_MODEL_PORT'].to_i
+      hostname = 'saver'
+      port = ENV['CYBER_DOJO_SAVER_PORT'].to_i
       @http = ::Test::HttpJsonHash::service(hostname, port)
     end
 

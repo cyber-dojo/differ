@@ -6,7 +6,7 @@ module External
   class Model
 
     def initialize(externals)
-      hostname = 'model'
+      hostname = 'saver'
       @port = ENV[port_env_var].to_i
       @http = HttpJsonHash::service(self.class.name, externals.model_http, hostname, port)
     end
@@ -42,7 +42,7 @@ module External
 =end
 
     def docker_port_env_var
-      'CYBER_DOJO_MODEL_PORT'
+      'CYBER_DOJO_SAVER_PORT'
     end
 
   end
