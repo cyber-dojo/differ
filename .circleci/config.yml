@@ -60,7 +60,7 @@ jobs:
           command: ./.circleci/connect-to-k8s.sh
       - run:
           name: Scrape cluster production environment
-          command: reporter report env k8s production --owner cyber-dojo --namespace prod
+          command: reporter report env k8s production --owner cyber-dojo --namespace prod,beta
 
 workflows:
   version: 2
