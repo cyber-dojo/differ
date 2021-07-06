@@ -59,8 +59,11 @@ jobs:
           name: Connect to K8S
           command: ./.circleci/connect-to-k8s.sh
       - run:
-          name: Scrape cluster production environment
+          name: Scrape cluster production environment and send to app.merkely.com
           command: reporter report env k8s production --owner cyber-dojo --namespace prod,beta
+      - run:
+          name: Scrape cluster production environment and send to staging.app.merkely.com
+          command: reporter report env k8s production -H https://staging.app.merkely.com --owner cyber-dojo --namespace prod,beta
 
 workflows:
   version: 2
