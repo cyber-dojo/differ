@@ -50,7 +50,7 @@ jobs:
           command: ./.circleci/merkely_log_deployment.sh prod
 
 
-  scrape-cluster:
+  merkely-run-reporter:
     docker:
       - image: ghcr.io/merkely-development/reporter:latest
     steps:
@@ -60,10 +60,10 @@ jobs:
           command: ./.circleci/connect-to-k8s.sh
       - run:
           name: Scrape cluster production environment and send to app.merkely.com
-          command: reporter report env k8s production --owner cyber-dojo --namespace prod,beta
+          command: reporter report env k8s production --owner cyber-dojo --namespace beta,prod
       - run:
           name: Scrape cluster production environment and send to staging.app.merkely.com
-          command: reporter report env k8s production -H https://staging.app.merkely.com --owner cyber-dojo --namespace prod,beta
+          command: reporter report env k8s production -H https://staging.app.merkely.com --owner cyber-dojo --namespace beta,prod
 
 workflows:
   version: 2
@@ -96,6 +96,10 @@ workflows:
           context: cyberdojo-context
           requires: [ deploy-to-prod ]
 
+      - merkely-run-reporter:
+          context: cyberdojo-context
+          requires: [ merkely-log-deployment-to-prod ]
+
   every-hour:
     triggers:
       - schedule:
@@ -105,7 +109,7 @@ workflows:
             branches:
               only: [ master ]
     jobs:
-      - scrape-cluster:
+      - merkely-run-reporter:
           context: cyberdojo-context
           filters:
             branches:
