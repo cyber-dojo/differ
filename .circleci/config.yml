@@ -56,13 +56,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Connect to K8S
+          name: Connect to k8s cluster
           command: ./.circleci/connect-to-k8s.sh
       - run:
-          name: Scrape cluster production environment and send to app.merkely.com
+          name: Scrape cluster namespaces beta&prod and send to app.merkely.com under Environment name of production
           command: reporter report env k8s production --owner cyber-dojo --namespace beta,prod
       - run:
-          name: Scrape cluster production environment and send to staging.app.merkely.com
+          name: Scrape cluster namespaces beta&prod and send to staging.app.merkely.com under Environment name of production
           command: reporter report env k8s production -H https://staging.app.merkely.com --owner cyber-dojo --namespace beta,prod
 
 workflows:
