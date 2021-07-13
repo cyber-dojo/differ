@@ -13,7 +13,7 @@ jobs:
             ./build_test_publish.sh
             docker logout
 
-  deploy-to-beta:
+  deploy-to-beta-env:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
@@ -22,7 +22,7 @@ jobs:
           name: Authenticate with gcloud, deploy to beta with helm
           command: ./.circleci/deploy_to_namespace.sh beta
 
-  deploy-to-prod:
+  deploy-to-prod-env:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
@@ -31,7 +31,7 @@ jobs:
           name: Authenticate with gcloud, deploy to prod with helm
           command: ./.circleci/deploy_to_namespace.sh prod
 
-  merkely-log-deployment-to-beta:
+  merkely-log-deployment-to-beta-env:
     machine:
       image: ubuntu-2004:202008-01
     steps:
@@ -40,7 +40,7 @@ jobs:
           name: Log deployment to beta in Merkely
           command: ./.circleci/merkely_log_deployment.sh beta
 
-  merkely-log-deployment-to-prod:
+  merkely-log-deployment-to-prod-env:
     machine:
       image: ubuntu-2004:202008-01
     steps:
@@ -50,7 +50,7 @@ jobs:
           command: ./.circleci/merkely_log_deployment.sh prod
 
 
-  merkely-run-reporter:
+  merkely-report-beta-env:
     docker:
       - image: ghcr.io/merkely-development/reporter:latest
     steps:
@@ -59,11 +59,26 @@ jobs:
           name: Connect to k8s cluster
           command: ./.circleci/connect-to-k8s.sh
       - run:
-          name: Scrape cluster namespaces beta&prod and send to app.merkely.com under Environment name of production
-          command: reporter report env k8s production --owner cyber-dojo --namespace beta,prod
+          name: Scrape cluster namespaces beta and send to app.merkely.com and staging.app.merkely.com
+          command: |
+            reporter report env k8s beta --owner cyber-dojo --namespace beta
+            reporter report env k8s beta -H https://staging.app.merkely.com --owner cyber-dojo --namespace beta
+
+
+  merkely-report-prod-env:
+    docker:
+      - image: ghcr.io/merkely-development/reporter:latest
+    steps:
+      - checkout
       - run:
-          name: Scrape cluster namespaces beta&prod and send to staging.app.merkely.com under Environment name of production
-          command: reporter report env k8s production -H https://staging.app.merkely.com --owner cyber-dojo --namespace beta,prod
+          name: Connect to k8s cluster
+          command: ./.circleci/connect-to-k8s.sh
+      - run:
+          name: Scrape cluster namespaces prod and send to app.merkely.com and staging.app.merkely.com
+          command: |
+            reporter report env k8s prod --owner cyber-dojo --namespace prod
+            reporter report env k8s prod -H https://staging.app.merkely.com --owner cyber-dojo --namespace prod
+
 
 workflows:
   version: 2
@@ -76,29 +91,34 @@ workflows:
             branches:
               only: [ master ]
 
-      - deploy-to-beta:
+      - deploy-to-beta-env:
           context: cyberdojo-context
           requires: [ build-publish ]
 
-      - merkely-log-deployment-to-beta:
+      - merkely-log-deployment-to-beta-env:
           context: cyberdojo-context
-          requires: [ deploy-to-beta ]
+          requires: [ deploy-to-beta-env ]
 
-      - approve-to-prod:
+      - merkely-report-beta-env:
+          context: cyberdojo-context
+          requires: [ merkely-log-deployment-to-beta-env ]
+
+      - approve-to-prod-env:
           type: approval
-          requires: [ deploy-to-beta ]
+          requires: [ merkely-report-beta-env ]
 
-      - deploy-to-prod:
+      - deploy-to-prod-env:
           context: cyberdojo-context
-          requires: [ approve-to-prod ]
+          requires: [ approve-to-prod-env ]
 
-      - merkely-log-deployment-to-prod:
+      - merkely-log-deployment-to-prod-env:
           context: cyberdojo-context
-          requires: [ deploy-to-prod ]
+          requires: [ deploy-to-prod-env ]
 
-      - merkely-run-reporter:
+      - merkely-report-prod-env:
           context: cyberdojo-context
-          requires: [ merkely-log-deployment-to-prod ]
+          requires: [ merkely-log-deployment-to-prod-env ]
+
 
   every-hour:
     triggers:
@@ -109,7 +129,13 @@ workflows:
             branches:
               only: [ master ]
     jobs:
-      - merkely-run-reporter:
+      - merkely-report-beta-env:
+          context: cyberdojo-context
+          filters:
+            branches:
+              only: [ master ]
+
+      - merkely-report-prod-env:
           context: cyberdojo-context
           filters:
             branches:
