@@ -59,10 +59,10 @@ jobs:
           name: Connect to k8s cluster
           command: ./.circleci/connect-to-k8s.sh
       - run:
-          name: Scrape cluster namespaces beta and send to app.merkely.com and staging.app.merkely.com
+          name: Report k8s cluster namespace beta and send to staging.app.merkely.com and app.merkely.com
           command: |
-            reporter report env k8s beta --owner cyber-dojo --namespace beta
             reporter report env k8s beta -H https://staging.app.merkely.com --owner cyber-dojo --namespace beta
+            reporter report env k8s beta --owner cyber-dojo --namespace beta
 
 
   merkely-report-prod-env:
@@ -74,10 +74,10 @@ jobs:
           name: Connect to k8s cluster
           command: ./.circleci/connect-to-k8s.sh
       - run:
-          name: Scrape cluster namespaces prod and send to app.merkely.com and staging.app.merkely.com
+          name: Report k8s cluster namespace prod and send to staging.app.merkely.com and app.merkely.com
           command: |
-            reporter report env k8s prod --owner cyber-dojo --namespace prod
             reporter report env k8s prod -H https://staging.app.merkely.com --owner cyber-dojo --namespace prod
+            reporter report env k8s prod --owner cyber-dojo --namespace prod
 
 
 workflows:
