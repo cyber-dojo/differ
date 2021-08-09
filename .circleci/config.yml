@@ -105,7 +105,7 @@ workflows:
 
       - approve-to-prod-env:
           type: approval
-          requires: [ merkely-report-beta-env ]
+          requires: [ deploy-to-beta-env ]
 
       - deploy-to-prod-env:
           context: cyberdojo-context
