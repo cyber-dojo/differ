@@ -1,7 +1,7 @@
 {
     "owner": "cyber-dojo",
     "name": "differ",
-    "description": "Pipeline Controls for Merkely",
+    "description": "Microservice to diff files from two traffic-lights",
     "visibility": "public",
     "template": [
         "artifact",

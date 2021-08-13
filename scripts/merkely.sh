@@ -28,7 +28,6 @@ merkely_declare_pipeline()
 		  ${MERKELY_CHANGE}
 }
 
-
 # - - - - - - - - - - - - - - - - - - -
 on_ci_merkely_declare_pipeline()
 {
