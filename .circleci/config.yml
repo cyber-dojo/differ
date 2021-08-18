@@ -52,7 +52,7 @@ jobs:
 
   merkely-report-beta-env:
     docker:
-      - image: ghcr.io/merkely-development/reporter:latest
+      - image: ghcr.io/merkely-development/reporter:v0.2.0
     steps:
       - checkout
       - run:
@@ -67,7 +67,7 @@ jobs:
 
   merkely-report-prod-env:
     docker:
-      - image: ghcr.io/merkely-development/reporter:latest
+      - image: ghcr.io/merkely-development/reporter:v0.2.0
     steps:
       - checkout
       - run:
