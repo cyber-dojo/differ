@@ -1,11 +1,9 @@
-require_relative 'differ_service'
-require_relative 'externals'
+require_relative 'differ'
 
 class HtmlDemo
 
   def initialize
-    externals = Externals.new
-    @differ = DifferService.new(externals)
+    @differ = ::External::Differ.new
   end
 
   def html
@@ -26,17 +24,17 @@ class HtmlDemo
   end
 
   def alive?
-    duration,result = timed { differ.alive? }
+    duration,result = timed { differ.alive }
     pre('alive?', duration, 'LightGreen', result)
   end
 
   def ready?
-    duration,result = timed { differ.ready? }
+    duration,result = timed { differ.ready }
     pre('ready?', duration, 'LightGreen', result)
   end
 
   def diff
-    duration,result = timed { differ.diff('PUF8Zg', old_files,new_files) }
+    duration,result = timed { differ.diff('PUF8Zg', old_files, new_files) }
     pre('diff', duration, 'LightGreen', result)
   end
 
@@ -81,4 +79,4 @@ class HtmlDemo
 
 end
 
-puts HtmlDemo.new.html
+puts(HtmlDemo.new.html)
