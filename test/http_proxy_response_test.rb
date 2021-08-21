@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require_relative 'differ_test_base'
 require_relative 'http_adapter_stub'
 

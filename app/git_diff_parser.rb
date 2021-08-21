@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require_relative 'git_diff_parse_filenames'
 
 class GitDiffParser
