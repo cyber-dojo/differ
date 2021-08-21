@@ -16,9 +16,9 @@ class HttpProxyResponseTest < DifferTestBase
   |which has a key matching the query-string (without the args)
   |then it returns the value for that key in the JSON-Hash
   ) do
-    externals.instance_exec { @model_http = ::HttpAdapterStub.new('{"ready?":[42]}') }
-    model = ::External::Model.new(externals)
-    assert_equal [42], model.ready?
+    externals.instance_exec { @saver_http = ::HttpAdapterStub.new('{"ready?":[42]}') }
+    saver = ::External::Saver.new(externals)
+    assert_equal [42], saver.ready?
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -28,7 +28,7 @@ class HttpProxyResponseTest < DifferTestBase
   |receives non-JSON in its response.body
   |it raises an exception
   ) do
-    stub_model_http('xxxx')
+    stub_saver_http('xxxx')
     ready_raises_exception('body is not JSON')
   end
 
@@ -39,7 +39,7 @@ class HttpProxyResponseTest < DifferTestBase
   |receives JSON (but not a Hash) in its response.body
   |it raises an exception
   ) do
-    stub_model_http('[]')
+    stub_saver_http('[]')
     ready_raises_exception('body is not JSON Hash')
   end
 
@@ -50,7 +50,7 @@ class HttpProxyResponseTest < DifferTestBase
   |receives JSON-Hash with an 'exception' key in its response.body
   |it raises an exception
   ) do
-    stub_model_http(response='{"exception":42}')
+    stub_saver_http(response='{"exception":42}')
     ready_raises_exception('body has embedded exception')
   end
 
@@ -62,14 +62,14 @@ class HttpProxyResponseTest < DifferTestBase
   |which does not contain the requested method's key
   |it raises an exception
   ) do
-    stub_model_http(response='{"wibble":42}')
+    stub_saver_http(response='{"wibble":42}')
     ready_raises_exception('body is missing ready? key')
   end
 
   private
 
-  def stub_model_http(body)
-    externals.instance_exec { @model_http = HttpAdapterStub.new(body) }
+  def stub_saver_http(body)
+    externals.instance_exec { @saver_http = HttpAdapterStub.new(body) }
   end
 
   # - - - - - - - - - - - - - - - - -

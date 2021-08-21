@@ -1,6 +1,6 @@
 require_relative 'lib/id58_test_base'
-require_app 'differ_service'
-require_app 'model_service'
+require_app 'differ'
+require_app 'saver'
 
 class ClientTestBase < Id58TestBase
 
@@ -9,11 +9,11 @@ class ClientTestBase < Id58TestBase
   end
 
   def differ
-    @differ ||= External::DifferService.new
+    @differ ||= External::Differ.new
   end
 
-  def model
-    @model ||= External::ModelService.new
+  def saver
+    @saver ||= External::Saver.new
   end
 
 end

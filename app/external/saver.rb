@@ -3,12 +3,12 @@ require_relative '../http_json_hash/service'
 
 module External
 
-  class Model
+  class Saver
 
     def initialize(externals)
       hostname = 'saver'
       @port = ENV[port_env_var].to_i
-      @http = HttpJsonHash::service(self.class.name, externals.model_http, hostname, port)
+      @http = HttpJsonHash::service(self.class.name, externals.saver_http, hostname, port)
     end
 
     attr_reader :port

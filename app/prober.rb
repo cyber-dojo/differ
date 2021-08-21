@@ -15,7 +15,7 @@ class Prober
   end
 
   def ready
-    @externals.model.ready?
+    @externals.saver.ready?
   end
 
 end

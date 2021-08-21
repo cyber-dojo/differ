@@ -747,7 +747,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def run_diff_prepare
-    id = model.kata_create(starter_manifest)
+    id = saver.kata_create(starter_manifest)
     kata_ran_tests(id, was_index=1, @old_files)
     kata_ran_tests(id, now_index=2, @new_files)
     [id, was_index, now_index]
@@ -756,7 +756,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def kata_ran_tests(id, index, files)
-    model.kata_ran_tests(
+    saver.kata_ran_tests(
       id,
       index,
       plain(files),
@@ -780,7 +780,7 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def starter_manifest
-    manifest = model.kata_manifest('5U2J18') # from test-data copied into saver
+    manifest = saver.kata_manifest('5U2J18') # from test-data copied into saver
     %w( id created group_id group_index ).each {|key| manifest.delete(key) }
     manifest
   end

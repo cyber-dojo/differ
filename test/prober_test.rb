@@ -26,10 +26,10 @@ class ProberTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '604', %w(
-  |when model http-proxy is not ready
+  |when saver http-proxy is not ready
   |then ready? is false
   ) do
-    externals.instance_exec { @model=STUB_READY_FALSE }
+    externals.instance_exec { @saver=STUB_READY_FALSE }
     assert false?(prober.ready)
   end
 

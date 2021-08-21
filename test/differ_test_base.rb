@@ -1,5 +1,5 @@
 require_relative 'lib/id58_test_base'
-require_relative 'model_service'
+require_relative 'saver'
 require_app 'externals'
 require_app 'differ'
 require_app 'prober'
@@ -24,9 +24,9 @@ class DifferTestBase < Id58TestBase
     @prober ||= Prober.new(externals)
   end
 
-  def model
+  def saver
     # local because tests need more of model's API.
-    @model ||= ::Test::ModelService.new
+    @saver ||= ::Test::Saver.new
   end
 
   def disk

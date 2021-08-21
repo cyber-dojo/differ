@@ -1,9 +1,8 @@
-# frozen_string_literal: true
 require_relative 'http_json_hash/service'
 
 module External
 
-  class DifferService
+  class Differ
 
     def initialize
       hostname = 'differ_server'

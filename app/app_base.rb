@@ -92,9 +92,9 @@ class AppBase < Sinatra::Base
     else
       exception[:message] = error.message
     end
-    diagnostic = json_pretty(info)
-    puts diagnostic
-    body diagnostic
+    diagnostic = JSON.pretty_generate(info)
+    puts(diagnostic)
+    body(diagnostic)
   end
 
 end

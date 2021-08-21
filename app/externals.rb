@@ -2,7 +2,7 @@
 require_relative 'external/disk_writer'
 require_relative 'external/gitter'
 require_relative 'external/http'
-require_relative 'external/model'
+require_relative 'external/saver'
 require_relative 'external/sheller'
 
 class Externals
@@ -21,11 +21,11 @@ class Externals
 
   # - - - - - - - - - - - - - - - - -
 
-  def model
-    @model ||= External::Model.new(self)
+  def saver
+    @saver ||= External::Saver.new(self)
   end
-  def model_http
-    @model_http ||= External::Http.new
+  def saver_http
+    @saver_http ||= External::Http.new
   end
 
 end
