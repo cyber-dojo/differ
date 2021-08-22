@@ -82,7 +82,7 @@ workflows:
           type: approval
           requires: [ deploy-to-beta-env-and-log-deployment-to-merkely ]
 
-      - deploy-to-beta-env-and-log-deployment-to-merkely:
+      - deploy-to-prod-env-and-log-deployment-to-merkely:
           context: cyberdojo-context
           requires: [ approve-to-prod-env ]
 
