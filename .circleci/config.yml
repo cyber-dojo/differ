@@ -14,7 +14,7 @@ jobs:
             ./build_test_publish.sh
             docker logout
 
-  deploy-to-beta-env-and-log-deployment-to-merkely:
+  deploy-to-beta-env:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
@@ -23,14 +23,22 @@ jobs:
           name: Authenticate with gcloud, deploy to beta with helm, log deployment to beta in Merkely
           command: |
             source ./.circleci/deploy_to_namespace.sh
-            source ./.circleci/merkely_log_deployment.sh
+            deploy_to_namespace beta
 
-            deploy_to_namespace    beta
+  log-deployment-to-beta-to-merkely:
+    docker:
+      - image: ubuntu-2004:202008-01
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with gcloud, deploy to beta with helm, log deployment to beta in Merkely
+          command: |
+            source ./.circleci/merkely_log_deployment.sh
             merkely_log_deployment beta https://staging.app.merkely.com
             merkely_log_deployment beta https://app.merkely.com
 
 
-  deploy-to-prod-env-and-log-deployment-to-merkely:
+  deploy-to-prod-env:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
@@ -38,10 +46,19 @@ jobs:
       - run:
           name: Authenticate with gcloud, deploy to prod with helm, log deployment to prod in Merkely
           command: |
-            ./.circleci/deploy_to_namespace.sh
-            ./.circleci/merkely_log_deployment.sh
+            source ./.circleci/deploy_to_namespace.sh
+            deploy_to_namespace prod
 
-            deploy_to_namespace    prod
+
+  log-deployment-to-prod-to-merkely:
+    docker:
+      - image: ubuntu-2004:202008-01
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with gcloud, deploy to prod with helm, log deployment to prod in Merkely
+          command: |
+            source ./.circleci/merkely_log_deployment.sh
             merkely_log_deployment prod https://staging.app.merkely.com
             merkely_log_deployment prod https://app.merkely.com
 
@@ -74,17 +91,25 @@ workflows:
             branches:
               only: [ master ]
 
-      - deploy-to-beta-env-and-log-deployment-to-merkely:
+      - deploy-to-beta-env:
           context: cyberdojo-context
           requires: [ build-test-publish ]
+
+      - log-deployment-to-beta-to-merkely:
+          context: cyberdojo-context
+          requires: [ deploy-to-beta-env ]
 
       - approve-to-prod-env:
           type: approval
           requires: [ deploy-to-beta-env-and-log-deployment-to-merkely ]
 
-      - deploy-to-prod-env-and-log-deployment-to-merkely:
+      - deploy-to-prod-env:
           context: cyberdojo-context
           requires: [ approve-to-prod-env ]
+
+      - log-deployment-to-prod-to-merkely:
+          context: cyberdojo-context
+          requires: [ deploy-to-prod-env ]
 
 
   every-hour:
