@@ -20,18 +20,18 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud, deploy to beta with helm, log deployment to beta in Merkely
+          name: Authenticate with gcloud, deploy to beta with helm
           command: |
             source ./.circleci/deploy_to_namespace.sh
             deploy_to_namespace beta
 
-  log-deployment-to-beta-to-merkely:
+  log-beta-deployment-to-merkely:
     docker:
       - image: ubuntu-2004:202008-01
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud, deploy to beta with helm, log deployment to beta in Merkely
+          name: Log beta deployment to Merkely
           command: |
             source ./.circleci/merkely_log_deployment.sh
             merkely_log_deployment beta https://staging.app.merkely.com
@@ -44,19 +44,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud, deploy to prod with helm, log deployment to prod in Merkely
+          name: Authenticate with gcloud, deploy to prod with helm
           command: |
             source ./.circleci/deploy_to_namespace.sh
             deploy_to_namespace prod
 
 
-  log-deployment-to-prod-to-merkely:
+  log-prod-deployment-to-merkely:
     docker:
       - image: ubuntu-2004:202008-01
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud, deploy to prod with helm, log deployment to prod in Merkely
+          name: Log prod deployment to Merkely
           command: |
             source ./.circleci/merkely_log_deployment.sh
             merkely_log_deployment prod https://staging.app.merkely.com
@@ -95,19 +95,19 @@ workflows:
           context: cyberdojo-context
           requires: [ build-test-publish ]
 
-      - log-deployment-to-beta-to-merkely:
+      - log-beta-deployment-to-merkely:
           context: cyberdojo-context
           requires: [ deploy-to-beta-env ]
 
       - approve-to-prod-env:
           type: approval
-          requires: [ deploy-to-beta-env-and-log-deployment-to-merkely ]
+          requires: [ log-beta-deployment-to-merkely ]
 
       - deploy-to-prod-env:
           context: cyberdojo-context
           requires: [ approve-to-prod-env ]
 
-      - log-deployment-to-prod-to-merkely:
+      - log-prod-deployment-to-merkely:
           context: cyberdojo-context
           requires: [ deploy-to-prod-env ]
 
