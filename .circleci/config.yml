@@ -1,6 +1,7 @@
 version: 2
+
 jobs:
-  build-publish:
+  build-test-publish:
     machine:
       image: ubuntu-2004:202008-01
     steps:
@@ -13,41 +14,45 @@ jobs:
             ./build_test_publish.sh
             docker logout
 
-  deploy-to-beta-env:
+  deploy-to-beta-env-and-log-deployment-to-merkely:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud, deploy to beta with helm
-          command: ./.circleci/deploy_to_namespace.sh beta
+          name: Authenticate with gcloud, deploy to beta with helm, log deployment to beta in Merkely
+          command: |
+            ./.circleci/deploy_to_namespace.sh    beta
+            ./.circleci/merkely_log_deployment.sh beta
 
-  deploy-to-prod-env:
+
+  deploy-to-prod-env-and-log-deployment-to-merkely:
     docker:
       - image: cyberdojo/gcloud-kubectl-helm
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud, deploy to prod with helm
-          command: ./.circleci/deploy_to_namespace.sh prod
+          name: Authenticate with gcloud, deploy to prod with helm, log deployment to prod in Merkely
+          command: |
+            ./.circleci/deploy_to_namespace.sh    prod
+            ./.circleci/merkely_log_deployment.sh prod
 
-  merkely-log-deployment-to-beta-env:
-    machine:
-      image: ubuntu-2004:202008-01
+
+  merkely-report-beta-and-prod-envs:
+    docker:
+      - image: ghcr.io/merkely-development/reporter:v0.2.0
     steps:
       - checkout
       - run:
-          name: Log deployment to beta in Merkely
-          command: ./.circleci/merkely_log_deployment.sh beta
-
-  merkely-log-deployment-to-prod-env:
-    machine:
-      image: ubuntu-2004:202008-01
-    steps:
-      - checkout
+          name: Connect to k8s cluster
+          command: ./.circleci/connect-to-k8s.sh
       - run:
-          name: Log deployment to prod in Merkely
-          command: ./.circleci/merkely_log_deployment.sh prod
+          name: Report k8s cluster namespaces beta+prod and send to https://staging.app.merkely.com and https://app.merkely.com
+          command: |
+            reporter report env k8s beta -H https://staging.app.merkely.com --owner cyber-dojo --namespace beta
+            reporter report env k8s beta -H https://app.merkely.com         --owner cyber-dojo --namespace beta
+            reporter report env k8s prod -H https://staging.app.merkely.com --owner cyber-dojo --namespace prod
+            reporter report env k8s prod -H https://app.merkely.com         --owner cyber-dojo --namespace prod
 
 
 workflows:
@@ -55,51 +60,38 @@ workflows:
   build-publish-deploy:
     jobs:
 
-      - build-publish:
+      - build-test-publish:
           context: cyberdojo-context
           filters:
             branches:
               only: [ master ]
 
-      - deploy-to-beta-env:
+      - deploy-to-beta-env-and-log-deployment-to-merkely:
           context: cyberdojo-context
-          requires: [ build-publish ]
-
-      - merkely-log-deployment-to-beta-env:
-          context: cyberdojo-context
-          requires: [ deploy-to-beta-env ]
+          requires: [ build-test-publish ]
 
       - approve-to-prod-env:
           type: approval
-          requires: [ deploy-to-beta-env ]
+          requires: [ deploy-to-beta-env-and-log-deployment-to-merkely ]
 
-      - deploy-to-prod-env:
+      - deploy-to-beta-env-and-log-deployment-to-merkely:
           context: cyberdojo-context
           requires: [ approve-to-prod-env ]
-
-      - merkely-log-deployment-to-prod-env:
-          context: cyberdojo-context
-          requires: [ deploy-to-prod-env ]
-
 
 
   every-hour:
     triggers:
       - schedule:
+          cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
           #cron: "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57 * * * *"
-          cron: "0 * * * *"
+          #cron: "0 * * * *"
           filters:
             branches:
               only: [ master ]
     jobs:
-      - merkely-report-beta-env:
+      - merkely-report-beta-and-prod-envs:
           context: cyberdojo-context
           filters:
             branches:
               only: [ master ]
 
-      - merkely-report-prod-env:
-          context: cyberdojo-context
-          filters:
-            branches:
-              only: [ master ]
