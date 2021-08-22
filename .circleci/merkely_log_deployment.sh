@@ -14,9 +14,7 @@ merkely_log_deployment()
   local -r CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
 
   # Pull image so merkely_fingerprint() works
-  echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
   docker pull ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
-  docker logout
 
 	docker run \
     --env MERKELY_COMMAND=log_deployment \

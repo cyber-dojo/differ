@@ -26,8 +26,8 @@ jobs:
             deploy_to_namespace beta
 
   log-beta-deployment-to-merkely:
-    docker:
-      - image: ubuntu-2004:202008-01
+    machine:
+      image: ubuntu-2004:202008-01
     steps:
       - checkout
       - run:
@@ -51,8 +51,8 @@ jobs:
 
 
   log-prod-deployment-to-merkely:
-    docker:
-      - image: ubuntu-2004:202008-01
+    machine:
+      image: ubuntu-2004:202008-01
     steps:
       - checkout
       - run:
