@@ -92,3 +92,21 @@ workflows:
       - log-prod-deployment-to-merkely:
           context: cyberdojo-context
           requires: [ deploy-to-prod-env ]
+
+
+  every-hour:
+    triggers:
+      - schedule:
+          #cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
+          cron: "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57 * * * *"
+          #cron: "0 * * * *"
+          filters:
+            branches:
+              only: [ master ]
+    jobs:
+      - merkely-report-beta-and-prod-envs:
+          context: cyberdojo-context
+          filters:
+            branches:
+              only: [ master ]
+
