@@ -73,25 +73,25 @@ workflows:
             branches:
               only: [ master ]
 
-      - deploy-to-beta-env:
+      - log-beta-deployment-to-merkely:
           context: cyberdojo-context
           requires: [ build-test-publish ]
 
-      - log-beta-deployment-to-merkely:
+      - deploy-to-beta-env:
           context: cyberdojo-context
-          requires: [ deploy-to-beta-env ]
+          requires: [ log-beta-deployment-to-merkely ]
 
       - approve-to-prod-env:
           type: approval
-          requires: [ log-beta-deployment-to-merkely ]
-
-      - deploy-to-prod-env:
-          context: cyberdojo-context
-          requires: [ approve-to-prod-env ]
+          requires: [ deploy-to-beta-env ]
 
       - log-prod-deployment-to-merkely:
           context: cyberdojo-context
-          requires: [ deploy-to-prod-env ]
+          requires: [ approve-to-prod-env ]
+
+      - deploy-to-prod-env:
+          context: cyberdojo-context
+          requires: [ log-prod-deployment-to-merkely ]
 
 
   every-hour:
