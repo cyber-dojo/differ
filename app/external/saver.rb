@@ -5,7 +5,10 @@ module External
   class Saver
 
     def initialize(externals)
-      hostname = 'saver'
+      hostname = ENV['CYBER_DOJO_SAVER_HOSTNAME']
+      if hostname.nil?
+        hostname = 'saver'
+      end
       @port = ENV[port_env_var].to_i
       @http = HttpJsonHash::service(self.class.name, externals.saver_http, hostname, port)
     end
