@@ -1,5 +1,5 @@
 variable "service_name" {
-  type = string
+  type    = string
   default = "differ"
 }
 
@@ -8,22 +8,22 @@ variable "env" {
 }
 
 variable "app_port" {
-  type = number
+  type    = number
   default = 4567
 }
 
 variable "cpu_limit" {
-  type = number
+  type    = number
   default = 20
 }
 
 variable "mem_limit" {
-  type = number
+  type    = number
   default = 256
 }
 
 variable "mem_reservation" {
-  type = number
+  type    = number
   default = 32
 }
 
