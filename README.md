@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/cyber-dojo/differ.svg?style=svg)](https://circleci.com/gh/cyber-dojo/differ)
+![Github Action (main)](https://github.com/cyber-dojo/differ/actions/workflows/main.yml/badge.svg)
 
 - The source for the [cyberdojo/differ](https://hub.docker.com/r/cyberdojo/differ/tags) Docker image.
 - A docker-containerized stateless micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
