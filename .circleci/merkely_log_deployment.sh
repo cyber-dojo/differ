@@ -34,7 +34,7 @@ kosli_log_deployment()
 # - - - - - - - - - - - - - - - - - - -
 VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
 export $(curl "${VERSIONER_URL}/app/.env")
-export CYBER_DOJO_CREATOR_TAG="${CIRCLE_SHA1:0:7}"
+export CYBER_DOJO_DIFFER_TAG="${CIRCLE_SHA1:0:7}"
 docker pull ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
 
 readonly ENVIRONMENT="${1}"
