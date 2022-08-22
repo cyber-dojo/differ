@@ -1,5 +1,11 @@
 #!/bin/bash -Eeu
 
+MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+"${MY_DIR}/../scripts/kosli_log_deployment.sh"
+
+exit 0
+
 readonly MERKELY_CHANGE=merkely/change:latest
 readonly MERKELY_OWNER=cyber-dojo
 readonly MERKELY_PIPELINE=differ
