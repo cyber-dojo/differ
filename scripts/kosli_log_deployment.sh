@@ -23,6 +23,9 @@ sudo tar -xf kosli_0.1.8_linux_amd64.tar.gz
 sudo mv kosli /usr/local/bin
 popd
 
+env | grep KOSLI
+
 kosli pipeline deployment report ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG} \
-  --artifact-type docker
+  --artifact-type docker \
+  --owner cyber-dojo
 
