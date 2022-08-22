@@ -1,15 +1,7 @@
 #!/bin/bash -Eeu
 
-# brew is not installed on Ubuntu 20.04, so can't do
+# brew is not installed on Ubuntu 20.04, so can't directly do
 # brew install kosli-dev/tap/kosli
-
-echo ======WHOAMI======
-whoami
-echo ======ETC/PASSWD=====
-cat /etc/passwd
-echo
-echo
-echo
 
 sudo apt-get update
 sudo apt-get install --yes wget
