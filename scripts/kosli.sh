@@ -3,6 +3,10 @@ set -Eeu
 
 # ROOT_DIR must be set
 
+export KOSLI_OWNER=cyber-dojo
+export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
+export KOSLI_PIPELINE=differ
+
 MERKELY_CHANGE=merkely/change:latest
 MERKELY_OWNER=cyber-dojo
 MERKELY_PIPELINE=differ
@@ -10,6 +14,8 @@ MERKELY_PIPELINE=differ
 # - - - - - - - - - - - - - - - - - - -
 install_kosli()
 {
+  # brew is not installed on Ubuntu 20.04, so can't directly do
+  # brew install kosli-dev/tap/kosli
   if ! hash kosli; then
     sudo apt-get update
     sudo apt-get install --yes wget
@@ -22,6 +28,17 @@ install_kosli()
 }
 
 # - - - - - - - - - - - - - - - - - - -
+image_name()
+{
+  VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
+  export $(curl "${VERSIONER_URL}/app/.env")
+  local -r VAR_NAME="CYBER_DOJO_${KOSLI_PIPELINE}_IMAGE"
+  local -r IMAGE_NAME="${!VAR_NAME}"
+  local -r IMAGE_TAG="${CIRCLE_SHA1:0:7}"
+  echo ${IMAGE_NAME}:${IMAGE_TAG}
+}
+
+# - - - - - - - - - - - - - - - - - - -
 kosli_fingerprint()
 {
   echo "docker://${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
@@ -30,14 +47,10 @@ kosli_fingerprint()
 # - - - - - - - - - - - - - - - - - - -
 kosli_declare_pipeline()
 {
-  local -r hostname="${1}"
   install_kosli
   kosli pipeline declare \
-    --api-token "${MERKELY_API_TOKEN}" \
     --description "Diff files from two traffic-lights" \
-    --host "${hostname}" \
-    --owner "${MERKELY_OWNER}" \
-    --pipeline "${MERKELY_PIPELINE}" \
+    --host "${1}" \
     --template artifact,branch-coverage \
     --visibility public
 }
@@ -55,23 +68,26 @@ on_ci_kosli_declare_pipeline()
 # - - - - - - - - - - - - - - - - - - -
 kosli_log_artifact()
 {
-  local -r hostname="${1}"
+  install_kosli
+  kosli pipeline artifact report creation $(image_name) \
+    --artifact-type docker \
+    --host "${1}"
 
-	docker run \
-    --env MERKELY_COMMAND=log_artifact \
-    --env MERKELY_OWNER=${MERKELY_OWNER} \
-    --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
-    --env MERKELY_FINGERPRINT=$(kosli_fingerprint) \
-    --env MERKELY_IS_COMPLIANT=TRUE \
-    --env MERKELY_ARTIFACT_GIT_COMMIT=${CYBER_DOJO_DIFFER_SHA} \
-    --env MERKELY_ARTIFACT_GIT_URL=https://github.com/${MERKELY_OWNER}/${MERKELY_PIPELINE}/commit/${CYBER_DOJO_DIFFER_SHA} \
-    --env MERKELY_CI_BUILD_NUMBER=${CIRCLE_BUILD_NUM} \
-    --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
-    --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
-    --env MERKELY_HOST="${hostname}" \
-    --rm \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
-      ${MERKELY_CHANGE}
+  # docker run \
+  #     --env MERKELY_COMMAND=log_artifact \
+  #     --env MERKELY_OWNER=${MERKELY_OWNER} \
+  #     --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
+  #     --env MERKELY_FINGERPRINT=$(kosli_fingerprint) \
+  #     --env MERKELY_IS_COMPLIANT=TRUE \
+  #     --env MERKELY_ARTIFACT_GIT_COMMIT=${CYBER_DOJO_DIFFER_SHA} \
+  #     --env MERKELY_ARTIFACT_GIT_URL=https://github.com/${MERKELY_OWNER}/${MERKELY_PIPELINE}/commit/${CYBER_DOJO_DIFFER_SHA} \
+  #     --env MERKELY_CI_BUILD_NUMBER=${CIRCLE_BUILD_NUM} \
+  #     --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
+  #     --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
+  #     --env MERKELY_HOST="${hostname}" \
+  #     --rm \
+  #     --volume /var/run/docker.sock:/var/run/docker.sock \
+  #       ${MERKELY_CHANGE}
 }
 
 # - - - - - - - - - - - - - - - - - - -
