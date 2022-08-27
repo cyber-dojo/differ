@@ -102,9 +102,9 @@ on_ci_kosli_log_evidence()
 write_evidence_json()
 {
   echo '{ "server": ' > "$(evidence_json_path)"
-  cat "${ROOT_DIR}/test/reports/coverage.json" >> "$(evidence_json_path)"
+  cat "${MY_DIR}/../test/reports/coverage.json" >> "$(evidence_json_path)"
   echo ', "client": ' >> "$(evidence_json_path)"
-  cat "${ROOT_DIR}/client/test/reports/coverage.json" >> "$(evidence_json_path)"
+  cat "${MY_DIR}/../client/test/reports/coverage.json" >> "$(evidence_json_path)"
   echo '}' >> "$(evidence_json_path)"
 }
 
