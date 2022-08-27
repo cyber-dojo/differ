@@ -111,6 +111,18 @@ kosli_log_evidence()
 }
 
 # - - - - - - - - - - - - - - - - - - -
+new_kosli_log_evidence()
+{
+  install_kosli
+  kosli artifact report evidence generic $(tagged_image_name) \
+    --artifact-type docker \
+    --description "server & client branch-coverage reports" \
+    --evidence-type branch-coverage \
+    --host "${1}" \
+    --user-data "$(evidence_json_path)"
+}
+
+# - - - - - - - - - - - - - - - - - - -
 on_ci_kosli_log_evidence()
 {
   if ! on_ci ; then
@@ -143,7 +155,7 @@ kosli_log_deployment()
   docker pull $(tagged_image_name)
   install_kosli
   kosli pipeline deployment report $(tagged_image_name) \
-    --artifact-type docker
+    --artifact-type docker \
     --environment "${1}" \
     --host "${2}"
 }
