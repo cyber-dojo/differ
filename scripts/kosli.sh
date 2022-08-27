@@ -1,10 +1,25 @@
-#!/bin/bash -Eeu
+#!/usr/bin/env bash
+set -Eeu
 
 # ROOT_DIR must be set
 
 MERKELY_CHANGE=merkely/change:latest
 MERKELY_OWNER=cyber-dojo
 MERKELY_PIPELINE=differ
+
+# - - - - - - - - - - - - - - - - - - -
+install_kosli()
+{
+  if ! hash kosli; then
+    sudo apt-get update
+    sudo apt-get install --yes wget
+    pushd /tmp
+    sudo wget https://github.com/kosli-dev/cli/releases/download/v0.1.8/kosli_0.1.8_linux_amd64.tar.gz
+    sudo tar -xf kosli_0.1.8_linux_amd64.tar.gz
+    sudo mv kosli /usr/local/bin
+    popd
+  fi
+}
 
 # - - - - - - - - - - - - - - - - - - -
 kosli_fingerprint()
@@ -16,16 +31,25 @@ kosli_fingerprint()
 kosli_declare_pipeline()
 {
   local -r hostname="${1}"
+  install_kosli
+  kosli pipeline declare \
+    --api-token "${MERKELY_API_TOKEN}" \
+    --description "Diff files from two traffic-lights" \
+    --host "${hostname}" \
+    --owner "${MERKELY_OWNER}" \
+    --pipeline "${MERKELY_PIPELINE}" \
+    --template artifact,branch-coverage \
+    --visibility public
 
-	docker run \
-		--env MERKELY_COMMAND=declare_pipeline \
-    --env MERKELY_OWNER=${MERKELY_OWNER} \
-    --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
-		--env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
-    --env MERKELY_HOST="${hostname}" \
-		--rm \
-		--volume ${ROOT_DIR}/Merkelypipe.json:/data/Merkelypipe.json \
-		  ${MERKELY_CHANGE}
+  # docker run \
+  #   --env MERKELY_COMMAND=declare_pipeline \
+  #   --env MERKELY_OWNER=${MERKELY_OWNER} \
+  #   --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
+  #   --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
+  #   --env MERKELY_HOST="${hostname}" \
+  #   --rm \
+  #   --volume ${ROOT_DIR}/Merkelypipe.json:/data/Merkelypipe.json \
+  #     ${MERKELY_CHANGE}
 }
 
 # - - - - - - - - - - - - - - - - - - -
