@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# ROOT_DIR must be set for write_evidence_json()
+MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-export KOSLI_OWNER=cyber-dojo
-export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
+#export KOSLI_OWNER=cyber-dojo
+#export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
 export KOSLI_PIPELINE=differ
 
 # - - - - - - - - - - - - - - - - - - -
@@ -111,7 +111,7 @@ write_evidence_json()
 # - - - - - - - - - - - - - - - - - - -
 evidence_json_path()
 {
-  echo "${ROOT_DIR}/test/reports/evidence.json"
+  echo "${MY_DIR}/../test/reports/evidence.json"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
