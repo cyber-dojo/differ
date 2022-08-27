@@ -29,7 +29,7 @@ install_kosli()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-image_name()
+tagged_image_name()
 {
   VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
   export $(curl "${VERSIONER_URL}/app/.env")
@@ -40,6 +40,7 @@ image_name()
 }
 
 # - - - - - - - - - - - - - - - - - - -
+# TODO: delete
 kosli_fingerprint()
 {
   echo "docker://${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
@@ -69,8 +70,7 @@ on_ci_kosli_declare_pipeline()
 # - - - - - - - - - - - - - - - - - - -
 kosli_log_artifact()
 {
-  install_kosli
-  kosli pipeline artifact report creation $(image_name) \
+  kosli pipeline artifact report creation $(tagged_image_name) \
     --artifact-type docker \
     --host "${1}"
 
