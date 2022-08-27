@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# TODO: delete
-# MERKELY_CHANGE=merkely/change:latest
-# MERKELY_OWNER=cyber-dojo
-# MERKELY_PIPELINE=differ
-# ROOT_DIR must be set
+# ROOT_DIR must be set for write_evidence_json()
 
 export KOSLI_OWNER=cyber-dojo
 export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
@@ -78,29 +74,6 @@ on_ci_kosli_log_artifact()
   kosli_log_artifact https://staging.app.kosli.com
   kosli_log_artifact https://app.kosli.com
 }
-
-# - - - - - - - - - - - - - - - - - - -
-# kosli_log_evidence()
-# {
-#   local -r hostname="${1}"
-#
-#   docker run \
-#     --env MERKELY_COMMAND=log_evidence \
-#     --env MERKELY_OWNER=${MERKELY_OWNER} \
-#     --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
-#     --env MERKELY_FINGERPRINT=$(kosli_fingerprint) \
-#     --env MERKELY_EVIDENCE_TYPE=branch-coverage \
-#     --env MERKELY_IS_COMPLIANT=TRUE \
-#     --env MERKELY_DESCRIPTION="server & client branch-coverage reports" \
-#     --env MERKELY_USER_DATA="$(evidence_json_path)" \
-#     --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
-#     --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
-#     --env MERKELY_HOST="${hostname}" \
-#     --rm \
-#     --volume "$(evidence_json_path):$(evidence_json_path)" \
-#     --volume /var/run/docker.sock:/var/run/docker.sock \
-#       ${MERKELY_CHANGE}
-# }
 
 # - - - - - - - - - - - - - - - - - - -
 kosli_log_evidence()
