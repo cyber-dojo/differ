@@ -4,6 +4,8 @@ set -Eeu
 MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export KOSLI_PIPELINE=differ
+export KOSLI_STAGING_HOSTNAME=https://staging.app.kosli.com
+export KOSLI_PROD_HOSTNAME=https://app.kosli.com
 
 # - - - - - - - - - - - - - - - - - - -
 install_kosli()
@@ -14,9 +16,9 @@ install_kosli()
     sudo apt-get update
     sudo apt-get install --yes wget
     pushd /tmp
-    local -r version=0.1.9
-    sudo wget https://github.com/kosli-dev/cli/releases/download/v${version}/kosli_${version}_linux_amd64.tar.gz
-    sudo tar -xf kosli_${version}_linux_amd64.tar.gz
+    local -r VERSION=0.1.9
+    sudo wget https://github.com/kosli-dev/cli/releases/download/v${VERSION}/kosli_${VERSION}_linux_amd64.tar.gz
+    sudo tar -xf kosli_${VERSION}_linux_amd64.tar.gz
     sudo mv kosli /usr/local/bin
     popd
   fi
@@ -25,7 +27,7 @@ install_kosli()
 # - - - - - - - - - - - - - - - - - - -
 tagged_image_name()
 {
-  VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
+  local -r VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
   export $(curl "${VERSIONER_URL}/app/.env")
   local -r VAR_NAME="CYBER_DOJO_${KOSLI_PIPELINE^^}_IMAGE"
   local -r IMAGE_NAME="${!VAR_NAME}"
@@ -50,8 +52,8 @@ on_ci_kosli_declare_pipeline()
     return
   fi
   install_kosli
-  kosli_declare_pipeline https://staging.app.kosli.com
-  kosli_declare_pipeline https://app.kosli.com
+  kosli_declare_pipeline "${KOSLI_STAGING_HOSTNAME}"
+  kosli_declare_pipeline "${KOSLI_PROD_HOSTNAME}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -69,8 +71,8 @@ on_ci_kosli_log_artifact()
     return
   fi
   install_kosli
-  kosli_log_artifact https://staging.app.kosli.com
-  kosli_log_artifact https://app.kosli.com
+  kosli_log_artifact "${KOSLI_STAGING_HOSTNAME}"
+  kosli_log_artifact "${KOSLI_PROD_HOSTNAME}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -92,8 +94,8 @@ on_ci_kosli_log_evidence()
   fi
   install_kosli
   write_evidence_json
-  kosli_log_evidence https://staging.app.kosli.com
-  kosli_log_evidence https://app.kosli.com
+  kosli_log_evidence "${KOSLI_STAGING_HOSTNAME}"
+  kosli_log_evidence "${KOSLI_PROD_HOSTNAME}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
