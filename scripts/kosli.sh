@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 set -Eeu
 
+# TODO: delete
+MERKELY_CHANGE=merkely/change:latest
+MERKELY_OWNER=cyber-dojo
+MERKELY_PIPELINE=differ
+
 # ROOT_DIR must be set
 
 export KOSLI_OWNER=cyber-dojo
 export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
 export KOSLI_PIPELINE=differ
-
-MERKELY_CHANGE=merkely/change:latest
-MERKELY_OWNER=cyber-dojo
-MERKELY_PIPELINE=differ
 
 # - - - - - - - - - - - - - - - - - - -
 install_kosli()
@@ -32,7 +33,7 @@ image_name()
 {
   VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
   export $(curl "${VERSIONER_URL}/app/.env")
-  local -r VAR_NAME="CYBER_DOJO_${KOSLI_PIPELINE}_IMAGE"
+  local -r VAR_NAME="CYBER_DOJO_${KOSLI_PIPELINE^^}_IMAGE"
   local -r IMAGE_NAME="${!VAR_NAME}"
   local -r IMAGE_TAG="${CIRCLE_SHA1:0:7}"
   echo ${IMAGE_NAME}:${IMAGE_TAG}
