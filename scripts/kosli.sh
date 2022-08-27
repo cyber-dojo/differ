@@ -80,34 +80,32 @@ on_ci_kosli_log_artifact()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-kosli_log_evidence()
-{
-  local -r hostname="${1}"
-
-  docker run \
-    --env MERKELY_COMMAND=log_evidence \
-    --env MERKELY_OWNER=${MERKELY_OWNER} \
-    --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
-    --env MERKELY_FINGERPRINT=$(kosli_fingerprint) \
-    --env MERKELY_EVIDENCE_TYPE=branch-coverage \
-    --env MERKELY_IS_COMPLIANT=TRUE \
-    --env MERKELY_DESCRIPTION="server & client branch-coverage reports" \
-    --env MERKELY_USER_DATA="$(evidence_json_path)" \
-    --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
-    --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
-    --env MERKELY_HOST="${hostname}" \
-    --rm \
-    --volume "$(evidence_json_path):$(evidence_json_path)" \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
-      ${MERKELY_CHANGE}
-}
+# kosli_log_evidence()
+# {
+#   local -r hostname="${1}"
+#
+#   docker run \
+#     --env MERKELY_COMMAND=log_evidence \
+#     --env MERKELY_OWNER=${MERKELY_OWNER} \
+#     --env MERKELY_PIPELINE=${MERKELY_PIPELINE} \
+#     --env MERKELY_FINGERPRINT=$(kosli_fingerprint) \
+#     --env MERKELY_EVIDENCE_TYPE=branch-coverage \
+#     --env MERKELY_IS_COMPLIANT=TRUE \
+#     --env MERKELY_DESCRIPTION="server & client branch-coverage reports" \
+#     --env MERKELY_USER_DATA="$(evidence_json_path)" \
+#     --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
+#     --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
+#     --env MERKELY_HOST="${hostname}" \
+#     --rm \
+#     --volume "$(evidence_json_path):$(evidence_json_path)" \
+#     --volume /var/run/docker.sock:/var/run/docker.sock \
+#       ${MERKELY_CHANGE}
+# }
 
 # - - - - - - - - - - - - - - - - - - -
-new_kosli_log_evidence()
+kosli_log_evidence()
 {
-  # This currently fails saying
-  # Error: unknown flag: --artifact-type
-  kosli artifact report evidence generic $(tagged_image_name) \
+  kosli pipeline artifact report evidence generic $(tagged_image_name) \
     --artifact-type docker \
     --description "server & client branch-coverage reports" \
     --evidence-type branch-coverage \
