@@ -117,7 +117,7 @@ evidence_json_path()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 kosli_log_deployment()
 {
-  docker pull $(tagged_image_name)
+  #docker pull $(tagged_image_name)
   install_kosli
   kosli pipeline deployment report $(tagged_image_name) \
     --artifact-type docker \
