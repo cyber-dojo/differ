@@ -3,8 +3,6 @@ set -Eeu
 
 MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-#export KOSLI_OWNER=cyber-dojo
-#export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
 export KOSLI_PIPELINE=differ
 
 # - - - - - - - - - - - - - - - - - - -
