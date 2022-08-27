@@ -35,7 +35,7 @@ image_name()
   export $(curl "${VERSIONER_URL}/app/.env")
   local -r VAR_NAME="CYBER_DOJO_${KOSLI_PIPELINE^^}_IMAGE"
   local -r IMAGE_NAME="${!VAR_NAME}"
-  local -r IMAGE_TAG="${CIRCLE_SHA1:0:7}"
+  local -r IMAGE_TAG="${GITHUB_SHA:0:7}"
   echo ${IMAGE_NAME}:${IMAGE_TAG}
 }
 
