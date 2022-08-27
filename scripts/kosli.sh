@@ -23,7 +23,7 @@ install_kosli()
     pushd /tmp
     local -r version=0.1.9
     sudo wget https://github.com/kosli-dev/cli/releases/download/v${version}/kosli_${version}_linux_amd64.tar.gz
-    sudo tar -xf kosli_0.1.8_linux_amd64.tar.gz
+    sudo tar -xf kosli_${version}_linux_amd64.tar.gz
     sudo mv kosli /usr/local/bin
     popd
   fi
