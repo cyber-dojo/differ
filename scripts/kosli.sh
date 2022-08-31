@@ -10,21 +10,11 @@ export KOSLI_PROD_HOSTNAME=https://app.kosli.com
 # - - - - - - - - - - - - - - - - - - -
 install_kosli()
 {
-  # brew is not installed on Ubuntu 20.04, so can't directly do
-  # brew install kosli-dev/tap/kosli
   if ! hash kosli; then
     sudo sh -c 'echo "deb [trusted=yes] https://apt.fury.io/kosli/ /"  > /etc/apt/sources.list.d/fury.list'
     sudo apt install ca-certificates
     sudo apt update
     sudo apt install kosli
-    #sudo apt-get update
-    #sudo apt-get install --yes wget
-    #pushd /tmp
-    #local -r VERSION=0.1.9
-    #sudo wget https://github.com/kosli-dev/cli/releases/download/v${VERSION}/kosli_${VERSION}_linux_amd64.tar.gz
-    #sudo tar -xf kosli_${VERSION}_linux_amd64.tar.gz
-    #sudo mv kosli /usr/local/bin
-    #popd
   fi
 }
 
