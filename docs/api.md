@@ -147,7 +147,7 @@ Present inside the image as the environment variable SHA.
 
 - - - -
 # GET alive
-Useful as a Kubernetes liveness probe.
+Useful as a runtime-environment liveness-probe.
 - returns
   * **true**
   ```json
@@ -161,7 +161,7 @@ Useful as a Kubernetes liveness probe.
 
 - - - -
 # GET ready
-Useful as a Docker heathcheck or Kubernetes readyness probe.
+Useful as a Docker heathcheck or runtime-environment readyness-probe.
 - returns
   * **true** if the service is ready
   ```json
