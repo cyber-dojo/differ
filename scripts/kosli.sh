@@ -3,6 +3,7 @@ set -Eeu
 
 MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+export KOSLI_OWNER=cyber-dojo
 export KOSLI_PIPELINE=differ
 export KOSLI_STAGING_HOSTNAME=https://staging.app.kosli.com
 export KOSLI_PROD_HOSTNAME=https://app.kosli.com
