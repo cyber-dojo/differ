@@ -57,10 +57,10 @@ kosli_log_artifact()
 {
   local -r hostname="${1}"
 
-  cd "$(tagged_image_name)"
+  cd "$(root_dir)"
 
   kosli pipeline artifact report creation \
-    "$(artifact_name)" \
+    "$(tagged_image_name)" \
       --artifact-type docker \
       --host "${hostname}"
 
