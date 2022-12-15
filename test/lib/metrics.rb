@@ -1,6 +1,6 @@
 
 # max values used by cyberdojo/check-test-results image
-# which is called from scripts/test_in_containers.sh
+# which is called from sh/test_in_containers.sh
 
 MAX = {
   failures:0,

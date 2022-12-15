@@ -6,8 +6,8 @@ MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export KOSLI_OWNER=cyber-dojo
 export KOSLI_PIPELINE=differ
 export KOSLI_API_TOKEN=${MERKELY_API_TOKEN}
-export KOSLI_STAGING_HOSTNAME=https://staging.app.kosli.com
-export KOSLI_PROD_HOSTNAME=https://app.kosli.com
+export KOSLI_HOST_STAGING=https://staging.app.kosli.com
+export KOSLI_HOST_PRODUCTION=https://app.kosli.com
 
 # - - - - - - - - - - - - - - - - - - -
 install_kosli()
@@ -48,8 +48,8 @@ on_ci_kosli_declare_pipeline()
     return
   fi
   install_kosli
-  kosli_declare_pipeline "${KOSLI_STAGING_HOSTNAME}"
-  kosli_declare_pipeline "${KOSLI_PROD_HOSTNAME}"
+  kosli_declare_pipeline "${KOSLI_HOST_STAGING}"
+  kosli_declare_pipeline "${KOSLI_HOST_PRODUCTION}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -67,8 +67,8 @@ on_ci_kosli_log_artifact()
     return
   fi
   install_kosli
-  kosli_log_artifact "${KOSLI_STAGING_HOSTNAME}"
-  kosli_log_artifact "${KOSLI_PROD_HOSTNAME}"
+  kosli_log_artifact "${KOSLI_HOST_STAGING}"
+  kosli_log_artifact "${KOSLI_HOST_PRODUCTION}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -90,8 +90,8 @@ on_ci_kosli_log_evidence()
   fi
   install_kosli
   write_evidence_json
-  kosli_log_evidence "${KOSLI_STAGING_HOSTNAME}"
-  kosli_log_evidence "${KOSLI_PROD_HOSTNAME}"
+  kosli_log_evidence "${KOSLI_HOST_STAGING}"
+  kosli_log_evidence "${KOSLI_HOST_PRODUCTION}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -110,19 +110,65 @@ evidence_json_path()
   echo "${MY_DIR}/../test/reports/evidence.json"
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - -
-kosli_log_deployment()
+# - - - - - - - - - - - - - - - - - - -
+kosli_expect_deployment()
 {
-  docker pull $(tagged_image_name)
-  install_kosli
-  kosli pipeline deployment report $(tagged_image_name) \
+  local -r environment="${1}"
+  local -r hostname="${2}"
+
+  # In .github/workflows/main.yml deployment is its own job
+  # and the image must be present to get its sha256 fingerprint.
+  docker pull "$(tagged_image_name)"
+
+  kosli expect deployment \
+    "$(tagged_image_name)" \
     --artifact-type docker \
-    --environment "${1}" \
-    --host "${2}"
+    --description "Deployed to ${environment} in Github Actions pipeline" \
+    --environment "${environment}" \
+    --host "${hostname}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+kosli_assert_artifact()
+{
+  local -r hostname="${1}"
+
+  kosli assert artifact \
+    "$(tagged_image_name)" \
+      --artifact-type docker \
+      --host "${hostname}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+kosli_expect_deployment()
+{
+  local -r environment="${1}"
+  local -r hostname="${2}"
+
+  # In .github/workflows/main.yml deployment is its own job
+  # and the image must be present to get its sha256 fingerprint.
+  docker pull "$(tagged_image_name)"
+
+  kosli expect deployment \
+    "$(tagged_image_name)" \
+    --artifact-type docker \
+    --description "Deployed to ${environment} in Github Actions pipeline" \
+    --environment "${environment}" \
+    --host "${hostname}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci()
 {
   [ -n "${CI:-}" ]
+}
+
+# - - - - - - - - - - - - - - - - - - -
+on_ci_kosli_assert_artifact()
+{
+  if ! on_ci ; then
+    return
+  fi
+  kosli_assert_artifact "${KOSLI_HOST_STAGING}"
+  kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
 }
