@@ -55,9 +55,15 @@ on_ci_kosli_declare_pipeline()
 # - - - - - - - - - - - - - - - - - - -
 kosli_log_artifact()
 {
-  kosli pipeline artifact report creation $(tagged_image_name) \
-    --artifact-type docker \
-    --host "${1}"
+  local -r hostname="${1}"
+
+  cd "$(tagged_image_name)"
+
+  kosli pipeline artifact report creation \
+    "$(artifact_name)" \
+      --artifact-type docker \
+      --host "${hostname}"
+
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -171,4 +177,12 @@ on_ci_kosli_assert_artifact()
   fi
   kosli_assert_artifact "${KOSLI_HOST_STAGING}"
   kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+root_dir()
+{
+  # Functions in this file are called after sourcing (not including)
+  # this file so root_dir() cannot use the path of this script.
+  git rev-parse --show-toplevel
 }
