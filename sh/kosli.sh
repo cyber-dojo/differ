@@ -4,21 +4,10 @@ set -Eeu
 MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export KOSLI_OWNER=cyber-dojo
-export KOSLI_PIPELINE=differ
+export KOSLI_FLOW=differ
 
 export KOSLI_HOST_STAGING=https://staging.app.kosli.com
 export KOSLI_HOST_PRODUCTION=https://app.kosli.com
-
-# - - - - - - - - - - - - - - - - - - -
-install_kosli()
-{
-  if ! hash kosli; then
-    sudo sh -c 'echo "deb [trusted=yes] https://apt.fury.io/kosli/ /"  > /etc/apt/sources.list.d/fury.list'
-    sudo apt install ca-certificates
-    sudo apt update
-    sudo apt install kosli
-  fi
-}
 
 # - - - - - - - - - - - - - - - - - - -
 tagged_image_name()
@@ -32,24 +21,13 @@ tagged_image_name()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-kosli_declare_pipeline()
+kosli_create_flow()
 {
-  kosli pipeline declare \
+  kosli create flow "${KOSLI_FLOW}" \
     --description "Diff files from two traffic-lights" \
     --host "${1}" \
     --template artifact,branch-coverage \
     --visibility public
-}
-
-# - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_declare_pipeline()
-{
-  if ! on_ci ; then
-    return
-  fi
-  install_kosli
-  kosli_declare_pipeline "${KOSLI_HOST_STAGING}"
-  kosli_declare_pipeline "${KOSLI_HOST_PRODUCTION}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -59,45 +37,23 @@ kosli_log_artifact()
 
   cd "$(root_dir)"
 
-  kosli pipeline artifact report creation \
-    "$(tagged_image_name)" \
+  kosli report artifact "$(tagged_image_name)" \
       --artifact-type docker \
       --host "${hostname}"
 
 }
 
 # - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_log_artifact()
-{
-  if ! on_ci ; then
-    return
-  fi
-  install_kosli
-  kosli_log_artifact "${KOSLI_HOST_STAGING}"
-  kosli_log_artifact "${KOSLI_HOST_PRODUCTION}"
-}
-
-# - - - - - - - - - - - - - - - - - - -
 kosli_log_evidence()
 {
-  kosli pipeline artifact report evidence generic $(tagged_image_name) \
+  local -r hostname="${1}"
+
+  kosli report evidence artifact generic "$(tagged_image_name)" \
     --artifact-type docker \
     --description "server & client branch-coverage reports" \
     --evidence-type branch-coverage \
-    --host "${1}" \
+    --host "${hostname}" \
     --user-data "$(evidence_json_path)"
-}
-
-# - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_log_evidence()
-{
-  if ! on_ci ; then
-    return
-  fi
-  install_kosli
-  write_evidence_json
-  kosli_log_evidence "${KOSLI_HOST_STAGING}"
-  kosli_log_evidence "${KOSLI_HOST_PRODUCTION}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -126,8 +82,7 @@ kosli_expect_deployment()
   # and the image must be present to get its sha256 fingerprint.
   docker pull "$(tagged_image_name)"
 
-  kosli expect deployment \
-    "$(tagged_image_name)" \
+  kosli expect deployment "$(tagged_image_name)" \
     --artifact-type docker \
     --description "Deployed to ${environment} in Github Actions pipeline" \
     --environment "${environment}" \
@@ -139,8 +94,7 @@ kosli_assert_artifact()
 {
   local -r hostname="${1}"
 
-  kosli assert artifact \
-    "$(tagged_image_name)" \
+  kosli assert artifact "$(tagged_image_name)" \
       --artifact-type docker \
       --host "${hostname}"
 }
@@ -155,8 +109,7 @@ kosli_expect_deployment()
   # and the image must be present to get its sha256 fingerprint.
   docker pull "$(tagged_image_name)"
 
-  kosli expect deployment \
-    "$(tagged_image_name)" \
+  kosli expect deployment "$(tagged_image_name)" \
     --artifact-type docker \
     --description "Deployed to ${environment} in Github Actions pipeline" \
     --environment "${environment}" \
@@ -170,13 +123,40 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - -
+on_ci_kosli_create_flow()
+{
+  if on_ci; then
+    kosli_create_flow "${KOSLI_HOST_STAGING}"
+    kosli_create_flow "${KOSLI_HOST_PRODUCTION}"
+  fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
+on_ci_kosli_log_artifact()
+{
+  if on_ci; then
+    kosli_log_artifact "${KOSLI_HOST_STAGING}"
+    kosli_log_artifact "${KOSLI_HOST_PRODUCTION}"
+  fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
+on_ci_kosli_log_evidence()
+{
+  if on_ci; then
+    write_evidence_json
+    kosli_log_evidence "${KOSLI_HOST_STAGING}"
+    kosli_log_evidence "${KOSLI_HOST_PRODUCTION}"
+  fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
 on_ci_kosli_assert_artifact()
 {
-  if ! on_ci ; then
-    return
+  if on_ci; then
+    kosli_assert_artifact "${KOSLI_HOST_STAGING}"
+    kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
   fi
-  kosli_assert_artifact "${KOSLI_HOST_STAGING}"
-  kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
