@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'English'
 require 'minitest/autorun'
 
@@ -77,7 +79,7 @@ class Id58TestBase < MiniTest::Test
     method = 'def self.id58_prefix'
     pointer = "#{' ' * method.index('.')}!"
     pointee = ['', pointer, method, '', ''].join("\n")
-    pointer.prepend("\n\n")
+    pointer = "\n\n" + pointer
     raise "#{pointer}missing#{pointee}" unless respond_to?(:id58_prefix)
     raise "#{pointer}empty#{pointee}" if id58_prefix == ''
     raise "#{pointer}not id58#{pointee}" unless id58?(id58_prefix)
@@ -87,7 +89,7 @@ class Id58TestBase < MiniTest::Test
     proposition = lines.join(' ')
     pointee = ['', pointer, method, "'#{proposition}'", '', ''].join("\n")
     id58 = id58_prefix + id58_suffix
-    pointer.prepend("\n\n")
+    pointer = "\n\n" + pointer
     raise "#{pointer}empty#{pointee}" if id58_suffix == ''
     raise "#{pointer}not id58#{pointee}" unless id58?(id58_suffix)
     raise "#{pointer}duplicate#{pointee}" if @@seen_ids.include?(id58)

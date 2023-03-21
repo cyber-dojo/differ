@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+require 'English'
 require 'minitest/autorun'
 
 def require_app(required)
@@ -35,9 +38,9 @@ class Id58TestBase < MiniTest::Test
         t1 = Time.now
         instance_eval(&test_block)
         t2 = Time.now
-        @@timings[id58 + ':' + src_file + ':' + src_line + ':' + name58] = (t2 - t1)
+        @@timings["#{id58}:#{src_file}:#{src_line}:#{name58}"] = (t2 - t1)
       ensure
-        puts $!.message unless $!.nil?
+        puts $ERROR_INFO.message unless $ERROR_INFO.nil?
         id58_teardown
       end
     }
@@ -74,23 +77,23 @@ class Id58TestBase < MiniTest::Test
 
   def self.checked_id58(id58_suffix, lines)
     method = 'def self.id58_prefix'
-    pointer = ' ' * method.index('.') + '!'
+    pointer = "#{' ' * method.index('.')}!"
     pointee = ['', pointer, method, '', ''].join("\n")
-    pointer.prepend("\n\n")
+    pointer = "\n\n#{pointer}"
     raise "#{pointer}missing#{pointee}" unless respond_to?(:id58_prefix)
     raise "#{pointer}empty#{pointee}" if id58_prefix === ''
     raise "#{pointer}not id58#{pointee}" unless id58?(id58_prefix)
 
     method = "test '#{id58_suffix}',"
-    pointer = ' ' * method.index("'") + '!'
+    pointer = "#{' ' * method.index("'")}!"
     proposition = lines.join(space = ' ')
     pointee = ['', pointer, method, "'#{proposition}'", '', ''].join("\n")
     id58 = id58_prefix + id58_suffix
-    pointer.prepend("\n\n")
+    pointer = "\n\n#{pointer}"
     raise "#{pointer}empty#{pointee}" if id58_suffix === ''
     raise "#{pointer}not id58#{pointee}" unless id58?(id58_suffix)
     raise "#{pointer}duplicate#{pointee}" if @@seen_ids.include?(id58)
-    raise "#{pointer}overlap#{pointee}" if id58_prefix[-2..-1] === id58_suffix[0..1]
+    raise "#{pointer}overlap#{pointee}" if id58_prefix[-2..] === id58_suffix[0..1]
 
     @@seen_ids << id58
     id58
