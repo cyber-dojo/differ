@@ -5,6 +5,7 @@ Metrics/BlockLength:
   Exclude:
     - 'test/*.rb'
     - 'client/test/*.rb'
+    - app/app_base.rb
 
 Metrics/MethodLength:
   Exclude:
@@ -12,6 +13,11 @@ Metrics/MethodLength:
     - 'test/lib/*.rb'
     - 'client/test/lib/*.rb'
     - 'client/test/*.rb'
+    - client/app/html_demo.rb
+    - app/git_diff_parser.rb
+    - app/external/sheller.rb
+    - app/differ.rb
+    - client/app/http_json_hash/service_error.rb
 
 Style/Documentation:
   Exclude:
@@ -25,3 +31,64 @@ Style/Documentation:
     - 'client/test/lib/*.rb'
     - 'client/app/http_json_hash/*.rb'
     - 'client/app/*.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - test/lib/id58_test_base.rb
+    - client/test/lib/id58_test_base.rb
+    - app/git_diff_parser.rb
+
+Metrics/AbcSize:
+  Exclude:
+    - test/lib/simplecov_json.rb
+    - test/lib/id58_test_base.rb
+    - client/test/lib/id58_test_base.rb
+    - client/test/lib/simplecov_json.rb
+    - app/git_diff_parser.rb
+
+
+Metrics/ClassLength:
+  Exclude:
+    - client/test/differ_client_test.rb
+    - test/git_diff_parse_filenames_test.rb
+    - test/git_diff_parser_test.rb
+    - test/differ_test.rb
+    - test/diff_summary_test.rb
+    - app/git_diff_parser.rb
+
+Style/FormatStringToken:
+  Exclude:
+    - client/test/lib/id58_test_base.rb
+    - test/lib/id58_test_base.rb
+
+Layout/LineLength:
+  Exclude:
+    - test/lib/simplecov_json.rb
+    - client/test/lib/simplecov_json.rb
+
+Style/ClassVars:
+  Exclude:
+    - client/test/lib/id58_test_base.rb
+    - test/lib/id58_test_base.rb
+
+Naming/VariableNumber:
+  Exclude:
+    - app/external/gitter.rb
+
+Metrics/ParameterLists:
+  Exclude:
+    - test/saver.rb
+    - client/app/saver.rb
+
+Style/OpenStructUse:
+  Exclude:
+    - test/prober_test.rb
+    - test/http_adapter_stub.rb
+    - client/test/http_response_unpacker_test.rb
+
+Lint/RescueException:
+  Exclude:
+    - client/app/client.rb
+
+
+

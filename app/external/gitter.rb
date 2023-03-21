@@ -28,7 +28,7 @@ module External
       shell.assert_cd_exec(path, DIFF_0_1)
     end
 
-    private
+    # private
 
     SETUP = [
       'git init --quiet',
