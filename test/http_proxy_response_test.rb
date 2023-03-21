@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'differ_test_base'
 require_relative 'http_adapter_stub'
 
@@ -45,7 +47,7 @@ class HttpProxyResponseTest < DifferTestBase
 
   test 'QN6', %w[
     |when an http-proxy
-    |receives JSON-Hash with an 'exception' key in its response.body
+    |receives JSON-Hash with an exception key in its response.body
     |it raises an exception
   ] do
     stub_saver_http('{"exception":42}')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'differ_test_base'
 
 class DifferTest < DifferTestBase
@@ -326,12 +328,12 @@ class DifferTest < DifferTestBase
   # - - - - - - - - - - - - -
 
   def plain(files)
-    files.map do |filename, content|
-      [filename, {
+    files.transform_values do |content|
+      {
         'content' => content,
         'truncated' => false
-      }]
-    end.to_h
+      }
+    end
   end
 
   # - - - - - - - - - - - - -

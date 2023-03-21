@@ -1,23 +1,27 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 module Test; end
 
-module Test::HttpJsonHash
-  class Http
-    def get(uri)
-      KLASS::Get.new(uri)
-    end
-
-    def post(uri)
-      KLASS::Post.new(uri)
-    end
-
-    def start(hostname, port, req)
-      KLASS.start(hostname, port) do |http|
-        http.request(req)
+module Test
+  module HttpJsonHash
+    class Http
+      def get(uri)
+        KLASS::Get.new(uri)
       end
-    end
 
-    KLASS = Net::HTTP
+      def post(uri)
+        KLASS::Post.new(uri)
+      end
+
+      def start(hostname, port, req)
+        KLASS.start(hostname, port) do |http|
+          http.request(req)
+        end
+      end
+
+      KLASS = Net::HTTP
+    end
   end
 end
