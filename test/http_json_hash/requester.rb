@@ -1,35 +1,39 @@
+# frozen_string_literal: true
+
 require_relative 'http'
 require 'json'
 require 'uri'
 
-module Test::HttpJsonHash
-  class Requester
-    def initialize(hostname, port)
-      @http = ::Test::HttpJsonHash::Http.new
-      @hostname = hostname
-      @port = port
-    end
-
-    def get(path, args)
-      request(path, args) do |uri|
-        @http.get(uri)
+module Test
+  module HttpJsonHash
+    class Requester
+      def initialize(hostname, port)
+        @http = ::Test::HttpJsonHash::Http.new
+        @hostname = hostname
+        @port = port
       end
-    end
 
-    def post(path, args)
-      request(path, args) do |uri|
-        @http.post(uri)
+      def get(path, args)
+        request(path, args) do |uri|
+          @http.get(uri)
+        end
       end
-    end
 
-    private
+      def post(path, args)
+        request(path, args) do |uri|
+          @http.post(uri)
+        end
+      end
 
-    def request(path, args)
-      uri = URI.parse("http://#{@hostname}:#{@port}/#{path}")
-      req = yield uri
-      req.content_type = 'application/json'
-      req.body = JSON.fast_generate(args)
-      @http.start(@hostname, @port, req)
+      private
+
+      def request(path, args)
+        uri = URI.parse("http://#{@hostname}:#{@port}/#{path}")
+        req = yield uri
+        req.content_type = 'application/json'
+        req.body = JSON.fast_generate(args)
+        @http.start(@hostname, @port, req)
+      end
     end
   end
 end

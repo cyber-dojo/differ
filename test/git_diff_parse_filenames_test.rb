@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'differ_test_base'
 require_app 'git_diff_parse_filenames'
 
@@ -171,7 +173,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
   test 'AD1', %w[
     parse old & new nested sub-dir filenames
     with double-quote and space in both filenames
-    and where first sub-dir is 'a' or 'b' which could clash
+    and where first sub-dir is a or b which could clash
     with git-diff output which uses a/ and b/
   ] do
     # double-quote " is a legal character in a linux filename
