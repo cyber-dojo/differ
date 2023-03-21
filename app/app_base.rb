@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'silently'
 silently { require 'sinatra/contrib' } # N x "warning: method redefined"
 require_relative 'http_json_hash/service'
