@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GitDiffer
   def initialize(external)
     @external = external
@@ -31,9 +33,9 @@ class GitDiffer
   def save(dir_name, files)
     files.each do |pathed_filename, content|
       path = File.dirname(pathed_filename)
-      src_dir = dir_name + '/' + path
+      src_dir = "#{dir_name}/#{path}"
       shell.assert_exec("mkdir -vp #{src_dir}") unless path == '.'
-      disk.write(dir_name + '/' + pathed_filename, content)
+      disk.write("#{dir_name}/#{pathed_filename}", content)
     end
   end
 

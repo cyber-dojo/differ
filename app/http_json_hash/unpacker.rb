@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'service_error'
 require 'json'
 
@@ -18,10 +20,10 @@ module HttpJsonHash
     def unpacked(body, path, args)
       json = JSON.parse!(body)
       raise service_error(path, args, body, 'body is not JSON Hash') unless json.instance_of?(Hash)
-      raise service_error(path, args, body, 'body has embedded exception') if json.has_key?('exception')
+      raise service_error(path, args, body, 'body has embedded exception') if json.key?('exception')
 
       name = argless(path)
-      raise service_error(path, args, body, "body is missing #{name} key") unless json.has_key?(name)
+      raise service_error(path, args, body, "body is missing #{name} key") unless json.key?(name)
 
       json[name]
     rescue JSON::ParserError
@@ -30,7 +32,7 @@ module HttpJsonHash
 
     def argless(path)
       s = path.split('?')[0]
-      path == s + '?' ? path : s
+      path == "#{s}?" ? path : s
     end
 
     def service_error(path, args, body, message)

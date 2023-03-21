@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'external/disk_writer'
 require_relative 'external/gitter'
 require_relative 'external/http'

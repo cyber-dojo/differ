@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitDiffParseFilenames
   def parse_old_new_filenames(header)
     old_filename, new_filename = old_new_filenames(header[0])
@@ -20,7 +22,7 @@ module GitDiffParseFilenames
   FILENAME_REGEXS = {
     qf: '("(\\"|[^"])+")', # quoted-filename,   eg "b/emb ed\"ed.h"
     uf: '([^ ]*)' # unquoted-filename, eg a/plain
-  }
+  }.freeze
 
   def old_new_filename_match(q1, q2, first_line)
     md = /^diff --git #{FILENAME_REGEXS[q1]} #{FILENAME_REGEXS[q2]}$/.match(first_line)

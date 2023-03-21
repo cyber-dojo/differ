@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module HttpJsonHash
   class ServiceError < RuntimeError
     def initialize(name, path, args, body, message)

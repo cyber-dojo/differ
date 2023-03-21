@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def silently
   old_stderr = $stderr
   $stderr = StringIO.new

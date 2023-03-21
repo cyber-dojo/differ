@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../utf8_clean'
 require 'open3'
 
@@ -8,7 +10,7 @@ module External
     end
 
     def assert_exec(*commands)
-      stdout, stderr, r = Open3.capture3('sh -c ' + quoted(commands.join(' && ')))
+      stdout, stderr, r = Open3.capture3("sh -c #{quoted(commands.join(' && '))}")
       stdout = Utf8.clean(stdout)
       stderr = Utf8.clean(stderr)
       exit_status = r.exitstatus
@@ -30,7 +32,7 @@ module External
     end
 
     def quoted(s)
-      '"' + s + '"'
+      "\"#{s}\""
     end
   end
 end

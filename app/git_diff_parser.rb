@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'git_diff_parse_filenames'
 
 class GitDiffParser
@@ -15,7 +17,7 @@ class GitDiffParser
 
   def parse_all
     all = []
-    all << parse_one while line && line.start_with?('diff --git')
+    all << parse_one while line&.start_with?('diff --git')
     all
   end
 
@@ -133,7 +135,7 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def parse_range
-    return unless line && line.start_with?('@@')
+    return unless line&.start_with?('@@')
 
     next_line
   end
@@ -142,7 +144,7 @@ class GitDiffParser
 
   def source_line(type, line, number)
     next_line
-    { type: type, line: line[1..-1], number: number }
+    { type: type, line: line[1..], number: number }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Prober
   def initialize(externals)
     @externals = externals
