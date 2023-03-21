@@ -13,6 +13,7 @@ class HtmlDemo
     src += alive?
     src += ready?
     src += diff
+    src
   end
 
   private

@@ -39,7 +39,7 @@ class Differ
     # Created entries for identical renames.
     # $ git diff ... prints no content in this case.
     diffs.each do |diff|
-      next unless diff[:type] === :renamed && diff[:line_counts] === { same: 0, deleted: 0, added: 0 }
+      next unless diff[:type] == :renamed && diff[:line_counts] == { same: 0, deleted: 0, added: 0 }
 
       filename = diff[:new_filename]
       lines = new_files[filename].split("\n")

@@ -28,7 +28,7 @@ class Id58TestBase < MiniTest::Test
     id58 = checked_id58(id58_suffix, lines)
     return unless @@args == [] || @@args.any? { |arg| id58.include?(arg) }
 
-    name58 = lines.join(space = ' ')
+    name58 = lines.join(' ')
     execute_around = lambda {
       ENV['ID58'] = id58
       @_id58 = id58

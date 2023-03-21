@@ -2,6 +2,7 @@ require_relative 'silently'
 silently { require 'sinatra/contrib' } # N x "warning: method redefined"
 require_relative 'http_json_hash/service'
 require 'json'
+require 'English'
 
 class AppBase < Sinatra::Base
   def initialize(externals)
@@ -39,7 +40,7 @@ class AppBase < Sinatra::Base
   # - - - - - - - - - - - - - - - - - - - - - -
 
   def json_hash_parse(body)
-    body = '{}' if body === ''
+    body = '{}' if body == ''
     json = JSON.parse!(body)
     raise 'body is not JSON Hash' unless json.instance_of?(Hash)
 
@@ -53,7 +54,7 @@ class AppBase < Sinatra::Base
   def probe_compatible(name, result)
     return unless %i[alive ready].include?(name)
 
-    sym = (name.to_s + '?').to_sym
+    sym = "#{name}?".to_sym
     result[sym] = result[name]
   end
 
@@ -62,7 +63,7 @@ class AppBase < Sinatra::Base
   set :show_exceptions, false
 
   error do
-    error = $!
+    error = $ERROR_INFO
     status(500)
     content_type('application/json')
     info = {

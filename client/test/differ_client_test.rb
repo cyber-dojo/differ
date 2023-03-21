@@ -758,16 +758,16 @@ class DifferClientTest < ClientTestBase
       id,
       index,
       plain(files),
-      stdout = {
+      { # stdout
         'content' => 'this is stdout',
         'truncated' => false
       },
-      stderr = {
+      { # stderr
         'content' => 'this is stderr',
         'truncated' => false
       },
-      status = '0',
-      summary = {
+      '0', # status
+      { # summary
         'duration' => 0.457764,
         'colour' => 'green',
         'predicted' => 'none'

@@ -28,7 +28,7 @@ class Id58TestBase < MiniTest::Test
     id58 = checked_id58(id58_suffix, lines)
     return unless @@args == [] || @@args.any? { |arg| id58.include?(arg) }
 
-    name58 = lines.join(space = ' ')
+    name58 = lines.join(' ')
     execute_around = lambda {
       ENV['ID58'] = id58
       @_id58 = id58
@@ -86,7 +86,7 @@ class Id58TestBase < MiniTest::Test
 
     method = "test '#{id58_suffix}',"
     pointer = "#{' ' * method.index("'")}!"
-    proposition = lines.join(space = ' ')
+    proposition = lines.join(' ')
     pointee = ['', pointer, method, "'#{proposition}'", '', ''].join("\n")
     id58 = id58_prefix + id58_suffix
     pointer = "\n\n#{pointer}"
