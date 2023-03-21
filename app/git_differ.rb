@@ -32,7 +32,7 @@ class GitDiffer
     files.each do |pathed_filename, content|
       path = File.dirname(pathed_filename)
       src_dir = dir_name + '/' + path
-      shell.assert_exec("mkdir -vp #{src_dir}") unless path === '.'
+      shell.assert_exec("mkdir -vp #{src_dir}") unless path == '.'
       disk.write(dir_name + '/' + pathed_filename, content)
     end
   end

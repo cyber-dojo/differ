@@ -26,7 +26,7 @@ class Id58TestBase < MiniTest::Test
     src_file = File.basename(src[0])
     src_line = src[1].to_s
     id58 = checked_id58(id58_suffix, lines)
-    return unless @@args === [] || @@args.any? { |arg| id58.include?(arg) }
+    return unless @@args == [] || @@args.any? { |arg| id58.include?(arg) }
 
     name58 = lines.join(space = ' ')
     execute_around = lambda {
@@ -58,7 +58,7 @@ class Id58TestBase < MiniTest::Test
     puts 'Slowest tests are...' unless sorted.empty?
     sorted.each_with_index do |(name, secs), index|
       puts format('%3.4f - %-72s', secs, name)
-      break if index === size
+      break if index == size
     end
   })
 
@@ -70,9 +70,9 @@ class Id58TestBase < MiniTest::Test
     a b c d e f g h j k l m n p q r s t u v w x y z
   ].join.freeze
 
-  def self.id58?(s)
-    s.is_a?(String) &&
-      s.chars.all? { |ch| ID58_ALPHABET.include?(ch) }
+  def self.id58?(arg)
+    arg.is_a?(String) &&
+      arg.chars.all? { |chr| ID58_ALPHABET.include?(chr) }
   end
 
   def self.checked_id58(id58_suffix, lines)
@@ -81,7 +81,7 @@ class Id58TestBase < MiniTest::Test
     pointee = ['', pointer, method, '', ''].join("\n")
     pointer = "\n\n#{pointer}"
     raise "#{pointer}missing#{pointee}" unless respond_to?(:id58_prefix)
-    raise "#{pointer}empty#{pointee}" if id58_prefix === ''
+    raise "#{pointer}empty#{pointee}" if id58_prefix == ''
     raise "#{pointer}not id58#{pointee}" unless id58?(id58_prefix)
 
     method = "test '#{id58_suffix}',"
@@ -90,10 +90,10 @@ class Id58TestBase < MiniTest::Test
     pointee = ['', pointer, method, "'#{proposition}'", '', ''].join("\n")
     id58 = id58_prefix + id58_suffix
     pointer = "\n\n#{pointer}"
-    raise "#{pointer}empty#{pointee}" if id58_suffix === ''
+    raise "#{pointer}empty#{pointee}" if id58_suffix == ''
     raise "#{pointer}not id58#{pointee}" unless id58?(id58_suffix)
     raise "#{pointer}duplicate#{pointee}" if @@seen_ids.include?(id58)
-    raise "#{pointer}overlap#{pointee}" if id58_prefix[-2..] === id58_suffix[0..1]
+    raise "#{pointer}overlap#{pointee}" if id58_prefix[-2..] == id58_suffix[0..1]
 
     @@seen_ids << id58
     id58

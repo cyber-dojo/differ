@@ -35,7 +35,7 @@ module HttpJsonHash
 
     def argless(path)
       s = path.split('?')[0]
-      path === s + '?' ? path : s
+      path == s + '?' ? path : s
     end
 
     def service_error(path, args, body, message)

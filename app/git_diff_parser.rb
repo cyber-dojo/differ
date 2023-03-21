@@ -156,15 +156,15 @@ class GitDiffParser
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def same?(line)
-    line && line[0] === ' '
+    line && line[0] == ' '
   end
 
   def deleted?(line)
-    line && line[0] === '-'
+    line && line[0] == '-'
   end
 
   def added?(line)
-    line && line[0] === '+'
+    line && line[0] == '+'
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

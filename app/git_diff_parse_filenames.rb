@@ -27,7 +27,7 @@ module GitDiffParseFilenames
     return nil if md.nil?
 
     old_index = 1
-    new_index = if q1 === :uf
+    new_index = if q1 == :uf
                   2
                 else
                   3
@@ -43,7 +43,7 @@ module GitDiffParseFilenames
   end
 
   def quoted?(filename)
-    filename[0].chr === '"'
+    filename[0].chr == '"'
   end
 
   def unquoted(filename)
@@ -59,7 +59,7 @@ module GitDiffParseFilenames
       "'" => "\x27"
     }
     str.gsub(/\\(?:([#{unescapes.keys.join}]))/) do
-      ::Regexp.last_match(1) === '\\' ? '\\' : unescapes[::Regexp.last_match(1)]
+      ::Regexp.last_match(1) == '\\' ? '\\' : unescapes[::Regexp.last_match(1)]
     end
   end
 end
