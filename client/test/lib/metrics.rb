@@ -30,4 +30,4 @@ MAX = {
       missed: 0
     }
   }
-}
+}.freeze

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RaisingDiskWriter
   attr_reader :pathed_filename
 
