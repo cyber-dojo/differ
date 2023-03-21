@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'git_differ'
 require_relative 'git_diff_parser'
 
@@ -28,9 +30,9 @@ class Differ
   end
 
   def files(event)
-    event['files'].map do |filename, file|
-      [filename, file['content']]
-    end.to_h
+    event['files'].transform_values do |file|
+      file['content']
+    end
   end
 
   def fill_identical_renamed_files(diffs, new_files, options)
