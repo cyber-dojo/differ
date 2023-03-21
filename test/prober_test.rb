@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'differ_test_base'
 
 class ProberTest < DifferTestBase
@@ -36,11 +38,11 @@ class ProberTest < DifferTestBase
 
   STUB_READY_FALSE = OpenStruct.new(ready?: false)
 
-  def true?(b)
-    b.instance_of?(TrueClass)
+  def true?(arg)
+    arg.instance_of?(TrueClass)
   end
 
-  def false?(b)
-    b.instance_of?(FalseClass)
+  def false?(arg)
+    arg.instance_of?(FalseClass)
   end
 end
