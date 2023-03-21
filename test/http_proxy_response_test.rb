@@ -48,7 +48,7 @@ class HttpProxyResponseTest < DifferTestBase
     |receives JSON-Hash with an 'exception' key in its response.body
     |it raises an exception
   ] do
-    stub_saver_http(response = '{"exception":42}')
+    stub_saver_http('{"exception":42}')
     ready_raises_exception('body has embedded exception')
   end
 
@@ -60,7 +60,7 @@ class HttpProxyResponseTest < DifferTestBase
     |which does not contain the requested method's key
     |it raises an exception
   ] do
-    stub_saver_http(response = '{"wibble":42}')
+    stub_saver_http('{"wibble":42}')
     ready_raises_exception('body is missing ready? key')
   end
 
