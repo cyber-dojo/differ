@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'client_test_base'
 require_app 'http_json_hash/unpacker'
 require 'ostruct'
@@ -54,7 +56,7 @@ class HttpResponseUnpackerTest < ClientTestBase
 
   test 'QN6', %w[
     |when an http-proxy
-    |receives JSON-Hash with an 'exception' key in its response.body
+    |receives JSON-Hash with an exception key in its response.body
     |it raises an exeption
   ] do
     raises_exception('{"exception":42}', 'body has embedded exception')

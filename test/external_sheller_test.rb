@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'differ_test_base'
 
 class ExternalShellerTest < DifferTestBase

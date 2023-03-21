@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # max values used by cyberdojo/check-test-results image
 # which is called from sh/test_in_containers.sh
 

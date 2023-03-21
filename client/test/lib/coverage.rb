@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 require_relative 'simplecov_json'
 

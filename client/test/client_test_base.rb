@@ -1,12 +1,10 @@
+# frozen_string_literal: true
+
 require_relative 'lib/id58_test_base'
 require_app 'differ'
 require_app 'saver'
 
 class ClientTestBase < Id58TestBase
-  def initialize(arg)
-    super(arg)
-  end
-
   def differ
     @differ ||= External::Differ.new
   end
