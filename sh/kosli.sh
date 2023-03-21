@@ -31,20 +31,21 @@ kosli_create_flow()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-kosli_log_artifact()
+kosli_report_artifact()
 {
   local -r hostname="${1}"
 
-  cd "$(root_dir)"
+  pushd "$(root_dir)" > /dev/null
 
   kosli report artifact "$(tagged_image_name)" \
       --artifact-type docker \
       --host "${hostname}"
 
+  popd > /dev/null
 }
 
 # - - - - - - - - - - - - - - - - - - -
-kosli_log_evidence()
+kosli_report_evidence()
 {
   local -r hostname="${1}"
 
@@ -132,21 +133,21 @@ on_ci_kosli_create_flow()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_log_artifact()
+on_ci_kosli_report_artifact()
 {
   if on_ci; then
-    kosli_log_artifact "${KOSLI_HOST_STAGING}"
-    kosli_log_artifact "${KOSLI_HOST_PRODUCTION}"
+    kosli_report_artifact "${KOSLI_HOST_STAGING}"
+    kosli_report_artifact "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
 # - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_log_evidence()
+on_ci_kosli_report_evidence()
 {
   if on_ci; then
     write_evidence_json
-    kosli_log_evidence "${KOSLI_HOST_STAGING}"
-    kosli_log_evidence "${KOSLI_HOST_PRODUCTION}"
+    kosli_report_evidence "${KOSLI_HOST_STAGING}"
+    kosli_report_evidence "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
