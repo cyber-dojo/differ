@@ -90,5 +90,17 @@ Lint/RescueException:
   Exclude:
     - client/app/client.rb
 
+Style/FetchEnvVar:
+  Exclude:
+    - app/app_base.rb
+
+Style/HashConversion:
+  Exclude:
+    - app/app_base.rb
+
+Style/HashTransformKeys:
+  Exclude:
+    - app/app_base.rb
+
 
 
