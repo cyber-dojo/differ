@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'http_json_args'
 require 'json'
 require 'rack'
@@ -48,5 +50,5 @@ class Client
 
   # - - - - - - - - - - - - - - - -
 
-  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }
+  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }.freeze
 end

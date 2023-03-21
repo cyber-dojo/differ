@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'differ'
 
 class HtmlDemo
@@ -53,8 +55,8 @@ class HtmlDemo
     whitespace = 'white-space: pre-wrap;'
     html = "<pre>/#{name}(#{duration}s)</pre>"
     unless result.nil?
-      html += "<pre style='#{whitespace}#{margin}#{border}#{padding}#{background}'>" +
-              "#{JSON.pretty_unparse(result)}" +
+      html += "<pre style='#{whitespace}#{margin}#{border}#{padding}#{background}'>" \
+              "#{JSON.pretty_unparse(result)}" \
               '</pre>'
     end
     html
