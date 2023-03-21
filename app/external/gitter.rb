@@ -36,11 +36,11 @@ module External
       "git config user.email 'differ@cyber-dojo.org'"
     ].join(' && ').freeze
 
-    def self.add_commit_tag(n)
+    def self.add_commit_tag(index)
       [
         'git add .',
-        "git commit --allow-empty --all --message #{n} --quiet",
-        "git tag #{n} HEAD"
+        "git commit --allow-empty --all --message #{index} --quiet",
+        "git tag #{index} HEAD"
       ].join(' && ').freeze
     end
 

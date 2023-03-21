@@ -28,11 +28,11 @@ module External
     private
 
     def success?(status)
-      status === 0
+      status.zero?
     end
 
-    def quoted(s)
-      "\"#{s}\""
+    def quoted(arg)
+      "\"#{arg}\""
     end
   end
 end

@@ -6,10 +6,10 @@ require_relative 'simplecov_json'
 SimpleCov.start do
   enable_coverage :branch
   filters.clear
-  coverage_dir(ENV['COVERAGE_ROOT'])
+  coverage_dir(ENV.fetch('COVERAGE_ROOT', nil))
   # add_group('debug') { |src| puts src.filename; false }
-  code_tab = ENV['COVERAGE_CODE_TAB_NAME']
-  test_tab = ENV['COVERAGE_TEST_TAB_NAME']
+  code_tab = ENV.fetch('COVERAGE_CODE_TAB_NAME', nil)
+  test_tab = ENV.fetch('COVERAGE_TEST_TAB_NAME', nil)
   add_group(code_tab) { |src| src.filename =~ %r{^/differ/app} }
   add_group(test_tab) { |src| src.filename =~ %r{^/differ/test} }
 end

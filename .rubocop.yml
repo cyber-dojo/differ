@@ -1,0 +1,27 @@
+AllCops:
+    NewCops: enable
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/*.rb'
+    - 'client/test/*.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'test/*.rb'
+    - 'test/lib/*.rb'
+    - 'client/test/lib/*.rb'
+    - 'client/test/*.rb'
+
+Style/Documentation:
+  Exclude:
+    - 'app/*.rb'
+    - 'app/http_json_hash/*.rb'
+    - 'app/external/*.rb'
+    - 'test/lib/*.rb'
+    - 'test/http_json_hash/*.rb'
+    - 'test/*.rb'
+    - 'client/test/*.rb'
+    - 'client/test/lib/*.rb'
+    - 'client/app/http_json_hash/*.rb'
+    - 'client/app/*.rb'

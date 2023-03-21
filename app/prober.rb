@@ -6,7 +6,7 @@ class Prober
   end
 
   def sha
-    ENV['SHA']
+    ENV.fetch('SHA', nil)
   end
 
   def alive

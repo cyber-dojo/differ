@@ -3,7 +3,7 @@
 module External
   class DiskWriter
     def write(pathed_filename, content)
-      File.open(pathed_filename, 'w') { |fd| fd.write(content) }
+      File.write(pathed_filename, content)
     end
   end
 end

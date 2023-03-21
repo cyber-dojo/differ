@@ -114,7 +114,7 @@ class DifferClientTest < ClientTestBase
     port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
-    error = assert_raises(RuntimeError) { http.get(:shar, { "x": 42 }) }
+    error = assert_raises(RuntimeError) { http.get(:shar, { x: 42 }) }
     json = JSON.parse(error.message)
     expected = {
       'request' => {

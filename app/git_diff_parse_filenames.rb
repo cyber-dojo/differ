@@ -24,12 +24,12 @@ module GitDiffParseFilenames
     uf: '([^ ]*)' # unquoted-filename, eg a/plain
   }.freeze
 
-  def old_new_filename_match(q1, q2, first_line)
-    md = /^diff --git #{FILENAME_REGEXS[q1]} #{FILENAME_REGEXS[q2]}$/.match(first_line)
+  def old_new_filename_match(quote1, quote2, first_line)
+    md = /^diff --git #{FILENAME_REGEXS[quote1]} #{FILENAME_REGEXS[quote2]}$/.match(first_line)
     return nil if md.nil?
 
     old_index = 1
-    new_index = if q1 == :uf
+    new_index = if quote1 == :uf
                   2
                 else
                   3

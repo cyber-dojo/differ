@@ -34,7 +34,7 @@ class AppBase < Sinatra::Base
            else
              params
            end
-    Hash[args.map { |key, value| [key.to_sym, value] }]
+    args.map { |key, value| [key.to_sym, value] }.to_h
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -
