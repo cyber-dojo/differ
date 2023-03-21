@@ -4,7 +4,6 @@ require_relative 'http_json_hash/service'
 require 'json'
 
 class AppBase < Sinatra::Base
-
   def initialize(externals)
     @externals = externals
     super(nil)
@@ -14,14 +13,14 @@ class AppBase < Sinatra::Base
   set :port, ENV['PORT']
 
   def self.get_json(name, klass)
-    get "/#{name}", provides:[:json] do
+    get "/#{name}", provides: [:json] do
       respond_to do |format|
-        format.json {
+        format.json do
           target = klass.new(@externals)
           result = { name => target.public_send(name, **named_args) }
           probe_compatible(name, result)
           json(result)
-        }
+        end
       end
     end
   end
@@ -29,36 +28,33 @@ class AppBase < Sinatra::Base
   private
 
   def named_args
-    if params.empty?
-      args = json_hash_parse(request.body.read)
-    else
-      args = params
-    end
-    Hash[args.map{ |key,value| [key.to_sym, value] }]
+    args = if params.empty?
+             json_hash_parse(request.body.read)
+           else
+             params
+           end
+    Hash[args.map { |key, value| [key.to_sym, value] }]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -
 
   def json_hash_parse(body)
-    if body === ''
-      body = '{}'
-    end
+    body = '{}' if body === ''
     json = JSON.parse!(body)
-    unless json.instance_of?(Hash)
-      fail 'body is not JSON Hash'
-    end
+    raise 'body is not JSON Hash' unless json.instance_of?(Hash)
+
     json
   rescue JSON::ParserError
-    fail 'body is not JSON'
+    raise 'body is not JSON'
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -
 
   def probe_compatible(name, result)
-    if [:alive, :ready].include?(name)
-      sym = (name.to_s + '?').to_sym
-      result[sym] = result[name]
-    end
+    return unless %i[alive ready].include?(name)
+
+    sym = (name.to_s + '?').to_sym
+    result[sym] = result[name]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -
@@ -73,20 +69,20 @@ class AppBase < Sinatra::Base
       exception: {
         time: Time.now,
         request: {
-          path:request.path,
-          params:request.params,
-          body:request.body.read
+          path: request.path,
+          params: request.params,
+          body: request.body.read
         }
       }
     }
     exception = info[:exception]
     if error.instance_of?(::HttpJsonHash::ServiceError)
       exception[:http_service] = {
-        name:error.name,
-        path:error.path,
-        args:error.args,
-        body:error.body,
-        message:error.message
+        name: error.name,
+        path: error.path,
+        args: error.args,
+        body: error.body,
+        message: error.message
       }
     else
       exception[:message] = error.message
@@ -95,5 +91,4 @@ class AppBase < Sinatra::Base
     puts(diagnostic)
     body(diagnostic)
   end
-
 end

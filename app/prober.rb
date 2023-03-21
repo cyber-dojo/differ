@@ -1,5 +1,4 @@
 class Prober
-
   def initialize(externals)
     @externals = externals
   end
@@ -15,5 +14,4 @@ class Prober
   def ready
     @externals.saver.ready?
   end
-
 end

@@ -3,9 +3,7 @@ require 'json'
 require 'uri'
 
 module Test::HttpJsonHash
-
   class Requester
-
     def initialize(hostname, port)
       @http = ::Test::HttpJsonHash::Http.new
       @hostname = hostname
@@ -33,7 +31,5 @@ module Test::HttpJsonHash
       req.body = JSON.fast_generate(args)
       @http.start(@hostname, @port, req)
     end
-
   end
-
 end

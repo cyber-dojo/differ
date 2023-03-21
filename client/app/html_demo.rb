@@ -1,7 +1,6 @@
 require_relative 'differ'
 
 class HtmlDemo
-
   def initialize
     @differ = ::External::Differ.new
   end
@@ -19,22 +18,22 @@ class HtmlDemo
   attr_reader :differ
 
   def sha
-    duration,result = timed { differ.sha }
+    duration, result = timed { differ.sha }
     pre('sha', duration, 'LightGreen', result)
   end
 
   def alive?
-    duration,result = timed { differ.alive }
+    duration, result = timed { differ.alive }
     pre('alive?', duration, 'LightGreen', result)
   end
 
   def ready?
-    duration,result = timed { differ.ready }
+    duration, result = timed { differ.ready }
     pre('ready?', duration, 'LightGreen', result)
   end
 
   def diff
-    duration,result = timed { differ.diff('PUF8Zg', old_files, new_files) }
+    duration, result = timed { differ.diff('PUF8Zg', old_files, new_files) }
     pre('diff', duration, 'LightGreen', result)
   end
 
@@ -42,8 +41,8 @@ class HtmlDemo
     started = Time.now
     result = yield
     finished = Time.now
-    duration = '%.4f' % (finished - started)
-    [duration,result]
+    duration = format('%.4f', (finished - started))
+    [duration, result]
   end
 
   def pre(name, duration, colour = 'white', result = nil)
@@ -51,7 +50,7 @@ class HtmlDemo
     padding = 'padding: 5px;'
     margin = 'margin-left: 30px; margin-right: 30px;'
     background = "background: #{colour};"
-    whitespace = "white-space: pre-wrap;"
+    whitespace = 'white-space: pre-wrap;'
     html = "<pre>/#{name}(#{duration}s)</pre>"
     unless result.nil?
       html += "<pre style='#{whitespace}#{margin}#{border}#{padding}#{background}'>" +
@@ -63,20 +62,19 @@ class HtmlDemo
 
   def old_files
     {
-      'cyber-dojo.sh': "blah blah",
+      'cyber-dojo.sh': 'blah blah',
       'hiker.c': '#include <hiker.h>',
-      'deleted.txt': 'tweedle-dee',
+      'deleted.txt': 'tweedle-dee'
     }
   end
 
   def new_files
     {
-      'cyber-dojo.sh': "blah blah blah",
+      'cyber-dojo.sh': 'blah blah blah',
       'hiker.c': '#include "hiker.h"',
-      'hiker.h': "#ifndef HIKER_INCLUDED\n#endif",
+      'hiker.h': "#ifndef HIKER_INCLUDED\n#endif"
     }
   end
-
 end
 
 puts(HtmlDemo.new.html)

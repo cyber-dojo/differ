@@ -5,7 +5,6 @@ require_relative 'external/saver'
 require_relative 'external/sheller'
 
 class Externals
-
   def disk
     @disk ||= External::DiskWriter.new
   end
@@ -23,8 +22,8 @@ class Externals
   def saver
     @saver ||= External::Saver.new(self)
   end
+
   def saver_http
     @saver_http ||= External::Http.new
   end
-
 end

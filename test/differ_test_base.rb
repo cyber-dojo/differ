@@ -5,7 +5,6 @@ require_app 'differ'
 require_app 'prober'
 
 class DifferTestBase < Id58TestBase
-
   def initialize(arg)
     super(arg)
   end
@@ -40,5 +39,4 @@ class DifferTestBase < Id58TestBase
   def shell
     externals.shell
   end
-
 end

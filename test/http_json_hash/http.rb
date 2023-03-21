@@ -1,10 +1,9 @@
 require 'net/http'
 
 module Test; end
+
 module Test::HttpJsonHash
-
   class Http
-
     def get(uri)
       KLASS::Get.new(uri)
     end
@@ -19,10 +18,6 @@ module Test::HttpJsonHash
       end
     end
 
-    private
-
     KLASS = Net::HTTP
-
   end
-
 end

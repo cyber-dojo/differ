@@ -1,9 +1,7 @@
 require 'json'
 
 module Test::HttpJsonHash
-
   class Unpacker
-
     def initialize(requester)
       @requester = requester
     end
@@ -26,7 +24,5 @@ module Test::HttpJsonHash
       path = path.to_s
       json[path]
     end
-
   end
-
 end

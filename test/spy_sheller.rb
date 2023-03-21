@@ -1,6 +1,4 @@
-
 class SpySheller
-
   def initialize
     @spied = []
   end
@@ -8,7 +6,6 @@ class SpySheller
   attr_reader :spied
 
   def assert_cd_exec(path, *commands)
-    spied << [path]+[*commands]
+    spied << [path] + [*commands]
   end
-
 end

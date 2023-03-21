@@ -1,52 +1,44 @@
 module GitDiffParseFilenames
-
   def parse_old_new_filenames(header)
-    old_filename,new_filename = old_new_filenames(header[0])
-    if header[1].start_with?('deleted file mode')
-      new_filename = nil
-    end
-    if header[1].start_with?('new file mode')
-      old_filename = nil
-    end
+    old_filename, new_filename = old_new_filenames(header[0])
+    new_filename = nil if header[1].start_with?('deleted file mode')
+    old_filename = nil if header[1].start_with?('new file mode')
     [old_filename, new_filename]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def old_new_filenames(first_line)
-    return old_new_filename_match(:uf, :uf, first_line) ||
-           old_new_filename_match(:uf, :qf, first_line) ||
-           old_new_filename_match(:qf, :qf, first_line) ||
-           old_new_filename_match(:qf, :uf, first_line)
+    old_new_filename_match(:uf, :uf, first_line) ||
+      old_new_filename_match(:uf, :qf, first_line) ||
+      old_new_filename_match(:qf, :qf, first_line) ||
+      old_new_filename_match(:qf, :uf, first_line)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   FILENAME_REGEXS = {
-    :qf => '("(\\"|[^"])+")', # quoted-filename,   eg "b/emb ed\"ed.h"
-    :uf => '([^ ]*)',         # unquoted-filename, eg a/plain
+    qf: '("(\\"|[^"])+")', # quoted-filename,   eg "b/emb ed\"ed.h"
+    uf: '([^ ]*)' # unquoted-filename, eg a/plain
   }
 
   def old_new_filename_match(q1, q2, first_line)
-    md = %r[^diff --git #{FILENAME_REGEXS[q1]} #{FILENAME_REGEXS[q2]}$].match(first_line)
-    if md.nil?
-      return nil
-    end
+    md = /^diff --git #{FILENAME_REGEXS[q1]} #{FILENAME_REGEXS[q2]}$/.match(first_line)
+    return nil if md.nil?
+
     old_index = 1
-    if q1 === :uf
-      new_index = 2
-    else
-      new_index = 3
-    end
-    [ cleaned(md[old_index]), cleaned(md[new_index]) ]
+    new_index = if q1 === :uf
+                  2
+                else
+                  3
+                end
+    [cleaned(md[old_index]), cleaned(md[new_index])]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def cleaned(filename)
-    if quoted?(filename)
-      filename = unquoted(filename)
-    end
+    filename = unquoted(filename) if quoted?(filename)
     unescaped(filename)
   end
 
@@ -62,13 +54,12 @@ module GitDiffParseFilenames
     # Avoiding eval.
     # http://stackoverflow.com/questions/8639642/best-way-to-escape-and-unescape-strings-in-ruby
     unescapes = {
-        "\\\\" => "\x5c",
-        '"'    => "\x22",
-        "'"    => "\x27"
+      '\\\\' => "\x5c",
+      '"' => "\x22",
+      "'" => "\x27"
     }
-    str.gsub(/\\(?:([#{unescapes.keys.join}]))/) {
-      $1 === '\\' ? '\\' : unescapes[$1]
-    }
+    str.gsub(/\\(?:([#{unescapes.keys.join}]))/) do
+      ::Regexp.last_match(1) === '\\' ? '\\' : unescapes[::Regexp.last_match(1)]
+    end
   end
-
 end

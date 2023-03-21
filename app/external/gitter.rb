@@ -1,7 +1,5 @@
 module External
-
   class Gitter
-
     def initialize(externals)
       @externals = externals
     end
@@ -62,7 +60,5 @@ module External
     def shell
       @externals.shell
     end
-
   end
-
 end
