@@ -45,6 +45,12 @@ kosli_report_artifact()
 }
 
 # - - - - - - - - - - - - - - - - - - -
+kosli_report_lint()
+{
+  # TODO
+}
+
+# - - - - - - - - - - - - - - - - - - -
 kosli_report_evidence()
 {
   local -r hostname="${1}"
@@ -121,6 +127,15 @@ on_ci_kosli_report_artifact()
   if on_ci; then
     kosli_report_artifact "${KOSLI_HOST_STAGING}"
     kosli_report_artifact "${KOSLI_HOST_PRODUCTION}"
+  fi
+}
+
+# - - - - - - - - - - - - - - - - - - -
+on_ci_kosli_report_lint()
+{
+  if on_ci; then
+    kosli_report_lint "${KOSLI_HOST_STAGING}"
+    kosli_report_lint "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
