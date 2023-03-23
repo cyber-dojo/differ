@@ -123,7 +123,7 @@ class DifferClientTest < ClientTestBase
         'args' => { 'x' => 42 }
       },
       'response' => {
-        'body' => 'GET /shar'
+        'body' => '<h1>Not Found</h1>'
       },
       'message' => 'body is not JSON'
     }

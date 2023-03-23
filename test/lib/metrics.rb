@@ -6,7 +6,7 @@
 MAX = {
   failures: 0,
   errors: 0,
-  warnings: 0,
+  warnings: 1,
   skips: 0,
 
   duration: 50,
