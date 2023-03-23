@@ -49,7 +49,7 @@ copy_in_saver_test_data
 exit_zero_if_demo_only "$@"
 
 test_in_containers "$@"
-on_ci_kosli_report_evidence
+on_ci_kosli_report_test_evidence
 
 containers_down
 echo_env_vars

@@ -14,7 +14,7 @@ tagged_image_name()
 {
   local -r VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
   export $(curl "${VERSIONER_URL}/app/.env")
-  local -r VAR_NAME="CYBER_DOJO_${KOSLI_PIPELINE^^}_IMAGE"
+  local -r VAR_NAME="CYBER_DOJO_${KOSLI_FLOW^^}_IMAGE"
   local -r IMAGE_NAME="${!VAR_NAME}"
   local -r IMAGE_TAG="${GITHUB_SHA:0:7}"
   echo ${IMAGE_NAME}:${IMAGE_TAG}
@@ -51,7 +51,7 @@ kosli_report_lint()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-kosli_report_evidence()
+kosli_report_test_evidence()
 {
   local -r hostname="${1}"
 
@@ -60,21 +60,21 @@ kosli_report_evidence()
     --description "server & client branch-coverage reports" \
     --evidence-type branch-coverage \
     --host "${hostname}" \
-    --user-data "$(evidence_json_path)"
+    --user-data "$(test_evidence_json_path)"
 }
 
 # - - - - - - - - - - - - - - - - - - -
-write_evidence_json()
+write_test_evidence_json()
 {
-  echo '{ "server": ' > "$(evidence_json_path)"
-  cat "${MY_DIR}/../test/reports/coverage.json" >> "$(evidence_json_path)"
-  echo ', "client": ' >> "$(evidence_json_path)"
-  cat "${MY_DIR}/../client/test/reports/coverage.json" >> "$(evidence_json_path)"
-  echo '}' >> "$(evidence_json_path)"
+  echo '{ "server": ' > "$(test_evidence_json_path)"
+  cat "${MY_DIR}/../test/reports/coverage.json" >> "$(test_evidence_json_path)"
+  echo ', "client": ' >> "$(test_evidence_json_path)"
+  cat "${MY_DIR}/../client/test/reports/coverage.json" >> "$(test_evidence_json_path)"
+  echo '}' >> "$(test_evidence_json_path)"
 }
 
 # - - - - - - - - - - - - - - - - - - -
-evidence_json_path()
+test_evidence_json_path()
 {
   echo "${MY_DIR}/../test/reports/evidence.json"
 }
@@ -140,12 +140,12 @@ on_ci_kosli_report_lint()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_report_evidence()
+on_ci_kosli_report_test_evidence()
 {
   if on_ci; then
-    write_evidence_json
-    kosli_report_evidence "${KOSLI_HOST_STAGING}"
-    kosli_report_evidence "${KOSLI_HOST_PRODUCTION}"
+    write_test_evidence_json
+    kosli_report_test_evidence "${KOSLI_HOST_STAGING}"
+    kosli_report_test_evidence "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
