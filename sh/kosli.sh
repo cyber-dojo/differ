@@ -47,7 +47,7 @@ kosli_report_artifact()
 # - - - - - - - - - - - - - - - - - - -
 kosli_report_lint()
 {
-  # TODO
+  : # TODO
 }
 
 # - - - - - - - - - - - - - - - - - - -
