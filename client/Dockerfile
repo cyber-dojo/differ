@@ -1,4 +1,4 @@
-FROM cyberdojo/rack-base:8fb133a
+FROM cyberdojo/rack-base:b336606
 LABEL maintainer=jon@jaggersoft.com
 
 WORKDIR /differ

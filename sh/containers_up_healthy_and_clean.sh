@@ -59,46 +59,39 @@ healthy()
 exit_non_zero_unless_started_cleanly()
 {
   echo
-  local -r log=$(docker logs "${CONTAINER_NAME}" 2>&1)
+  local DOCKER_LOG=$(echo_docker_log)
 
   # Handle known warnings (eg waiting on Gem upgrade)
   #local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   #DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
 
-
-  local -r line_count=$(echo -n "${log}" | grep -c '^')
-  if [ "${CONTAINER_NAME}" == "${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}" ]; then
-    local -r lines=6
-  fi
-  if [ "${CONTAINER_NAME}" == "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}" ]; then
-    local -r lines=6
-  fi
-
   echo "Checking if ${SERVICE_NAME} started cleanly."
-  if [ "${line_count}" == "${lines}" ]; then
-    echo 'OK'
+  local -r top5=$(echo "${DOCKER_LOG}" | head -5)
+  if [ "${top5}" == "$(clean_top_5)" ]; then
+    echo "${SERVICE_NAME} started cleanly."
   else
-    echo 'FAIL'
-    echo "Expecting ${lines} lines"
-    echo "   Actual ${line_count} lines"
-    echo_docker_log
+    echo "${SERVICE_NAME} did not start cleanly."
+    echo "First 10 lines of: docker logs ${CONTAINER_NAME}"
+    echo
+    echo "${DOCKER_LOG}" | head -10
+    echo
+    clean_top_5
     exit 42
   fi
 }
 
 # - - - - - - - - - - - - - - - - - - -
-clean_top_6()
+clean_top_5()
 {
   # 1st 6 lines on Puma
   local -r L1="Puma starting in single mode..."
-  local -r L2="* Version 5.0.4 (ruby 2.7.2-p137), codename: Spoony Bard"
-  local -r L3="* Min threads: 0, max threads: 5"
-  local -r L4="* Environment: production"
-  local -r L5="* Listening on http://0.0.0.0:${CONTAINER_PORT}"
-  local -r L6="Use Ctrl-C to stop"
+  local -r L2='* Puma version: 6.1.1 (ruby 3.2.1-p31) ("The Way Up")'
+  local -r L3="*  Min threads: 0"
+  local -r L4="*  Max threads: 5"
+  local -r L5="*  Environment: production"
   #
-  local -r top6="$(printf "%s\n%s\n%s\n%s\n%s\n%s" "${L1}" "${L2}" "${L3}" "${L4}" "${L5}" "${L6}")"
-  echo "${top6}"
+  local -r top5="$(printf "%s\n%s\n%s\n%s\n%s" "${L1}" "${L2}" "${L3}" "${L4}" "${L5}")"
+  echo "${top5}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
