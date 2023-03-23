@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 module External
-
   class Gitter
-
     def initialize(externals)
       @externals = externals
     end
@@ -28,7 +28,7 @@ module External
       shell.assert_cd_exec(path, DIFF_0_1)
     end
 
-    private
+    # private
 
     SETUP = [
       'git init --quiet',
@@ -36,11 +36,11 @@ module External
       "git config user.email 'differ@cyber-dojo.org'"
     ].join(' && ').freeze
 
-    def self.add_commit_tag(n)
+    def self.add_commit_tag(index)
       [
         'git add .',
-        "git commit --allow-empty --all --message #{n} --quiet",
-        "git tag #{n} HEAD"
+        "git commit --allow-empty --all --message #{index} --quiet",
+        "git tag #{index} HEAD"
       ].join(' && ').freeze
     end
 
@@ -62,7 +62,5 @@ module External
     def shell
       @externals.shell
     end
-
   end
-
 end

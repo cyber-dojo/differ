@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 module HttpJsonHash
-
   class Http
-
     def get(uri)
       KLASS::Get.new(uri)
     end
@@ -18,10 +18,6 @@ module HttpJsonHash
       end
     end
 
-    private
-
     KLASS = Net::HTTP
-
   end
-
 end

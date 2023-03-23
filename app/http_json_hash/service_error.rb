@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 module HttpJsonHash
-
   class ServiceError < RuntimeError
-
     def initialize(name, path, args, body, message)
       @name = name
       @path = path
@@ -11,7 +11,5 @@ module HttpJsonHash
     end
 
     attr_reader :name, :path, :args, :body
-
   end
-
 end

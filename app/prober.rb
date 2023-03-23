@@ -1,11 +1,12 @@
-class Prober
+# frozen_string_literal: true
 
+class Prober
   def initialize(externals)
     @externals = externals
   end
 
   def sha
-    ENV['SHA']
+    ENV.fetch('SHA', nil)
   end
 
   def alive
@@ -15,5 +16,4 @@ class Prober
   def ready
     @externals.saver.ready?
   end
-
 end

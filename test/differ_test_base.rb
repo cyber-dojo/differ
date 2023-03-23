@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'lib/id58_test_base'
 require_relative 'saver'
 require_app 'externals'
@@ -5,11 +7,6 @@ require_app 'differ'
 require_app 'prober'
 
 class DifferTestBase < Id58TestBase
-
-  def initialize(arg)
-    super(arg)
-  end
-
   # Don't create a diff() method here as it interferes with MiniTest::Test!
 
   def externals
@@ -40,5 +37,4 @@ class DifferTestBase < Id58TestBase
   def shell
     externals.shell
   end
-
 end

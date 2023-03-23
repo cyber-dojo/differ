@@ -1,4 +1,4 @@
-FROM cyberdojo/sinatra-base:e35b490
+FROM cyberdojo/sinatra-base:bbb7973
 LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --upgrade --no-cache add git

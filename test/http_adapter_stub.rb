@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 
 class HttpAdapterStub
-
   def initialize(body)
     @body = body
   end
@@ -15,5 +16,4 @@ class HttpAdapterStub
   end
 
   attr_reader :body
-
 end

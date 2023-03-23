@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'differ_test_base'
 require_relative 'http_adapter_stub'
 
 class HttpProxyResponseTest < DifferTestBase
-
   def self.id58_prefix
     'f28'
   end
@@ -10,10 +11,10 @@ class HttpProxyResponseTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test 'QN3', %w(
-  |when an http-proxy
-  |receives a JSON-Hash in its response.body
-  |which has a key matching the query-string (without the args)
-  |then it returns the value for that key in the JSON-Hash
+    |when an http-proxy
+    |receives a JSON-Hash in its response.body
+    |which has a key matching the query-string (without the args)
+    |then it returns the value for that key in the JSON-Hash
   ) do
     externals.instance_exec { @saver_http = ::HttpAdapterStub.new('{"ready?":[42]}') }
     saver = ::External::Saver.new(externals)
@@ -22,11 +23,11 @@ class HttpProxyResponseTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'QN4', %w(
-  |when an http-proxy
-  |receives non-JSON in its response.body
-  |it raises an exception
-  ) do
+  test 'QN4', %w[
+    |when an http-proxy
+    |receives non-JSON in its response.body
+    |it raises an exception
+  ] do
     stub_saver_http('xxxx')
     ready_raises_exception('body is not JSON')
   end
@@ -34,9 +35,9 @@ class HttpProxyResponseTest < DifferTestBase
   # - - - - - - - - - - - - - - - - -
 
   test 'QN5', %w(
-  |when an http-proxy
-  |receives JSON (but not a Hash) in its response.body
-  |it raises an exception
+    |when an http-proxy
+    |receives JSON (but not a Hash) in its response.body
+    |it raises an exception
   ) do
     stub_saver_http('[]')
     ready_raises_exception('body is not JSON Hash')
@@ -44,24 +45,24 @@ class HttpProxyResponseTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'QN6', %w(
-  |when an http-proxy
-  |receives JSON-Hash with an 'exception' key in its response.body
-  |it raises an exception
-  ) do
-    stub_saver_http(response='{"exception":42}')
+  test 'QN6', %w[
+    |when an http-proxy
+    |receives JSON-Hash with an exception key in its response.body
+    |it raises an exception
+  ] do
+    stub_saver_http('{"exception":42}')
     ready_raises_exception('body has embedded exception')
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'QN7', %w(
-  |when an http-proxy
-  |receives JSON-Hash in its response.body
-  |which does not contain the requested method's key
-  |it raises an exception
-  ) do
-    stub_saver_http(response='{"wibble":42}')
+  test 'QN7', %w[
+    |when an http-proxy
+    |receives JSON-Hash in its response.body
+    |which does not contain the requested method's key
+    |it raises an exception
+  ] do
+    stub_saver_http('{"wibble":42}')
     ready_raises_exception('body is missing ready? key')
   end
 
@@ -77,5 +78,4 @@ class HttpProxyResponseTest < DifferTestBase
     error = assert_raises(HttpJsonHash::ServiceError) { prober.ready }
     assert_equal expected_message, error.message
   end
-
 end
