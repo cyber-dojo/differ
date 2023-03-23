@@ -58,7 +58,7 @@ kosli_report_test_evidence()
   kosli report evidence artifact generic "$(tagged_image_name)" \
     --artifact-type docker \
     --description "server & client branch-coverage reports" \
-    --evidence-type branch-coverage \
+    --name branch-coverage \
     --host "${hostname}" \
     --user-data "$(test_evidence_json_path)"
 }
