@@ -50,7 +50,7 @@ run_tests()
   local -r COVERAGE_CODE_TAB_NAME=app
   local -r COVERAGE_TEST_TAB_NAME=test
   local -r CONTAINER_TMP_DIR=/tmp # fs is read-only with tmpfs at /tmp
-  local -r CONTAINER_COVERAGE_DIR="/${CONTAINER_TMP_DIR}/reports"
+  local -r CONTAINER_COVERAGE_DIR="${CONTAINER_TMP_DIR}/reports"
   local -r TEST_LOG=test.log
 
   set +e
