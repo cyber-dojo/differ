@@ -50,9 +50,11 @@ kosli_report_lint()
   local -r hostname="${1}"
 
   kosli report evidence commit generic \
-    --compliant "${KOSLI_LINT_COMPLIANT}" \
-    --name lint \
-    --host "${hostname}"
+    --compliant="${KOSLI_LINT_COMPLIANT}" \
+    --host "${hostname}" \
+    --name lint
+
+  # --evidence-paths /tmp/evidence/lint \
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -62,8 +64,8 @@ kosli_report_test_evidence()
 
   kosli report evidence artifact generic "$(tagged_image_name)" \
     --artifact-type docker \
-    --name branch-coverage \
     --host "${hostname}" \
+    --name branch-coverage \
     --user-data "$(test_evidence_json_path)"
 }
 
