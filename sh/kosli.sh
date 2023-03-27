@@ -26,7 +26,7 @@ kosli_create_flow()
   kosli create flow "${KOSLI_FLOW}" \
     --description "Diff files from two traffic-lights" \
     --host "${1}" \
-    --template artifact,branch-coverage \
+    --template artifact,lint,branch-coverage \
     --visibility public
 }
 
@@ -47,7 +47,12 @@ kosli_report_artifact()
 # - - - - - - - - - - - - - - - - - - -
 kosli_report_lint()
 {
-  : # TODO
+  local -r hostname="${1}"
+
+  kosli report evidence commit generic \
+    --compliant "${KOSLI_LINT_COMPLIANT}" \
+    --name lint \
+    --host "${hostname}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -57,7 +62,6 @@ kosli_report_test_evidence()
 
   kosli report evidence artifact generic "$(tagged_image_name)" \
     --artifact-type docker \
-    --description "server & client branch-coverage reports" \
     --name branch-coverage \
     --host "${hostname}" \
     --user-data "$(test_evidence_json_path)"
