@@ -3,10 +3,12 @@ on_ci_run_lint()
 {
   if on_ci; then
     sudo gem install rubocop --no-document
-    mkdir -p /tmp/evidence/lint
-    cp "$(root_dir)/.rubocop.yml" /tmp/evidence/lint
+    local -r LINT_EVIDNCE_DIR=/tmp/evidence/lint
+    mkdir -p "${LINT_EVIDNCE_DIR}"
+    cp "$(root_dir)/.rubocop.yml" "${LINT_EVIDNCE_DIR}"/rubocop.yml
+    ls -al "${LINT_EVIDNCE_DIR}"
     set +e
-    rubocop . | tee /tmp/evidence/lint/rubocop.log
+    rubocop . | tee "${LINT_EVIDNCE_DIR}"/rubocop.log
     local -r STATUS=$?
     set -e
 
