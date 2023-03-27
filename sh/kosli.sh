@@ -3,31 +3,21 @@ set -Eeu
 
 MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-export KOSLI_ORG=cyber-dojo
+# The following KOSLI_ env-vars are set in the CI workflow yml
+# KOSLI_ORG=cyber-dojo
+# KOSLI_HOST_STAGING
+# KOSLI_HOST_PRODUCTION
+
 export KOSLI_FLOW=differ
-
-export KOSLI_HOST_STAGING=https://staging.app.kosli.com
-export KOSLI_HOST_PRODUCTION=https://app.kosli.com
-
-# - - - - - - - - - - - - - - - - - - -
-tagged_image_name()
-{
-  local -r VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
-  export $(curl "${VERSIONER_URL}/app/.env")
-  local -r VAR_NAME="CYBER_DOJO_${KOSLI_FLOW^^}_IMAGE"
-  local -r IMAGE_NAME="${!VAR_NAME}"
-  local -r IMAGE_TAG="${GITHUB_SHA:0:7}"
-  echo ${IMAGE_NAME}:${IMAGE_TAG}
-}
 
 # - - - - - - - - - - - - - - - - - - -
 kosli_create_flow()
 {
   kosli create flow "${KOSLI_FLOW}" \
-    --description "Diff files from two traffic-lights" \
-    --host "${1}" \
-    --template artifact,lint,branch-coverage \
-    --visibility public
+    --description="Diff files from two traffic-lights" \
+    --host="${1}" \
+    --template=artifact,lint,branch-coverage \
+    --visibility=public
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -35,13 +25,10 @@ kosli_report_artifact()
 {
   local -r hostname="${1}"
 
-  pushd "$(root_dir)" > /dev/null
-
   kosli report artifact "$(tagged_image_name)" \
-      --artifact-type docker \
-      --host "${hostname}"
-
-  popd > /dev/null
+      --artifact-type=docker \
+      --host="${hostname}" \
+      --repo-root="$(repo_root)"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -51,10 +38,9 @@ kosli_report_lint()
 
   kosli report evidence commit generic \
     --compliant="${KOSLI_LINT_COMPLIANT}" \
-    --evidence-paths /tmp/evidence/lint \
-    --host "${hostname}" \
-    --name lint
-
+    --evidence-paths=/tmp/evidence/lint \
+    --host="${hostname}" \
+    --name=lint
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -63,26 +49,10 @@ kosli_report_test_evidence()
   local -r hostname="${1}"
 
   kosli report evidence artifact generic "$(tagged_image_name)" \
-    --artifact-type docker \
-    --host "${hostname}" \
-    --name branch-coverage \
-    --user-data "$(test_evidence_json_path)"
-}
-
-# - - - - - - - - - - - - - - - - - - -
-write_test_evidence_json()
-{
-  echo '{ "server": ' > "$(test_evidence_json_path)"
-  cat "${MY_DIR}/../test/reports/coverage.json" >> "$(test_evidence_json_path)"
-  echo ', "client": ' >> "$(test_evidence_json_path)"
-  cat "${MY_DIR}/../client/test/reports/coverage.json" >> "$(test_evidence_json_path)"
-  echo '}' >> "$(test_evidence_json_path)"
-}
-
-# - - - - - - - - - - - - - - - - - - -
-test_evidence_json_path()
-{
-  echo "${MY_DIR}/../test/reports/evidence.json"
+    --artifact-type=docker \
+    --host="${hostname}" \
+    --name=branch-coverage \
+    --user-data="$(test_evidence_json_path)"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -92,14 +62,13 @@ kosli_expect_deployment()
   local -r hostname="${2}"
 
   # In .github/workflows/main.yml deployment is its own job
-  # and the image must be present to get its sha256 fingerprint.
+  # and the image must be present to get its sha256 digest.
   docker pull "$(tagged_image_name)"
 
   kosli expect deployment "$(tagged_image_name)" \
-    --artifact-type docker \
-    --description "Deployed to ${environment} in Github Actions pipeline" \
-    --environment "${environment}" \
-    --host "${hostname}"
+    --artifact-type=docker \
+    --environment="${environment}" \
+    --host="${hostname}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -108,8 +77,8 @@ kosli_assert_artifact()
   local -r hostname="${1}"
 
   kosli assert artifact "$(tagged_image_name)" \
-      --artifact-type docker \
-      --host "${hostname}"
+    --artifact-type=docker \
+    --host="${hostname}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -165,9 +134,36 @@ on_ci_kosli_assert_artifact()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-root_dir()
+write_test_evidence_json()
 {
-  # Functions in this file are called after sourcing (not including)
-  # this file so root_dir() cannot use the path of this script.
+  echo '{ "server": ' > "$(test_evidence_json_path)"
+  cat "${MY_DIR}/../test/reports/coverage.json" >> "$(test_evidence_json_path)"
+  echo ', "client": ' >> "$(test_evidence_json_path)"
+  cat "${MY_DIR}/../client/test/reports/coverage.json" >> "$(test_evidence_json_path)"
+  echo '}' >> "$(test_evidence_json_path)"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+test_evidence_json_path()
+{
+  echo "${MY_DIR}/../test/reports/evidence.json"
+}
+
+# - - - - - - - - - - - - - - - - - - -
+repo_root()
+{
+  # Functions in this file are called after sourcing the file
+  # so repo_root() cannot use the path of this script.
   git rev-parse --show-toplevel
+}
+
+# - - - - - - - - - - - - - - - - - - -
+tagged_image_name()
+{
+  local -r VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
+  export $(curl "${VERSIONER_URL}/app/.env")
+  local -r VAR_NAME="CYBER_DOJO_${KOSLI_FLOW^^}_IMAGE"
+  local -r IMAGE_NAME="${!VAR_NAME}"
+  local -r IMAGE_TAG="${GITHUB_SHA:0:7}"
+  echo ${IMAGE_NAME}:${IMAGE_TAG}
 }
