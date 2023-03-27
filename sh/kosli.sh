@@ -51,10 +51,10 @@ kosli_report_lint()
 
   kosli report evidence commit generic \
     --compliant="${KOSLI_LINT_COMPLIANT}" \
+    --evidence-paths /tmp/evidence/lint \
     --host "${hostname}" \
     --name lint
 
-  # --evidence-paths /tmp/evidence/lint \
 }
 
 # - - - - - - - - - - - - - - - - - - -
