@@ -17,8 +17,8 @@ kosli_create_flow()
 kosli_report_artifact()
 {
   kosli report artifact "$(tagged_image_name)" \
-      --artifact-type=docker \
-      --repo-root="$(repo_root)"
+    --artifact-type=docker \
+    --repo-root="$(repo_root)"
 }
 
 kosli_report_lint_evidence()
