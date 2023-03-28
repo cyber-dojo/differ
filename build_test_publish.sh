@@ -33,7 +33,7 @@ remove_old_images
 on_ci_kosli_create_flow
 
 on_ci_run_lint
-on_ci_kosli_report_lint
+on_ci_kosli_report_lint_evidence
 
 build_tagged_images "$@"
 tag_images_to_latest "$@"
