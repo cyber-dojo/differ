@@ -56,6 +56,16 @@ kosli_report_test_evidence()
 }
 
 # - - - - - - - - - - - - - - - - - - -
+kosli_assert_artifact()
+{
+  local -r hostname="${1}"
+
+  kosli assert artifact "$(tagged_image_name)" \
+    --artifact-type=docker \
+    --host="${hostname}"
+}
+
+# - - - - - - - - - - - - - - - - - - -
 kosli_expect_deployment()
 {
   local -r environment="${1}"
@@ -69,22 +79,6 @@ kosli_expect_deployment()
     --artifact-type=docker \
     --environment="${environment}" \
     --host="${hostname}"
-}
-
-# - - - - - - - - - - - - - - - - - - -
-kosli_assert_artifact()
-{
-  local -r hostname="${1}"
-
-  kosli assert artifact "$(tagged_image_name)" \
-    --artifact-type=docker \
-    --host="${hostname}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-on_ci()
-{
-  [ -n "${CI:-}" ]
 }
 
 # - - - - - - - - - - - - - - - - - - -
@@ -131,6 +125,12 @@ on_ci_kosli_assert_artifact()
     kosli_assert_artifact "${KOSLI_HOST_STAGING}"
     kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
   fi
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+on_ci()
+{
+  [ -n "${CI:-}" ]
 }
 
 # - - - - - - - - - - - - - - - - - - -
