@@ -1,67 +1,52 @@
 #!/usr/bin/env bash
 set -Eeu
 
-MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# The following KOSLI_ env-vars are set in the CI workflow yml
-# KOSLI_ORG=cyber-dojo
-# KOSLI_HOST_STAGING
-# KOSLI_HOST_PRODUCTION
-
+# KOSLI_API_TOKEN env-var is set in the CI workflow yml
+# KOSLI_HOST env-var is also set
+export KOSLI_ORG=cyber-dojo
 export KOSLI_FLOW=differ
 
 kosli_create_flow()
 {
   kosli create flow "${KOSLI_FLOW}" \
     --description="Diff files from two traffic-lights" \
-    --host="${1}" \
     --template=artifact,lint,branch-coverage \
     --visibility=public
 }
 
 kosli_report_artifact()
 {
-  local -r hostname="${1}"
-
   kosli report artifact "$(tagged_image_name)" \
       --artifact-type=docker \
-      --host="${hostname}" \
       --repo-root="$(repo_root)"
 }
 
 kosli_report_lint_evidence()
 {
-  local -r hostname="${1}"
-
   kosli report evidence commit generic \
     --compliant="${KOSLI_LINT_COMPLIANT}" \
     --evidence-paths=/tmp/evidence/lint \
-    --host="${hostname}" \
     --name=lint
 }
 
 kosli_report_test_evidence()
 {
-  local -r hostname="${1}"
-
   kosli report evidence artifact generic "$(tagged_image_name)" \
     --artifact-type=docker \
-    --host="${hostname}" \
     --name=branch-coverage \
     --user-data="$(test_evidence_json_path)"
 }
 
 kosli_assert_artifact()
 {
-  local -r hostname="${1}"
-
   kosli assert artifact "$(tagged_image_name)" \
-    --artifact-type=docker \
-    --host="${hostname}"
+    --artifact-type=docker
 }
 
 kosli_expect_deployment()
 {
+  # This is called from .github/workflows/kosli_deploy.yml
+  # in the cyber-dojo/reusable-actions-workflows repo.
   local -r environment="${1}"
   local -r hostname="${2}"
 
@@ -71,31 +56,37 @@ kosli_expect_deployment()
 
   kosli expect deployment "$(tagged_image_name)" \
     --artifact-type=docker \
-    --environment="${environment}" \
+    --environment="${environment}"
     --host="${hostname}"
 }
 
 on_ci_kosli_create_flow()
 {
   if on_ci; then
-    kosli_create_flow "${KOSLI_HOST_STAGING}"
-    kosli_create_flow "${KOSLI_HOST_PRODUCTION}"
+    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
+    kosli_create_flow
+    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
+    kosli_create_flow
   fi
 }
 
 on_ci_kosli_report_artifact()
 {
   if on_ci; then
-    kosli_report_artifact "${KOSLI_HOST_STAGING}"
-    kosli_report_artifact "${KOSLI_HOST_PRODUCTION}"
+    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
+    kosli_report_artifact
+    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
+    kosli_report_artifact
   fi
 }
 
 on_ci_kosli_report_lint_evidence()
 {
   if on_ci; then
-    kosli_report_lint_evidence "${KOSLI_HOST_STAGING}"
-    kosli_report_lint_evidence "${KOSLI_HOST_PRODUCTION}"
+    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
+    kosli_report_lint_evidence
+    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
+    kosli_report_lint_evidence
   fi
 }
 
@@ -103,16 +94,20 @@ on_ci_kosli_report_test_evidence()
 {
   if on_ci; then
     write_test_evidence_json
-    kosli_report_test_evidence "${KOSLI_HOST_STAGING}"
-    kosli_report_test_evidence "${KOSLI_HOST_PRODUCTION}"
+    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
+    kosli_report_test_evidence
+    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
+    kosli_report_test_evidence
   fi
 }
 
 on_ci_kosli_assert_artifact()
 {
   if on_ci; then
-    kosli_assert_artifact "${KOSLI_HOST_STAGING}"
-    kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
+    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
+    kosli_assert_artifact
+    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
+    kosli_assert_artifact
   fi
 }
 
@@ -120,6 +115,8 @@ on_ci()
 {
   [ -n "${CI:-}" ]
 }
+
+MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 write_test_evidence_json()
 {
