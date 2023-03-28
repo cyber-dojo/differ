@@ -56,7 +56,7 @@ kosli_expect_deployment()
 
   kosli expect deployment "$(tagged_image_name)" \
     --artifact-type=docker \
-    --environment="${environment}"
+    --environment="${environment}" \
     --host="${hostname}"
 }
 
