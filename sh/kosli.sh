@@ -10,7 +10,6 @@ MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export KOSLI_FLOW=differ
 
-# - - - - - - - - - - - - - - - - - - -
 kosli_create_flow()
 {
   kosli create flow "${KOSLI_FLOW}" \
@@ -20,7 +19,6 @@ kosli_create_flow()
     --visibility=public
 }
 
-# - - - - - - - - - - - - - - - - - - -
 kosli_report_artifact()
 {
   local -r hostname="${1}"
@@ -31,8 +29,7 @@ kosli_report_artifact()
       --repo-root="$(repo_root)"
 }
 
-# - - - - - - - - - - - - - - - - - - -
-kosli_report_lint()
+kosli_report_lint_evidence()
 {
   local -r hostname="${1}"
 
@@ -43,7 +40,6 @@ kosli_report_lint()
     --name=lint
 }
 
-# - - - - - - - - - - - - - - - - - - -
 kosli_report_test_evidence()
 {
   local -r hostname="${1}"
@@ -55,7 +51,6 @@ kosli_report_test_evidence()
     --user-data="$(test_evidence_json_path)"
 }
 
-# - - - - - - - - - - - - - - - - - - -
 kosli_assert_artifact()
 {
   local -r hostname="${1}"
@@ -65,7 +60,6 @@ kosli_assert_artifact()
     --host="${hostname}"
 }
 
-# - - - - - - - - - - - - - - - - - - -
 kosli_expect_deployment()
 {
   local -r environment="${1}"
@@ -81,7 +75,6 @@ kosli_expect_deployment()
     --host="${hostname}"
 }
 
-# - - - - - - - - - - - - - - - - - - -
 on_ci_kosli_create_flow()
 {
   if on_ci; then
@@ -90,7 +83,6 @@ on_ci_kosli_create_flow()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - -
 on_ci_kosli_report_artifact()
 {
   if on_ci; then
@@ -99,16 +91,14 @@ on_ci_kosli_report_artifact()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_report_lint()
+on_ci_kosli_report_lint_evidence()
 {
   if on_ci; then
-    kosli_report_lint "${KOSLI_HOST_STAGING}"
-    kosli_report_lint "${KOSLI_HOST_PRODUCTION}"
+    kosli_report_lint_evidence "${KOSLI_HOST_STAGING}"
+    kosli_report_lint_evidence "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - -
 on_ci_kosli_report_test_evidence()
 {
   if on_ci; then
@@ -118,7 +108,6 @@ on_ci_kosli_report_test_evidence()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - -
 on_ci_kosli_assert_artifact()
 {
   if on_ci; then
@@ -127,13 +116,11 @@ on_ci_kosli_assert_artifact()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci()
 {
   [ -n "${CI:-}" ]
 }
 
-# - - - - - - - - - - - - - - - - - - -
 write_test_evidence_json()
 {
   echo '{ "server": ' > "$(test_evidence_json_path)"
@@ -143,13 +130,11 @@ write_test_evidence_json()
   echo '}' >> "$(test_evidence_json_path)"
 }
 
-# - - - - - - - - - - - - - - - - - - -
 test_evidence_json_path()
 {
   echo "${MY_DIR}/../test/reports/evidence.json"
 }
 
-# - - - - - - - - - - - - - - - - - - -
 repo_root()
 {
   # Functions in this file are called after sourcing the file
@@ -157,7 +142,6 @@ repo_root()
   git rev-parse --show-toplevel
 }
 
-# - - - - - - - - - - - - - - - - - - -
 tagged_image_name()
 {
   local -r VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
