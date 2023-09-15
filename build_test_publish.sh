@@ -29,7 +29,7 @@ export $(echo_versioner_env_vars)
 exit_zero_if_show_help "$@"
 exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
-on_ci_upgrade_docker_compose
+# on_ci_upgrade_docker_compose
 remove_old_images
 #generate_env_var_yml_files
 on_ci_kosli_create_flow
