@@ -1,5 +1,5 @@
 
-#- - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - -
 tag_images_to_latest()
 {
   docker tag $(image_name):$(image_tag) $(image_name):latest

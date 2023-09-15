@@ -1,6 +1,6 @@
-#--------------------------------------------------------------
+# --------------------------------------------------------------
 # Notes (from when not using git diff --unified=VERY_LARGE)
-#--------------------------------------------------------------
+# --------------------------------------------------------------
 # LINE: diff --git
 # LINE: ...
 # LINE: @@ -4,2 +4,1 @@ ...
@@ -42,7 +42,7 @@
 # I wondered if the format of this was that the initial \
 # means the line is a comment line and that there could be (are) other
 # comments, but googling does not indicate this.
-#--------------------------------------------------------------
+# --------------------------------------------------------------
 # https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html#Detailed%20Unified
 # https://stackoverflow.com/questions/2529441
 # http://en.wikipedia.org/wiki/Diff

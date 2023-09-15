@@ -114,5 +114,4 @@ class Id58TestBase < Minitest::Test
   def name58
     @_name58
   end
-
 end

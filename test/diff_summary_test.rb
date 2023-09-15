@@ -72,7 +72,7 @@ class DiffSummaryTest < DifferTestBase
                         :unchanged, 'readme.txt', 'readme.txt', 0, 0, 14)
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'k15',
        'non-empty file deleted' do

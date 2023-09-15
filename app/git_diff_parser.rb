@@ -151,6 +151,7 @@ class GitDiffParser
 
   def parse_newline_at_eof
     return unless /^\\ No newline at end of file/.match(line)
+
     next_line
   end
 

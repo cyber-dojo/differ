@@ -8,9 +8,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
     'wK7'
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_old_new_filenames()
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D5F',
        'parse old & new filenames with space in both filenames' do
@@ -23,7 +23,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'e mpty.h', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1B5',
        'parse old & new filenames with double-quote and space in both filenames' do
@@ -37,7 +37,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'em bed"ded', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '50A',
        'parse old & new filenames with double-quote and space only in new-filename' do
@@ -51,7 +51,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'em bed"ded', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D8',
        'parse old & new filenames with double-quote and space only in old-filename' do
@@ -65,7 +65,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'plain', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '740',
        'new_filename is nil for for deleted file' do
@@ -79,7 +79,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_nil new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '2A9',
        'old_filename is nil for new file' do
@@ -93,7 +93,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'empty.h', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A90',
        'parse old & new filenames for renamed file' do
@@ -108,7 +108,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'new "name.h', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD7',
        'parse old & new filenames for new file in nested sub-dir' do
@@ -122,7 +122,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal '1/2/3/empty.h', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD8',
        'parse old & new filenames for renamed file in nested sub-dir' do
@@ -137,7 +137,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal '1/2/3/new_name.h', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD9',
        'parse old & new filenames for renamed file across nested sub-dir' do
@@ -152,7 +152,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal '4/5/6/new_name.h', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD0', %w[
     parse old & new nested sub-dir filenames
@@ -168,7 +168,7 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'u/i/o/em bed"ded', new_filename, :new_filename
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AD1', %w[
     parse old & new nested sub-dir filenames

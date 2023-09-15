@@ -22,7 +22,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A5C',
        'empty file is deleted' do
@@ -34,7 +34,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '3ED',
        'empty file is unchanged' do
@@ -46,7 +46,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA6',
        'empty file is renamed 100% identical' do
@@ -58,7 +58,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A2D',
        'empty file is renamed 100% identical across dirs' do
@@ -70,7 +70,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F2E',
        'empty file has some content added' do
@@ -87,9 +87,9 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # non-empty file
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D09',
        'non-empty file is created' do
@@ -104,7 +104,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '0C6',
        'non-empty file is deleted' do
@@ -120,7 +120,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '21D',
        'non-empty file is unchanged' do
@@ -134,7 +134,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA7',
        'non-empty file is renamed 100% identical' do
@@ -148,7 +148,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'BA7',
        'non-empty file is renamed 100% identical across dirs' do
@@ -165,7 +165,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA8',
        'non-empty file is renamed <100% identical' do
@@ -184,7 +184,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AA9',
        'non-empty file is renamed <100% identical across dirs' do
@@ -203,7 +203,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D0',
        'non-empty file has some content added at the start' do
@@ -219,7 +219,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D1',
        'non-empty file has some content added at the end' do
@@ -235,7 +235,7 @@ class DifferTest < DifferTestBase
     ]
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '4D2',
        'non-empty file has some content added in the middle' do

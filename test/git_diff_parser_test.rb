@@ -7,7 +7,7 @@ class GitDiffParserTest < DifferTestBase
     'B56'
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'sP3',
        'empty options in ctor gives no lines and no line_counts' do
@@ -46,9 +46,9 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, {}).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_all
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E10',
        'parse diff containing filename with backslash' do
@@ -80,7 +80,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '196',
        'parse diff deleted file' do
@@ -104,7 +104,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '0FE',
        'parse another diff-form of a deleted file' do
@@ -139,7 +139,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D91',
        'parse diff for renamed but unchanged file and newname is quoted' do
@@ -164,7 +164,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E38',
        'parse diff for renamed but unchanged file' do
@@ -189,7 +189,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A61',
        'parse diff for renamed and changed file' do
@@ -242,7 +242,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '91D',
        'parse diffs for two files' do
@@ -300,7 +300,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_all
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '1BC',
        'two hunks with no newline at end of file' do
@@ -340,7 +340,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_one
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B2C',
        'diff one-hunk one-line' do
@@ -370,7 +370,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_one
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A8A',
        'standard diff' do
@@ -402,7 +402,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal expected, GitDiffParser.new(diff, lines: true).parse_one
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '3B5',
        'find copies harder finds a rename' do
@@ -418,7 +418,7 @@ class GitDiffParserTest < DifferTestBase
     assert_equal diff, GitDiffParser.new(diff.join("\n"), lines: true).parse_header
   end
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '124', %w[
     renamed but unchanged file has no trailing

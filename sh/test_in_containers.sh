@@ -44,7 +44,7 @@ run_tests()
   echo "Running ${TYPE} tests"
   echo '=================================='
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Run tests (with branch coverage) inside the container.
 
   local -r COVERAGE_CODE_TAB_NAME=app
@@ -62,7 +62,7 @@ run_tests()
       sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:4}"
   set -e
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract test-run results and coverage data from the container.
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out
 
@@ -79,7 +79,7 @@ run_tests()
       - "$(basename "${CONTAINER_COVERAGE_DIR}")" \
         | tar Cxf "${HOST_TEST_DIR}/" -
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Process test-run results and coverage data.
 
   local -r HOST_REPORTS_DIR="${HOST_TEST_DIR}/reports"
@@ -105,7 +105,7 @@ run_tests()
   local -r STATUS=${PIPESTATUS[0]}
   set -e
 
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Tell caller where the results are...
 
   echo "${TYPE} test branch-coverage report is at"
