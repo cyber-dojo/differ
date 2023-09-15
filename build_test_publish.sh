@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeu
 
+docker-compose --version
+
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export SH_DIR="${ROOT_DIR}/sh"
 
