@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -Eeu
 
-docker-compose --version
-
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export SH_DIR="${ROOT_DIR}/sh"
 
@@ -20,6 +18,7 @@ source "${SH_DIR}/exit_zero_if_show_help.sh"
 source "${SH_DIR}/lint.sh"
 source "${SH_DIR}/kosli.sh"
 source "${SH_DIR}/on_ci_publish_tagged_images.sh"
+source "${SH_DIR}/on_ci_upgrade_docker_compose.sh"
 source "${SH_DIR}/remove_old_images.sh"
 source "${SH_DIR}/tag_images_to_latest.sh"
 source "${SH_DIR}/test_in_containers.sh"
@@ -30,6 +29,7 @@ export $(echo_versioner_env_vars)
 exit_zero_if_show_help "$@"
 exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
+on_ci_upgrade_docker_compose
 remove_old_images
 #generate_env_var_yml_files
 on_ci_kosli_create_flow

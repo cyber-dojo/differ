@@ -21,7 +21,7 @@ services:
       - type: tmpfs
         target: /tmp
         tmpfs:
-          # mode: 01777
+          mode: 01777
           size: 10485760  # 10MB
 
   differ_server:
@@ -42,5 +42,5 @@ services:
       - type: tmpfs
         target: /tmp
         tmpfs:
-          # mode: 01777
+          mode: 01777
           size: 10485760  # 10MB
