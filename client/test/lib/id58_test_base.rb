@@ -7,7 +7,7 @@ def require_app(required)
   require_relative "../../app/#{required}"
 end
 
-class Id58TestBase < MiniTest::Test
+class Id58TestBase < Minitest::Test
   def initialize(arg)
     @_id58 = nil
     @_name58 = nil
