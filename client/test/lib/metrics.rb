@@ -6,7 +6,7 @@
 MAX = {
   failures: 0,
   errors: 0,
-  warnings: 1,
+  warnings: 0,
   skips: 0,
 
   duration: 50,
@@ -24,7 +24,7 @@ MAX = {
 
   test: {
     lines: {
-      total: 244,
+      total: 230,
       missed: 0
     },
     branches: {

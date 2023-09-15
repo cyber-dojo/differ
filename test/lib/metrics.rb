@@ -6,14 +6,14 @@
 MAX = {
   failures: 0,
   errors: 0,
-  warnings: 1,
+  warnings: 0,
   skips: 0,
 
   duration: 50,
 
   app: {
     lines: {
-      total: 353,
+      total: 352,
       missed: 0
     },
     branches: {
@@ -24,7 +24,7 @@ MAX = {
 
   test: {
     lines: {
-      total: 528,
+      total: 516,
       missed: 0
     },
     branches: {
