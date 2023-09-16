@@ -147,7 +147,6 @@ artifact_name()
   export $(echo_versioner_env_vars)
   echo "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
 }
-export -f artifact_name
 
 on_ci()
 {
@@ -179,7 +178,6 @@ tagged_image_name()
   local -r IMAGE_TAG="${GITHUB_SHA:0:7}"
   echo ${IMAGE_NAME}:${IMAGE_TAG}
 }
-export -f tagged_image_name
 
 repo_root()
 {
