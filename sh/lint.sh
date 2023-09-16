@@ -5,7 +5,7 @@ on_ci_run_lint()
     sudo gem install rubocop --no-document
     local -r LINT_EVIDNCE_DIR=/tmp/evidence/lint
     mkdir -p "${LINT_EVIDNCE_DIR}"
-    cp "$(root_dir)/.rubocop.yml" "${LINT_EVIDNCE_DIR}"/.rubocop.yml
+    cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDNCE_DIR}"/.rubocop.yml
     ls -al "${LINT_EVIDNCE_DIR}"
     set +e
     rubocop . | tee "${LINT_EVIDNCE_DIR}"/rubocop.log
@@ -18,12 +18,4 @@ on_ci_run_lint()
       export KOSLI_LINT_COMPLIANT="false"
     fi
   fi
-}
-
-# - - - - - - - - - - - - - - - - - - -
-root_dir()
-{
-  # Functions in this file are called after sourcing (not including)
-  # this file so root_dir() cannot use the path of this script.
-  git rev-parse --show-toplevel
 }

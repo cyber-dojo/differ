@@ -141,32 +141,38 @@ on_ci_kosli_assert_artifact()
   fi
 }
 
+artifact_name()
+{
+  source "$(repo_root)/sh/echo_versioner_env_vars.sh"
+  export $(echo_versioner_env_vars)
+  echo "${CYBER_DOJO_CREATOR_IMAGE}:${CYBER_DOJO_CREATOR_TAG}"
+}
+
+repo_root()
+{
+  git rev-parse --show-toplevel
+}
+export -f repo_root
+
 on_ci()
 {
   [ -n "${CI:-}" ]
 }
 
-MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 write_test_evidence_json()
 {
-  echo '{ "server": ' > "$(test_evidence_json_path)"
-  cat "${MY_DIR}/../test/reports/coverage.json" >> "$(test_evidence_json_path)"
-  echo ', "client": ' >> "$(test_evidence_json_path)"
-  cat "${MY_DIR}/../client/test/reports/coverage.json" >> "$(test_evidence_json_path)"
-  echo '}' >> "$(test_evidence_json_path)"
+  {
+    echo '{ "server": '
+    cat "$(repo_root)/test/reports/coverage.json"
+    echo ', "client": '
+    cat "$(repo_root)/client/test/reports/coverage.json"
+    echo '}'
+  } > "$(coverage_json_path)"
 }
 
 test_evidence_json_path()
 {
-  echo "${MY_DIR}/../test/reports/evidence.json"
-}
-
-repo_root()
-{
-  # Functions in this file are called after sourcing the file
-  # so repo_root() cannot use the path of this script.
-  git rev-parse --show-toplevel
+  echo "$(repo_root)/test/reports/evidence.json"
 }
 
 tagged_image_name()
