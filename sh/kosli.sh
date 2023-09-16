@@ -167,7 +167,7 @@ write_test_evidence_json()
     echo ', "client": '
     cat "$(repo_root)/client/test/reports/coverage.json"
     echo '}'
-  } > "$(coverage_json_path)"
+  } > "$(test_evidence_json_path)"
 }
 
 test_evidence_json_path()
