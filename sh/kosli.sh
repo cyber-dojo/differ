@@ -16,7 +16,7 @@ kosli_create_flow()
   kosli create flow "${KOSLI_FLOW}" \
     --description="Diff files from two traffic-lights" \
     --host="${hostname}" \
-    --template=artifact,lint,branch-coverage,snyk-scan \
+    --template=artifact,lint,branch-coverage \
     --visibility=public
 }
 
