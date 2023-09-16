@@ -1,40 +1,66 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# KOSLI_API_TOKEN env-var is set in the CI workflow yml
-# KOSLI_HOST env-var is also set
-export KOSLI_ORG=cyber-dojo
 export KOSLI_FLOW=differ
+
+# KOSLI_ORG is set in CI
+# KOSLI_API_TOKEN is set in CI
+# KOSLI_HOST_STAGING is set in CI
+# KOSLI_HOST_PRODUCTION is set in CI
+# SNYK_TOKEN is set in CI
 
 kosli_create_flow()
 {
+  local -r hostname="${1}"
+
   kosli create flow "${KOSLI_FLOW}" \
     --description="Diff files from two traffic-lights" \
-    --template=artifact,lint,branch-coverage \
+    --host="${hostname}" \
+    --template=artifact,lint,branch-coverage,snyk-scan \
     --visibility=public
 }
 
 kosli_report_artifact()
 {
+  local -r hostname="${1}"
+
   kosli report artifact "$(tagged_image_name)" \
     --artifact-type=docker \
+    --host="${hostname}" \
     --repo-root="$(repo_root)"
 }
 
 kosli_report_lint_evidence()
 {
+  local -r hostname="${1}"
+
   kosli report evidence commit generic \
     --compliant="${KOSLI_LINT_COMPLIANT}" \
     --evidence-paths=/tmp/evidence/lint \
+    --host="${hostname}" \
     --name=lint
 }
 
 kosli_report_test_evidence()
 {
+  local -r hostname="${1}"
+
   kosli report evidence artifact generic "$(tagged_image_name)" \
     --artifact-type=docker \
+    --host="${hostname}" \
     --name=branch-coverage \
     --user-data="$(test_evidence_json_path)"
+}
+
+kosli_report_snyk_evidence()
+{
+  local -r hostname="${1}"
+
+  kosli report evidence artifact snyk "$(artifact_name)" \
+      --artifact-type=docker \
+      --host="${hostname}" \
+      --name=snyk-scan \
+      --scan-results=snyk.json
 }
 
 kosli_assert_artifact()
@@ -63,30 +89,24 @@ kosli_expect_deployment()
 on_ci_kosli_create_flow()
 {
   if on_ci; then
-    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
-    kosli_create_flow
-    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
-    kosli_create_flow
+    kosli_create_flow "${KOSLI_HOST_STAGING}"
+    kosli_create_flow "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
 on_ci_kosli_report_artifact()
 {
   if on_ci; then
-    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
-    kosli_report_artifact
-    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
-    kosli_report_artifact
+    kosli_report_artifact "${KOSLI_HOST_STAGING}"
+    kosli_report_artifact "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
 on_ci_kosli_report_lint_evidence()
 {
   if on_ci; then
-    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
-    kosli_report_lint_evidence
-    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
-    kosli_report_lint_evidence
+    kosli_report_lint_evidence "${KOSLI_HOST_STAGING}"
+    kosli_report_lint_evidence "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
@@ -94,20 +114,30 @@ on_ci_kosli_report_test_evidence()
 {
   if on_ci; then
     write_test_evidence_json
-    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
-    kosli_report_test_evidence
-    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
-    kosli_report_test_evidence
+    kosli_report_test_evidence "${KOSLI_HOST_STAGING}"
+    kosli_report_test_evidence "${KOSLI_HOST_PRODUCTION}"
+  fi
+}
+
+on_ci_kosli_report_snyk_scan_evidence()
+{
+  if on_ci; then
+    set +e
+    snyk container test "$(artifact_name)" \
+      --json-file-output=snyk.json \
+      --policy-path=.snyk
+    set -e
+
+    kosli_report_snyk_evidence "${KOSLI_HOST_STAGING}"
+    kosli_report_snyk_evidence "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
 on_ci_kosli_assert_artifact()
 {
   if on_ci; then
-    export KOSLI_HOST="${KOSLI_HOST_STAGING}"
-    kosli_assert_artifact
-    export KOSLI_HOST="${KOSLI_HOST_PRODUCTION}"
-    kosli_assert_artifact
+    kosli_assert_artifact "${KOSLI_HOST_STAGING}"
+    kosli_assert_artifact "${KOSLI_HOST_PRODUCTION}"
   fi
 }
 
