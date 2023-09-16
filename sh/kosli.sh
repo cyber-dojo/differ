@@ -16,7 +16,7 @@ kosli_create_flow()
   kosli create flow "${KOSLI_FLOW}" \
     --description="Diff files from two traffic-lights" \
     --host="${hostname}" \
-    --template=artifact,lint,branch-coverage \
+    --template=artifact,lint,branch-coverage,snyk-scan \
     --visibility=public
 }
 
@@ -60,7 +60,7 @@ kosli_report_snyk_evidence()
       --artifact-type=docker \
       --host="${hostname}" \
       --name=snyk-scan \
-      --scan-results=snyk.json
+      --scan-results="$(repo_root)/snyk.json"
 }
 
 kosli_assert_artifact()
@@ -124,8 +124,8 @@ on_ci_kosli_report_snyk_scan_evidence()
   if on_ci; then
     set +e
     snyk container test "$(artifact_name)" \
-      --json-file-output=snyk.json \
-      --policy-path=.snyk
+      --json-file-output="$(repo_root)/snyk.json" \
+      --policy-path="$(repo_root)/.snyk"
     set -e
 
     kosli_report_snyk_evidence "${KOSLI_HOST_STAGING}"
@@ -147,12 +147,7 @@ artifact_name()
   export $(echo_versioner_env_vars)
   echo "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
 }
-
-repo_root()
-{
-  git rev-parse --show-toplevel
-}
-export -f repo_root
+export -f artifact_name
 
 on_ci()
 {
@@ -184,3 +179,10 @@ tagged_image_name()
   local -r IMAGE_TAG="${GITHUB_SHA:0:7}"
   echo ${IMAGE_NAME}:${IMAGE_TAG}
 }
+export -f tagged_image_name
+
+repo_root()
+{
+  git rev-parse --show-toplevel
+}
+export -f repo_root

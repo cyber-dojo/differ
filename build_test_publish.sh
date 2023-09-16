@@ -26,6 +26,9 @@ source "${SH_DIR}/test_in_containers.sh"
 source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
 
+echo "artifact_name=:$(artifact_name):"
+echo "tagged_image_name=:$(tagged_image_name):"
+
 exit_zero_if_show_help "$@"
 exit_non_zero_unless_installed docker
 exit_non_zero_unless_installed docker-compose
@@ -52,7 +55,7 @@ exit_zero_if_demo_only "$@"
 
 test_in_containers "$@"
 on_ci_kosli_report_test_evidence
-# on_ci_kosli_report_snyk_scan_evidence
+on_ci_kosli_report_snyk_scan_evidence
 
 containers_down
 echo_env_vars
