@@ -145,7 +145,7 @@ artifact_name()
 {
   source "$(repo_root)/sh/echo_versioner_env_vars.sh"
   export $(echo_versioner_env_vars)
-  echo "${CYBER_DOJO_CREATOR_IMAGE}:${CYBER_DOJO_CREATOR_TAG}"
+  echo "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
 }
 
 repo_root()
