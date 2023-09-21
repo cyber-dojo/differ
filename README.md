@@ -1,8 +1,8 @@
 [![Github Action (main)](https://github.com/cyber-dojo/differ/actions/workflows/main.yml/badge.svg)](https://github.com/cyber-dojo/differ/actions)
 
-- The source for the [cyberdojo/differ](https://hub.docker.com/r/cyberdojo/differ/tags) Docker image.
-- A docker-containerized stateless micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
-- An http service (sinatra based) for diffing two sets of files.
+- A docker-containerized micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
+- - An HTTP service (sinatra based) for diffing two sets of files.
+- A [Kolsi](https://www.kosli.com/) showcase for a [CI flow](https://app.kosli.com/cyber-dojo/flows/differ/artifacts/) and an [aws production environment](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/)
 
 ***
 API
