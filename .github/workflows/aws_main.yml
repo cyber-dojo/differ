@@ -75,8 +75,8 @@ jobs:
       - name: Create Kosli flow
         run:
           kosli create flow ${{ env.KOSLI_FLOW }} 
-            --description="Group/Kata model+persistence" 
-            --template=artifact,branch-coverage,snyk-scan
+            --description="Diff files from two traffic-lights" 
+            --template=artifact,lint,branch-coverage,snyk-scan
 
       - name: Report image to Kosli
         run: |
