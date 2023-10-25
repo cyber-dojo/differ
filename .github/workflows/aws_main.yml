@@ -86,9 +86,9 @@ jobs:
 
       - name: Run Rubocop linter, report results to Kosli
         run: |
-          ./sh/run_lint.sh          
-          kosli report evidence commit generic \ 
-            --compliant="${KOSLI_LINT_COMPLIANT}" \ 
+          ./sh/run_lint.sh         
+          kosli report evidence commit generic \
+            --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths=/tmp/evidence/lint \
             --host="${hostname}" \
             --name=lint
