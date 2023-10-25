@@ -89,6 +89,7 @@ jobs:
           ruby-version: 3.2.0
           bundler-cache: true
       - name: Run Rubocop linter, report results to Kosli
+        run: |
           gem install rubocop
           source ./sh/lint_clean.sh
           if [ lint_clean ]; then
