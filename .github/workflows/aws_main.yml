@@ -84,10 +84,10 @@ jobs:
           kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
             --artifact-type=docker
 
-#      - uses: ruby/setup-ruby@v1
-#        with:
-#          ruby-version: 3.2.0
-#          bundler-cache: true
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
       - name: Run Rubocop linter, report results to Kosli
         run: |
           repo_root() { git rev-parse --show-toplevel; }
