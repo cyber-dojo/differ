@@ -1,7 +1,9 @@
 name: Build image
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
 
@@ -46,19 +48,19 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
-      KOSLI_HOST: https://staging.app.kosli.com
+      KOSLI_HOST: https://staging.app.kosli.com  #<<<<<<<<
       IMAGE_TAG: ${{ needs.with-vars.outputs.image_tag }}
       AWS_ACCOUNT_ID_BETA: ${{ needs.with-vars.outputs.aws_account_id_beta }}
       AWS_ACCOUNT_ID_PROD: ${{ needs.with-vars.outputs.aws_account_id_prod }}
 
-#  kosli-production:
-#    needs: [with-vars, build]
-#    uses: cyber-dojo/differ/.github/workflows/aws_main.yml@main
-#    secrets:
-#      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-#      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-#    with:
-#      KOSLI_HOST: https://app.kosli.com
-#      IMAGE_TAG: ${{ needs.with-vars.outputs.image_tag }}
-#      AWS_ACCOUNT_ID_BETA: ${{ needs.with-vars.outputs.aws_account_id_beta }}
-#      AWS_ACCOUNT_ID_PROD: ${{ needs.with-vars.outputs.aws_account_id_prod }}
+  kosli-production:
+    needs: [with-vars, build, kosli-staging]
+    uses: cyber-dojo/differ/.github/workflows/aws_main.yml@main
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    with:
+      KOSLI_HOST: https://app.kosli.com  #<<<<<<<<
+      IMAGE_TAG: ${{ needs.with-vars.outputs.image_tag }}
+      AWS_ACCOUNT_ID_BETA: ${{ needs.with-vars.outputs.aws_account_id_beta }}
+      AWS_ACCOUNT_ID_PROD: ${{ needs.with-vars.outputs.aws_account_id_prod }}

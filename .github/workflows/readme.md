@@ -10,5 +10,3 @@ To resolve this the workflow is split into two parts;
    once from build.yml's kosli-staging: job, which reports only to https://staging.app.kosli.com
    once from build.yml's kosli-production: job, which reports only to https://app.kosli.com
 
-While these workflows are being built, _no_ workflows run on a push. 
-If you are doing a genuine (non CI) commit you will need to manually trigger old_main.yml
