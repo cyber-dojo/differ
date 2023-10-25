@@ -24,3 +24,4 @@ copy_in_saver_test_data
 exit_zero_if_demo_only "$@"
 
 test_in_containers "$@"
+write_test_evidence_json
