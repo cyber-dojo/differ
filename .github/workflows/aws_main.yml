@@ -95,7 +95,7 @@ jobs:
               --artifact-type=docker
               --description="server & client branch-coverage reports"
               --name=branch-coverage
-              --user-data=./tmp/evidence.json
+              --user-data=./test/reports/evidence.json
 
       # Snyk image scanning ------------------
       - name: Setup Snyk
