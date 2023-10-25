@@ -148,11 +148,6 @@ artifact_name()
   echo "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
 }
 
-on_ci()
-{
-  [ -n "${CI:-}" ]
-}
-
 write_test_evidence_json()
 {
   {
@@ -179,8 +174,3 @@ tagged_image_name()
   echo ${IMAGE_NAME}:${IMAGE_TAG}
 }
 
-repo_root()
-{
-  git rev-parse --show-toplevel
-}
-export -f repo_root
