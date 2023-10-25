@@ -102,17 +102,20 @@ jobs:
               --name=branch-coverage \
               --user-data=./test/reports/evidence.json
 
-      - name: Run Snyk to check Docker image for vulnerabilities, report to Kosli
+      - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/setup@master
         continue-on-error: true
-        run: |
-           snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }} \
-            --file=Dockerfile \
-            --json-file-output=snyk.json \
+        run:
+           snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }} 
+            --file=Dockerfile 
+            --json-file-output=snyk.json 
             --policy-path=.snyk
-          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }} \ 
-            --artifact-type=docker \
-            --name=snyk-scan \
+
+      - name: Report Snyk results to Kosli
+        run:
+          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }}  
+            --artifact-type=docker 
+            --name=snyk-scan 
             --scan-results=snyk.json
 
       - name: Kosli SDLC short-circuit gate
