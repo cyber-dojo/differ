@@ -54,7 +54,7 @@ jobs:
       AWS_ACCOUNT_ID_PROD: ${{ needs.with-vars.outputs.aws_account_id_prod }}
 
   kosli-production:
-    needs: [kosli-staging]
+    needs: [with-vars, kosli-staging]
     uses: cyber-dojo/differ/.github/workflows/test_and_deploy.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
