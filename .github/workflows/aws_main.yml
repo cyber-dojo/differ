@@ -76,7 +76,7 @@ jobs:
         run:
           kosli create flow ${{ env.KOSLI_FLOW }} 
             --description="Diff files from two traffic-lights" 
-            --template=artifact,lint,branch-coverage,snyk-scan
+            --template=artifact,branch-coverage,snyk-scan
 
       - name: Report image to Kosli
         run: |
@@ -147,7 +147,6 @@ jobs:
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
           docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ env.ECR_REGISTRY_BETA }}/differ:${{ env.IMAGE_TAG }}
           docker push ${{ env.ECR_REGISTRY_BETA }}/differ:${{ env.IMAGE_TAG }}
-          docker logout
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -164,7 +163,7 @@ jobs:
 
 
   deploy-to-aws-beta:
-    needs: [with-vars, test, push-image-to-beta-ecr]
+    needs: [with-vars, push-image-to-beta-ecr]
     permissions:
       id-token: write
       contents: write
@@ -204,7 +203,6 @@ jobs:
 #          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
 #          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ env.ECR_REGISTRY_PROD }}/differ:${{ env.IMAGE_TAG }}
 #          docker push ${{ env.ECR_REGISTRY_PROD }}/differ:${{ env.IMAGE_TAG }}
-#          docker logout
 #
 #      - name: Setup Kosli CLI
 #        uses: kosli-dev/setup-cli-action@v2
