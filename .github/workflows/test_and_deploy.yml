@@ -1,4 +1,4 @@
-name: Tests built image, deploys to aws-beta and aws-prod
+name: Test image, deploy to aws-beta and aws-prod
 
 on:
   workflow_call:

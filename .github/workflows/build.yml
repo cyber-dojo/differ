@@ -43,7 +43,7 @@ jobs:
 
   kosli-staging:
     needs: [with-vars, build]
-    uses: cyber-dojo/differ/.github/workflows/aws_main.yml@main
+    uses: cyber-dojo/differ/.github/workflows/test_and_deploy.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -55,7 +55,7 @@ jobs:
 
   kosli-production:
     needs: [kosli-staging]
-    uses: cyber-dojo/differ/.github/workflows/aws_main.yml@main
+    uses: cyber-dojo/differ/.github/workflows/test_and_deploy.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
