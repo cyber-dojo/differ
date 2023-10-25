@@ -84,46 +84,35 @@ jobs:
           kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
             --artifact-type=docker
 
-      - name: Run Rubocop linter
-        run:
-          ./sh/run_lint.sh
-
-      - name: Report Rubocop results to Kosli
-        run:
-          kosli report evidence commit generic 
-            --compliant="${KOSLI_LINT_COMPLIANT}" 
-            --evidence-paths=/tmp/evidence/lint 
-            --host="${hostname}" 
+      - name: Run Rubocop linter, report results to Kosli
+        run: |
+          ./sh/run_lint.sh          
+          kosli report evidence commit generic \ 
+            --compliant="${KOSLI_LINT_COMPLIANT}" \ 
+            --evidence-paths=/tmp/evidence/lint \
+            --host="${hostname}" \
             --name=lint
 
-      - name: Run tests and save results to evidence.json file
-        run:
+      - name: Run tests, save results to evidence.json file, report to Kosli
+        run: |
           ./sh/run_tests_with_coverage.sh
-
-      - name: Report branch coverage to Kosli
-        run:
-          kosli report evidence artifact generic cyberdojo/differ:${{ env.IMAGE_TAG }}
-              --artifact-type=docker
-              --description="server & client branch-coverage reports"
-              --name=branch-coverage
+          kosli report evidence artifact generic cyberdojo/differ:${{ env.IMAGE_TAG }} \
+              --artifact-type=docker \
+              --description="server & client branch-coverage reports" \
+              --name=branch-coverage \
               --user-data=./test/reports/evidence.json
 
-      - name: Setup Snyk
+      - name: Run Snyk to check Docker image for vulnerabilities, report to Kosli
         uses: snyk/actions/setup@master
-
-      - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
-        run:
-           snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }}
-            --file=Dockerfile
-            --json-file-output=snyk.json
+        run: |
+           snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --file=Dockerfile \
+            --json-file-output=snyk.json \
             --policy-path=.snyk
-
-      - name: Report Snyk scan results evidence to Kosli
-        run:
-          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }} 
-            --artifact-type=docker 
-            --name=snyk-scan 
+          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }} \ 
+            --artifact-type=docker \
+            --name=snyk-scan \
             --scan-results=snyk.json
 
       - name: Kosli SDLC short-circuit gate
