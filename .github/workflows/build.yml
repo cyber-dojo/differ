@@ -1,4 +1,4 @@
-name: Build image, test it, deploy to aws-beta and aws-prod
+name: Build image
 
 on:
   workflow_dispatch:
