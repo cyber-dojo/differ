@@ -88,14 +88,13 @@ jobs:
         run: |
           source ./sh/lint_clean.sh
           if [ lint_clean ]; then
-            echo 'KOSLI_LINT_COMPLIANT=true' >> ${GITHUB_ENV}
+            export KOSLI_LINT_COMPLIANT='true'
           else
-            echo 'KOSLI_LINT_COMPLIANT=false' >> ${GITHUB_ENV}
+            export KOSLI_LINT_COMPLIANT='false'
           fi
           kosli report evidence commit generic \
-            --compliant="${{ env.KOSLI_LINT_COMPLIANT }}" \
+            --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths=/tmp/evidence/lint \
-            --host="${hostname}" \
             --name=lint
 
       - name: Run tests, save results to evidence.json file, report to Kosli
