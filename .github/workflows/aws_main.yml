@@ -84,8 +84,12 @@ jobs:
           kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
             --artifact-type=docker
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
       - name: Run Rubocop linter, report results to Kosli
-        run: |
+          gem install rubocop
           source ./sh/lint_clean.sh
           if [ lint_clean ]; then
             export KOSLI_LINT_COMPLIANT='true'
