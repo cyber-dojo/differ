@@ -102,8 +102,10 @@ jobs:
               --name=branch-coverage \
               --user-data=./test/reports/evidence.json
 
-      - name: Run Snyk to check Docker image for vulnerabilities
+      - name: Setup Snyk
         uses: snyk/actions/setup@master
+
+      - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
         run:
            snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }} 
