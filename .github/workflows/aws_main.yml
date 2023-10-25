@@ -76,7 +76,7 @@ jobs:
         run:
           kosli create flow ${{ env.KOSLI_FLOW }} 
             --description="Diff files from two traffic-lights" 
-            --template=artifact,branch-coverage,snyk-scan
+            --template=artifact,lint,branch-coverage,snyk-scan
 
       - name: Report image to Kosli
         run: |
@@ -84,8 +84,19 @@ jobs:
           kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
             --artifact-type=docker
 
-      # Run tests with coverage ------------------
-      - name: Run tests and create branch coverage json file
+      - name: Run Rubocop linter
+        run:
+          ./sh/run_lint.sh
+
+      - name: Report Rubocop results to Kosli
+        run:
+          kosli report evidence commit generic 
+            --compliant="${KOSLI_LINT_COMPLIANT}" 
+            --evidence-paths=/tmp/evidence/lint 
+            --host="${hostname}" 
+            --name=lint
+
+      - name: Run tests and save results to evidence.json file
         run:
           ./sh/run_tests_with_coverage.sh
 
@@ -97,7 +108,6 @@ jobs:
               --name=branch-coverage
               --user-data=./test/reports/evidence.json
 
-      # Snyk image scanning ------------------
       - name: Setup Snyk
         uses: snyk/actions/setup@master
 
@@ -116,8 +126,7 @@ jobs:
             --name=snyk-scan 
             --scan-results=snyk.json
 
-      # Short-circuit if any test has failed ------------------
-      - name: Kosli SDLC gate
+      - name: Kosli SDLC short-circuit gate
         run:
           kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} 
             --artifact-type=docker

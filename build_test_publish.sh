@@ -16,7 +16,7 @@ source "${SH_DIR}/exit_zero_if_demo_only.sh"
 source "${SH_DIR}/exit_zero_if_show_help.sh"
 #source "${SH_DIR}/generate_env_var_yml_files.sh"
 source "${SH_DIR}/lib.sh"
-source "${SH_DIR}/lint.sh"
+#source "${SH_DIR}/lint.sh"
 source "${SH_DIR}/kosli.sh"
 source "${SH_DIR}/on_ci_publish_tagged_images.sh"
 source "${SH_DIR}/on_ci_upgrade_docker_compose.sh"
@@ -35,7 +35,7 @@ remove_old_images
 #generate_env_var_yml_files
 on_ci_kosli_create_flow
 
-on_ci_run_lint
+#on_ci_run_lint
 on_ci_kosli_report_lint_evidence
 
 build_tagged_images "$@"
