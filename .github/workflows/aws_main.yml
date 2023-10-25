@@ -86,7 +86,11 @@ jobs:
 
       - name: Run Rubocop linter, report results to Kosli
         run: |
-          ./sh/run_lint.sh         
+          if [ ./sh/lint_clean.sh ]; then
+            export KOSLI_LINT_COMPLIANT="true"
+          else
+            export KOSLI_LINT_COMPLIANT="false"
+          fi
           kosli report evidence commit generic \
             --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths=/tmp/evidence/lint \
