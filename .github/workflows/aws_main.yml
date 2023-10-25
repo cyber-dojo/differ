@@ -86,7 +86,8 @@ jobs:
 
       - name: Run Rubocop linter, report results to Kosli
         run: |
-          if [ ./sh/lint_clean.sh ]; then
+          source ./sh/lint_clean.sh
+          if [ lint_clean ]; then
             export KOSLI_LINT_COMPLIANT="true"
           else
             export KOSLI_LINT_COMPLIANT="false"
