@@ -1,4 +1,4 @@
-name: Main that reports to https://staging.app.kosli.com
+name: Main reporting to https://staging.app.kosli.com
 
 on:
   workflow_dispatch:
