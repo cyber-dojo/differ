@@ -1,4 +1,4 @@
-name: Test image, deploy to aws-beta and aws-prod
+name: Deploy to aws-beta and aws-prod
 
 on:
   workflow_call:
@@ -6,6 +6,9 @@ on:
       KOSLI_API_TOKEN:
         required: true
     inputs:
+      KOSLI_CLI_VERSION:
+        required: true
+        type: string
       KOSLI_HOST:
         required: true
         type: string
@@ -19,12 +22,12 @@ on:
         required: true
         type: string
 
-env: 
-  KOSLI_ORG: cyber-dojo
-  KOSLI_FLOW: differ
-  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-  KOSLI_CLI_VERSION: "2.6.11"
+env:
+  KOSLI_CLI_VERSION: ${{ inputs.KOSLI_CLI_VERSION }}
   KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
+  KOSLI_ORG: cyber-dojo
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  KOSLI_FLOW: differ
   IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
   AWS_ACCOUNT_ID_BETA: ${{ inputs.AWS_ACCOUNT_ID_BETA }}
   ECR_REGISTRY_BETA: ${{ inputs.AWS_ACCOUNT_ID_BETA }}.dkr.ecr.eu-central-1.amazonaws.com
@@ -55,6 +58,7 @@ jobs:
         echo "aws_account_id_prod=${{ env.AWS_ACCOUNT_ID_PROD }}"           >> ${GITHUB_OUTPUT}
         echo "ecr_registry_prod=${{ env.ECR_REGISTRY_PROD }}"               >> ${GITHUB_OUTPUT}
         echo "gh_actions_iam_role_name=${{ env.GH_ACTIONS_IAM_ROLE_NAME }}" >> ${GITHUB_OUTPUT}
+
 
   push-image-to-beta-ecr:
     runs-on: ubuntu-latest
@@ -148,6 +152,7 @@ jobs:
             --artifact-type=docker
             --description="Deployed to aws-beta in Github Actions pipeline"
             --environment=aws-prod
+
 
   deploy-to-aws-prod:
     needs: [setup-ci-vars, push-image-to-prod-ecr]
