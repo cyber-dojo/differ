@@ -1,4 +1,4 @@
-name: Test image
+name: Subflow - test image
 
 on:
   workflow_call:

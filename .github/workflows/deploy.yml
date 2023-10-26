@@ -1,4 +1,4 @@
-name: Deploy to aws-beta and aws-prod
+name: Subflow - deploy to aws-beta and aws-prod
 
 on:
   workflow_call:
