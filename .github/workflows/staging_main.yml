@@ -22,6 +22,8 @@ jobs:
       kosli_dry_run: ${{ steps.ci_vars.outputs.kosli_dry_run }}
       kosli_cli_version: ${{ steps.ci_vars.outputs.kosli_cli_version }}
       kosli_host: ${{ steps.ci_vars.outputs.kosli_host }}
+      kosli_org: ${{ steps.ci_vars.outputs.kosli_org }}
+      kosli_flow: ${{ steps.ci_vars.outputs.kosli_flow }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
     steps:
     - uses: actions/checkout@v3
@@ -30,7 +32,9 @@ jobs:
       run: |
         echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"             >> ${GITHUB_OUTPUT}        
         echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}"     >> ${GITHUB_OUTPUT}
-        echo "kosli_host=$${ env.KOSLI_HOST }}"                   >> ${GITHUB_OUTPUT}
+        echo "kosli_host=${{ env.KOSLI_HOST }}"                   >> ${GITHUB_OUTPUT}
+        echo "kosli_org=${{ env.KOSLI_ORG }}"                     >> ${GITHUB_OUTPUT}
+        echo "kosli_flow=${{ env.KOSLI_FLOW }}"                   >> ${GITHUB_OUTPUT}        
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)"           >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
@@ -85,5 +89,7 @@ jobs:
       KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
+      KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 

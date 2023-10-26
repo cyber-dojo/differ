@@ -15,6 +15,12 @@ on:
       KOSLI_HOST:
         required: true
         type: string
+      KOSLI_ORG:
+        required: true
+        type: string
+      KOSLI_FLOW:
+        required: true
+        type: string
       IMAGE_TAG:
         required: true
         type: string
@@ -29,9 +35,9 @@ env:
   KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
   KOSLI_CLI_VERSION: ${{ inputs.KOSLI_CLI_VERSION }}
   KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
-  KOSLI_ORG: cyber-dojo
+  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-  KOSLI_FLOW: differ
+  KOSLI_FLOW: ${{ inputs.KOSLI_FLOW }}
   IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
   AWS_ACCOUNT_ID_BETA: ${{ inputs.AWS_ACCOUNT_ID_BETA }}
   ECR_REGISTRY_BETA: ${{ inputs.AWS_ACCOUNT_ID_BETA }}.dkr.ecr.eu-central-1.amazonaws.com
@@ -154,7 +160,7 @@ jobs:
         run:
           kosli expect deployment cyberdojo/differ:${{ env.IMAGE_TAG }}
             --artifact-type=docker
-            --description="Deployed to aws-beta in Github Actions pipeline"
+            --description="Deployed to aws-prod in Github Actions pipeline"
             --environment=aws-prod
 
 

@@ -35,6 +35,8 @@ jobs:
         echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"             >> ${GITHUB_OUTPUT}
         echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}"     >> ${GITHUB_OUTPUT}
         echo "kosli_host=${{ env.KOSLI_HOST }}"                   >> ${GITHUB_OUTPUT}
+        echo "kosli_org=${{ env.KOSLI_ORG }}"                     >> ${GITHUB_OUTPUT}
+        echo "kosli_flow=${{ env.KOSLI_FLOW }}"                   >> ${GITHUB_OUTPUT}                
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)"           >> ${GITHUB_OUTPUT}
         echo "aws_account_id_beta=${{ env.AWS_ACCOUNT_ID_BETA }}" >> ${GITHUB_OUTPUT} 
         echo "aws_account_id_prod=${{ env.AWS_ACCOUNT_ID_PROD }}" >> ${GITHUB_OUTPUT} 
@@ -100,6 +102,8 @@ jobs:
       KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
+      KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
 
@@ -112,6 +116,8 @@ jobs:
       KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
+      KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
       AWS_ACCOUNT_ID_BETA: ${{ needs.setup-ci-vars.outputs.aws_account_id_beta }}
       AWS_ACCOUNT_ID_PROD: ${{ needs.setup-ci-vars.outputs.aws_account_id_prod }}
