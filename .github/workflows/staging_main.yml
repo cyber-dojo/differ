@@ -81,7 +81,7 @@ jobs:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
       KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
-      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
+      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
