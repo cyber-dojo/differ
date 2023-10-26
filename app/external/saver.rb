@@ -27,18 +27,6 @@ module External
       docker_port_env_var
     end
 
-    #     def port_env_var
-    #       if ENV.has_key?(k8s_port_env_var)
-    #         k8s_port_env_var
-    #       else
-    #         docker_port_env_var
-    #       end
-    #     end
-    #
-    #     def k8s_port_env_var
-    #       'CYBER_DOJO_K8S_PORT'
-    #     end
-
     def docker_port_env_var
       'CYBER_DOJO_SAVER_PORT'
     end

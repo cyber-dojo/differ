@@ -3,7 +3,7 @@
 exit_zero_if_show_help()
 {
   if show_help_arg "${1:-}"; then
-    local -r my_name=build_test_publish.sh
+    local -r my_name=build_test.sh
     cat <<- EOF
 
     Use: ${my_name} [client|server] [ID...]
