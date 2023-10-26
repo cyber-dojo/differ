@@ -1,4 +1,4 @@
-name: Main
+name: Wait for image to be built
 
 on:
   workflow_dispatch:
@@ -9,35 +9,27 @@ on:
 env:
   KOSLI_DRY_RUN: "False"  # "True"
   KOSLI_CLI_VERSION: "2.6.11"
-  KOSLI_HOST: https://app.kosli.com
+  KOSLI_HOST: https://staging.app.kosli.com
   KOSLI_ORG: cyber-dojo
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_FLOW: differ
-  AWS_ACCOUNT_ID_BETA: 244531986313
-  AWS_ACCOUNT_ID_PROD: 274425519734
 
 jobs:
 
   setup-ci-vars:
     runs-on: ubuntu-latest
     outputs:
-      kosli_dry_run: ${{ steps.ci_vars.outputs.kosli_dry_run }}
       kosli_cli_version: ${{ steps.ci_vars.outputs.kosli_cli_version }}
-      kosli_host: ${{ steps.ci_vars.outputs.kosli_host }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
-      aws_account_id_beta: ${{ steps.ci_vars.outputs.aws_account_id_beta }}
-      aws_account_id_prod: ${{ steps.ci_vars.outputs.aws_account_id_prod }}
     steps:
     - uses: actions/checkout@v3
     - name: Prepare
       id: ci_vars
       run: |
-        echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"             >> ${GITHUB_OUTPUT}
-        echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}"     >> ${GITHUB_OUTPUT} 
+        echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"             >> ${GITHUB_OUTPUT}        
+        echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}"     >> ${GITHUB_OUTPUT}
+        echo "kosli_host=$${ env.KOSLI_HOST }}"                   >> ${GITHUB_OUTPUT}
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)"           >> ${GITHUB_OUTPUT}
-        echo "aws_account_id_beta=${{ env.AWS_ACCOUNT_ID_BETA }}" >> ${GITHUB_OUTPUT} 
-        echo "aws_account_id_prod=${{ env.AWS_ACCOUNT_ID_PROD }}" >> ${GITHUB_OUTPUT} 
-
 
   create-kosli-flow:
     runs-on: ubuntu-latest
@@ -54,8 +46,7 @@ jobs:
             --description="Diff files from two traffic-lights" 
             --template=artifact,lint,branch-coverage,snyk-scan
 
-
-  build-image:
+  wait-for-image:
     needs: [setup-ci-vars, create-kosli-flow]
     runs-on: ubuntu-latest
     env:
@@ -65,15 +56,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build
-        run:
-          ./sh/build.sh
-
-      - name: Push image to public registry (dockerhub)
         run: |
-          echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
-          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"           
-          docker push cyberdojo/differ:${IMAGE_TAG}
-          docker logout
+          ./sh/wait_for_image.sh
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -87,10 +71,10 @@ jobs:
           docker pull cyberdojo/differ:${IMAGE_TAG}          
           kosli report artifact cyberdojo/differ:${IMAGE_TAG} \
             --artifact-type=docker
-
+          
 
   test:
-    needs: [setup-ci-vars, build-image]
+    needs: [setup-ci-vars]
     uses: cyber-dojo/differ/.github/workflows/test.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -100,18 +84,4 @@ jobs:
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-
-
-  deploy:
-    needs: [setup-ci-vars, test]
-    uses: cyber-dojo/differ/.github/workflows/deploy.yml@main
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-    with:
-      KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
-      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
-      KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
-      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      AWS_ACCOUNT_ID_BETA: ${{ needs.setup-ci-vars.outputs.aws_account_id_beta }}
-      AWS_ACCOUNT_ID_PROD: ${{ needs.setup-ci-vars.outputs.aws_account_id_prod }}
 
