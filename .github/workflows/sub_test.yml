@@ -1,4 +1,4 @@
-name: job - test image
+name: Sub - test image
 
 on:
   workflow_call:

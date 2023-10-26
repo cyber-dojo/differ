@@ -1,4 +1,4 @@
-name: Main - reporting to https://staging.app.kosli.com
+name: Main - reports to https://staging.app.kosli.com
 
 on:
   push:
@@ -80,7 +80,7 @@ jobs:
 
   test:
     needs: [setup-ci-vars, create-kosli-flow, wait-for-image]
-    uses: cyber-dojo/differ/.github/workflows/job_test.yml@main
+    uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

@@ -1,4 +1,4 @@
-name: Main - reporting to https://app.kosli.com
+name: Main - reports to https://app.kosli.com
 
 on:
   push:
@@ -61,7 +61,7 @@ jobs:
 
   build-image:
     needs: [setup-ci-vars, create-kosli-flow]
-    uses: cyber-dojo/differ/.github/workflows/job_build_image.yml@main
+    uses: cyber-dojo/differ/.github/workflows/sub_build_image.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
@@ -77,7 +77,7 @@ jobs:
 
   test:
     needs: [setup-ci-vars, build-image]
-    uses: cyber-dojo/differ/.github/workflows/job_test.yml@main
+    uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -92,7 +92,7 @@ jobs:
 
   deploy:
     needs: [setup-ci-vars, test]
-    uses: cyber-dojo/differ/.github/workflows/job_deploy.yml@main
+    uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:

@@ -1,4 +1,4 @@
-name: job - deploy to aws-beta and aws-prod
+name: Sub - deploy to aws-beta and aws-prod
 
 on:
   workflow_call:
