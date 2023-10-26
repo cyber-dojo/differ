@@ -66,6 +66,12 @@ jobs:
           docker push cyberdojo/differ:${IMAGE_TAG}
           docker logout
 
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version:
+            ${{ env.KOSLI_CLI_VERSION }}
+
       - name: Report image to Kosli flow
         run: |
           IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"           
