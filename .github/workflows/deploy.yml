@@ -6,6 +6,9 @@ on:
       KOSLI_API_TOKEN:
         required: true
     inputs:
+      KOSLI_DRY_RUN:
+        required: true
+        type: string
       KOSLI_CLI_VERSION:
         required: true
         type: string
@@ -23,6 +26,7 @@ on:
         type: string
 
 env:
+  KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
   KOSLI_CLI_VERSION: ${{ inputs.KOSLI_CLI_VERSION }}
   KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
   KOSLI_ORG: cyber-dojo

@@ -7,12 +7,14 @@ on:
 #      - main
 
 env:
+  KOSLI_DRY_RUN: "False"  # "True"
   KOSLI_CLI_VERSION: "2.6.11"
   KOSLI_HOST: https://app.kosli.com
   KOSLI_ORG: cyber-dojo
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_FLOW: differ
-  # KOSLI_DRY_RUN: "True"
+  AWS_ACCOUNT_ID_BETA: 244531986313
+  AWS_ACCOUNT_ID_PROD: 274425519734
 
 jobs:
 
@@ -28,10 +30,11 @@ jobs:
     - name: Prepare
       id: ci_vars
       run: |
-        echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}" >> ${GITHUB_OUTPUT} 
-        echo "image_tag=$(echo $GITHUB_SHA | head -c7)"       >> ${GITHUB_OUTPUT}
-        echo "aws_account_id_beta=244531986313"               >> ${GITHUB_OUTPUT} 
-        echo "aws_account_id_prod=274425519734"               >> ${GITHUB_OUTPUT} 
+        echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}"     >> ${GITHUB_OUTPUT} 
+        echo "image_tag=$(echo $GITHUB_SHA | head -c7)"           >> ${GITHUB_OUTPUT}
+        echo "aws_account_id_beta=${{ env.AWS_ACCOUNT_ID_BETA }}" >> ${GITHUB_OUTPUT} 
+        echo "aws_account_id_prod=${{ env.AWS_ACCOUNT_ID_PROD }}" >> ${GITHUB_OUTPUT} 
+
 
   create-kosli-flow:
     runs-on: ubuntu-latest
@@ -47,6 +50,7 @@ jobs:
           kosli create flow ${{ env.KOSLI_FLOW }} 
             --description="Diff files from two traffic-lights" 
             --template=artifact,lint,branch-coverage,snyk-scan
+
 
   build-image:
     needs: [setup-ci-vars, create-kosli-flow]
@@ -81,6 +85,7 @@ jobs:
           kosli report artifact cyberdojo/differ:${IMAGE_TAG} \
             --artifact-type=docker
 
+
   test:
     needs: [setup-ci-vars, build-image]
     uses: cyber-dojo/differ/.github/workflows/test.yml@main
@@ -88,9 +93,11 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
+      KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_HOST: https://app.kosli.com
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
+
 
   deploy:
     needs: [setup-ci-vars, test]
@@ -98,6 +105,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
+      KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_HOST: https://app.kosli.com
       KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
