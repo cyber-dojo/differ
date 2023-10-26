@@ -1,5 +1,4 @@
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_installed()
 {
   printf "Checking ${1} is installed..."
@@ -11,7 +10,6 @@ exit_non_zero_unless_installed()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 installed()
 {
   if hash "${1}" 2> /dev/null; then
@@ -19,4 +17,10 @@ installed()
   else
     false
   fi
+}
+
+stderr()
+{
+  local -r message="${1}"
+  >&2 echo "ERROR: ${message}"
 }
