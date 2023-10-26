@@ -40,12 +40,6 @@ jobs:
           version:
             ${{ env.KOSLI_CLI_VERSION }}
 
-      - name: Create Kosli flow
-        run:
-          kosli create flow ${{ env.KOSLI_FLOW }} 
-            --description="Diff files from two traffic-lights" 
-            --template=artifact,lint,branch-coverage,snyk-scan
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
@@ -67,12 +61,6 @@ jobs:
             --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
             --name=lint
-
-      - name: Report image to Kosli flow
-        run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
-          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
-            --artifact-type=docker
 
       - name: Run tests, save results to evidence.json file, report to Kosli flow
         run: |
