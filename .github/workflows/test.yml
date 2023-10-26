@@ -17,10 +17,10 @@ on:
       KOSLI_CLI_VERSION:
         required: true
         type: string
-      KOSLI_CLI_ORG:
+      KOSLI_ORG:
         required: true
         type: string
-      KOSLI_CLI_FLOW:
+      KOSLI_FLOW:
         required: true
         type: string
       IMAGE_TAG:
