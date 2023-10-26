@@ -39,18 +39,18 @@ env:
 
 jobs:
 
-  with-vars:
+  setup-ci-vars:
     runs-on: ubuntu-latest
     outputs:
-      image_tag: ${{ steps.with_vars.outputs.image_tag }}
-      aws_account_id_beta: ${{ steps.with_vars.outputs.aws_account_id_beta }}
-      ecr_registry_beta: ${{ steps.with_vars.outputs.ecr_registry_beta }}
-      aws_account_id_prod: ${{ steps.with_vars.outputs.aws_account_id_prod }}
-      ecr_registry_prod: ${{ steps.with_vars.outputs.ecr_registry_prod }}
-      gh_actions_iam_role_name: ${{ steps.with_vars.outputs.gh_actions_iam_role_name }}
+      image_tag: ${{ steps.ci_vars.outputs.image_tag }}
+      aws_account_id_beta: ${{ steps.ci_vars.outputs.aws_account_id_beta }}
+      ecr_registry_beta: ${{ steps.ci_vars.outputs.ecr_registry_beta }}
+      aws_account_id_prod: ${{ steps.ci_vars.outputs.aws_account_id_prod }}
+      ecr_registry_prod: ${{ steps.ci_vars.outputs.ecr_registry_prod }}
+      gh_actions_iam_role_name: ${{ steps.ci_vars.outputs.gh_actions_iam_role_name }}
     steps:
     - name: Prepare outputs for fivexl deployment workflow # it can't use ${{ env.VAR }}
-      id: with_vars
+      id: ci_vars
       run: |
         echo "image_tag=${{ env.IMAGE_TAG }}"                               >> ${GITHUB_OUTPUT}
         echo "aws_account_id_beta=${{ env.AWS_ACCOUNT_ID_BETA }}"           >> ${GITHUB_OUTPUT}
@@ -180,20 +180,20 @@ jobs:
 
 
   deploy-to-aws-beta:
-    needs: [with-vars, push-image-to-beta-ecr]
+    needs: [setup-ci-vars, push-image-to-beta-ecr]
     permissions:
       id-token: write
       contents: write
     uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.7
     with:
       aws_region: eu-central-1
-      aws_role_arn: arn:aws:iam::${{ needs.with-vars.outputs.aws_account_id_beta }}:role/${{ needs.with-vars.outputs.gh_actions_iam_role_name }}
+      aws_role_arn: arn:aws:iam::${{ needs.setup-ci-vars.outputs.aws_account_id_beta }}:role/${{ needs.setup-ci-vars.outputs.gh_actions_iam_role_name }}
       aws_default_region: eu-central-1
       aws_role_duration: 900
       working_directory: deployment/terraform/
       tf_apply: 'true'
       tf_version: v1.4.5
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.with-vars.outputs.ecr_registry_beta }}/differ:${{ needs.with-vars.outputs.image_tag }}"}'
+      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.setup-ci-vars.outputs.ecr_registry_beta }}/differ:${{ needs.setup-ci-vars.outputs.image_tag }}"}'
 
 
   push-image-to-prod-ecr:
@@ -235,17 +235,17 @@ jobs:
             --environment=aws-prod
 
   deploy-to-aws-prod:
-    needs: [with-vars, push-image-to-prod-ecr]
+    needs: [setup-ci-vars, push-image-to-prod-ecr]
     permissions:
       id-token: write
       contents: write
     uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.7
     with:
       aws_region: eu-central-1
-      aws_role_arn: arn:aws:iam::${{ needs.with-vars.outputs.aws_account_id_prod }}:role/${{ needs.with-vars.outputs.gh_actions_iam_role_name }}
+      aws_role_arn: arn:aws:iam::${{ needs.setup-ci-vars.outputs.aws_account_id_prod }}:role/${{ needs.setup-ci-vars.outputs.gh_actions_iam_role_name }}
       aws_default_region: eu-central-1
       aws_role_duration: 900
       working_directory: deployment/terraform/
       tf_apply: 'true'
       tf_version: v1.4.5
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.with-vars.outputs.ecr_registry_prod }}/differ:${{ needs.with-vars.outputs.image_tag }}"}'
+      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.setup-ci-vars.outputs.ecr_registry_prod }}/differ:${{ needs.setup-ci-vars.outputs.image_tag }}"}'
