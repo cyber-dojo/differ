@@ -57,7 +57,6 @@ jobs:
         echo "gh_actions_iam_role_name=${{ env.GH_ACTIONS_IAM_ROLE_NAME }}" >> ${GITHUB_OUTPUT}
 
   push-image-to-beta-ecr:
-    needs: [test]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
