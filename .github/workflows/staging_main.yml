@@ -19,7 +19,9 @@ jobs:
   setup-ci-vars:
     runs-on: ubuntu-latest
     outputs:
+      kosli_dry_run: ${{ steps.ci_vars.outputs.kosli_dry_run }}
       kosli_cli_version: ${{ steps.ci_vars.outputs.kosli_cli_version }}
+      kosli_host: ${{ steps.ci_vars.outputs.kosli_host }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
     steps:
     - uses: actions/checkout@v3
