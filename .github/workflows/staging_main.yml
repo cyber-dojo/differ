@@ -47,7 +47,7 @@ jobs:
             --template=artifact,lint,branch-coverage,snyk-scan
 
   wait-for-image:
-    needs: [setup-ci-vars, create-kosli-flow]
+    needs: [create-kosli-flow]
     runs-on: ubuntu-latest
     env:
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
@@ -55,7 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build
+      - name: Wait for image to be built in main.yml
         run: |
           ./sh/wait_for_image.sh
 
@@ -74,7 +74,7 @@ jobs:
           
 
   test:
-    needs: [wait-for-image]
+    needs: [setup-ci-vars, create-kosli-flow, wait-for-image]
     uses: cyber-dojo/differ/.github/workflows/test.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
