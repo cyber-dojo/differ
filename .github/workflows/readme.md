@@ -8,15 +8,17 @@ To resolve this, git pushes trigger two workflows:
 
 1) main.yml which reports to https://app.kosli.com
    - builds the image
-       using sub/build_image.yml
+       using job_build_image.yml
    - runs the tests  
-       using sub/test.yml
+       using job_test.yml
    - deploys the image to aws-beta and aws-prod
-       using sub/deploy.yml
+       using job_deploy.yml
    
 2) main_staging.yml which reports to https://staging.app.kosli.com
    - waits for main.yml to build the image
    - tests the image
    - does _not_ deploy the image
+    
+During a demo, look at main.yml (and its three job_* yml files)
+which is the workflow visible by default.
 
-During a demo, look at main.yml and its three workflow/sub/ yml files. 

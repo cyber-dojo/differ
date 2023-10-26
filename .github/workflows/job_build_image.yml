@@ -1,4 +1,4 @@
-name: Subflow - build image
+name: job - build image
 
 on:
   workflow_call:
