@@ -27,7 +27,6 @@ jobs:
     - name: Prepare
       id: ci_vars
       run: |
-        echo "IMAGE_TAG=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_ENV}
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
         echo "aws_account_id_beta=244531986313"         >> ${GITHUB_OUTPUT} 
         echo "aws_account_id_prod=274425519734"         >> ${GITHUB_OUTPUT} 
@@ -63,13 +62,15 @@ jobs:
       - name: Push image to public registry (dockerhub)
         run: |
           echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
-          docker push cyberdojo/differ:${{ env.IMAGE_TAG }}
+          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"           
+          docker push cyberdojo/differ:${IMAGE_TAG}
           docker logout
 
       - name: Report image to Kosli flow
         run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
-          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
+          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"           
+          docker pull cyberdojo/differ:${IMAGE_TAG}          
+          kosli report artifact cyberdojo/differ:${IMAGE_TAG} \
             --artifact-type=docker
 
   test:
