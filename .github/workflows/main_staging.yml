@@ -1,10 +1,9 @@
 name: Main reporting to https://staging.app.kosli.com
 
 on:
-  workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
 
 env:
   KOSLI_DRY_RUN: "False"  # "True"

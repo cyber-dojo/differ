@@ -4,11 +4,14 @@ by the fact that cyber-dojo Flows are unusual in that they need to
 repeat every Kosli step twice; once to report to https://staging.app.kosli.com
 and once again to report to https://app.kosli.com
 A normal customer CI workflow yml file would only report to the latter.
-To resolve this the workflow is split into two parts;
-1) build.yml which builds the image and pushes it to its public dockerhub registry
-2) test_and_deploy.yml which is called twice;
-   once from build.yml's kosli-staging: job, which reports only to https://staging.app.kosli.com
-   once from build.yml's kosli-production: job, which reports only to https://app.kosli.com
+To resolve this git pushes triggers two workflows;
+1) main.yml which reports to https://app.kosli.com
+   - builds the image
+   - tests the image 
+   - deploys the image to aws-beta and aws-prod
+2) main_staging.yml which reports to https://staging.app.kosli.com
+   - waits for main.yml to build the image
+   - tests the image
+   - does _not_ deploy the image
 
-This means that during a demo, when looking at test_and_deploy.yml
-you do not see every kosli command repeated twice.
+During a demo, look at main.yml!
