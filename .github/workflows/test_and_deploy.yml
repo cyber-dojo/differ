@@ -79,17 +79,11 @@ jobs:
             --description="Diff files from two traffic-lights" 
             --template=artifact,lint,branch-coverage,snyk-scan
 
-      - name: Report image to Kosli
-        run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
-          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
-            --artifact-type=docker
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
           bundler-cache: true
-      - name: Run Rubocop linter, report results to Kosli
+      - name: Run Rubocop linter on source, report results to Kosli flow
         run: |
           repo_root() { git rev-parse --show-toplevel; }
           export LINT_EVIDENCE_DIR=/tmp/evidence/lint
@@ -107,9 +101,15 @@ jobs:
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
             --name=lint
 
-      - name: Run tests, save results to evidence.json file, report to Kosli
+      - name: Report image to Kosli flow
         run: |
-          ./sh/run_tests_with_coverage.sh
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
+          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --artifact-type=docker
+
+      - name: Run tests, save results to evidence.json file, report to Kosli flow
+        run: |
+          ./sh/run_tests_with_coverage.sh          
           kosli report evidence artifact generic cyberdojo/differ:${{ env.IMAGE_TAG }} \
               --artifact-type=docker \
               --description="server & client branch-coverage reports" \
@@ -127,14 +127,14 @@ jobs:
             --json-file-output=snyk.json 
             --policy-path=.snyk
 
-      - name: Report Snyk results to Kosli
+      - name: Report Snyk results to Kosli flow
         run:
           kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }}  
             --artifact-type=docker 
             --name=snyk-scan 
             --scan-results=snyk.json
 
-      - name: Kosli SDLC short-circuit gate
+      - name: Kosli SDLC short-circuit-the-flow gate
         run:
           kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} 
             --artifact-type=docker
