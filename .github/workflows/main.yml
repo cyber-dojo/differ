@@ -61,7 +61,7 @@ jobs:
 
 
   build-image:
-    needs: [create-kosli-flow]
+    needs: [setup-ci-vars, create-kosli-flow]
     uses: cyber-dojo/differ/.github/workflows/build_image.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
