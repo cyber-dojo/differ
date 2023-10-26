@@ -24,6 +24,8 @@ jobs:
       kosli_dry_run: ${{ steps.ci_vars.outputs.kosli_dry_run }}
       kosli_cli_version: ${{ steps.ci_vars.outputs.kosli_cli_version }}
       kosli_host: ${{ steps.ci_vars.outputs.kosli_host }}
+      kosli_org: ${{ steps.ci_vars.outputs.kosli_org }}
+      kosli_flow: ${{ steps.ci_vars.outputs.kosli_flow }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
       aws_account_id_beta: ${{ steps.ci_vars.outputs.aws_account_id_beta }}
       aws_account_id_prod: ${{ steps.ci_vars.outputs.aws_account_id_prod }}
