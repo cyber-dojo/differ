@@ -1,0 +1,108 @@
+name: Test image, deploy to aws-beta and aws-prod
+
+on:
+  workflow_call:
+    secrets:
+      KOSLI_API_TOKEN:
+        required: true
+      SNYK_TOKEN:
+        required: true
+    inputs:
+      KOSLI_HOST:
+        required: true
+        type: string
+      IMAGE_TAG:
+        required: true
+        type: string
+
+env: 
+  KOSLI_ORG: cyber-dojo
+  KOSLI_FLOW: differ
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  KOSLI_CLI_VERSION: "2.6.11"
+  KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
+  IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  # KOSLI_DRY_RUN: "True"
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version:
+            ${{ env.KOSLI_CLI_VERSION }}
+
+      - name: Create Kosli flow
+        run:
+          kosli create flow ${{ env.KOSLI_FLOW }} 
+            --description="Diff files from two traffic-lights" 
+            --template=artifact,lint,branch-coverage,snyk-scan
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
+      - name: Run Rubocop linter on source, report results to Kosli flow
+        run: |
+          repo_root() { git rev-parse --show-toplevel; }
+          export LINT_EVIDENCE_DIR=/tmp/evidence/lint
+          mkdir -p "${LINT_EVIDENCE_DIR}"
+          cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDENCE_DIR}"/.rubocop.yml
+          gem install rubocop
+          if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
+            export KOSLI_LINT_COMPLIANT='true'
+          else
+            export KOSLI_LINT_COMPLIANT='false'
+          fi
+
+          kosli report evidence commit generic \
+            --compliant="${KOSLI_LINT_COMPLIANT}" \
+            --evidence-paths="${LINT_EVIDENCE_DIR}" \
+            --name=lint
+
+      - name: Report image to Kosli flow
+        run: |
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
+          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --artifact-type=docker
+
+      - name: Run tests, save results to evidence.json file, report to Kosli flow
+        run: |
+          ./sh/run_tests_with_coverage.sh          
+          kosli report evidence artifact generic cyberdojo/differ:${{ env.IMAGE_TAG }} \
+              --artifact-type=docker \
+              --description="server & client branch-coverage reports" \
+              --name=branch-coverage \
+              --user-data=./test/reports/evidence.json
+
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        continue-on-error: true
+        run:
+           snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }} 
+            --file=Dockerfile 
+            --json-file-output=snyk.json 
+            --policy-path=.snyk
+
+      - name: Report Snyk results to Kosli flow
+        run:
+          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }}  
+            --artifact-type=docker 
+            --name=snyk-scan 
+            --scan-results=snyk.json
+
+      - name: Kosli SDLC short-circuit-the-flow gate
+        run:
+          kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} 
+            --artifact-type=docker
+
