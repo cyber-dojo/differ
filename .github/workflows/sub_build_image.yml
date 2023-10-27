@@ -56,7 +56,8 @@ jobs:
           context: .
           push: true
           tags: "cyberdojo/differ:${{ env.IMAGE_TAG }}"
-          build-args: [ COMMIT_SHA=${{ github.sha }} ]
+          build-args:
+            COMMIT_SHA=${{ github.sha }}
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
