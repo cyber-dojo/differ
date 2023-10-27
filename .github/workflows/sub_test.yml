@@ -39,7 +39,7 @@ env:
 
 jobs:
 
-  test:
+  branch-coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -58,6 +58,15 @@ jobs:
               --name=branch-coverage \
               --user-data=./test/reports/evidence.json
 
+
+  snyk-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ env.KOSLI_CLI_VERSION }}
+
       - name: Setup Snyk
         uses: snyk/actions/setup@master
 
@@ -75,6 +84,16 @@ jobs:
             --artifact-type=docker 
             --name=snyk-scan 
             --scan-results=snyk.json
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -98,6 +117,16 @@ jobs:
             --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
             --name=lint
+
+
+  sdlc-gate:
+    needs: [branch-coverage, snyk-scan, lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Kosli SDLC gate to short-circuit-the-flow
         run:
