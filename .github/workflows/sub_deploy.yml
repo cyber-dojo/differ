@@ -97,8 +97,7 @@ jobs:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version:
-            ${{ env.KOSLI_CLI_VERSION }}
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Report expected aws-beta deployment to Kosli
         run:
@@ -153,8 +152,7 @@ jobs:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version:
-            ${{ env.KOSLI_CLI_VERSION }}
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Report expected aws-prod deployment to Kosli
         run:
