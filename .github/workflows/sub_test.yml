@@ -121,7 +121,6 @@ jobs:
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
             --name=lint
 
-
   sdlc-gate:
     needs: [branch-coverage, snyk-scan, lint]
     runs-on: ubuntu-latest
@@ -132,7 +131,7 @@ jobs:
           version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Kosli SDLC gate to short-circuit-the-flow
-        run:
-          kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} 
+        run: |
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
+          kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
             --artifact-type=docker
-
