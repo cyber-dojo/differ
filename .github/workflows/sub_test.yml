@@ -49,29 +49,6 @@ jobs:
         with:
           version: ${{ env.KOSLI_CLI_VERSION }}
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.0
-          bundler-cache: true
-
-      - name: Run Rubocop linter on source, report results to Kosli flow
-        run: |
-          repo_root() { git rev-parse --show-toplevel; }
-          export LINT_EVIDENCE_DIR=/tmp/evidence/lint
-          mkdir -p "${LINT_EVIDENCE_DIR}"
-          cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDENCE_DIR}"/.rubocop.yml
-          gem install rubocop
-          if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
-            export KOSLI_LINT_COMPLIANT='true'
-          else
-            export KOSLI_LINT_COMPLIANT='false'
-          fi
-
-          kosli report evidence commit generic \
-            --compliant="${KOSLI_LINT_COMPLIANT}" \
-            --evidence-paths="${LINT_EVIDENCE_DIR}" \
-            --name=lint
-
       - name: Run tests, save results to evidence.json file, report to Kosli flow
         run: |
           ./sh/run_tests_with_coverage.sh          
@@ -98,6 +75,29 @@ jobs:
             --artifact-type=docker 
             --name=snyk-scan 
             --scan-results=snyk.json
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
+
+      - name: Run Rubocop linter on source, report results to Kosli flow
+        run: |
+          repo_root() { git rev-parse --show-toplevel; }
+          export LINT_EVIDENCE_DIR=/tmp/evidence/lint
+          mkdir -p "${LINT_EVIDENCE_DIR}"
+          cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDENCE_DIR}"/.rubocop.yml
+          gem install rubocop
+          if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
+            export KOSLI_LINT_COMPLIANT='true'
+          else
+            export KOSLI_LINT_COMPLIANT='false'
+          fi
+
+          kosli report evidence commit generic \
+            --compliant="${KOSLI_LINT_COMPLIANT}" \
+            --evidence-paths="${LINT_EVIDENCE_DIR}" \
+            --name=lint
 
       - name: Kosli SDLC gate to short-circuit-the-flow
         run:
