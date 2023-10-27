@@ -81,9 +81,9 @@ jobs:
       - name: Report Snyk results to Kosli flow
         run: |
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
-          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }}  
-            --artifact-type=docker 
-            --name=snyk-scan 
+          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --artifact-type=docker  \
+            --name=snyk-scan  \
             --scan-results=snyk.json
 
   lint:
