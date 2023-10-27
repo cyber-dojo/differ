@@ -41,11 +41,16 @@ env:
 jobs:
   build-image:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+#    env:
+#      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+#      DOCKER_USER: ${{ secrets.DOCKER_USER }}
     steps:
       - uses: actions/checkout@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
 
       - name: Build
         run:
@@ -53,9 +58,9 @@ jobs:
 
       - name: Push image to public registry (dockerhub)
         run: |
-          echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
+          # echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
           docker push cyberdojo/differ:${{ env. IMAGE_TAG }}
-          docker logout
+          # docker logout
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
