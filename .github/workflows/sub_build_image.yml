@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
-      - name: Build and push image to Dockerhub ECR
+      - name: Build and push image to Dockerhub Registry
         id: docker_build
         uses: docker/build-push-action@v3
         with:
@@ -58,14 +58,6 @@ jobs:
           tags: "cyberdojo/${{ env.KOSLI_FLOW }}:${{ env.IMAGE_TAG }}"
           build-args:
             COMMIT_SHA=${{ github.sha }}
-
-#      - name: Build
-#        run:
-#          ./sh/build.sh
-#
-#      - name: Push image to public registry (dockerhub)
-#        run:
-#          docker push cyberdojo/differ:${{ env. IMAGE_TAG }}
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
