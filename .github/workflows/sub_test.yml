@@ -79,7 +79,8 @@ jobs:
             --policy-path=.snyk
 
       - name: Report Snyk results to Kosli flow
-        run:
+        run: |
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
           kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }}  
             --artifact-type=docker 
             --name=snyk-scan 
