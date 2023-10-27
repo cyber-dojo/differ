@@ -53,9 +53,6 @@ jobs:
   wait-for-image:
     needs: [create-kosli-flow]
     runs-on: ubuntu-latest
-    env:
-      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
     steps:
       - uses: actions/checkout@v3
 
