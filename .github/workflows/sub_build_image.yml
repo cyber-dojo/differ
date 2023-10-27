@@ -67,5 +67,5 @@ jobs:
 
       - name: Report image to Kosli flow
         run:
-          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
+          kosli report artifact cyberdojo/differ:${{ env.IMAGE_TAG }}
             --artifact-type=docker

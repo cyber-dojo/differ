@@ -102,7 +102,7 @@ jobs:
             --name=snyk-scan 
             --scan-results=snyk.json
 
-      - name: Kosli SDLC gate to short-circuit-the-flow 
+      - name: Kosli SDLC gate to short-circuit-the-flow
         run:
           kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} 
             --artifact-type=docker
