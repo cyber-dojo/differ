@@ -24,12 +24,6 @@ on:
       IMAGE_TAG:
         required: true
         type: string
-      AWS_ACCOUNT_ID_BETA:
-        required: true
-        type: string
-      AWS_ACCOUNT_ID_PROD:
-        required: true
-        type: string
 
 env:
   KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
@@ -39,13 +33,6 @@ env:
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_FLOW: ${{ inputs.KOSLI_FLOW }}
   IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
-  AWS_ACCOUNT_ID_BETA: ${{ inputs.AWS_ACCOUNT_ID_BETA }}
-  ECR_REGISTRY_BETA: ${{ inputs.AWS_ACCOUNT_ID_BETA }}.dkr.ecr.eu-central-1.amazonaws.com
-  AWS_ACCOUNT_ID_PROD: ${{ inputs.AWS_ACCOUNT_ID_PROD }}
-  ECR_REGISTRY_PROD: ${{ inputs.AWS_ACCOUNT_ID_PROD }}.dkr.ecr.eu-central-1.amazonaws.com
-  AWS_REGION: eu-central-1
-  GH_ACTIONS_IAM_ROLE_NAME: gh_actions_services
-
 
 jobs:
 
@@ -54,23 +41,25 @@ jobs:
     outputs:
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
       aws_account_id_beta: ${{ steps.ci_vars.outputs.aws_account_id_beta }}
-      ecr_registry_beta: ${{ steps.ci_vars.outputs.ecr_registry_beta }}
       aws_account_id_prod: ${{ steps.ci_vars.outputs.aws_account_id_prod }}
+      ecr_registry_beta: ${{ steps.ci_vars.outputs.ecr_registry_beta }}
       ecr_registry_prod: ${{ steps.ci_vars.outputs.ecr_registry_prod }}
+      aws_region: ${{ steps.ci_vars.outputs.aws_region }}
       gh_actions_iam_role_name: ${{ steps.ci_vars.outputs.gh_actions_iam_role_name }}
     steps:
-    - name: Prepare outputs for fivexl deployment workflow # it can't use ${{ env.VAR }}
+    - name: Prepare outputs for fivexl deployment workflow # can't use ${{ env.VAR }} in its with:
       id: ci_vars
       run: |
-        echo "image_tag=${{ env.IMAGE_TAG }}"                               >> ${GITHUB_OUTPUT}
-        echo "aws_account_id_beta=${{ env.AWS_ACCOUNT_ID_BETA }}"           >> ${GITHUB_OUTPUT}
-        echo "ecr_registry_beta=${{ env.ECR_REGISTRY_BETA }}"               >> ${GITHUB_OUTPUT}
-        echo "aws_account_id_prod=${{ env.AWS_ACCOUNT_ID_PROD }}"           >> ${GITHUB_OUTPUT}
-        echo "ecr_registry_prod=${{ env.ECR_REGISTRY_PROD }}"               >> ${GITHUB_OUTPUT}
-        echo "gh_actions_iam_role_name=${{ env.GH_ACTIONS_IAM_ROLE_NAME }}" >> ${GITHUB_OUTPUT}
-
+        echo "image_tag=${{ env.IMAGE_TAG }}"                                    >> ${GITHUB_OUTPUT}
+        echo "aws_account_id_beta=244531986313"                                  >> ${GITHUB_OUTPUT}
+        echo "aws_account_id_prod=274425519734"                                  >> ${GITHUB_OUTPUT}
+        echo "ecr_registry_beta=244531986313.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
+        echo "ecr_registry_prod=274425519734.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
+        echo "aws_region=eu-central-1"                                           >> ${GITHUB_OUTPUT}
+        echo "gh_actions_iam_role_name=gh_actions_services"                      >> ${GITHUB_OUTPUT}
 
   push-image-to-beta-ecr:
+    needs: [setup-ci-vars]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -79,10 +68,10 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ needs.setup-ci-vars.outputs.aws_region }}
           role-duration-seconds: 2400
           role-session-name: ${{ github.event.repository.name }}
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID_BETA }}:role/${{ env.GH_ACTIONS_IAM_ROLE_NAME }}
+          role-to-assume: arn:aws:iam::${{ needs.setup-ci-vars.outputs.aws_account_id_beta }}:role/${{ needs.setup-ci-vars.outputs.gh_actions_iam_role_name }}
 
       - name: Login to Amazon ECR (Elastic Container Registry)
         id: login-ecr
@@ -91,8 +80,8 @@ jobs:
       - name: Push image to private beta-ECR
         run: |
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
-          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ env.ECR_REGISTRY_BETA }}/differ:${{ env.IMAGE_TAG }}
-          docker push ${{ env.ECR_REGISTRY_BETA }}/differ:${{ env.IMAGE_TAG }}
+          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ needs.setup-ci-vars.outputs.ecr_registry_beta }}/differ:${{ env.IMAGE_TAG }}
+          docker push ${{ needs.setup-ci-vars.outputs.ecr_registry_beta }}/differ:${{ env.IMAGE_TAG }}
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -106,7 +95,6 @@ jobs:
             --description="Deployed to aws-beta in Github Actions pipeline"
             --environment=aws-beta
 
-
   deploy-to-aws-beta:
     needs: [setup-ci-vars, push-image-to-beta-ecr]
     permissions:
@@ -114,18 +102,17 @@ jobs:
       contents: write
     uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.7
     with:
-      aws_region: eu-central-1
+      aws_region: ${{ needs.setup-ci-vars.outputs.aws_region }}
       aws_role_arn: arn:aws:iam::${{ needs.setup-ci-vars.outputs.aws_account_id_beta }}:role/${{ needs.setup-ci-vars.outputs.gh_actions_iam_role_name }}
-      aws_default_region: eu-central-1
+      aws_default_region: ${{ needs.setup-ci-vars.outputs.aws_region }}
       aws_role_duration: 900
       working_directory: deployment/terraform/
       tf_apply: 'true'
       tf_version: v1.4.5
       tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.setup-ci-vars.outputs.ecr_registry_beta }}/differ:${{ needs.setup-ci-vars.outputs.image_tag }}"}'
 
-
   push-image-to-prod-ecr:
-    needs: [deploy-to-aws-beta]
+    needs: [setup-ci-vars, deploy-to-aws-beta]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -134,10 +121,10 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ needs.setup-ci-vars.outputs.aws_region }}
           role-duration-seconds: 2400
           role-session-name: ${{ github.event.repository.name }}
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID_PROD }}:role/${{ env.GH_ACTIONS_IAM_ROLE_NAME }}
+          role-to-assume: arn:aws:iam::${{ needs.setup-ci-vars.outputs.aws_account_id_prod }}:role/${{ needs.setup-ci-vars.outputs.gh_actions_iam_role_name }}
 
       - name: Login to Amazon ECR (Elastic Container Registry)
         id: login-ecr
@@ -146,8 +133,8 @@ jobs:
       - name: Push image to private prod-ECR
         run: |
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
-          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ env.ECR_REGISTRY_PROD }}/differ:${{ env.IMAGE_TAG }}
-          docker push ${{ env.ECR_REGISTRY_PROD }}/differ:${{ env.IMAGE_TAG }}
+          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ needs.setup-ci-vars.outputs.ecr_registry_prod }}/differ:${{ env.IMAGE_TAG }}
+          docker push ${{ needs.setup-ci-vars.outputs.ecr_registry_prod }}/differ:${{ env.IMAGE_TAG }}
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -161,7 +148,6 @@ jobs:
             --description="Deployed to aws-prod in Github Actions pipeline"
             --environment=aws-prod
 
-
   deploy-to-aws-prod:
     needs: [setup-ci-vars, push-image-to-prod-ecr]
     permissions:
@@ -169,9 +155,9 @@ jobs:
       contents: write
     uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.7
     with:
-      aws_region: eu-central-1
+      aws_region: ${{ needs.setup-ci-vars.outputs.aws_region }}
       aws_role_arn: arn:aws:iam::${{ needs.setup-ci-vars.outputs.aws_account_id_prod }}:role/${{ needs.setup-ci-vars.outputs.gh_actions_iam_role_name }}
-      aws_default_region: eu-central-1
+      aws_default_region: ${{ needs.setup-ci-vars.outputs.aws_region }}
       aws_role_duration: 900
       working_directory: deployment/terraform/
       tf_apply: 'true'

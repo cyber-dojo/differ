@@ -12,8 +12,6 @@ env:
   KOSLI_ORG: cyber-dojo
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_FLOW: differ
-  AWS_ACCOUNT_ID_BETA: 244531986313
-  AWS_ACCOUNT_ID_PROD: 274425519734
 
 jobs:
 
@@ -26,22 +24,17 @@ jobs:
       kosli_org: ${{ steps.ci_vars.outputs.kosli_org }}
       kosli_flow: ${{ steps.ci_vars.outputs.kosli_flow }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
-      aws_account_id_beta: ${{ steps.ci_vars.outputs.aws_account_id_beta }}
-      aws_account_id_prod: ${{ steps.ci_vars.outputs.aws_account_id_prod }}
     steps:
     - uses: actions/checkout@v3
     - name: Prepare
       id: ci_vars
       run: |
-        echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"             >> ${GITHUB_OUTPUT}
-        echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}"     >> ${GITHUB_OUTPUT}
-        echo "kosli_host=${{ env.KOSLI_HOST }}"                   >> ${GITHUB_OUTPUT}
-        echo "kosli_org=${{ env.KOSLI_ORG }}"                     >> ${GITHUB_OUTPUT}
-        echo "kosli_flow=${{ env.KOSLI_FLOW }}"                   >> ${GITHUB_OUTPUT}                
-        echo "image_tag=$(echo $GITHUB_SHA | head -c7)"           >> ${GITHUB_OUTPUT}
-        echo "aws_account_id_beta=${{ env.AWS_ACCOUNT_ID_BETA }}" >> ${GITHUB_OUTPUT} 
-        echo "aws_account_id_prod=${{ env.AWS_ACCOUNT_ID_PROD }}" >> ${GITHUB_OUTPUT} 
-
+        echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"         >> ${GITHUB_OUTPUT}
+        echo "kosli_cli_version=${{ env.KOSLI_CLI_VERSION }}" >> ${GITHUB_OUTPUT}
+        echo "kosli_host=${{ env.KOSLI_HOST }}"               >> ${GITHUB_OUTPUT}
+        echo "kosli_org=${{ env.KOSLI_ORG }}"                 >> ${GITHUB_OUTPUT}
+        echo "kosli_flow=${{ env.KOSLI_FLOW }}"               >> ${GITHUB_OUTPUT}                
+        echo "image_tag=$(echo $GITHUB_SHA | head -c7)"       >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     runs-on: ubuntu-latest
@@ -49,15 +42,13 @@ jobs:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version:
-            ${{ env.KOSLI_CLI_VERSION }}
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Create Kosli flow
         run:
           kosli create flow ${{ env.KOSLI_FLOW }} 
             --description="Diff files from two traffic-lights" 
             --template=artifact,lint,branch-coverage,snyk-scan
-
 
   build-image:
     needs: [setup-ci-vars, create-kosli-flow]
@@ -74,7 +65,6 @@ jobs:
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
-
   test:
     needs: [setup-ci-vars, build-image]
     uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
@@ -89,7 +79,6 @@ jobs:
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
-
   deploy:
     needs: [setup-ci-vars, test]
     uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
@@ -102,6 +91,4 @@ jobs:
       KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      AWS_ACCOUNT_ID_BETA: ${{ needs.setup-ci-vars.outputs.aws_account_id_beta }}
-      AWS_ACCOUNT_ID_PROD: ${{ needs.setup-ci-vars.outputs.aws_account_id_prod }}
 
