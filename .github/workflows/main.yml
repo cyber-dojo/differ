@@ -7,7 +7,7 @@ on:
 
 env:
   KOSLI_DRY_RUN: "False"  # "True"
-  KOSLI_CLI_VERSION: "2.6.11"
+  KOSLI_CLI_VERSION: "2.6.12"
   KOSLI_HOST: "https://app.kosli.com"
   KOSLI_ORG: cyber-dojo
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
