@@ -37,7 +37,6 @@ env:
 jobs:
 
   expect-deployment:
-    needs: [setup-ci-vars]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
@@ -46,9 +45,9 @@ jobs:
           version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Report expected aws-beta deployment to Kosli
-        run:
+        run: |
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
-          kosli expect deployment cyberdojo/differ:${{ env.IMAGE_TAG }}
-            --artifact-type=docker
-            --description="Deployed to aws-beta in Github Actions pipeline"
+          kosli expect deployment cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --artifact-type=docker \
+            --description="Deployed to aws-beta in Github Actions pipeline" \
             --environment=aws-beta
