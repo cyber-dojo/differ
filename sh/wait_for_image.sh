@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 set -Eeu
 
-export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export SH_DIR="${ROOT_DIR}/sh"
-
-# TODO: wait for image to be pulled from dockerhub in repeating 10s probe
-#       for maximum of 1 min, then give up with error
-sleep 60
+TAG="$(echo ${GITHUB_SHA} | head -c7)"
+MAX_TRIES=30  # every 10s for 5 mins
+COUNTER=0
+until docker pull cyberdojo/differ:${TAG}
+do
+  sleep 10
+  [[ ${COUNTER} -eq ${MAX_TRIES} ]] && echo "Failed!" && exit 1
+  echo "Trying docker pull cyberdojo/differ:${TAG} again. Try #${COUNTER}"
+  ((COUNTER++))
+done
