@@ -1,4 +1,4 @@
-name: Sub - expect-deployment to aws-beta
+name: Sub - expect-deployment
 
 on:
   workflow_call:
@@ -36,7 +36,7 @@ env:
 
 jobs:
 
-  expect-deployment:
+  to-aws-beta:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
@@ -51,3 +51,19 @@ jobs:
             --artifact-type=docker \
             --description="Deployed to aws-beta in Github Actions pipeline" \
             --environment=aws-beta
+
+  to-aws-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ env.KOSLI_CLI_VERSION }}
+
+      - name: Report expected aws-prod deployment to Kosli
+        run: |
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
+          kosli expect deployment cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --artifact-type=docker \
+            --description="Deployed to aws-prod in Github Actions pipeline" \
+            --environment=aws-prod
