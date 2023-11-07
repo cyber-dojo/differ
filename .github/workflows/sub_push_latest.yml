@@ -16,7 +16,7 @@ env:
   IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
 
 jobs:
-  push-latest-image-to-dockerhub:
+  to-dockerhub:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
