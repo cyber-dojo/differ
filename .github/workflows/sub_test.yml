@@ -134,4 +134,4 @@ jobs:
         run: |
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
           kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
-            --artifact-type=docker
+            --artifact-type=docker          
