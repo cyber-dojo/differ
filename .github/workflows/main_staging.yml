@@ -86,6 +86,15 @@ jobs:
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
+  push-latest:
+    needs: [setup-ci-vars, test]
+    uses: cyber-dojo/differ/.github/workflows/sub_push_latest.yml@main
+    secrets:
+      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+    with:
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
+
   expected-deployment:
     needs: [setup-ci-vars, test]
     uses: cyber-dojo/differ/.github/workflows/sub_expect_deployment.yml@main
@@ -98,3 +107,5 @@ jobs:
       KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
+
+

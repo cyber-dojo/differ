@@ -135,3 +135,19 @@ jobs:
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
           kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
             --artifact-type=docker          
+
+  push-latest-image-to-dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Build and push image:latest to Dockerhub Registry
+        run: |
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}  
+          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} cyberdojo/differ:latest
+          docker push cyberdojo/differ:latest
