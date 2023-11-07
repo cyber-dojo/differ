@@ -16,6 +16,6 @@ SimpleCov.start do
 end
 
 SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
-                                                                  SimpleCov::Formatter::HTMLFormatter,
-                                                                  SimpleCov::Formatter::JSONFormatter
-                                                                ])
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::JSONFormatter
+])
