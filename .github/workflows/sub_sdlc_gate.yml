@@ -36,7 +36,6 @@ env:
 
 jobs:
   sdlc-gate:
-    needs: [branch-coverage, snyk-scan, lint]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
