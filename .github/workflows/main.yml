@@ -79,9 +79,9 @@ jobs:
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
-  deploy:
+  sdlc-gate:
     needs: [setup-ci-vars, test]
-    uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
+    uses: cyber-dojo/differ/.github/workflows/sub_sdlc_gate.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -90,5 +90,24 @@ jobs:
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
+
+  expect-deployment:
+    needs: [setup-ci-vars, sdlc-gate]
+    uses: cyber-dojo/differ/.github/workflows/sub_expect_deployment.yml@main
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+    with:
+      KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
+      KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
+      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
+      KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
+
+  deploy:
+    needs: [setup-ci-vars, sdlc-gate]
+    uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
+    with:
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 

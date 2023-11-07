@@ -1,0 +1,51 @@
+name: Sub - test image
+
+on:
+  workflow_call:
+    secrets:
+      KOSLI_API_TOKEN:
+        required: true
+    inputs:
+      KOSLI_DRY_RUN:
+        required: true
+        type: string
+      KOSLI_HOST:
+        required: true
+        type: string
+      KOSLI_CLI_VERSION:
+        required: true
+        type: string
+      KOSLI_ORG:
+        required: true
+        type: string
+      KOSLI_FLOW:
+        required: true
+        type: string
+      IMAGE_TAG:
+        required: true
+        type: string
+
+env: 
+  KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
+  KOSLI_CLI_VERSION: ${{ inputs.KOSLI_CLI_VERSION }}
+  KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
+  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  KOSLI_FLOW: ${{ inputs.KOSLI_FLOW }}
+  IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+
+jobs:
+  sdlc-gate:
+    needs: [branch-coverage, snyk-scan, lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ env.KOSLI_CLI_VERSION }}
+
+      - name: Kosli SDLC gate to short-circuit-the-flow
+        run: |
+          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
+          kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
+            --artifact-type=docker          

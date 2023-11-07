@@ -2,36 +2,12 @@ name: Sub - deploy to aws-beta and aws-prod
 
 on:
   workflow_call:
-    secrets:
-      KOSLI_API_TOKEN:
-        required: true
     inputs:
-      KOSLI_DRY_RUN:
-        required: true
-        type: string
-      KOSLI_CLI_VERSION:
-        required: true
-        type: string
-      KOSLI_HOST:
-        required: true
-        type: string
-      KOSLI_ORG:
-        required: true
-        type: string
-      KOSLI_FLOW:
-        required: true
-        type: string
       IMAGE_TAG:
         required: true
         type: string
 
 env:
-  KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
-  KOSLI_CLI_VERSION: ${{ inputs.KOSLI_CLI_VERSION }}
-  KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
-  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
-  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-  KOSLI_FLOW: ${{ inputs.KOSLI_FLOW }}
   IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
 
 jobs:
@@ -83,18 +59,6 @@ jobs:
           docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ needs.setup-ci-vars.outputs.ecr_registry_beta }}/differ:${{ env.IMAGE_TAG }}
           docker push ${{ needs.setup-ci-vars.outputs.ecr_registry_beta }}/differ:${{ env.IMAGE_TAG }}
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ env.KOSLI_CLI_VERSION }}
-
-      - name: Report expected aws-beta deployment to Kosli
-        run:
-          kosli expect deployment cyberdojo/differ:${{ env.IMAGE_TAG }}
-            --artifact-type=docker
-            --description="Deployed to aws-beta in Github Actions pipeline"
-            --environment=aws-beta
-
   deploy-to-aws-beta:
     needs: [setup-ci-vars, push-image-to-beta-ecr]
     permissions:
@@ -135,18 +99,6 @@ jobs:
           docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
           docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ needs.setup-ci-vars.outputs.ecr_registry_prod }}/differ:${{ env.IMAGE_TAG }}
           docker push ${{ needs.setup-ci-vars.outputs.ecr_registry_prod }}/differ:${{ env.IMAGE_TAG }}
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ env.KOSLI_CLI_VERSION }}
-
-      - name: Report expected aws-prod deployment to Kosli
-        run:
-          kosli expect deployment cyberdojo/differ:${{ env.IMAGE_TAG }}
-            --artifact-type=docker
-            --description="Deployed to aws-prod in Github Actions pipeline"
-            --environment=aws-prod
 
   deploy-to-aws-prod:
     needs: [setup-ci-vars, push-image-to-prod-ecr]
