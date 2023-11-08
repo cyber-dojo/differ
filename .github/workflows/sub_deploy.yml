@@ -7,9 +7,6 @@ on:
         required: true
         type: string
 
-env:
-  IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
-
 jobs:
 
   variables:
@@ -23,10 +20,10 @@ jobs:
       aws_region: ${{ steps.vars.outputs.aws_region }}
       gh_actions_iam_role_name: ${{ steps.vars.outputs.gh_actions_iam_role_name }}
     steps:
-    - name: Prepare outputs for fivexl deployment workflow # can't use ${{ env.VAR }} in its with:
+    - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "image_tag=${{ env.IMAGE_TAG }}"                                    >> ${GITHUB_OUTPUT}
+        echo "image_tag=${{ inputs.IMAGE_TAG }}"                                 >> ${GITHUB_OUTPUT}
         echo "aws_account_id_beta=244531986313"                                  >> ${GITHUB_OUTPUT}
         echo "aws_account_id_prod=274425519734"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry_beta=244531986313.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
@@ -55,9 +52,9 @@ jobs:
 
       - name: Push image to private beta-ECR
         run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
-          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ needs.variables.outputs.ecr_registry_beta }}/differ:${{ env.IMAGE_TAG }}
-          docker push ${{ needs.variables.outputs.ecr_registry_beta }}/differ:${{ env.IMAGE_TAG }}
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
+          docker tag cyberdojo/differ:${{ inputs.IMAGE_TAG }} ${{ needs.variables.outputs.ecr_registry_beta }}/differ:${{ inputs.IMAGE_TAG }}
+          docker push ${{ needs.variables.outputs.ecr_registry_beta }}/differ:${{ inputs.IMAGE_TAG }}
 
   deploy-to-aws-beta:
     needs: [variables, push-image-to-beta-ecr]
@@ -88,7 +85,7 @@ jobs:
           aws-region: ${{ needs.variables.outputs.aws_region }}
           role-duration-seconds: 2400
           role-session-name: ${{ github.event.repository.name }}
-          role-to-assume: arn:aws:iam::${{ needs.variables.outputs.aws_account_id_prod }}:role/${{ needs.svariables.outputs.gh_actions_iam_role_name }}
+          role-to-assume: arn:aws:iam::${{ needs.variables.outputs.aws_account_id_prod }}:role/${{ needs.variables.outputs.gh_actions_iam_role_name }}
 
       - name: Login to Amazon ECR (Elastic Container Registry)
         id: login-ecr
@@ -96,9 +93,9 @@ jobs:
 
       - name: Push image to private prod-ECR
         run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
-          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} ${{ needs.variables.outputs.ecr_registry_prod }}/differ:${{ env.IMAGE_TAG }}
-          docker push ${{ needs.variables.outputs.ecr_registry_prod }}/differ:${{ env.IMAGE_TAG }}
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
+          docker tag cyberdojo/differ:${{ inputs.IMAGE_TAG }} ${{ needs.variables.outputs.ecr_registry_prod }}/differ:${{ inputs.IMAGE_TAG }}
+          docker push ${{ needs.variables.outputs.ecr_registry_prod }}/differ:${{ inputs.IMAGE_TAG }}
 
   deploy-to-aws-prod:
     needs: [variables, push-image-to-prod-ecr]
