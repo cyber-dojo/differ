@@ -38,7 +38,7 @@ jobs:
             --template=artifact,lint,branch-coverage,snyk-scan
 
   build-image:
-    needs: [vars, create-kosli-flow]
+    needs: [variables, create-kosli-flow]
     uses: cyber-dojo/differ/.github/workflows/sub_build_image.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   test:
-    needs: [vars, build-image]
+    needs: [variables, build-image]
     uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -58,7 +58,7 @@ jobs:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   sdlc-gate:
-    needs: [vars, test]
+    needs: [variables, test]
     uses: cyber-dojo/differ/.github/workflows/sub_sdlc_gate.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -67,7 +67,7 @@ jobs:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   expect-deployment:
-    needs: [vars, sdlc-gate]
+    needs: [variables, sdlc-gate]
     uses: cyber-dojo/differ/.github/workflows/sub_expect_deployment.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -76,7 +76,7 @@ jobs:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   deploy:
-    needs: [vars, sdlc-gate]
+    needs: [variables, sdlc-gate]
     uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
     with:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}

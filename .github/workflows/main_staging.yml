@@ -60,7 +60,7 @@ jobs:
             --artifact-type=docker
 
   test:
-    needs: [setup-ci-vars, wait-for-image]
+    needs: [variables, wait-for-image]
     uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   push-latest:
-    needs: [setup-ci-vars, test]
+    needs: [variables, test]
     uses: cyber-dojo/differ/.github/workflows/sub_push_latest.yml@main
     secrets:
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
@@ -79,7 +79,7 @@ jobs:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   expected-deployment:
-    needs: [setup-ci-vars, test]
+    needs: [variables, test]
     uses: cyber-dojo/differ/.github/workflows/sub_expect_deployment.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
