@@ -19,13 +19,10 @@ jobs:
     outputs:
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
     steps:
-    - uses: actions/checkout@v3
+    #- uses: actions/checkout@v3
     - name: Prepare
       id: ci_vars
       run: echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
-    - name: Prepare2
-      id: vars
-      run: echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     runs-on: ubuntu-latest
@@ -49,8 +46,7 @@ jobs:
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
     with:
-      # IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   test:
     needs: [setup-ci-vars, build-image]
@@ -60,8 +56,7 @@ jobs:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
       KOSLI_HOST: ${{ vars.KOSLI_HOST }}
-      #IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   sdlc-gate:
     needs: [setup-ci-vars, test]
@@ -70,8 +65,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ vars.KOSLI_HOST }}
-      #IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   expect-deployment:
     needs: [setup-ci-vars, sdlc-gate]
@@ -80,13 +74,11 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ vars.KOSLI_HOST }}
-      #IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   deploy:
     needs: [setup-ci-vars, sdlc-gate]
     uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
     with:
-      #IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
-      IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+      IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
