@@ -2,12 +2,32 @@
 $ brew tap hashicorp/tap
 $ brew install hashicorp/tap/terraform
 
-2. Download tf.sh wrapper
+2. Install aws-vault
+See https://github.com/99designs/aws-vault#installing
+On a mac
+$ brew install --cask aws-vault
+
+3. Ensure you have an ~/.aws/config file with the required profile (eg cyber-dojo-beta)
+It will look like this...
+[profile cyber-dojo-beta]
+sso_start_url = https://merkely.awsapps.com/start
+sso_region = eu-north-1
+sso_account_id = 244531986313
+sso_role_name = AdministratorAccess
+region = eu-central-1
+output = json
+
+4. Do an aws-vault login
+$ aws-vault login cyber-dojo-beta -d 8h
+
+5. cd to the ./deployment/terraform directory inside the repo in question
+$ cd ./deployment/terraform
+
+6. Download tf.sh wrapper
 $ curl https://releases.fivexl.io/tf/v0.2.1/tf.sh --output tf.sh && chmod +x ./tf.sh
 
-3. Now it's possible to unlock the state.
-Inside the deployment/terraform directory run this command:
-$ tf.sh force-unlock <state-lock-id>
+7. run this command:
+$ ./tf.sh force-unlock <state-lock-id>
 
 You can find state lock ID in the CI error message:
 Error: Error acquiring the state lock
@@ -24,4 +44,4 @@ Lock Info:
 
 So in this case the command would be:
 
-$ tf.sh force-unlock c9cc5264-88ee-46ec-4507-ba929c37b97e
+$ ./tf.sh force-unlock c9cc5264-88ee-46ec-4507-ba929c37b97e
