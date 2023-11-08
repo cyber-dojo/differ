@@ -3,8 +3,8 @@ name: Sub - build image
 on:
   workflow_call:
     secrets:
-      KOSLI_API_TOKEN:
-        required: true
+#      KOSLI_API_TOKEN:
+#        required: true
       DOCKER_PASS:
         required: true
       DOCKER_USER:
