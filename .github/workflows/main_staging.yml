@@ -50,7 +50,7 @@ jobs:
 
       - name: Report image to Kosli flow
         run: |
-          IMAGE_TAG="${{ needs.variables.outputs.image_tag }}"           
+          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"           
           docker pull cyberdojo/differ:${IMAGE_TAG}          
           kosli report artifact cyberdojo/differ:${IMAGE_TAG} \
             --artifact-type=docker
