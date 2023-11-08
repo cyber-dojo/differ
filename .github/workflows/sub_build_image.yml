@@ -58,7 +58,7 @@ jobs:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version: ${{ env.KOSLI_CLI_VERSION }}
+          version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report image to Kosli flow
         run:
