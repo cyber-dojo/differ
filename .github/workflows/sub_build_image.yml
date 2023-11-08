@@ -16,9 +16,6 @@ on:
       KOSLI_HOST:
         required: true
         type: string
-      KOSLI_ORG:
-        required: true
-        type: string
       KOSLI_FLOW:
         required: true
         type: string
@@ -29,7 +26,6 @@ on:
 env:
   KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
   KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
-  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_FLOW: ${{ inputs.KOSLI_FLOW }}
   IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
