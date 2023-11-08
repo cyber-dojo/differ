@@ -1,4 +1,4 @@
-name: Sub - test image
+name: Sub - SDLC gate
 
 on:
   workflow_call:
