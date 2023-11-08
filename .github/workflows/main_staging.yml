@@ -6,34 +6,26 @@ on:
       - main
 
 env:
-  KOSLI_DRY_RUN: "False"  # "True"
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}
   KOSLI_HOST: "https://staging.app.kosli.com"
-  KOSLI_ORG: cyber-dojo
+  KOSLI_ORG: ${{ vars.KOSLI_ORG }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-  KOSLI_FLOW: differ
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
 
 jobs:
 
   setup-ci-vars:
     runs-on: ubuntu-latest
     outputs:
-      kosli_dry_run: ${{ steps.ci_vars.outputs.kosli_dry_run }}
-      kosli_cli_version: ${{ steps.ci_vars.outputs.kosli_cli_version }}
       kosli_host: ${{ steps.ci_vars.outputs.kosli_host }}
-      kosli_org: ${{ steps.ci_vars.outputs.kosli_org }}
-      kosli_flow: ${{ steps.ci_vars.outputs.kosli_flow }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
     steps:
     - uses: actions/checkout@v3
     - name: Prepare
       id: ci_vars
       run: |
-        echo "kosli_dry_run=${{ env.KOSLI_DRY_RUN }}"             >> ${GITHUB_OUTPUT}        
-        echo "kosli_cli_version=${{ vars.KOSLI_CLI_VERSION }}"    >> ${GITHUB_OUTPUT}
-        echo "kosli_host=${{ env.KOSLI_HOST }}"                   >> ${GITHUB_OUTPUT}
-        echo "kosli_org=${{ env.KOSLI_ORG }}"                     >> ${GITHUB_OUTPUT}
-        echo "kosli_flow=${{ env.KOSLI_FLOW }}"                   >> ${GITHUB_OUTPUT}        
-        echo "image_tag=$(echo $GITHUB_SHA | head -c7)"           >> ${GITHUB_OUTPUT}
+        echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
+        echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     runs-on: ubuntu-latest
@@ -78,10 +70,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
-      KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
-      KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   push-latest:
@@ -99,10 +88,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
-      KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
 
