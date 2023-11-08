@@ -18,17 +18,20 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.vars.outputs.image_tag }}
+      kosli_host: ${{ steps.vars.outputs.kosli_host }}
     steps:
     - name: Prepare
       id: vars
-      run: echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
+      run: |
+        echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
+        echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     uses: cyber-dojo/differ/.github/workflows/sub_create_kosli_flow.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: https://staging.app.kosli.com
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
 
   wait-for-image:
     needs: [create-kosli-flow]
@@ -47,7 +50,7 @@ jobs:
 
       - name: Report image to Kosli flow
         run: |
-          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"           
+          IMAGE_TAG="${{ needs.variables.outputs.image_tag }}"           
           docker pull cyberdojo/differ:${IMAGE_TAG}          
           kosli report artifact cyberdojo/differ:${IMAGE_TAG} \
             --artifact-type=docker
@@ -59,7 +62,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
-      KOSLI_HOST: https://staging.app.kosli.com
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   push-latest:
@@ -77,7 +80,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: https://staging.app.kosli.com
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
 
