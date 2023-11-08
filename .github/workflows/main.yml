@@ -40,7 +40,6 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
-      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   sdlc-gate:

@@ -9,7 +9,8 @@ on:
         required: true
     inputs:
       KOSLI_HOST:
-        required: true
+        default: https://app.kosli.com
+        required: false
         type: string
       IMAGE_TAG:
         required: true
