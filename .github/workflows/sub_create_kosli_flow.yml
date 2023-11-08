@@ -1,0 +1,33 @@
+name: Sub - push :latest image to dockerhub
+
+on:
+  workflow_call:
+    secrets:
+      KOSLI_API_TOKEN:
+        required: true
+    inputs:
+      KOSLI_HOST:
+        required: true
+        type: string
+
+env:
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}
+  KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
+  KOSLI_ORG: ${{ vars.KOSLI_ORG }}
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+
+jobs:
+  create-kosli-flow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Create Kosli flow
+        run:
+          kosli create flow ${{ env.KOSLI_FLOW }} 
+            --description="Diff files from two traffic-lights" 
+            --template=artifact,lint,branch-coverage,snyk-scan
