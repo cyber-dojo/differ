@@ -65,6 +65,15 @@ jobs:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
+  sdlc-gate:
+    needs: [variables, test]
+    uses: cyber-dojo/differ/.github/workflows/sub_sdlc_gate.yml@main
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+    with:
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+
   push-latest:
     needs: [variables, test]
     uses: cyber-dojo/differ/.github/workflows/sub_push_latest.yml@main

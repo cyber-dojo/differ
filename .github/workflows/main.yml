@@ -20,8 +20,6 @@ jobs:
     uses: cyber-dojo/differ/.github/workflows/sub_create_kosli_flow.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-    with:
-      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
 
   build-image:
     needs: [variables, create-kosli-flow]
@@ -48,7 +46,6 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   expect-deployment:
@@ -57,7 +54,6 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   deploy:
