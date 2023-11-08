@@ -9,9 +9,6 @@ on:
       KOSLI_DRY_RUN:
         required: true
         type: string
-      KOSLI_CLI_VERSION:
-        required: true
-        type: string
       KOSLI_HOST:
         required: true
         type: string
@@ -27,7 +24,6 @@ on:
 
 env:
   KOSLI_DRY_RUN: ${{ inputs.KOSLI_DRY_RUN }}
-  KOSLI_CLI_VERSION: ${{ inputs.KOSLI_CLI_VERSION }}
   KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
   KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -42,7 +38,7 @@ jobs:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version: ${{ env.KOSLI_CLI_VERSION }}
+          version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report expected aws-beta deployment to Kosli
         run: |
@@ -58,7 +54,7 @@ jobs:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version: ${{ env.KOSLI_CLI_VERSION }}
+          version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report expected aws-prod deployment to Kosli
         run: |
