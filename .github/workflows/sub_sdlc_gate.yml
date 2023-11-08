@@ -19,7 +19,6 @@ env:
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-  IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
 
 jobs:
   sdlc-gate:
@@ -32,6 +31,6 @@ jobs:
 
       - name: Kosli SDLC gate to short-circuit-the-flow
         run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}          
-          kosli assert artifact cyberdojo/differ:${{ env.IMAGE_TAG }} \
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
+          kosli assert artifact cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
             --artifact-type=docker          

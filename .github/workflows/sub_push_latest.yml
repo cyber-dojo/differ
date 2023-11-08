@@ -12,9 +12,6 @@ on:
         required: true
         type: string
 
-env: 
-  IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
-
 jobs:
   to-dockerhub:
     runs-on: ubuntu-latest
@@ -28,6 +25,6 @@ jobs:
 
       - name: Build and push image:latest to Dockerhub Registry
         run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}  
-          docker tag cyberdojo/differ:${{ env.IMAGE_TAG }} cyberdojo/differ:latest
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}  
+          docker tag cyberdojo/differ:${{ inputs.IMAGE_TAG }} cyberdojo/differ:latest
           docker push cyberdojo/differ:latest

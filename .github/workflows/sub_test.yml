@@ -22,7 +22,6 @@ env:
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
 
 jobs:
 
@@ -39,7 +38,7 @@ jobs:
       - name: Run tests, save results to evidence.json file, report to Kosli flow
         run: |
           ./sh/run_tests_with_coverage.sh          
-          kosli report evidence artifact generic cyberdojo/differ:${{ env.IMAGE_TAG }} \
+          kosli report evidence artifact generic cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
               --artifact-type=docker \
               --description="server & client branch-coverage reports" \
               --name=branch-coverage \
@@ -61,15 +60,15 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
         run:
-           snyk container test cyberdojo/differ:${{ env.IMAGE_TAG }} 
+           snyk container test cyberdojo/differ:${{ inputs.IMAGE_TAG }} 
             --file=Dockerfile 
             --json-file-output=snyk.json 
             --policy-path=.snyk
 
       - name: Report Snyk results to Kosli flow
         run: |
-          docker pull cyberdojo/differ:${{ env.IMAGE_TAG }}
-          kosli report evidence artifact snyk cyberdojo/differ:${{ env.IMAGE_TAG }} \
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
+          kosli report evidence artifact snyk cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
             --artifact-type=docker  \
             --name=snyk-scan  \
             --scan-results=snyk.json
