@@ -24,7 +24,6 @@ jobs:
     - name: Prepare
       id: ci_vars
       run: |
-        echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
@@ -49,8 +48,6 @@ jobs:
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
     with:
-      # KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
-      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   test:
@@ -60,7 +57,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
-      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_HOST: ${{ env.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   sdlc-gate:
@@ -69,7 +66,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_HOST: ${{ env.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   expect-deployment:
@@ -78,7 +75,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
+      KOSLI_HOST: ${{ env.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   deploy:
