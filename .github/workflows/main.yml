@@ -17,7 +17,6 @@ jobs:
   setup-ci-vars:
     runs-on: ubuntu-latest
     outputs:
-      kosli_host: ${{ steps.ci_vars.outputs.kosli_host }}
       image_tag: ${{ steps.ci_vars.outputs.image_tag }}
     steps:
     - uses: actions/checkout@v3
@@ -57,7 +56,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
-      KOSLI_HOST: ${{ env.KOSLI_HOST }}
+      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   sdlc-gate:
@@ -66,7 +65,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: ${{ env.KOSLI_HOST }}
+      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   expect-deployment:
@@ -75,7 +74,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
-      KOSLI_HOST: ${{ env.KOSLI_HOST }}
+      KOSLI_HOST: ${{ vars.KOSLI_HOST }}
       IMAGE_TAG: ${{ needs.setup-ci-vars.outputs.image_tag }}
 
   deploy:
