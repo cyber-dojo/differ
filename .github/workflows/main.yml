@@ -59,7 +59,6 @@ jobs:
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
     with:
       KOSLI_DRY_RUN: ${{ needs.setup-ci-vars.outputs.kosli_dry_run }}
-      KOSLI_CLI_VERSION: ${{ needs.setup-ci-vars.outputs.kosli_cli_version }}
       KOSLI_HOST: ${{ needs.setup-ci-vars.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.setup-ci-vars.outputs.kosli_org }}
       KOSLI_FLOW: ${{ needs.setup-ci-vars.outputs.kosli_flow }}
