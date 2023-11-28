@@ -24,3 +24,12 @@ deploy-manually.yml is a third, manually triggered pipeline, which has two purpo
    image_tag that still works, since it will be deployed to https://cyber-dojo.org
    The simplest way to ensure this, is to pick an image that failed only its
    snyk-scan. For example e091a4d (See https://app.kosli.com/cyber-dojo/flows/differ/artifacts/fb96934)
+   This will create a snapshot where differ has provenance, but is non-compliant.
+  
+   Alternatively, you can pick an image_tag that is completely unknown to Kosli.
+   There is a specially prepared image tag for this (that has been pushed to dockerhub).
+   Its short-sha is badhaxr 
+   Its fingerprint is 388f48140331636dcb230bd8fd896c36e6007cc10c6065ad86a5bda61fe4a110
+   This will result in Kosli snapshot with an Artifact with no-provenance.
+   Again, this Artifact will be deployed to https://cyber-dojo.org
+   but this Artifact has full and correct functionality.
