@@ -1,0 +1,14 @@
+name: Deploy-manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag (short commit SHA - first 7 digits)'
+        required: true
+
+jobs:
+  deploy:
+    uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
+    with:
+      IMAGE_TAG: ${{ github.event.inputs.image_tag }}
