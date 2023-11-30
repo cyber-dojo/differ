@@ -31,6 +31,10 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Report approval of deployment to aws-beta
         run: |
           docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
@@ -46,6 +50,10 @@ jobs:
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Report approval of deployment to aws-prod
         run: |
