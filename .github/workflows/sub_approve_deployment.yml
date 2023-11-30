@@ -37,7 +37,7 @@ jobs:
           kosli report approval cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
             --artifact-type=docker \
             --environment=aws-beta \
-            --approver="${{ github.actor }}
+            --approver="${{ github.actor }}"
 
   to-aws-prod:
     runs-on: ubuntu-latest
@@ -53,4 +53,4 @@ jobs:
           kosli report approval cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
             --artifact-type=docker \
             --environment=aws-prod \
-            --approver="${{ github.actor }}          
+            --approver="${{ github.actor }}"          
