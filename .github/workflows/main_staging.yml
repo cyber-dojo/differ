@@ -80,6 +80,7 @@ jobs:
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   expected-deployment:
