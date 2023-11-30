@@ -28,7 +28,9 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Create Kosli flow
-        run:
+        run: |
+          echo "APPROVER="${{ github.actor }}"
+          dfsdf
           kosli create flow ${{ env.KOSLI_FLOW }} 
             --description="Diff files from two traffic-lights" 
             --template=artifact,lint,branch-coverage,snyk-scan
