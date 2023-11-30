@@ -106,3 +106,25 @@ jobs:
             --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
             --name=lint
+
+  pull-request:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report pull-request evidence to Kosli
+        run:
+          kosli report evidence artifact pullrequest github cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
+            --artifact-type=docker  \
+            --github-token ${{ secrets.GITHUB_TOKEN }} \
+            --name=pull-request
