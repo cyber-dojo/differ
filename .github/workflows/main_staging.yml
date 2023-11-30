@@ -74,21 +74,43 @@ jobs:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
-  approve-deployment:
+  approve-deployment-to-beta:
     needs: [variables, sdlc-gate]
     uses: cyber-dojo/differ/.github/workflows/sub_approve_deployment.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ENVIRONMENT: aws-beta
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
-  expected-deployment:
-    needs: [variables, approve-deployment]
+  expect-deployment-to-beta:
+    needs: [variables, approve-deployment-to-beta]
     uses: cyber-dojo/differ/.github/workflows/sub_expect_deployment.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
+      KOSLI_ENVIRONMENT: aws-beta
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+
+  approve-deployment-to-prod:
+    needs: [variables, sdlc-gate]
+    uses: cyber-dojo/differ/.github/workflows/sub_approve_deployment.yml@main
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+    with:
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ENVIRONMENT: aws-prod
+      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+
+  expect-deployment-to-prod:
+    needs: [variables, approve-deployment-to-prod]
+    uses: cyber-dojo/differ/.github/workflows/sub_expect_deployment.yml@main
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+    with:
+      KOSLI_ENVIRONMENT: aws-prod
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 

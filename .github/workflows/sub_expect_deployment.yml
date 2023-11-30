@@ -13,6 +13,9 @@ on:
       IMAGE_TAG:
         required: true
         type: string
+      KOSLI_ENVIRONMENT:
+        required: true
+        type: string
 
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}
@@ -23,7 +26,7 @@ env:
 
 jobs:
 
-  to-aws-beta:
+  to-env:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
@@ -31,26 +34,10 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Report expected aws-beta deployment to Kosli
+      - name: Report expected deployment to Kosli
         run: |
           docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
           kosli expect deployment cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
             --artifact-type=docker \
-            --description="Deployed to aws-beta in Github Actions pipeline" \
-            --environment=aws-beta
-
-  to-aws-prod:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Report expected aws-prod deployment to Kosli
-        run: |
-          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
-          kosli expect deployment cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
-            --artifact-type=docker \
-            --description="Deployed to aws-prod in Github Actions pipeline" \
-            --environment=aws-prod
+            --description="Deployed to ${{ inputs.KOSLI_ENVIRONMENT }} in Github Actions pipeline" \
+            --environment=${{ inputs.KOSLI_ENVIRONMENT }}
