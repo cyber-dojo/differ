@@ -123,8 +123,9 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report pull-request evidence to Kosli
-        run:
+        run: |
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
           kosli report evidence artifact pullrequest github cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
-            --artifact-type=docker  \
+            --artifact-type=docker \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
             --name=pull-request
