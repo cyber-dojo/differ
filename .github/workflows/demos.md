@@ -33,3 +33,6 @@ deploy-manually.yml is a third, manually triggered pipeline, which has two purpo
    This will result in Kosli snapshot with an Artifact with no-provenance.
    Again, this Artifact will be deployed to https://cyber-dojo.org
    but this Artifact has full and correct functionality.
+
+Note: the lint: job occasionally fails its CI job. 
+   There is typically a spurious failure, and if you re-run the failed jobs it will pass.
