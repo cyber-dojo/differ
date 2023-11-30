@@ -124,7 +124,7 @@ jobs:
 
       - name: Report pull-request evidence to Kosli
         run: |
-          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
           kosli report evidence artifact pullrequest github cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
             --artifact-type=docker \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
