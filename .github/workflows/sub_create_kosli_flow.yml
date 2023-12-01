@@ -1,4 +1,4 @@
-name: Sub - push :latest image to dockerhub
+name: Sub - create kosli flow
 
 on:
   workflow_call:

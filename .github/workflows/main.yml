@@ -23,7 +23,7 @@ jobs:
 
   build-image:
     needs: [variables, create-kosli-flow]
-    uses: cyber-dojo/differ/.github/workflows/sub_build_image.yml@main
+    uses: ./.github/workflows/sub_build_image.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
@@ -33,7 +33,7 @@ jobs:
 
   test:
     needs: [variables, build-image]
-    uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
+    uses: ./.github/workflows/sub_test.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
 
   sdlc-gate:
     needs: [variables, test]
-    uses: cyber-dojo/differ/.github/workflows/sub_sdlc_gate.yml@main
+    uses: ./.github/workflows/sub_sdlc_gate.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -50,7 +50,7 @@ jobs:
 
   approve-deployment-to-beta:
     needs: [variables, sdlc-gate]
-    uses: cyber-dojo/differ/.github/workflows/sub_approve_deployment.yml@main
+    uses: ./.github/workflows/sub_approve_deployment.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -59,13 +59,13 @@ jobs:
 
   deploy-to-beta:
     needs: [variables, approve-deployment-to-beta]
-    uses: cyber-dojo/differ/.github/workflows/sub_deploy_to_beta.yml@main
+    uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   approve-deployment-to-prod:
     needs: [variables, deploy-to-beta]
-    uses: cyber-dojo/differ/.github/workflows/sub_approve_deployment.yml@main
+    uses: ./.github/workflows/sub_approve_deployment.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -74,6 +74,6 @@ jobs:
 
   deploy-to-prod:
     needs: [variables, approve-deployment-to-prod]
-    uses: cyber-dojo/differ/.github/workflows/sub_deploy_to_prod.yml@main
+    uses: ./.github/workflows/sub_deploy_to_prod.yml
     with:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}

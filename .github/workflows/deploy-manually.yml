@@ -9,11 +9,11 @@ on:
 
 jobs:
   deploy_to_beta:
-    uses: cyber-dojo/differ/.github/workflows/sub_deploy_to_beta.yml@main
+    uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
       IMAGE_TAG: ${{ github.event.inputs.image_tag }}
 
   deploy_to_prod:
-    uses: cyber-dojo/differ/.github/workflows/sub_deploy_to_prod.yml@main
+    uses: ./.github/workflows/sub_deploy_to_prod.yml
     with:
       IMAGE_TAG: ${{ github.event.inputs.image_tag }}

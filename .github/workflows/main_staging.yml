@@ -27,7 +27,7 @@ jobs:
         echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
-    uses: cyber-dojo/differ/.github/workflows/sub_create_kosli_flow.yml@main
+    uses: ./.github/workflows/sub_create_kosli_flow.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -58,7 +58,7 @@ jobs:
 
   test:
     needs: [variables, wait-for-image]
-    uses: cyber-dojo/differ/.github/workflows/sub_test.yml@main
+    uses: ./.github/workflows/sub_test.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -68,7 +68,7 @@ jobs:
 
   sdlc-gate:
     needs: [variables, test]
-    uses: cyber-dojo/differ/.github/workflows/sub_sdlc_gate.yml@main
+    uses: ./.github/workflows/sub_sdlc_gate.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -77,7 +77,7 @@ jobs:
 
   approve-deployment-to-beta:
     needs: [variables, sdlc-gate]
-    uses: cyber-dojo/differ/.github/workflows/sub_approve_deployment.yml@main
+    uses: ./.github/workflows/sub_approve_deployment.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -87,7 +87,7 @@ jobs:
 
   approve-deployment-to-prod:
     needs: [variables, approve-deployment-to-beta]
-    uses: cyber-dojo/differ/.github/workflows/sub_approve_deployment.yml@main
+    uses: ./.github/workflows/sub_approve_deployment.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
@@ -97,7 +97,7 @@ jobs:
 
   push-latest:
     needs: [variables, approve-deployment-to-prod]
-    uses: cyber-dojo/differ/.github/workflows/sub_push_latest.yml@main
+    uses: ./.github/workflows/sub_push_latest.yml
     secrets:
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
