@@ -8,7 +8,12 @@ on:
         required: true
 
 jobs:
-  deploy:
-    uses: cyber-dojo/differ/.github/workflows/sub_deploy.yml@main
+  deploy_to_beta:
+    uses: cyber-dojo/differ/.github/workflows/sub_deploy_to_beta.yml@main
+    with:
+      IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+
+  deploy_to_prod:
+    uses: cyber-dojo/differ/.github/workflows/sub_deploy_to_prod.yml@main
     with:
       IMAGE_TAG: ${{ github.event.inputs.image_tag }}
