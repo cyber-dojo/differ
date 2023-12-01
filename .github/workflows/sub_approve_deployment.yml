@@ -47,3 +47,10 @@ jobs:
             --environment=${{ inputs.KOSLI_ENVIRONMENT }} \
             --approver="${{ github.actor }}"
 
+      - name: Report expected deployment to Kosli
+        run: |
+          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}          
+          kosli expect deployment cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
+            --artifact-type=docker \
+            --description="Deployed to ${{ inputs.KOSLI_ENVIRONMENT }} in Github Actions pipeline" \
+            --environment=${{ inputs.KOSLI_ENVIRONMENT }}
