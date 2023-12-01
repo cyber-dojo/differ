@@ -7,11 +7,15 @@ on:
         required: true
         type: string
 
+env:
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
+
 jobs:
 
   variables:
     runs-on: ubuntu-latest
     outputs:
+      flow_name: ${{ steps.vars.outputs.flow_name }}
       image_tag: ${{ steps.vars.outputs.image_tag }}
       aws_account_id: ${{ steps.vars.outputs.aws_account_id }}
       ecr_registry: ${{ steps.vars.outputs.ecr_registry }}
@@ -21,6 +25,7 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
+        echo "flow_name=${{ env.KOSLI_FLOW }}"                              >> ${GITHUB_OUTPUT}
         echo "image_tag=${{ inputs.IMAGE_TAG }}"                            >> ${GITHUB_OUTPUT}
         echo "aws_account_id=244531986313"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry=244531986313.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
@@ -48,9 +53,11 @@ jobs:
 
       - name: Push image to private beta-ECR
         run: |
-          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
-          docker tag cyberdojo/differ:${{ inputs.IMAGE_TAG }} ${{ needs.variables.outputs.ecr_registry }}/differ:${{ inputs.IMAGE_TAG }}
-          docker push ${{ needs.variables.outputs.ecr_registry }}/differ:${{ inputs.IMAGE_TAG }}
+          PUBLIC_IMAGE_NAME=cyberdojo/${{ needs.variables.outputs.flow_name }}:${{ inputs.IMAGE_TAG }}
+          PRIVATE_IMAGE_NAME=${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.flow_name }}:${{ inputs.IMAGE_TAG }}
+          docker pull ${PUBLIC_IMAGE_NAME}
+          docker tag ${PUBLIC_IMAGE_NAME} ${PRIVATE_IMAGE_NAME}
+          docker push ${PRIVATE_IMAGE_NAME}
 
   deploy-to-aws-beta:
     needs: [variables, push-image-to-beta-ecr]
@@ -66,4 +73,4 @@ jobs:
       working_directory: deployment/terraform/
       tf_apply: 'true'
       tf_version: v1.4.5
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/differ:${{ needs.variables.outputs.image_tag }}"}'
+      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.flow_name }}:${{ needs.variables.outputs.image_tag }}"}'

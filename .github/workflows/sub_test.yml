@@ -39,7 +39,7 @@ jobs:
       - name: Run tests, save results to evidence.json file, report to Kosli flow
         run: |
           ./sh/run_tests_with_coverage.sh          
-          kosli report evidence artifact generic cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
+          kosli report evidence artifact generic cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }} \
               --artifact-type=docker \
               --description="server & client branch-coverage reports" \
               --name=branch-coverage \
@@ -61,15 +61,16 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
         run:
-           snyk container test cyberdojo/differ:${{ inputs.IMAGE_TAG }} 
+           snyk container test cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }} 
             --file=Dockerfile 
             --json-file-output=snyk.json 
             --policy-path=.snyk
 
       - name: Report Snyk results to Kosli flow
         run: |
-          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
-          kosli report evidence artifact snyk cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
+          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
+          docker pull ${ARTIFACT_NAME}
+          kosli report evidence artifact snyk ${ARTIFACT_NAME} \
             --artifact-type=docker  \
             --name=snyk-scan  \
             --scan-results=snyk.json
@@ -124,8 +125,9 @@ jobs:
 
       - name: Report pull-request evidence to Kosli
         run: |
-          docker pull cyberdojo/differ:${{ inputs.IMAGE_TAG }}
-          kosli report evidence artifact pullrequest github cyberdojo/differ:${{ inputs.IMAGE_TAG }} \
+          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          docker pull ${ARTIFACT_NAME}
+          kosli report evidence artifact pullrequest github ${ARTIFACT_NAME} \
             --artifact-type=docker \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
             --name=pull-request

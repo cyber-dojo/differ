@@ -42,7 +42,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: cyberdojo/differ:${{ inputs.IMAGE_TAG }}
+          tags: cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
           build-args:
             COMMIT_SHA=${{ github.sha }}
 
@@ -52,6 +52,7 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report image to Kosli flow
-        run:
-          kosli report artifact cyberdojo/differ:${{ inputs.IMAGE_TAG }} 
+        run: |
+          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}                    
+          kosli report artifact ${ARTIFACT_NAME} \ 
             --artifact-type=docker
