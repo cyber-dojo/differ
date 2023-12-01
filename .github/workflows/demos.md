@@ -25,6 +25,7 @@ deploy-manually.yml is a third, manually triggered pipeline, which has two purpo
    The simplest way to ensure this, is to pick an image that failed only its
    snyk-scan. For example e091a4d (See https://app.kosli.com/cyber-dojo/flows/differ/artifacts/fb96934)
    This will create a snapshot where differ has provenance, but is non-compliant.
+   Eg https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/1461?active_tab=running
   
    Alternatively, you can pick an image_tag that is completely unknown to Kosli.
    There is a specially prepared image tag for this (that has been pushed to dockerhub).
@@ -33,6 +34,8 @@ deploy-manually.yml is a third, manually triggered pipeline, which has two purpo
    This will result in Kosli snapshot with an Artifact with no-provenance.
    Again, this Artifact will be deployed to https://cyber-dojo.org
    but this Artifact has full and correct functionality.
+   Eg https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/1465?active_tab=running
+
 
 Note: the lint: job occasionally fails its CI job. 
    There is typically a spurious failure, and if you re-run the failed jobs it will pass.
