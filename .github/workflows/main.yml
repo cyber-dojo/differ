@@ -17,7 +17,7 @@ jobs:
       run: echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
-    uses: cyber-dojo/differ/.github/workflows/sub_create_kosli_flow.yml@main
+    uses: ./.github/workflows/sub_create_kosli_flow.yml@main
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
 
