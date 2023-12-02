@@ -53,6 +53,6 @@ jobs:
 
       - name: Report image to Kosli flow
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}                    
-          kosli report artifact ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}                    
+          kosli report artifact ${IMAGE_NAME} \
             --artifact-type=docker

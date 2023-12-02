@@ -68,9 +68,9 @@ jobs:
 
       - name: Report Snyk results to Kosli flow
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
-          docker pull ${ARTIFACT_NAME}
-          kosli report evidence artifact snyk ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
+          docker pull ${IMAGE_NAME}
+          kosli report evidence artifact snyk ${IMAGE_NAME} \
             --artifact-type=docker  \
             --name=snyk-scan  \
             --scan-results=snyk.json
@@ -98,9 +98,9 @@ jobs:
           cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDENCE_DIR}"/.rubocop.yml
           gem install rubocop
           if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
-            export KOSLI_LINT_COMPLIANT='true'
+            export KOSLI_LINT_COMPLIANT=true
           else
-            export KOSLI_LINT_COMPLIANT='false'
+            export KOSLI_LINT_COMPLIANT=false
           fi
 
           kosli report evidence commit generic \
@@ -125,9 +125,9 @@ jobs:
 
       - name: Report pull-request evidence to Kosli
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${ARTIFACT_NAME}
-          kosli report evidence artifact pullrequest github ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          docker pull ${IMAGE_NAME}
+          kosli report evidence artifact pullrequest github ${IMAGE_NAME} \
             --artifact-type=docker \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
             --name=pull-request

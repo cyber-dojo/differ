@@ -41,18 +41,18 @@ jobs:
 
       - name: Report approval of deployment
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${ARTIFACT_NAME}
-          kosli report approval ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          docker pull ${IMAGE_NAME}
+          kosli report approval ${IMAGE_NAME} \
             --artifact-type=docker \
             --environment=${{ inputs.KOSLI_ENVIRONMENT }} \
             --approver="${{ github.actor }}"
 
       - name: Report expected deployment to Kosli
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${ARTIFACT_NAME}
-          kosli expect deployment ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          docker pull ${IMAGE_NAME}
+          kosli expect deployment ${IMAGE_NAME} \
             --artifact-type=docker \
             --description="Deployed to ${{ inputs.KOSLI_ENVIRONMENT }} in Github Actions pipeline" \
             --environment=${{ inputs.KOSLI_ENVIRONMENT }}
