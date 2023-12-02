@@ -68,9 +68,9 @@ jobs:
 
       - name: Report Snyk results to Kosli flow
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
-          docker pull ${ARTIFACT_NAME}
-          kosli report evidence artifact snyk ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
+          docker pull ${IMAGE_NAME}
+          kosli report evidence artifact snyk ${IMAGE_NAME} \
             --artifact-type=docker  \
             --name=snyk-scan  \
             --scan-results=snyk.json
@@ -125,9 +125,9 @@ jobs:
 
       - name: Report pull-request evidence to Kosli
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${ARTIFACT_NAME}
-          kosli report evidence artifact pullrequest github ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          docker pull ${IMAGE_NAME}
+          kosli report evidence artifact pullrequest github ${IMAGE_NAME} \
             --artifact-type=docker \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
             --name=pull-request

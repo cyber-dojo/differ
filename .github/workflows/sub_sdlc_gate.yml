@@ -32,7 +32,7 @@ jobs:
 
       - name: Kosli SDLC gate to short-circuit-the-flow
         run: |
-          ARTIFACT_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${ARTIFACT_NAME}
-          kosli assert artifact ${ARTIFACT_NAME} \
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          docker pull ${IMAGE_NAME}
+          kosli assert artifact ${IMAGE_NAME} \
             --artifact-type=docker          
