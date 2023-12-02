@@ -2,17 +2,18 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 test_in_containers()
 {
-  if [ "${1:-}" == 'client' ]; then
+  local exit_code=0
+  if [ "${1:-}" = 'client' ]; then
     shift
-    run_client_tests "${@:-}"
-  elif [ "${1:-}" == 'server' ]; then
+    run_client_tests "${@:-}" || exit_code=$?
+  elif [ "${1:-}" = 'server' ]; then
     shift
-    run_server_tests "${@:-}"
+    run_server_tests "${@:-}" || exit_code=$?
   else
-    run_server_tests "${@:-}"
-    run_client_tests "${@:-}"
+    run_server_tests "${@:-}" || exit_code=$?
+    run_client_tests "${@:-}" || exit_code=$?
   fi
-  echo All passed
+  return ${exit_code}
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -21,7 +22,7 @@ run_client_tests()
   run_tests \
     "${CYBER_DOJO_DIFFER_CLIENT_USER}" \
     "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}" \
-    client "${@:-}";
+    client "${@:-}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -30,7 +31,7 @@ run_server_tests()
   run_tests \
     "${CYBER_DOJO_DIFFER_SERVER_USER}" \
     "${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}" \
-    server "${@:-}";
+    server "${@:-}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -66,7 +67,7 @@ run_tests()
   # Extract test-run results and coverage data from the container.
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out
 
-  if [ "${TYPE}" == server ]; then
+  if [ "${TYPE}" = server ]; then
     local -r HOST_TEST_DIR="${ROOT_DIR}/test"
   else
     local -r HOST_TEST_DIR="${ROOT_DIR}/client/test"
