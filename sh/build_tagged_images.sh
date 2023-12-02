@@ -9,7 +9,7 @@ source "${SH_DIR}/augmented_docker_compose.sh"
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
 {
-  if [ "${1:-}" == server ]; then
+  if [ "${1:-}" = server ]; then
     local -r target=differ_server
   fi
   echo
