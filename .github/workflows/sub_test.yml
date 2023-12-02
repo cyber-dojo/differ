@@ -98,9 +98,9 @@ jobs:
           cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDENCE_DIR}"/.rubocop.yml
           gem install rubocop
           if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
-            export KOSLI_LINT_COMPLIANT='true'
+            export KOSLI_LINT_COMPLIANT=true
           else
-            export KOSLI_LINT_COMPLIANT='false'
+            export KOSLI_LINT_COMPLIANT=false
           fi
 
           kosli report evidence commit generic \
