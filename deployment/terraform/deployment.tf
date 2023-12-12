@@ -10,6 +10,6 @@ module "ecs-service" {
   app_env_vars              = local.app_env_vars
   ecr_replication_targets   = var.ecr_replication_targets
   ecr_replication_origin    = var.ecr_replication_origin
-  ecs_wait_for_steady_state = true
+  ecs_wait_for_steady_state = false
   tags                      = module.tags.result
 }
