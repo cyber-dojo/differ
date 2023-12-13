@@ -27,6 +27,7 @@ jobs:
         echo "kosli_host=https://staging.app.kosli.com" >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
+    needs: [variables]
     uses: ./.github/workflows/sub_create_kosli_flow.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
