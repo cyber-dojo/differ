@@ -19,6 +19,7 @@ jobs:
     outputs:
       image_tag: ${{ steps.vars.outputs.image_tag }}
       kosli_host: ${{ steps.vars.outputs.kosli_host }}
+      kosli_org: ${{ steps.vars.outputs.kosli_org }}
     steps:
     - name: Prepare
       id: vars
