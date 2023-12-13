@@ -1,23 +1,22 @@
 
 When showing CI workflows in Kosli demos, there is a tension created
 by the fact that cyber-dojo Flows are unusual in that they need to 
-repeat every Kosli step twice; once to report to https://staging.app.kosli.com
-and once again to report to https://app.kosli.com
-A normal customer CI workflow yml file would only report to the latter.
+repeat every Kosli step twice; once to report to https://app.kosli.com
+and once again to report to https://staging.app.kosli.com
+A normal customer CI workflow yml file would only report to the former.
 To resolve this, a git push triggers two workflows:
 
 1) main.yml which reports to https://app.kosli.com
 2) main_staging.yml which reports to https://staging.app.kosli.com
-   This is basically the same as main.yml but it does NOT
+   This is basically the same as main.yml but it does NOT...
    - rebuild the docker image (since the build is not binary reproducible)
    - deploy the image to aws-beta/aws-prod (since main.yml already does that)
     
-During a demo, look at main.yml (and its three job_* yml files)
-which is the workflow visible by default.
+During a demo, look at main.yml (and its sub_* yml files).
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-deploy-manually.yml is a third, manually triggered pipeline, which has two purposes:
+deploy-manually-to-aws-beta-and-aws-prod.yml is a manually triggered pipeline, which has two purposes:
 1) in case you want to do a real-life "emergency" roll-back to a previous image
 2) to deliberately run a non-compliant artifact in the cyber-dojo aws-beta and aws-prod 
    environments for demo purposes. In this case, please try to ensure you pick an
@@ -38,4 +37,4 @@ deploy-manually.yml is a third, manually triggered pipeline, which has two purpo
 
 
 Note: the lint: job occasionally fails its CI job. 
-   There is typically a spurious failure, and if you re-run the failed jobs it will pass.
+   This is typically a spurious failure, and if you re-run the failed jobs it will pass.

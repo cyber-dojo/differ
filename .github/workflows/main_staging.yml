@@ -25,6 +25,7 @@ jobs:
       run: |
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
         echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
+        echo "kosli_org=${{ env.KOSLI_ORG }}"           >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     uses: ./.github/workflows/sub_create_kosli_flow.yml
@@ -32,6 +33,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
 
   wait-for-image:
     needs: [create-kosli-flow]
@@ -64,6 +66,7 @@ jobs:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   sdlc-gate:
@@ -73,6 +76,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   approve-deployment-to-beta:
@@ -82,6 +86,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       KOSLI_ENVIRONMENT: aws-beta
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
@@ -92,6 +97,7 @@ jobs:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       KOSLI_ENVIRONMENT: aws-prod
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
