@@ -12,6 +12,10 @@ on:
         default: https://app.kosli.com
         required: false
         type: string
+      KOSLI_ORG:
+        default: cyber-dojo
+        required: false
+        type: string
       IMAGE_TAG:
         required: true
         type: string
@@ -19,7 +23,7 @@ on:
 env: 
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}
   KOSLI_HOST: ${{ inputs.KOSLI_HOST }}
-  KOSLI_ORG: ${{ vars.KOSLI_ORG }}
+  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
