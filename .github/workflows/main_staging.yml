@@ -25,8 +25,8 @@ jobs:
       id: vars
       run: |
         echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
-        echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
-        echo "kosli_org=${{ env.KOSLI_ORG }}"           >> ${GITHUB_OUTPUT}
+        echo "kosli_host=https://staging.app.kosli.com" >> ${GITHUB_OUTPUT}
+        echo "kosli_org=cyber-dojo"                     >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     uses: ./.github/workflows/sub_create_kosli_flow.yml
