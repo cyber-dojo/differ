@@ -49,7 +49,7 @@ jobs:
             KOSLI_COMPLIANT=false
           fi
           IMAGE_NAME="cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}"
-          kosli report evidence junit "${IMAGE_NAME}" \
+          kosli report evidence artifact junit "${IMAGE_NAME}" \
               --artifact-type=docker \
               --name=unit-test \
               --results-dir=test/reports/junit
