@@ -43,8 +43,17 @@ jobs:
       - name: Run tests, save results to evidence.json file, report to Kosli flow
         run: |
           source ./sh/run_tests_with_coverage.sh
-          if run_tests_with_coverage; then KOSLI_COMPLIANT=true; else KOSLI_COMPLIANT=false; fi
-          kosli report evidence artifact generic cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }} \
+          if run_tests_with_coverage; then
+            KOSLI_COMPLIANT=true
+          else
+            KOSLI_COMPLIANT=false
+          fi
+          IMAGE_NAME="cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}"
+          kosli report evidence junit "${IMAGE_TAG}" \
+              --artifact-type=docker \
+              --name=unit-test \
+              --results-dir=test/reports/junit
+          kosli report evidence artifact generic "${IMAGE_TAG}" \
               --artifact-type=docker \
               --compliant=${KOSLI_COMPLIANT} \
               --description="server & client branch-coverage reports" \

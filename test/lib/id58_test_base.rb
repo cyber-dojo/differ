@@ -2,6 +2,9 @@
 
 require 'English'
 require 'minitest/autorun'
+require 'minitest/ci'
+
+Minitest::Ci.report_dir = "#{ENV['COVERAGE_ROOT']}/junit"
 
 def require_app(required)
   require_relative "../../app/#{required}"

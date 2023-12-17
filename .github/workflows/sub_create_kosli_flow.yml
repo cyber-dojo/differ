@@ -35,4 +35,4 @@ jobs:
         run:
           kosli create flow ${{ env.KOSLI_FLOW }} 
             --description="Diff files from two traffic-lights" 
-            --template=artifact,lint,branch-coverage,snyk-scan,pull-request
+            --template=artifact,lint,unit-test,branch-coverage,snyk-scan,pull-request
