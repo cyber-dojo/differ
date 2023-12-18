@@ -49,14 +49,3 @@ jobs:
           tags: cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
           build-args:
             COMMIT_SHA=${{ github.sha }}
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Report image to Kosli flow
-        run: |
-          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}                    
-          kosli report artifact ${IMAGE_NAME} \
-            --artifact-type=docker
