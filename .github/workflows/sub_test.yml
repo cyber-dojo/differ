@@ -76,10 +76,11 @@ jobs:
 
       - name: Report image to Kosli flow
         run: |
-          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
-          kosli report artifact ${IMAGE_NAME} \
+          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"
+          IMAGE_NAME="cyberdojo/${{ env.KOSLI_FLOW }}:${IMAGE_TAG}"
+          docker pull "${IMAGE_NAME}"
+          kosli report artifact "${IMAGE_NAME}" \
             --artifact-type=docker
-
 
   branch-coverage:
     needs: [report-image]
