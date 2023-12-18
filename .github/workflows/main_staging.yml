@@ -47,19 +47,6 @@ jobs:
         run:
           ./sh/wait_for_image.sh
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Report image to Kosli flow
-        run: |
-          IMAGE_TAG="$(echo $GITHUB_SHA | head -c7)"
-          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${IMAGE_TAG}
-          docker pull ${IMAGE_NAME}     
-          kosli report artifact ${IMAGE_NAME} \
-            --artifact-type=docker
-
   test:
     needs: [variables, wait-for-image]
     uses: ./.github/workflows/sub_test.yml
