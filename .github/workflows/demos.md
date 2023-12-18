@@ -7,10 +7,17 @@ A normal customer CI workflow yml file would only report to the former.
 To resolve this, a git push triggers two workflows:
 
 1) main.yml which reports to https://app.kosli.com
+
 2) main_staging.yml which reports to https://staging.app.kosli.com
-   This is basically the same as main.yml but it does NOT...
+   This is basically the same as 1)main.yml but it does NOT...
    - rebuild the docker image (since the build is not binary reproducible)
    - deploy the image to aws-beta/aws-prod (since main.yml already does that)
+   It _does_ however re-run the test evidence (currently unit-test, security-scan,
+   lint, and pull-request) so it is possible (eg if the unit-tests are flaky) to get the
+   run from 1)main.yml to report a compliant Artifact and do deployments to beta and prod but the
+   run from 2)main_staging.yml to report the same Artifact as non-compliant.
+   In this situation, the Environment report for staging will see the Artifact deployment
+   from 1)main.yml and so, in staging, the Artifact will appear as non-compliant in its snapshot.
     
 During a demo, look at main.yml (and its sub_* yml files).
 
