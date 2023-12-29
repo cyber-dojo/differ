@@ -1,5 +1,5 @@
 
-A single command run: like this, with continuation characters is wrong
+A single run: command like this, with continuation characters is wrong
         run:
           kosli report evidence commit generic \
             --compliant="${KOSLI_LINT_COMPLIANT}" \
@@ -11,6 +11,18 @@ In this case you cannot use continuation characters:
             --compliant="${KOSLI_LINT_COMPLIANT}"
             --evidence-paths="${LINT_EVIDENCE_DIR}"
             --name=lint
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+A multi-line run: command, needs a | after run: and line continuation characters, like this:
+        run: |
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
+          ./sh/wait_for_deployment.sh \
+             "${IMAGE_NAME}" \
+             "${{ env.KOSLI_HOST }}" \
+             "${{ env.KOSLI_API_TOKEN }}" \
+             "${{ env.KOSLI_ORG }}" \
+             aws-prod
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -33,4 +45,17 @@ These are equivalent:
     needs: variables
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+You can't use if: to skip a job if another, unskipped job needs: it
+
+  report-image:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    ...
+
+  branch-coverage:
+    needs: report-image
+    ...
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
