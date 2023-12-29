@@ -24,9 +24,9 @@ jobs:
     - name: Prepare
       id: vars
       run: |
-        echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
-        echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
-        echo "kosli_org=${{ env.KOSLI_ORG }}"           >> ${GITHUB_OUTPUT}
+        echo "image_tag=$(echo ${GITHUB_SHA} | head -c7)" >> ${GITHUB_OUTPUT}
+        echo "kosli_host=${{ env.KOSLI_HOST }}"           >> ${GITHUB_OUTPUT}
+        echo "kosli_org=${{ env.KOSLI_ORG }}"             >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
     needs: variables
@@ -45,7 +45,7 @@ jobs:
 
       - name: Wait for image to be built in main.yml
         run: |
-          ./sh/wait_for_image.sh "${{ env.GITHUB_SHA }}"
+          ./sh/wait_for_image.sh "${GITHUB_SHA}"
 
   test:
     needs: [variables, wait-for-image]
