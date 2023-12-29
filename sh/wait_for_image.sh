@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -Eu
 
-TAG="$(echo ${GITHUB_SHA} | head -c7)"
-MAX_ATTEMPTS=30  # every 10s for 5 minutes
-ATTEMPTS=1
+GIT_COMMIT="${1}"                         # eg 756c7286adbcca25ec7a1e098e43758b270ebed6
+TAG="$(echo "${GIT_COMMIT}" | head -c7)"  # eg 756c728
+IMAGE_NAME="cyberdojo/differ:${TAG}"      # eg cyberdojo/differ:756c728
 
-until docker pull cyberdojo/differ:${TAG}
+MAX_WAIT_TIME=$((5 * 60))  # 5 minutes
+SLEEP_TIME=10              # 10 secs
+MAX_ATTEMPTS=$(( MAX_WAIT_TIME / SLEEP_TIME ))
+
+until docker pull "${IMAGE_NAME}"
 do
   sleep 10
   [[ ${ATTEMPTS} -eq ${MAX_ATTEMPTS} ]] && echo "Failed!" && exit 1

@@ -35,22 +35,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
           bundler-cache: true
 
-      - name: Run Rubocop linter on source, report results to Kosli flow
+      - name: Run Rubocop linter on source
         run: |
           repo_root() { git rev-parse --show-toplevel; }
           export LINT_EVIDENCE_DIR=/tmp/evidence/lint
           mkdir -p "${LINT_EVIDENCE_DIR}"
-          cp "$(repo_root)/.rubocop.yml" "${LINT_EVIDENCE_DIR}"/.rubocop.yml
           gem install rubocop
           if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
             export KOSLI_LINT_COMPLIANT=true
@@ -58,6 +52,15 @@ jobs:
             export KOSLI_LINT_COMPLIANT=false
           fi
 
+      - name: Setup Kosli CLI
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report Rubocop results to Kosli
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run:
           kosli report evidence commit generic \
             --compliant="${KOSLI_LINT_COMPLIANT}" \
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
@@ -65,6 +68,7 @@ jobs:
 
   report-image:
     needs: [lint]
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -88,12 +92,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Run tests, save results to evidence.json file, report to Kosli flow
+      - name: Run tests, save results to evidence.json file
         run: |
           source ./sh/run_tests_with_coverage.sh
           if run_tests_with_coverage; then
@@ -101,6 +100,16 @@ jobs:
           else
             KOSLI_COMPLIANT=false
           fi
+
+      - name: Setup Kosli CLI
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report test results to Kosli
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |          
           IMAGE_NAME="cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}"
           kosli report evidence artifact junit "${IMAGE_NAME}" \
               --artifact-type=docker \
@@ -119,23 +128,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
       - name: Setup Snyk
         uses: snyk/actions/setup@master
 
       - name: Run Snyk to check Docker image for vulnerabilities
-        continue-on-error: true
+        continue-on-error: ${{ github.ref == 'refs/heads/main' }}
         run:
            snyk container test cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }} 
             --file=Dockerfile 
             --json-file-output=snyk.json 
             --policy-path=.snyk
 
-      - name: Report Snyk results to Kosli flow
+      - name: Setup Kosli CLI
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report Snyk results to Kosli
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
           docker pull ${IMAGE_NAME}
@@ -162,7 +173,7 @@ jobs:
 
       - name: Report pull-request evidence to Kosli
         run: |
-          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
           docker pull ${IMAGE_NAME}
           kosli report evidence artifact pullrequest github ${IMAGE_NAME} \
             --artifact-type=docker \

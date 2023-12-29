@@ -33,31 +33,20 @@ jobs:
 
   to-env:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Report approval of deployment to Kosli
-        run: |
-          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${IMAGE_NAME}
-          kosli report approval ${IMAGE_NAME} \
-            --artifact-type=docker \
-            --environment=${{ inputs.KOSLI_ENVIRONMENT }} \
-            --approver="${{ github.actor }}"
+      - uses: actions/checkout@v4
 
-      - name: Report expected deployment to Kosli
+      - name: Report wait for deployment
         run: |
           IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}          
-          docker pull ${IMAGE_NAME}
-          kosli expect deployment ${IMAGE_NAME} \
-            --artifact-type=docker \
-            --description="Deployed to ${{ inputs.KOSLI_ENVIRONMENT }} in Github Actions pipeline" \
-            --environment=${{ inputs.KOSLI_ENVIRONMENT }}
+          ./sh/wait_for_deployment.sh \
+             "${IMAGE_NAME}" \
+             "${{ env.KOSLI_HOST }}"
+             "${{ secrets.KOSLI_API_TOKEN }}" \
+             "${{ env.KOSLI_ORG }}" \
+             aws-prod
