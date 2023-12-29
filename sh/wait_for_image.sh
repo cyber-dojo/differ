@@ -8,6 +8,7 @@ IMAGE_NAME="cyberdojo/differ:${TAG}"      # eg cyberdojo/differ:756c728
 MAX_WAIT_TIME=$((5 * 60))  # 5 minutes
 SLEEP_TIME=10              # 10 secs
 MAX_ATTEMPTS=$(( MAX_WAIT_TIME / SLEEP_TIME ))
+ATTEMPTS=1
 
 until docker pull "${IMAGE_NAME}"
 do
