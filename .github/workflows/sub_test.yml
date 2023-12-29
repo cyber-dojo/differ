@@ -69,6 +69,7 @@ jobs:
             --name=lint
 
   report-image:
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: lint
     runs-on: ubuntu-latest
     steps:
