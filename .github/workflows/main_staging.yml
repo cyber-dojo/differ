@@ -3,7 +3,7 @@ name: Main - reports to https://staging.app.kosli.com
 on:
   push:
     branches:
-      - main
+      - *
 
 env:
   # KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
