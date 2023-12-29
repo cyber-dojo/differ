@@ -61,10 +61,11 @@ jobs:
       - name: Report Rubocop results to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
         env:
-          KOSLI_COMPLIANT: "${{ env.KOSLI_LINT_COMPLIANT }}"
+          KOSLI_LINT_COMPLIANT: "${{ env.KOSLI_LINT_COMPLIANT }}"
         run:
-          kosli report evidence commit generic \
-            --evidence-paths="${LINT_EVIDENCE_DIR}" \
+          kosli report evidence commit generic
+            --compliant="${KOSLI_LINT_COMPLIANT}"
+            --evidence-paths="${LINT_EVIDENCE_DIR}"
             --name=lint
 
   report-image:
@@ -139,9 +140,9 @@ jobs:
         continue-on-error: ${{ github.ref == 'refs/heads/main' }}
         run:
            snyk container test cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }} 
-            --file=Dockerfile 
-            --json-file-output=snyk.json 
-            --policy-path=.snyk
+             --file=Dockerfile 
+             --json-file-output=snyk.json 
+             --policy-path=.snyk
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' }}
