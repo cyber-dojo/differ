@@ -67,8 +67,7 @@ jobs:
             --name=lint
 
   report-image:
-    needs: [lint]
-    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -87,7 +86,7 @@ jobs:
             --artifact-type=docker
 
   branch-coverage:
-    needs: [report-image]
+    needs: report-image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -102,13 +101,11 @@ jobs:
           fi
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report test results to Kosli
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |          
           IMAGE_NAME="cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}"
           kosli report evidence artifact junit "${IMAGE_NAME}" \
@@ -123,7 +120,7 @@ jobs:
               --user-data=./test/reports/evidence.json
 
   snyk-scan:
-    needs: [report-image]
+    needs: report-image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -140,13 +137,11 @@ jobs:
             --policy-path=.snyk
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report Snyk results to Kosli
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
           docker pull ${IMAGE_NAME}
@@ -156,8 +151,7 @@ jobs:
             --scan-results=snyk.json
 
   pull-request:
-    needs: [report-image]
-    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: report-image
     runs-on: ubuntu-latest
     permissions:
       id-token: write

@@ -29,7 +29,7 @@ jobs:
         echo "kosli_org=${{ env.KOSLI_ORG }}"           >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
-    needs: [variables]
+    needs: variables
     uses: ./.github/workflows/sub_create_kosli_flow.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
@@ -38,7 +38,7 @@ jobs:
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
 
   wait-for-image:
-    needs: [create-kosli-flow]
+    needs: create-kosli-flow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
