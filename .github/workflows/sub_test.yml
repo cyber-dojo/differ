@@ -47,9 +47,9 @@ jobs:
           mkdir -p "${LINT_EVIDENCE_DIR}"
           gem install rubocop
           if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
-            export KOSLI_LINT_COMPLIANT=true
+            echo "KOSLI_LINT_COMPLIANT=true" >> ${{GITHUB_ENV}}
           else
-            export KOSLI_LINT_COMPLIANT=false
+            echo "KOSLI_LINT_COMPLIANT=false" >> ${{GITHUB_ENV}}
           fi
 
       - name: Setup Kosli CLI
@@ -60,6 +60,8 @@ jobs:
 
       - name: Report Rubocop results to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          KOSLI_LINT_COMPLIANT: "${{ env.KOSLI_LINT_COMPLIANT }}"
         run:
           kosli report evidence commit generic \
             --compliant="${KOSLI_LINT_COMPLIANT}" \
