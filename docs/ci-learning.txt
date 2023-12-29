@@ -1,0 +1,36 @@
+
+A single command run: like this, with continuation characters is wrong
+        run:
+          kosli report evidence commit generic \
+            --compliant="${KOSLI_LINT_COMPLIANT}" \
+            --evidence-paths="${LINT_EVIDENCE_DIR}" \
+            --name=lint
+In this case you cannot use continuation characters:
+        run:
+          kosli report evidence commit generic
+            --compliant="${KOSLI_LINT_COMPLIANT}"
+            --evidence-paths="${LINT_EVIDENCE_DIR}"
+            --name=lint
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+These are equivalent:
+  build-image:
+    needs: [variables, create-kosli-flow]
+
+  build-image:
+    needs:
+      - variables
+      - create-kosli-flow
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+These are equivalent:
+  build-image:
+    needs: [variables]
+
+  build-image:
+    needs: variables
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
