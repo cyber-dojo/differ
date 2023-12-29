@@ -69,7 +69,8 @@ jobs:
             --name=lint
 
   report-image:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    # if: ${{ github.ref == 'refs/heads/main' }}
+    # Can't put this here as dependent jobs (eg branch-coverage) don't run
     needs: lint
     runs-on: ubuntu-latest
     steps:
