@@ -3,7 +3,7 @@ name: Main - reports to https://app.kosli.com
 on:
   push:
     branches:
-      - *
+      - '*'
 
 jobs:
 
