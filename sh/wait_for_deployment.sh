@@ -51,6 +51,7 @@ do
   [[ ${ATTEMPTS} -eq ${MAX_ATTEMPTS} ]] && echo "Failed!" && exit 1
   ((ATTEMPTS++))
   echo "Waiting for deployment of Artifact ${IMAGE_NAME} to Environment ${KOSLI_ENVIRONMENT}"
-  echo "Attempt #${ATTEMPTS}"
+  echo "Attempt # ${ATTEMPTS} / ${MAX_ATTEMPTS}"
 done
+echo "Success: Artifact ${IMAGE_NAME} is running in Environment ${KOSLI_ENVIRONMENT}"
 exit 0
