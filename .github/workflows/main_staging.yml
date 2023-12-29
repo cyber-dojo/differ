@@ -3,14 +3,14 @@ name: Main - reports to https://staging.app.kosli.com
 on:
   push:
     branches:
-      - main
+      - '*'
 
 env:
-  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}
-  KOSLI_HOST: https://staging.app.kosli.com
-  KOSLI_ORG: ${{ vars.KOSLI_ORG }}
-  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
-  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  # KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
+  KOSLI_HOST: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
+  KOSLI_ORG: ${{ vars.KOSLI_ORG }}           # cyber-dojo
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}         # differ
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
 jobs:
 
@@ -24,66 +24,88 @@ jobs:
     - name: Prepare
       id: vars
       run: |
-        echo "image_tag=$(echo $GITHUB_SHA | head -c7)" >> ${GITHUB_OUTPUT}
-        echo "kosli_host=${{ env.KOSLI_HOST }}"         >> ${GITHUB_OUTPUT}
-        echo "kosli_org=${{ env.KOSLI_ORG }}"           >> ${GITHUB_OUTPUT}
+        echo "image_tag=$(echo ${GITHUB_SHA} | head -c7)" >> ${GITHUB_OUTPUT}
+        echo "kosli_host=${{ env.KOSLI_HOST }}"           >> ${GITHUB_OUTPUT}
+        echo "kosli_org=${{ env.KOSLI_ORG }}"             >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
-    needs: [variables]
+    needs: variables
     uses: ./.github/workflows/sub_create_kosli_flow.yml
     secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
 
   wait-for-image:
-    needs: [create-kosli-flow]
+    needs: create-kosli-flow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Wait for image to be built in main.yml
-        run:
-          ./sh/wait_for_image.sh
+        run: |
+          ./sh/wait_for_image.sh "${GITHUB_SHA}"
 
   test:
     needs: [variables, wait-for-image]
     uses: ./.github/workflows/sub_test.yml
     secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
-  sdlc-gate:
+  sdlc-control-gate:
     needs: [variables, test]
-    uses: ./.github/workflows/sub_sdlc_gate.yml
+    uses: ./.github/workflows/sub_sdlc_control_gate.yml
     secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
-  approve-deployment-to-beta:
-    needs: [variables, sdlc-gate]
-    uses: ./.github/workflows/sub_approve_deployment.yml
+  wait-for-deployment-to-beta:
+    needs: [variables, sdlc-control-gate]
+    uses: ./.github/workflows/sub_wait_for_deployment.yml
     secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
       KOSLI_ENVIRONMENT: aws-beta
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
-  approve-deployment-to-prod:
-    needs: [variables, approve-deployment-to-beta]
+  approve-deployment-to-beta:
+    needs: [variables, wait-for-deployment-to-beta]
     uses: ./.github/workflows/sub_approve_deployment.yml
     secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
+    with:
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
+      KOSLI_ENVIRONMENT: aws-beta
+      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+
+  wait-for-deployment-to-prod:
+    needs: [variables, approve-deployment-to-beta]
+    uses: ./.github/workflows/sub_wait_for_deployment.yml
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
+    with:
+      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
+      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
+      KOSLI_ENVIRONMENT: aws-prod
+      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+
+  approve-deployment-to-prod:
+    needs: [variables, wait-for-deployment-to-prod]
+    uses: ./.github/workflows/sub_approve_deployment.yml
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
     with:
       KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}

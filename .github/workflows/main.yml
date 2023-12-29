@@ -3,7 +3,7 @@ name: Main - reports to https://app.kosli.com
 on:
   push:
     branches:
-      - main
+      - '*'
 
 jobs:
 
@@ -40,16 +40,16 @@ jobs:
     with:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
-  sdlc-gate:
+  sdlc-control-gate:
     needs: [variables, test]
-    uses: ./.github/workflows/sub_sdlc_gate.yml
+    uses: ./.github/workflows/sub_sdlc_control_gate.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
     with:
       IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
 
   approve-deployment-to-beta:
-    needs: [variables, sdlc-gate]
+    needs: [variables, sdlc-control-gate]
     uses: ./.github/workflows/sub_approve_deployment.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
