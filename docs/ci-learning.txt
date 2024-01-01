@@ -56,6 +56,55 @@ You can't use if: to skip a job if another, unskipped job needs: it
     needs: report-image
     ...
 
+This is particularly noticeable with the sdlc-control-gate job
+which cannot be skipped.
+
+Note, however that an if: can be safely applied to a run:
+
+Github:
+      - name: Setup Kosli CLI
+        if: ${{ github.ref == 'refs/heads/main' }}
+
+Gitlab does not support steps within a job, so you need to use:
+  script:
+    - if [ "${CI_COMMIT_BRANCH}" != "${CI_DEFAULT_BRANCH}" ] ; then exit 0 ; fi
+
+or:
+
+  script:
+    - set +e
+    - command-that-can-fail
+    - STATUS=$?
+    - set -e
+    - ...
+    - if [ "${CI_COMMIT_BRANCH}" != "${CI_DEFAULT_BRANCH}" ] ; then exit ${STATUS} ; fi
+    - ...
+
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+If the ci-command being reported by kosli returns a non-zero exit code
+when it does not succeed, the ci will likely, by default, exit the
+job early meaning the following kosli report will not occur.
+A simple way to ensure the kosli report runs is as follows:
 
+    - set +e
+    - command-that-can-fail
+    - STATUS=$?
+    - set -e
+    - kosli ...
+    - exit ${STATUS}
+
+Another way is as follows, which relies on the kosli report command
+also returning a non-zero exit-code when --compliant=false
+(although note that this will return a different non-zero exit-code).
+
+    run: |
+      if [ command-that-can-fail ]; then
+        echo "KOSLI_COMPLIANT=true" >> ${GITHUB_ENV}
+      else
+        echo "KOSLI_COMPLIANT=false" >> ${GITHUB_ENV}
+      fi
+      kosli report ... \
+        --compliant=${KOSLI_COMPLIANT} \
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
