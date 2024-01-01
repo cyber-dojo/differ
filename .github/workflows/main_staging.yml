@@ -38,7 +38,7 @@ jobs:
       KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
 
   wait-for-image:
-    needs: create-kosli-flow
+    needs: [variables, create-kosli-flow]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
