@@ -1,4 +1,4 @@
-name: Main - reports to https://staging.app.kosli.com
+name: Reports to https://staging.app.kosli.com
 
 on:
   push:
