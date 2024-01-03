@@ -20,6 +20,15 @@ output = json
 4. Do an aws-vault login
 $ aws-vault login cyber-dojo-beta -d 8h
 
+If you do not have enough permissions you will get this error message:
+
+Opening the SSO authorization page in your default browser (use Ctrl-C to abort)
+https://device.sso.eu-north-1.amazonaws.com/?user_code=FXZC-DCWQ
+aws-vault: error: login: operation error SSO: GetRoleCredentials, https response error
+  StatusCode: 403,
+  RequestID: 2810674b-0316-4e68-91fe-6f5d6bfb7c7d, api error
+  ForbiddenException: No access
+
 5. cd to the ./deployment/terraform directory inside the repo in question
 $ cd ./deployment/terraform
 
@@ -45,3 +54,4 @@ Lock Info:
 So in this case the command would be:
 
 $ ./tf.sh force-unlock c9cc5264-88ee-46ec-4507-ba929c37b97e
+
