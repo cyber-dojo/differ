@@ -84,7 +84,7 @@ or:
 
 If the ci-command being reported by kosli returns a non-zero exit code
 when it does not succeed, the ci will likely, by default, exit the
-job early meaning the following kosli report will not occur.
+job early meaning the following kosli report will NOT occur.
 A simple way to ensure the kosli report runs is as follows:
 
     - set +e
@@ -106,5 +106,44 @@ also returning a non-zero exit-code when --compliant=false
       fi
       kosli report ... \
         --compliant=${KOSLI_COMPLIANT} \
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Another way to ensure the kosli report occurs is to use the
+continue-on-error: and then do the report, and somewhere,
+later in the workflow, run a kosli sdlc-control-gate
+    kosli assert artifact ${IMAGE_NAME} --artifact-type=docker
+
+
+For example:
+
+  snyk-scan:
+    needs: report-image
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        continue-on-error: ${{ github.ref == 'refs/heads/main' }}
+        run:
+           snyk container test cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
+             --file=Dockerfile
+             --json-file-output=snyk.json
+             --policy-path=.snyk
+
+      - name: Setup Kosli CLI
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report Snyk results to Kosli
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          IMAGE_NAME=cyberdojo/${{ env.KOSLI_FLOW }}:${{ inputs.IMAGE_TAG }}
+          docker pull ${IMAGE_NAME}
+          kosli report evidence artifact snyk ${IMAGE_NAME} \
+            --artifact-type=docker  \
+            --name=snyk-scan  \
+            --scan-results=snyk.json
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
