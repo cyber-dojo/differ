@@ -15,7 +15,6 @@ SimpleCov.start do
   add_group(test_tab) { |src| src.filename =~ %r{^/differ/test} }
 end
 
-SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
-    SimpleCov::Formatter::HTMLFormatter,
-    SimpleCov::Formatter::JSONFormatter
-])
+formatters = [SimpleCov::Formatter::HTMLFormatter,
+              SimpleCov::Formatter::JSONFormatter]
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(formatters)

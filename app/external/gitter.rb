@@ -56,7 +56,7 @@ module External
       '--indent-heuristic',
       '0',
       '1',
-      '--'     # specifies to git that 0,1 are revisions and not filenames
+      '--' # specifies to git that 0,1 are revisions and not filenames
     ].join(' ').freeze
 
     def shell
