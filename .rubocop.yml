@@ -90,6 +90,12 @@ Lint/RescueException:
   Exclude:
     - client/app/client.rb
 
+Lint/SymbolConversion:
+  Exclude:
+    - app/app_base.rb
+    - test/lib/id58_test_base.rb
+    - client/test/lib/id58_test_base.rb
+
 Style/FetchEnvVar:
   Exclude:
     - app/app_base.rb
