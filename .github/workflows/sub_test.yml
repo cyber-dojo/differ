@@ -42,11 +42,10 @@ jobs:
 
       - name: Run Rubocop linter on source
         run: |
-          repo_root() { git rev-parse --show-toplevel; }
           export LINT_EVIDENCE_DIR=/tmp/evidence/lint
           mkdir -p "${LINT_EVIDENCE_DIR}"
           gem install rubocop
-          if [ rubocop "$(repo_root)" | tee "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
+          if [ rubocop --raise-cop-error . > "${LINT_EVIDENCE_DIR}"/rubocop.log ]; then
             echo "KOSLI_LINT_COMPLIANT=true" >> ${GITHUB_ENV}
           else
             echo "KOSLI_LINT_COMPLIANT=false" >> ${GITHUB_ENV}
