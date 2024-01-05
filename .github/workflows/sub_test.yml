@@ -62,7 +62,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         # env:
         #   KOSLI_LINT_COMPLIANT: "${{ env.KOSLI_LINT_COMPLIANT }}"
-        run:
+        run: |
           cp .rubocop.yml "${LINT_EVIDENCE_DIR}"          
           kosli report evidence commit generic
             --compliant="${KOSLI_LINT_COMPLIANT}"
