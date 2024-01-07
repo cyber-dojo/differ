@@ -17,7 +17,7 @@ services:
     read_only: true
     restart: "no"
     volumes:
-      - "./client/test:/differ/test/:ro"
+      - ./client/test:/differ/test/:ro
       - type: tmpfs
         target: /tmp
         tmpfs:
@@ -38,9 +38,21 @@ services:
     read_only: true
     restart: "no"
     volumes:
-      - "./test:/differ/test/:ro"
+      - ./test:/differ/test/:ro
       - type: tmpfs
         target: /tmp
         tmpfs:
           mode: 01777
           size: 10485760  # 10MB
+
+  saver:
+    image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}
+    user: saver
+    ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
+    env_file: [ .env ]
+    init: true
+    read_only: true
+    restart: "no"
+    tmpfs:
+      - /cyber-dojo:uid=19663,gid=65533
+      - /tmp:uid=19663,gid=65533
