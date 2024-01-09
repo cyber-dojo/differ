@@ -170,6 +170,8 @@ jobs:
   snyk-scan:
     needs: [variables, build-image]
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
