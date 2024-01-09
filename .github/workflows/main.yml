@@ -193,10 +193,10 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
         run: |
-          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                                  
-          snyk container test ${IMAGE_NAME} 
-            --file=Dockerfile 
-            --json-file-output=snyk.json 
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+          snyk container test ${IMAGE_NAME} \
+            --file=Dockerfile \
+            --json-file-output=snyk.json \
             --policy-path=.snyk
 
       - name: Setup Kosli CLI
@@ -206,7 +206,7 @@ jobs:
 
       - name: Report Snyk results to Kosli
         run: |
-          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                        
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
           docker pull ${IMAGE_NAME}
           kosli report evidence artifact snyk ${IMAGE_NAME} \
             --artifact-type=docker  \
