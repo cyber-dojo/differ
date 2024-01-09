@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  # KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
   KOSLI_HOST: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}           # cyber-dojo
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}         # differ
@@ -29,15 +29,84 @@ jobs:
         echo "kosli_org=${{ env.KOSLI_ORG }}"             >> ${GITHUB_OUTPUT}
 
   create-kosli-flow:
-    needs: variables
-    uses: ./.github/workflows/sub_create_kosli_flow.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
 
-  wait-for-image:
+      - name: Create Kosli flow
+        run:
+          kosli create flow ${{ env.KOSLI_FLOW }} 
+            --description="Diff files from two traffic-lights" 
+            --template=artifact,lint,unit-test,branch-coverage,snyk-scan,pull-request
+
+
+  lint:
+    needs: [variables, create-kosli-flow]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
+
+      - name: Run Rubocop linter on source
+        run: |
+          LINT_EVIDENCE_DIR=/tmp/evidence/lint
+          mkdir -p "${LINT_EVIDENCE_DIR}"
+          gem install rubocop
+          set +e
+          rubocop --raise-cop-error . > "${LINT_EVIDENCE_DIR}"/rubocop.log
+          STATUS=$?
+          set -e
+          cp .rubocop.yml "${LINT_EVIDENCE_DIR}"          
+          echo "LINT_EVIDENCE_DIR=${LINT_EVIDENCE_DIR}"       >> ${GITHUB_ENV}
+          KOSLI_LINT_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
+          echo "KOSLI_LINT_COMPLIANT=${KOSLI_LINT_COMPLIANT}" >> ${GITHUB_ENV}
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report Rubocop results to Kosli
+        env:
+          LINT_EVIDENCE_DIR: "${{ env.LINT_EVIDENCE_DIR }}"
+          KOSLI_LINT_COMPLIANT: "${{ env.KOSLI_LINT_COMPLIANT }}"
+        run:
+          kosli report evidence commit generic
+            --compliant="${KOSLI_LINT_COMPLIANT}"
+            --evidence-paths="${LINT_EVIDENCE_DIR}"
+            --name=lint
+
+  pull-request:
+    needs: [variables, create-kosli-flow]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report pull-request evidence to Kosli
+        run:
+          kosli report evidence commit pullrequest github
+            --flows="${{ env.KOSLI_FLOW }}"
+            --github-token ${{ secrets.GITHUB_TOKEN }}
+            --name=pull-request
+
+
+  build-image:
     needs: [variables, create-kosli-flow]
     runs-on: ubuntu-latest
     steps:
@@ -45,79 +114,199 @@ jobs:
 
       - name: Wait for image to be built in main.yml
         run: |
-          ./sh/wait_for_image.sh "${GITHUB_SHA}"
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}          
+          ./sh/wait_for_image.sh "${IMAGE_NAME}"
 
-  test:
-    needs: [variables, wait-for-image]
-    uses: ./.github/workflows/sub_test.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report image to Kosli flow
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                    
+          docker pull "${IMAGE_NAME}"
+          kosli report artifact "${IMAGE_NAME}" \
+            --artifact-type=docker
+
+
+  unit-tests:
+    needs: [variables, build-image]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests, save results to evidence.json file
+        run: |
+          source ./sh/run_tests_with_coverage.sh
+          if run_tests_with_coverage; then
+            echo "KOSLI_COMPLIANT=true" >> ${GITHUB_ENV}
+          else
+            echo "KOSLI_COMPLIANT=false" >> ${GITHUB_ENV}
+          fi
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report test and coverage results to Kosli
+        env:
+          KOSLI_COMPLIANT: "${{ env.KOSLI_COMPLIANT }}"
+        run: |         
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                              
+          kosli report evidence artifact junit "${IMAGE_NAME}" \
+              --artifact-type=docker \
+              --name=unit-test \
+              --results-dir=test/reports/junit
+          kosli report evidence artifact generic "${IMAGE_NAME}" \
+              --artifact-type=docker \
+              --compliant=${KOSLI_COMPLIANT} \
+              --description="server & client branch-coverage reports" \
+              --name=branch-coverage \
+              --user-data=./test/reports/evidence.json
+
 
   sdlc-control-gate:
-    needs: [variables, test]
-    uses: ./.github/workflows/sub_sdlc_control_gate.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+    needs: [variables, lint, pull-request, unit-tests, snyk-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
 
-  wait-for-deployment-to-beta:
-    needs: [variables, sdlc-control-gate]
-    uses: ./.github/workflows/sub_wait_for_deployment.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
-      KOSLI_ENVIRONMENT: aws-beta
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+      - name: Kosli SDLC gate to short-circuit-the-flow
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                                  
+          docker pull ${IMAGE_NAME}
+          kosli assert artifact ${IMAGE_NAME} \
+            --artifact-type=docker          
+
 
   approve-deployment-to-beta:
-    needs: [variables, wait-for-deployment-to-beta]
-    uses: ./.github/workflows/sub_approve_deployment.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
-      KOSLI_ENVIRONMENT: aws-beta
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+    needs: [variables, sdlc-control-gate]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  wait-for-deployment-to-prod:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report approval of deployment to Kosli
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+          docker pull ${IMAGE_NAME}
+          kosli report approval ${IMAGE_NAME} \
+            --artifact-type=docker \
+            --environment=aws-beta \
+            --approver="${{ github.actor }}"
+
+      - name: Report expected deployment to Kosli
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+          docker pull ${IMAGE_NAME}
+          kosli expect deployment ${IMAGE_NAME} \
+            --artifact-type=docker \
+            --description="Deployed to aws-beta in Github Actions pipeline" \
+            --environment=aws-beta
+
+
+  deploy-to-beta:
     needs: [variables, approve-deployment-to-beta]
-    uses: ./.github/workflows/sub_wait_for_deployment.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
-      KOSLI_ENVIRONMENT: aws-prod
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - uses: actions/checkout@v4
+
+      - name: Wait for deployment from main.yml
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}          
+          ./sh/wait_for_deployment.sh \
+             "${IMAGE_NAME}" \
+             "${{ env.KOSLI_HOST }}" \
+             "${{ env.KOSLI_API_TOKEN }}" \
+             "${{ env.KOSLI_ORG }}" \
+             aws-beta
+
 
   approve-deployment-to-prod:
-    needs: [variables, wait-for-deployment-to-prod]
-    uses: ./.github/workflows/sub_approve_deployment.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-    with:
-      KOSLI_HOST: ${{ needs.variables.outputs.kosli_host }}
-      KOSLI_ORG: ${{ needs.variables.outputs.kosli_org }}
-      KOSLI_ENVIRONMENT: aws-prod
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+    needs: [variables, deploy-to-prod]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report approval of deployment to Kosli
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+          docker pull ${IMAGE_NAME}
+          kosli report approval ${IMAGE_NAME} \
+            --artifact-type=docker \
+            --environment=aws-prod \
+            --approver="${{ github.actor }}"
+
+      - name: Report expected deployment to Kosli
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+          docker pull ${IMAGE_NAME}
+          kosli expect deployment ${IMAGE_NAME} \
+            --artifact-type=docker \
+            --description="Deployed to aws-prod in Github Actions pipeline" \
+            --environment=aws-prod
+    
+
+  deploy-to-prod:
+    needs: [variables, approve-deployment-to-prod]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - uses: actions/checkout@v4
+
+      - name: Wait for deployment from main.yml
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}          
+          ./sh/wait_for_deployment.sh \
+             "${IMAGE_NAME}" \
+             "${{ env.KOSLI_HOST }}" \
+             "${{ env.KOSLI_API_TOKEN }}" \
+             "${{ env.KOSLI_ORG }}" \
+             aws-prod
+    
 
   push-latest:
-    needs: [variables, approve-deployment-to-prod]
-    uses: ./.github/workflows/sub_push_latest.yml
-    secrets:
-      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-    with:
-      IMAGE_TAG: ${{ needs.variables.outputs.image_tag }}
+    needs: [variables, deploy-to-prod]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Build and push image:latest to Dockerhub Registry
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+          IMAGE_LATEST=cyberdojo/${{ env.KOSLI_FLOW }}:latest
+          docker pull ${IMAGE_NAME}  
+          docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
+          docker push ${IMAGE_LATEST}
