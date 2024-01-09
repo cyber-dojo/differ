@@ -167,6 +167,39 @@ jobs:
               --user-data=./test/reports/evidence.json
 
 
+  snyk-scan:
+    needs: [variables, build-image]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        continue-on-error: true
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                                  
+          snyk container test ${IMAGE_NAME} 
+            --file=Dockerfile 
+            --json-file-output=snyk.json 
+            --policy-path=.snyk
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report Snyk results to Kosli
+        run: |
+          IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                        
+          docker pull ${IMAGE_NAME}
+          kosli report evidence artifact snyk ${IMAGE_NAME} \
+            --artifact-type=docker  \
+            --name=snyk-scan  \
+            --scan-results=snyk.json
+
+
   sdlc-control-gate:
     needs: [variables, lint, pull-request, unit-tests, snyk-scan]
     runs-on: ubuntu-latest

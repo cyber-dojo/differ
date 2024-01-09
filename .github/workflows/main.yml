@@ -189,7 +189,7 @@ jobs:
         uses: snyk/actions/setup@master
 
       - name: Run Snyk to check Docker image for vulnerabilities
-        continue-on-error: ${{ github.ref == 'refs/heads/main' }}
+        continue-on-error: true
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                                  
           snyk container test ${IMAGE_NAME} 
