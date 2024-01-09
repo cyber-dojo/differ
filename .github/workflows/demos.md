@@ -12,14 +12,13 @@ To resolve this, a git push triggers two workflows:
    This is basically the same as 1)main.yml but it does NOT...
    - rebuild the docker image (since the build is not binary reproducible)
    - deploy the image to aws-beta/aws-prod (since main.yml already does that)
-   It _does_ however re-run the test evidence (currently unit-test, security-scan,
-   lint, and pull-request) so it is possible (eg if the unit-tests are flaky) to get the
-   run from 1)main.yml to report a compliant Artifact and do deployments to aws-beta and aws-prod but the
-   run from 2)main_staging.yml to report the same Artifact as non-compliant.
+   It _does_ however re-run the test evidence so it is possible (eg if the unit-tests are flaky) 
+   to get the run from 1)main.yml to report a compliant Artifact and do deployments to aws-beta and 
+   aws-prod but the run from 2)main_staging.yml to report the same Artifact as non-compliant.
    In this situation, the Environment report for staging will see the Artifact deployment
    from 1)main.yml and so, in staging, the Artifact will appear as non-compliant in its snapshot.
     
-During a demo, look at main.yml (and its sub_* yml files).
+During a demo, look at main.yml 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -28,6 +27,7 @@ deploy-manually-to-aws-beta-and-aws-prod.yml is a manually triggered pipeline, w
 2) to deliberately run a non-compliant artifact in the cyber-dojo aws-beta and aws-prod 
    environments for demo purposes. In this case, please try to ensure you pick an
    image_tag that still works, since it will be deployed to https://cyber-dojo.org
+
    The simplest way to ensure this, is to pick an image that failed only its
    snyk-scan. For example e091a4d (See https://app.kosli.com/cyber-dojo/flows/differ/artifacts/fb96934)
    This will create a snapshot where differ has provenance, but is non-compliant.
@@ -43,5 +43,5 @@ deploy-manually-to-aws-beta-and-aws-prod.yml is a manually triggered pipeline, w
    Eg https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/1465?active_tab=running
 
 
-Note: the lint: job occasionally fails its CI job. 
+Note: the lint: job very occasionally fails its CI job. 
    This is typically a spurious failure, and if you re-run the failed jobs it will pass.
