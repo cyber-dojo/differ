@@ -261,7 +261,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Wait for deployment from main.yml
+      - name: Wait for deployment in main.yml
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}          
           ./sh/wait_for_deployment.sh \
@@ -315,7 +315,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Wait for deployment from main.yml
+      - name: Wait for deployment in main.yml
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}          
           ./sh/wait_for_deployment.sh \
