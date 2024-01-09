@@ -272,7 +272,7 @@ jobs:
 
 
   approve-deployment-to-prod:
-    needs: [variables, deploy-to-prod]
+    needs: [variables, deploy-to-beta]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
