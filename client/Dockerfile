@@ -1,4 +1,4 @@
-FROM cyberdojo/sinatra-base:ad4c29a
+FROM cyberdojo/sinatra-base:6afffdb
 LABEL maintainer=jon@jaggersoft.com
 
 WORKDIR /differ
