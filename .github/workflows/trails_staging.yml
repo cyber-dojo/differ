@@ -127,7 +127,7 @@ jobs:
           docker pull "${IMAGE_NAME}"
           kosli attest artifact "${IMAGE_NAME}" \
             --artifact-type=docker \
-            --name=dashboard \
+            --name=differ \
             --trail="${GITHUB_SHA}"
 
 
