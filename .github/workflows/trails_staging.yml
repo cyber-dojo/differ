@@ -99,7 +99,6 @@ jobs:
       - name: Report pull-request evidence to Kosli
         run:
           kosli attest pullrequest github
-            --flows="${{ env.KOSLI_FLOW }}"
             --github-token ${{ secrets.GITHUB_TOKEN }}
             --name=pull-request
             --trail="${GITHUB_SHA}"
@@ -243,9 +242,9 @@ jobs:
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}
           docker pull ${IMAGE_NAME}
           kosli report approval ${IMAGE_NAME} \
+            --approver="${{ github.actor }}" \
             --artifact-type=docker \
-            --environment=aws-beta \
-            --approver="${{ github.actor }}"
+            --environment=aws-beta
 
       - name: Report expected deployment to Kosli
         run: |
@@ -297,9 +296,9 @@ jobs:
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}
           docker pull ${IMAGE_NAME}
           kosli report approval ${IMAGE_NAME} \
+            --approver="${{ github.actor }}" \
             --artifact-type=docker \
-            --environment=aws-prod \
-            --approver="${{ github.actor }}"
+            --environment=aws-prod
 
       - name: Report expected deployment to Kosli
         run: |
