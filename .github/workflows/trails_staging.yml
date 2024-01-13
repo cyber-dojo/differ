@@ -125,7 +125,7 @@ jobs:
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                    
           docker pull "${IMAGE_NAME}"
-          kosli attest artifact "${IMAGE_NAME}" \          
+          kosli attest artifact "${IMAGE_NAME}" \
             --artifact-type=docker \
             --name=dashboard \
             --trail="${GITHUB_SHA}"
