@@ -1,4 +1,4 @@
-name: Reports Trails to https://staging.app.kosli.com
+name: Reports Trails to https://app.kosli.com
 
 on:
   push:
