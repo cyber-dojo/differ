@@ -165,7 +165,6 @@ jobs:
           kosli attest generic "${IMAGE_NAME}" \
               --artifact-type=docker \
               --compliant=${KOSLI_COMPLIANT} \
-              --description="server & client branch-coverage reports" \
               --evidence-paths=./test/reports/evidence.json \
               --name=differ.branch-coverage \
               --trail="${GITHUB_SHA}"
