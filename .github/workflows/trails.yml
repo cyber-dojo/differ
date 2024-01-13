@@ -1,4 +1,4 @@
-name: Reports to https://staging.app.kosli.com
+name: Reports Trails to https://staging.app.kosli.com
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - main
 
 env:
-  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
-  KOSLI_HOST: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
-  KOSLI_ORG: ${{ vars.KOSLI_ORG }}           # cyber-dojo
-  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}         # differ
-  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }} # False
+  KOSLI_HOST: ${{ vars.KOSLI_HOST }}       # https://app.kosli.com
+  KOSLI_ORG: cyber-dojo-trails
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}       # differ
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_TRAILS }}
 
 jobs:
 
@@ -24,9 +24,11 @@ jobs:
       run:
         echo "image_name=cyberdojo/${{ env.KOSLI_FLOW }}:${GITHUB_SHA:0:7}" >> ${GITHUB_OUTPUT}
 
-  create-kosli-flow:
+  begin-kosli-trail:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
@@ -35,12 +37,16 @@ jobs:
       - name: Create Kosli flow
         run:
           kosli create flow ${{ env.KOSLI_FLOW }} 
-            --description="Diff files from two traffic-lights" 
-            --template=artifact,lint,unit-test,branch-coverage,snyk-scan,pull-request
+            --description="Diff files from two traffic-lights"
+            --template-file=.kosli.yml
+
+      - name: Begin Kosli Trail
+        run:
+          kosli begin trail "${GITHUB_SHA}"
 
 
   lint:
-    needs: [variables, create-kosli-flow]
+    needs: [variables, begin-kosli-trail]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +56,12 @@ jobs:
           ruby-version: 3.2.0
           bundler-cache: true
 
-      - name: Run Rubocop linter on source
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Run Rubocop linter on source, report results to Kosli Trail
         run: |
           LINT_EVIDENCE_DIR=/tmp/evidence/lint
           mkdir -p "${LINT_EVIDENCE_DIR}"
@@ -59,28 +70,19 @@ jobs:
           rubocop --raise-cop-error . > "${LINT_EVIDENCE_DIR}"/rubocop.log
           STATUS=$?
           set -e
-          cp .rubocop.yml "${LINT_EVIDENCE_DIR}"          
-          echo "LINT_EVIDENCE_DIR=${LINT_EVIDENCE_DIR}"       >> ${GITHUB_ENV}
+          
           KOSLI_LINT_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
-          echo "KOSLI_LINT_COMPLIANT=${KOSLI_LINT_COMPLIANT}" >> ${GITHUB_ENV}
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Report Rubocop results to Kosli
-        env:
-          LINT_EVIDENCE_DIR: ${{ env.LINT_EVIDENCE_DIR }}
-          KOSLI_LINT_COMPLIANT: ${{ env.KOSLI_LINT_COMPLIANT }}
-        run:
-          kosli report evidence commit generic
-            --compliant="${KOSLI_LINT_COMPLIANT}"
-            --evidence-paths="${LINT_EVIDENCE_DIR}"
-            --name=lint
+          cp .rubocop.yml "${LINT_EVIDENCE_DIR}"
+          kosli attest generic \
+            --compliant="${KOSLI_LINT_COMPLIANT}" \
+            --evidence-paths="${LINT_EVIDENCE_DIR}" \
+            --name=lint \
+            --trail="${GITHUB_SHA}"
+          exit $STATUS
+                  
 
   pull-request:
-    needs: [variables, create-kosli-flow]
+    needs: [variables, begin-kosli-trail]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -96,14 +98,15 @@ jobs:
 
       - name: Report pull-request evidence to Kosli
         run:
-          kosli report evidence commit pullrequest github
-            --flows="${{ env.KOSLI_FLOW }}"
+          kosli attest pullrequest github
             --github-token ${{ secrets.GITHUB_TOKEN }}
             --name=pull-request
+            --trail="${GITHUB_SHA}"
+
 
 
   build-image:
-    needs: [variables, create-kosli-flow]
+    needs: [variables, begin-kosli-trail]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -122,8 +125,10 @@ jobs:
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                    
           docker pull "${IMAGE_NAME}"
-          kosli report artifact "${IMAGE_NAME}" \
-            --artifact-type=docker
+          kosli attest artifact "${IMAGE_NAME}" \
+            --artifact-type=docker \
+            --name=differ \
+            --trail="${GITHUB_SHA}"
 
 
   unit-tests:
@@ -151,16 +156,18 @@ jobs:
           KOSLI_COMPLIANT: ${{ env.KOSLI_COMPLIANT }}
         run: |         
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                              
-          kosli report evidence artifact junit "${IMAGE_NAME}" \
+          kosli attest junit "${IMAGE_NAME}" \
               --artifact-type=docker \
-              --name=unit-test \
-              --results-dir=test/reports/junit
-          kosli report evidence artifact generic "${IMAGE_NAME}" \
+              --name=differ.unit-test \
+              --results-dir=test/reports/junit \
+              --trail="${GITHUB_SHA}"
+          
+          kosli attest generic "${IMAGE_NAME}" \
               --artifact-type=docker \
               --compliant=${KOSLI_COMPLIANT} \
-              --description="server & client branch-coverage reports" \
-              --name=branch-coverage \
-              --user-data=./test/reports/evidence.json
+              --evidence-paths=./test/reports/evidence.json \
+              --name=differ.branch-coverage \
+              --trail="${GITHUB_SHA}"
 
 
   snyk-scan:
@@ -192,10 +199,11 @@ jobs:
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}
           docker pull ${IMAGE_NAME}
-          kosli report evidence artifact snyk ${IMAGE_NAME} \
+          kosli attest snyk ${IMAGE_NAME} \
             --artifact-type=docker  \
-            --name=snyk-scan  \
-            --scan-results=snyk.json
+            --name=differ.snyk-scan  \
+            --scan-results=snyk.json \
+            --trail="${GITHUB_SHA}"
 
 
   sdlc-control-gate:
@@ -233,9 +241,9 @@ jobs:
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}
           docker pull ${IMAGE_NAME}
           kosli report approval ${IMAGE_NAME} \
+            --approver="${{ github.actor }}" \
             --artifact-type=docker \
-            --environment=aws-beta \
-            --approver="${{ github.actor }}"
+            --environment=aws-beta
 
       - name: Report expected deployment to Kosli
         run: |
@@ -287,9 +295,9 @@ jobs:
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}
           docker pull ${IMAGE_NAME}
           kosli report approval ${IMAGE_NAME} \
+            --approver="${{ github.actor }}" \
             --artifact-type=docker \
-            --environment=aws-prod \
-            --approver="${{ github.actor }}"
+            --environment=aws-prod
 
       - name: Report expected deployment to Kosli
         run: |
@@ -323,21 +331,21 @@ jobs:
              aws-prod
     
 
-  push-latest:
-    needs: [variables, deploy-to-prod]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASS }}
-
-      - name: Build and push image:latest to Dockerhub Registry
-        run: |
-          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
-          IMAGE_LATEST=cyberdojo/${{ env.KOSLI_FLOW }}:latest
-          docker pull ${IMAGE_NAME}  
-          docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
-          docker push ${IMAGE_LATEST}
+#  push-latest:
+#    needs: [variables, deploy-to-prod]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USER }}
+#          password: ${{ secrets.DOCKER_PASS }}
+#
+#      - name: Build and push image:latest to Dockerhub Registry
+#        run: |
+#          IMAGE_NAME=${{ needs.variables.outputs.image_name }}
+#          IMAGE_LATEST=cyberdojo/${{ env.KOSLI_FLOW }}:latest
+#          docker pull ${IMAGE_NAME}
+#          docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
+#          docker push ${IMAGE_LATEST}

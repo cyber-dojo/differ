@@ -76,8 +76,8 @@ jobs:
 
       - name: Report Rubocop results to Kosli
         env:
-          LINT_EVIDENCE_DIR: "${{ env.LINT_EVIDENCE_DIR }}"
-          KOSLI_LINT_COMPLIANT: "${{ env.KOSLI_LINT_COMPLIANT }}"
+          LINT_EVIDENCE_DIR: ${{ env.LINT_EVIDENCE_DIR }}
+          KOSLI_LINT_COMPLIANT: ${{ env.KOSLI_LINT_COMPLIANT }}
         run:
           kosli report evidence commit generic
             --compliant="${KOSLI_LINT_COMPLIANT}"
@@ -164,7 +164,7 @@ jobs:
 
       - name: Report test and coverage results to Kosli
         env:
-          KOSLI_COMPLIANT: "${{ env.KOSLI_COMPLIANT }}"
+          KOSLI_COMPLIANT: ${{ env.KOSLI_COMPLIANT }}
         run: |         
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                              
           kosli report evidence artifact junit "${IMAGE_NAME}" \
