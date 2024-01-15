@@ -18,7 +18,7 @@ region = eu-central-1
 output = json
 
 4. Do an aws-vault login
-$ aws-vault login cyber-dojo-beta -d 8h
+$ aws-vault exec -d 8h cyber-dojo-beta
 
 If you do not have enough permissions you will get this error message:
 
