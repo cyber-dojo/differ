@@ -165,15 +165,19 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Attest test and branch-coverage results to Kosli
-        run: |         
-          kosli attest junit "${IMAGE_NAME}" \
-              --name=differ.unit-test \
+      - name: Attest junit test results to Kosli
+        run:
+          kosli attest junit "${IMAGE_NAME}" 
+              --name=differ.unit-test 
               --results-dir=test/reports/junit
-          
-          kosli attest generic "${IMAGE_NAME}" \
-              --compliant=${KOSLI_COMPLIANT} \
-              --evidence-paths=./test/reports/evidence.json \
+
+      - name: Attest branch-coverage results to Kosli
+        env:
+          KOSLI_COMPLIANT: ${{ env.KOSLI_COMPLIANT }}
+        run:
+          kosli attest generic "${IMAGE_NAME}" 
+              --compliant=${KOSLI_COMPLIANT} 
+              --evidence-paths=./test/reports/evidence.json 
               --name=differ.branch-coverage
 
 
