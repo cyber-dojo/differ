@@ -131,6 +131,7 @@ jobs:
       - name: Attest image to Kosli flow
         run:
           kosli attest artifact "${IMAGE_NAME}" 
+            --artifact-type=docker          
             --name=differ
 
       - name: Set outputs
