@@ -252,7 +252,7 @@ jobs:
 
       - name: Report expected deployment to Kosli
         run:
-          kosli expect deployment ${IMAGE_NAME} \
+          kosli expect deployment ${IMAGE_NAME} 
             --description="Deployed to ${KOSLI_ENVIRONMENT} in Github Actions pipeline"
 
 
