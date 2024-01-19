@@ -341,9 +341,9 @@ jobs:
 
       - name: Wait for deployment in main.yml
         run:
-          ./sh/wait_for_deployment.sh \
-              "${IMAGE_NAME}" \
-              "${{ env.KOSLI_HOST }}" \
-              "${{ env.KOSLI_API_TOKEN }}" \
-              "${{ env.KOSLI_ORG }}" \
+          ./sh/wait_for_deployment.sh 
+              "${IMAGE_NAME}" 
+              "${{ env.KOSLI_HOST }}" 
+              "${{ env.KOSLI_API_TOKEN }}" 
+              "${{ env.KOSLI_ORG }}" 
               "${KOSLI_ENVIRONMENT}"
