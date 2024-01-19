@@ -210,7 +210,6 @@ jobs:
       - name: Attest Snyk evidence to Kosli
         run:
           kosli attest snyk ${IMAGE_NAME} 
-            --artifact-type=docker  
             --name=differ.snyk-scan  
             --scan-results=snyk.json
 
