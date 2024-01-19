@@ -194,9 +194,9 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
         run:
-          snyk container test ${IMAGE_NAME} \
-            --file=Dockerfile \
-            --json-file-output=snyk.json \
+          snyk container test ${IMAGE_NAME} 
+            --file=Dockerfile 
+            --json-file-output=snyk.json 
             --policy-path=.snyk
 
       - name: Setup Kosli CLI
@@ -206,8 +206,8 @@ jobs:
 
       - name: Attest Snyk results to Kosli
         run:
-          kosli attest snyk ${IMAGE_NAME} \
-            --name=differ.snyk-scan  \
+          kosli attest snyk ${IMAGE_NAME} 
+            --name=differ.snyk-scan  
             --scan-results=snyk.json
 
 
