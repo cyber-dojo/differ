@@ -102,11 +102,10 @@ jobs:
           KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
           cp .rubocop.yml "${LINT_EVIDENCE_DIR}"
           kosli attest generic \
-            --assert \
             --compliant="${KOSLI_COMPLIANT}" \
             --evidence-paths="${LINT_EVIDENCE_DIR}" \
             --name=differ.lint
-                  
+          exit ${STATUS}                  
 
   build-image:
     needs: [kosli-trail]
