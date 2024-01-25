@@ -56,13 +56,13 @@ jobs:
           mkdir -p "${LINT_EVIDENCE_DIR}"
           gem install rubocop
           set +e
-          rubocop --raise-cop-error . > "${LINT_EVIDENCE_DIR}"/rubocop.log
-          STATUS=$?
+          rubocop --raise-cop-error . | tee "${LINT_EVIDENCE_DIR}"/rubocop.log
+          STATUS=${PIPESTATUS[0]}
           set -e
           cp .rubocop.yml "${LINT_EVIDENCE_DIR}"          
-          echo "LINT_EVIDENCE_DIR=${LINT_EVIDENCE_DIR}"       >> ${GITHUB_ENV}
-          KOSLI_LINT_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
-          echo "KOSLI_LINT_COMPLIANT=${KOSLI_LINT_COMPLIANT}" >> ${GITHUB_ENV}
+          echo "LINT_EVIDENCE_DIR=${LINT_EVIDENCE_DIR}" >> ${GITHUB_ENV}
+          KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
+          echo "KOSLI_COMPLIANT=${KOSLI_COMPLIANT}" >> ${GITHUB_ENV}
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -72,10 +72,10 @@ jobs:
       - name: Report Rubocop results to Kosli
         env:
           LINT_EVIDENCE_DIR: ${{ env.LINT_EVIDENCE_DIR }}
-          KOSLI_LINT_COMPLIANT: ${{ env.KOSLI_LINT_COMPLIANT }}
+          KOSLI_COMPLIANT: ${{ env.KOSLI_COMPLIANT }}
         run:
           kosli report evidence commit generic
-            --compliant="${KOSLI_LINT_COMPLIANT}"
+            --compliant="${KOSLI_COMPLIANT}"
             --evidence-paths="${LINT_EVIDENCE_DIR}"
             --name=lint
 
