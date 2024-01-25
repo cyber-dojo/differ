@@ -91,19 +91,19 @@ jobs:
 
       - name: Run Rubocop linter on source, attest results to Kosli Trail
         run: |
-          LINT_EVIDENCE_DIR=/tmp/evidence/lint
-          mkdir -p "${LINT_EVIDENCE_DIR}"
+          KOSLI_EVIDENCE_PATHS=/tmp/evidence/lint
+          mkdir -p "${KOSLI_EVIDENCE_PATHS}"
           gem install rubocop
           set +e
-          rubocop --raise-cop-error . | tee "${LINT_EVIDENCE_DIR}"/rubocop.log
+          rubocop --raise-cop-error . | tee "${KOSLI_EVIDENCE_PATHS}"/rubocop.log
           STATUS=${PIPESTATUS[0]}
           set -e
           
           KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
-          cp .rubocop.yml "${LINT_EVIDENCE_DIR}"
+          cp .rubocop.yml "${KOSLI_EVIDENCE_PATHS}"
           kosli attest generic \
             --compliant="${KOSLI_COMPLIANT}" \
-            --evidence-paths="${LINT_EVIDENCE_DIR}" \
+            --evidence-paths="${KOSLI_EVIDENCE_PATHS}" \
             --name=differ.lint
           exit ${STATUS}                  
 
