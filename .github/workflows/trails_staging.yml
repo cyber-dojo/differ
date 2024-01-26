@@ -67,7 +67,7 @@ jobs:
       - name: Report pull-request evidence to Kosli
         run:
           kosli attest pullrequest github
-            --github-token ${{ secrets.GITHUB_TOKEN }}
+            --github-token=${{ secrets.GITHUB_TOKEN }}
             --name=differ.pull-request
 
 
@@ -90,10 +90,11 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Run Rubocop linter on source, attest results to Kosli Trail
+        env:
+          KOSLI_EVIDENCE_PATHS: /tmp/evidence/lint
         run: |
-          KOSLI_EVIDENCE_PATHS=/tmp/evidence/lint
-          mkdir -p "${KOSLI_EVIDENCE_PATHS}"
           gem install rubocop
+          mkdir -p "${KOSLI_EVIDENCE_PATHS}"
           set +e
           rubocop --raise-cop-error . | tee "${KOSLI_EVIDENCE_PATHS}"/rubocop.log
           STATUS=${PIPESTATUS[0]}
