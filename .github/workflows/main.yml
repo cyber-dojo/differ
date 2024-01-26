@@ -62,7 +62,7 @@ jobs:
 
       - name: Run Rubocop linter on source, attest results to Kosli Trail
         env:
-          KOSLI_EVIDENCE_PATHS=/tmp/evidence/lint
+          KOSLI_EVIDENCE_PATHS: /tmp/evidence/lint
         run: |
           mkdir -p "${KOSLI_EVIDENCE_PATHS}"
           gem install rubocop
