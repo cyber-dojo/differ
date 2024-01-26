@@ -11,6 +11,7 @@ env:
   KOSLI_ORG: cyber-dojo-trails
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}         # differ
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_TRAILS_STAGING }}
+  KOSLI_TRAIL: ${{ github.sha }}
 
 jobs:
 
@@ -19,7 +20,6 @@ jobs:
     outputs:
       image_tag:   ${{ steps.variables.outputs.image_tag }}
       image_name:  ${{ steps.variables.outputs.image_name }}
-      kosli_trail: ${{ steps.variables.outputs.kosli_trail }}
     steps:
       - uses: actions/checkout@v4
 
@@ -36,7 +36,7 @@ jobs:
 
       - name: Begin Kosli Trail
         run:
-          kosli begin trail "${GITHUB_SHA}"
+          kosli begin trail "${{ env.KOSLI_TRAIL }}"
 
       - name: Set outputs
         id: variables
@@ -44,7 +44,6 @@ jobs:
           IMAGE_TAG=${GITHUB_SHA:0:7}
           echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}       
           echo "image_name=cyberdojo/${{ env.KOSLI_FLOW }}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
-          echo "kosli_trail=${GITHUB_SHA}" >> ${GITHUB_OUTPUT}
 
 
   pull-request:
@@ -63,8 +62,6 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report pull-request evidence to Kosli Trail
-        env:
-          KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
         run:
           kosli attest pullrequest github
             --github-token=${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +87,6 @@ jobs:
       - name: Run Rubocop linter on source, attest results to Kosli Trail
         env:
           KOSLI_EVIDENCE_PATHS: /tmp/evidence/lint
-          KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
         run: |
           gem install rubocop
           mkdir -p "${KOSLI_EVIDENCE_PATHS}"
@@ -128,8 +124,6 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest image to Kosli Trail
-        env:
-          KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
         run:
           kosli attest artifact "${IMAGE_NAME}" 
             --artifact-type=docker          
@@ -167,7 +161,6 @@ jobs:
       - name: Attest junit test results to Kosli Trail
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
-          KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
         run:
           kosli attest junit "${IMAGE_NAME}" 
               --name=differ.unit-test 
@@ -177,7 +170,6 @@ jobs:
         env:
           KOSLI_COMPLIANT: ${{ env.KOSLI_COMPLIANT }}
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
-          KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
         run:
           kosli attest generic "${IMAGE_NAME}" 
               --compliant=${KOSLI_COMPLIANT} 
@@ -214,7 +206,6 @@ jobs:
       - name: Attest Snyk results to Kosli Trail
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
-          KOSLI_TRAIL:       ${{ needs.kosli-trail.outputs.kosli_trail }}
         run:
           kosli attest snyk ${IMAGE_NAME} 
             --name=differ.snyk-scan  
