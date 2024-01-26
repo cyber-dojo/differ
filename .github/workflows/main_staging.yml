@@ -203,7 +203,7 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Kosli SDLC gate to short-circuit-the-flow
+      - name: Kosli SDLC gate to short-circuit the Flow
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                                  
           docker pull ${IMAGE_NAME}

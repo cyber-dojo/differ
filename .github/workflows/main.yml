@@ -115,7 +115,7 @@ jobs:
 
       - name: Build and push image to Dockerhub Registry
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
@@ -217,7 +217,7 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Kosli SDLC gate to short-circuit-the-flow
+      - name: Kosli SDLC gate to short-circuit the Flow
         run: |
           IMAGE_NAME=${{ needs.variables.outputs.image_name }}                                                  
           docker pull ${IMAGE_NAME}
