@@ -68,9 +68,9 @@ jobs:
           
           KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
           cp .rubocop.yml "${KOSLI_EVIDENCE_PATHS}"
-          kosli report evidence commit generic
-            --compliant="${KOSLI_COMPLIANT}"
-            --evidence-paths="${KOSLI_EVIDENCE_PATHS}"
+          kosli report evidence commit generic \
+            --compliant="${KOSLI_COMPLIANT}" \
+            --evidence-paths="${KOSLI_EVIDENCE_PATHS}" \
             --name=lint
           exit ${STATUS}
 
