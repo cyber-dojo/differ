@@ -3,7 +3,7 @@ AllCops:
 
 Metrics/BlockLength:
   Exclude:
-    - 'test/*.rb'
+#    - 'test/*.rb'
     - 'client/test/*.rb'
     - app/app_base.rb
 

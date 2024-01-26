@@ -50,34 +50,30 @@ jobs:
           ruby-version: 3.2.0
           bundler-cache: true
 
-      - name: Run Rubocop linter on source
-        run: |
-          LINT_EVIDENCE_DIR=/tmp/evidence/lint
-          mkdir -p "${LINT_EVIDENCE_DIR}"
-          gem install rubocop
-          set +e
-          rubocop --raise-cop-error . | tee "${LINT_EVIDENCE_DIR}"/rubocop.log
-          STATUS=${PIPESTATUS[0]}
-          set -e
-          cp .rubocop.yml "${LINT_EVIDENCE_DIR}"          
-          echo "LINT_EVIDENCE_DIR=${LINT_EVIDENCE_DIR}" >> ${GITHUB_ENV}
-          KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
-          echo "KOSLI_COMPLIANT=${KOSLI_COMPLIANT}" >> ${GITHUB_ENV}
-
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Report Rubocop results to Kosli
+      - name: Run Rubocop linter on source, attest results to Kosli Trail
         env:
-          LINT_EVIDENCE_DIR: ${{ env.LINT_EVIDENCE_DIR }}
-          KOSLI_COMPLIANT: ${{ env.KOSLI_COMPLIANT }}
-        run:
+          KOSLI_EVIDENCE_PATHS=/tmp/evidence/lint
+        run: |
+          mkdir -p "${KOSLI_EVIDENCE_PATHS}"
+          gem install rubocop
+          set +e
+          rubocop --raise-cop-error . | tee "${KOSLI_EVIDENCE_PATHS}"/rubocop.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          
+          KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
+          cp .rubocop.yml "${KOSLI_EVIDENCE_PATHS}"
           kosli report evidence commit generic
             --compliant="${KOSLI_COMPLIANT}"
-            --evidence-paths="${LINT_EVIDENCE_DIR}"
+            --evidence-paths="${KOSLI_EVIDENCE_PATHS}"
             --name=lint
+          exit ${STATUS}
+
 
   pull-request:
     needs: [variables, create-kosli-flow]
