@@ -86,20 +86,20 @@ jobs:
 
       - name: Run Rubocop linter on source, attest evidence to Kosli Trail
         env:
-          KOSLI_EVIDENCE_PATHS: /tmp/evidence/lint
+          KOSLI_ATTACHMENTS: /tmp/kosli_attachments
         run: |
           gem install rubocop
-          mkdir -p "${KOSLI_EVIDENCE_PATHS}"
+          mkdir -p "${KOSLI_ATTACHMENTS}"
           set +e
-          rubocop --raise-cop-error . | tee "${KOSLI_EVIDENCE_PATHS}"/rubocop.log
+          rubocop --raise-cop-error . | tee "${KOSLI_ATTACHMENTS}"/rubocop.log
           STATUS=${PIPESTATUS[0]}
           set -e
           
           KOSLI_COMPLIANT=$([ ${STATUS} = 0 ] && echo true || echo false)
-          cp .rubocop.yml "${KOSLI_EVIDENCE_PATHS}"
+          cp .rubocop.yml "${KOSLI_ATTACHMENTS}"
           kosli attest generic \
+            --attachments="${KOSLI_ATTACHMENTS}" \
             --compliant="${KOSLI_COMPLIANT}" \
-            --evidence-paths="${KOSLI_EVIDENCE_PATHS}" \
             --name=differ.lint
           exit ${STATUS}                  
 
@@ -172,8 +172,9 @@ jobs:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
         run:
           kosli attest generic "${IMAGE_NAME}" 
+              --attachments=./test/reports/evidence.json 
               --compliant=${KOSLI_COMPLIANT} 
-              --evidence-paths=./test/reports/evidence.json 
+              --description="server & client branch-coverage"          
               --name=differ.branch-coverage
 
 
