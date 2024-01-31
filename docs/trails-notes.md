@@ -34,7 +34,7 @@ kosli attest pullrequest github
 kosli report evidence artifact generic "${IMAGE_NAME}" \
     --artifact-type=docker \
     --compliant=${KOSLI_COMPLIANT} \
-    --description="server & client branch-coverage reports" \
+    --description="server & client branch-coverage" \
     --name=branch-coverage \
     --user-data=./test/reports/evidence.json
 ```
@@ -45,7 +45,8 @@ kosli report evidence artifact generic "${IMAGE_NAME}" \
 kosli attest generic "${IMAGE_NAME}" \
     --artifact-type=docker \
     --compliant=${KOSLI_COMPLIANT} \
-    --evidence-paths=./test/reports/evidence.json \
+    --description="server & client branch-coverage" \
+    --attachments=./test/reports/evidence.json \
     --name=differ.branch-coverage \
     --trail="${GITHUB_SHA}"
 ```
@@ -53,6 +54,6 @@ kosli attest generic "${IMAGE_NAME}" \
 ## Differences
 
 - s/report evidence artifact/attest/
-- s/--description//
+- s/--name=branch-coverage/--name=differ.branch-coverage/
 - s//--trail=.../
 
