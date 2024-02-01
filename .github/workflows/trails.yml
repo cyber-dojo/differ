@@ -113,6 +113,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+#      - name: Build and push image to Dockerhub Registry
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          push: true
+#          tags: ${{ needs.kosli-trail.outputs.image_name }}
+#          build-args:
+#            COMMIT_SHA=${{ github.sha }}
+
       - name: Wait for image to be built in main.yml
         run:
           ./sh/wait_for_image.sh "${IMAGE_NAME}"
