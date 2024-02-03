@@ -14,10 +14,16 @@ source "${SH_DIR}/tag_images_to_latest.sh"
 source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
 
-exit_non_zero_unless_installed docker
-exit_non_zero_unless_installed docker-compose
-remove_old_images
-build_tagged_images "$@"
-tag_images_to_latest "$@"
-check_embedded_sha_env_var
-echo_env_vars
+if on_ci ; then
+  echo On CI so not re-building the image
+  echo Instead, letting docker pull the built image
+else
+  echo Not on CI so building the image
+  exit_non_zero_unless_installed docker
+  exit_non_zero_unless_installed docker-compose
+  remove_old_images
+  build_tagged_images "$@"
+  tag_images_to_latest "$@"
+  check_embedded_sha_env_var
+  echo_env_vars
+fi
