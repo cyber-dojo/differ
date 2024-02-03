@@ -88,10 +88,9 @@ jobs:
         env:
           KOSLI_ATTACHMENTS: /tmp/kosli_attachments
         run: |
-          gem install rubocop
           mkdir -p "${KOSLI_ATTACHMENTS}"
           set +e
-          rubocop --raise-cop-error . | tee "${KOSLI_ATTACHMENTS}"/rubocop.log
+          make lint | tee "${KOSLI_ATTACHMENTS}"/rubocop.log
           STATUS=${PIPESTATUS[0]}
           set -e
           
@@ -144,10 +143,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run tests, saves results to test/reports/evidence.json file
-        run: |
-          source ./sh/run_tests_with_coverage.sh
-          if run_tests_with_coverage; then
+      - name: Run tests with branch-coverage
+        run:
+          if make test ; then
             echo "KOSLI_COMPLIANT=true" >> ${GITHUB_ENV}
           else
             echo "KOSLI_COMPLIANT=false" >> ${GITHUB_ENV}
