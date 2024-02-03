@@ -24,3 +24,7 @@ run_tests_with_coverage()
   write_test_evidence_json
   return ${exit_code}
 }
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  run_tests_with_coverage "$@"
+fi
