@@ -37,7 +37,7 @@ class HtmlDemo
 
   def diff
     duration, result = timed { differ.diff_lines('5U2J18', 1, 2) }
-    pre('diff', duration, 'LightGreen', result)
+    pre('diff_lines', duration, 'LightGreen', result)
   end
 
   def timed
