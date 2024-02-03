@@ -36,7 +36,7 @@ class HtmlDemo
   end
 
   def diff
-    duration, result = timed { differ.diff('PUF8Zg', old_files, new_files) }
+    duration, result = timed { differ.diff_lines('5U2J18', 1, 2) }
     pre('diff', duration, 'LightGreen', result)
   end
 
