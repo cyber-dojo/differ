@@ -270,6 +270,9 @@ jobs:
   deploy-to-beta:
     needs: [approve-deployment-to-beta, kosli-trail]
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.app.kosli.com
     env:
       IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
       KOSLI_ENVIRONMENT: aws-beta
@@ -324,6 +327,9 @@ jobs:
   deploy-to-prod:
     needs: [approve-deployment-to-prod, kosli-trail]
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://app.kosli.com
     env:
       IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
       KOSLI_ENVIRONMENT: aws-prod
