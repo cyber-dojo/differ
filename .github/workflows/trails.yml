@@ -259,11 +259,6 @@ jobs:
           kosli report approval ${IMAGE_NAME} 
             --approver="${{ github.actor }}"
 
-      - name: Attest expected deployment to Kosli
-        run:
-          kosli expect deployment ${IMAGE_NAME} 
-            --description="Deployed to ${KOSLI_ENVIRONMENT} in Github Actions pipeline"
-
 
 #  deploy-to-beta:
 #    needs: [approve-deployment-to-beta, kosli-trail]
@@ -275,6 +270,9 @@ jobs:
   deploy-to-beta:
     needs: [approve-deployment-to-beta, kosli-trail]
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.app.kosli.com
     env:
       IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
       KOSLI_ENVIRONMENT: aws-beta
@@ -318,11 +316,6 @@ jobs:
           kosli report approval ${IMAGE_NAME} 
             --approver="${{ github.actor }}"
 
-      - name: Attest expected deployment to Kosli
-        run:
-          kosli expect deployment ${IMAGE_NAME} 
-            --description="Deployed to {KOSLI_ENVIRONMENT} in Github Actions pipeline"
-
 
 #  deploy-to-prod:
 #    needs: [approve-deployment-to-prod, kosli-trail]
@@ -334,6 +327,9 @@ jobs:
   deploy-to-prod:
     needs: [approve-deployment-to-prod, kosli-trail]
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://app.kosli.com
     env:
       IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
       KOSLI_ENVIRONMENT: aws-prod
