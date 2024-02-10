@@ -118,7 +118,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASS }}
 
       - name: Build and push image to Dockerhub Registry
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
