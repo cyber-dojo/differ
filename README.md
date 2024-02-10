@@ -2,7 +2,7 @@
 
 - A [docker-containerized](https://registry.hub.docker.com/r/cyberdojo/differ) micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
 - An HTTP service (sinatra based) for diffing two sets of files.
-- Demonstrates a [Kosli](https://www.kosli.com/) instrumented [GitHub CI pipeline](https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/) 
+- Demonstrates a [Kosli](https://www.kosli.com/) instrumented [Github CI pipeline](https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/) 
   deploying, with Continuous Compliance, to [staging](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/) and [production](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/) AWS environments.
 
 
