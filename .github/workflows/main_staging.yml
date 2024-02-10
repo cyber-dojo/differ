@@ -43,7 +43,7 @@ jobs:
         run: |
           IMAGE_TAG=${GITHUB_SHA:0:7}
           echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}       
-          echo "image_name=cyberdojo/${{ env.KOSLI_FLOW }}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
+          echo "image_name=cyberdojo/differ:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
 
 
   pull-request:
