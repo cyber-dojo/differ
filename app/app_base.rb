@@ -32,6 +32,7 @@ class AppBase < Sinatra::Base
 
   def named_args
     args = if params.empty?
+             request.body.rewind
              json_hash_parse(request.body.read)
            else
              params
