@@ -217,6 +217,7 @@ jobs:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
         run:
           kosli attest snyk ${IMAGE_NAME} 
+            --attachments=.snyk
             --name=differ.snyk-scan  
             --scan-results=snyk.json
 
