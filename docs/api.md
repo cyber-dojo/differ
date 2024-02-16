@@ -2,7 +2,7 @@
 
 - - - -
 ## GET diff_files(id,was_index,now_index)
-A diff of two sets of files (designated with **was_index** and **now_index**) from the kata with id **id**.
+A diff of two sets of files (designated with **was_index** and **now_index**) from the kata designated with **id**.
 Also includes unchanged files and the content of files renamed but with identical content.
 - parameters
   * **id:String** the id of the kata.
@@ -18,9 +18,10 @@ Also includes unchanged files and the content of files renamed but with identica
   * "new_filename" - the String name of the **now_index** file, unless "type" is "deleted" in which case **null**.
   * "lines" - an Array of Hashes, each Hash detailing an "added", "deleted", or "same" line, or
     a "section" marker before a diff-chunk.
-  * "added" - line numbers index into **now_index**'s "new_filename" file.
-  * "deleted" - line numbers index into **was_index**'s "old_filename" file.
-  * "same" - line numbers index into **now_index**'s "new_filename" file.
+  * "line_counts" - a Hash with three entries:
+    - "added" - line numbers index into **now_index**'s "new_filename" file.
+    - "deleted" - line numbers index into **was_index**'s "old_filename" file.
+    - "same" - line numbers index into **now_index**'s "new_filename" file.
   *
   * eg a created file, which always has a single "section" marker.
   ```json
