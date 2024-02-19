@@ -1,4 +1,22 @@
 
+# Report-Artifact
+
+## Flows V1
+```yml
+kosli report artifact ...
+   --git-commit=...
+```
+
+## Flows V2
+```yml
+kosli attest artifact ...
+   --commit=...
+```
+
+## Differences
+s/--git-commit/commit/
+
+
 # Pull-Request
 
 ## Flows v1
