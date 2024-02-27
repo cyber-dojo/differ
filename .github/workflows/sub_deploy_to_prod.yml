@@ -8,7 +8,8 @@ on:
         type: string
 
 env:
-  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
+  KOSLI_FLOW: differ-ci
+  KOSLI_TRAIL: ${{ github.sha }}
 
 jobs:
 
@@ -53,8 +54,8 @@ jobs:
 
       - name: Push image to private prod-ECR
         run: |
-          PUBLIC_IMAGE_NAME=cyberdojo/${{ needs.variables.outputs.flow_name }}:${{ inputs.IMAGE_TAG }}
-          PRIVATE_IMAGE_NAME=${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.flow_name }}:${{ inputs.IMAGE_TAG }}
+          PUBLIC_IMAGE_NAME=cyberdojo/differ:${{ inputs.IMAGE_TAG }}
+          PRIVATE_IMAGE_NAME=${{ needs.variables.outputs.ecr_registry }}/differ:${{ inputs.IMAGE_TAG }}
           docker pull ${PUBLIC_IMAGE_NAME}
           docker tag ${PUBLIC_IMAGE_NAME} ${PRIVATE_IMAGE_NAME}
           docker push ${PRIVATE_IMAGE_NAME}
