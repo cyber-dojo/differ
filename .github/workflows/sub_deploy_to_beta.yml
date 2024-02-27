@@ -8,7 +8,7 @@ on:
         type: string
 
 env:
-  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}
+  KOSLI_FLOW: differ-ci
   KOSLI_TRAIL: ${{ github.sha }}
 
 jobs:
@@ -96,7 +96,7 @@ jobs:
         uses: kosli-dev/setup-cli-action@v2
         with:
           version:
-            ${{ env.KOSLI_CLI_VERSION }}
+            ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Download a plan artifact
         uses: actions/download-artifact@v4.1.1
