@@ -76,11 +76,10 @@ jobs:
       tf_version: v1.4.5
       tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.flow_name }}:${{ needs.variables.outputs.image_tag }}"}'
       tf_sh_version: 0.2.1
-      tf_upload_artifact_state_file: 'true'
       tf_upload_artifact_name_suffix: "_beta"
-      tf_upload_artifacts: 'true'
-      tf_upload_artifact_path: "./tfplan"
-      tf_state_file_path: "terraform/differ/main.tfstate"
+      tf_upload_artifact_state_file: 'true'
+      tf_upload_artifact_plan: 'true'
+      tf_state_file_path_on_s3: "terraform/differ/main.tfstate"
 
   trail-attest-terraform:
     needs: deploy-to-aws-beta
@@ -114,7 +113,7 @@ jobs:
       #       --name tf-apply-plan-beta
       #       --flow ${{ env.KOSLI_FLOW }}
       #       --trail ${{ env.KOSLI_TRAIL }}
-      #       --attachments ./tfplan
+      #       --attachments deployment/terraform/tfplan
       #       --host ${{ env.KOSLI_HOST }}
       #       --api-token ${{ env.KOSLI_API_TOKEN }}
 
@@ -124,7 +123,7 @@ jobs:
             --name tf-apply-plan-beta
             --flow ${{ env.KOSLI_FLOW }}
             --trail ${{ env.KOSLI_TRAIL }}
-            --attachments ./tfplan
+            --attachments deployment/terraform/tfplan
             --host ${{ env.KOSLI_HOST_STAGING }}
             --api-token ${{ env.KOSLI_API_TOKEN_STAGING }}
 
@@ -148,7 +147,7 @@ jobs:
       # - name: Attest tf state artifact (production)
       #   run: |
       #     kosli attest artifact \
-      #       --artifact-type file ./main.tfstate \
+      #       --artifact-type file deployment/terraform/main.tfstate \
       #       --name state-beta \
       #       --flow ${{ env.KOSLI_FLOW }} \
       #       --trail ${{ env.KOSLI_TRAIL }} \
@@ -158,7 +157,7 @@ jobs:
       - name: Attest tf state artifact (staging)
         run: |
           kosli attest artifact \
-            --artifact-type file ./main.tfstate \
+            --artifact-type file deployment/terraform/main.tfstate \
             --name state-beta \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
