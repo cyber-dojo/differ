@@ -120,17 +120,17 @@ jobs:
       - name: Download a plan artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: tf_artifacts_plan_beta
+          name: tf_artifacts_plan_prod
 
       - name: Download a state file artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: tf_artifacts_state_file_beta
+          name: tf_artifacts_state_file_prod
       
       - name: Attest tf plan to Kosli trail (production)
         run:
           kosli attest generic
-            --name tf-apply-plan-beta
+            --name tf-apply-plan-prod
             --flow ${{ inputs.KOSLI_FLOW }}
             --trail ${{ inputs.KOSLI_TRAIL }}
             --attachments ./tfplan
@@ -140,7 +140,7 @@ jobs:
       - name: Attest tf plan to Kosli trail (staging)
         run:
           kosli attest generic
-            --name tf-apply-plan-beta
+            --name tf-apply-plan-prod
             --flow ${{ inputs.KOSLI_FLOW }}
             --trail ${{ inputs.KOSLI_TRAIL }}
             --attachments ./tfplan
@@ -168,7 +168,7 @@ jobs:
         run: |
           kosli attest artifact \
             --artifact-type file ./main.tfstate \
-            --name state-beta \
+            --name state-prod \
             --flow ${{ inputs.KOSLI_FLOW }} \
             --trail ${{ inputs.KOSLI_TRAIL }} \
             --host ${{ inputs.KOSLI_HOST }} \
@@ -178,7 +178,7 @@ jobs:
         run: |
           kosli attest artifact \
             --artifact-type file ./main.tfstate \
-            --name state-beta \
+            --name state-prod \
             --flow ${{ inputs.KOSLI_FLOW }} \
             --trail ${{ inputs.KOSLI_TRAIL }} \
             --host ${{ inputs.KOSLI_HOST_STAGING }} \
