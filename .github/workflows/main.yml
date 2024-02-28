@@ -204,7 +204,8 @@ jobs:
         run:
           snyk container test ${IMAGE_NAME} 
             --file=Dockerfile 
-            --json-file-output=snyk.json 
+            --sarif
+            --sarif-file-output=snyk.json 
             --policy-path=.snyk
 
       - name: Setup Kosli CLI
