@@ -13,12 +13,14 @@ image_deployed()
 
     # Use Kosli CLI to get info on what artifacts are currently running
     # (docs/snapshot.json contains an example json file)
+    echo "Getting snapshot from ${KOSLI_ENVIRONMENT} on ${KOSLI_HOST}"
+
     kosli get snapshot "${KOSLI_ENVIRONMENT}" \
       --host="${KOSLI_HOST}" \
       --api-token="${KOSLI_API_TOKEN}" \
       --org="${KOSLI_ORG}" \
       --output=json \
-        | tee "${snapshot_json_filename}"
+        > "${snapshot_json_filename}"
 
     # Process info, one artifact at a time
     local -r artifacts_length=$(jq '.artifacts | length' ${snapshot_json_filename})
@@ -26,13 +28,25 @@ image_deployed()
     do
         annotation_type=$(jq -r ".artifacts[$i].annotation.type" ${snapshot_json_filename})
         if [ "${annotation_type}" != "exited" ]; then
+          name=$(jq -r ".artifacts[$i].name" ${snapshot_json_filename})
           fingerprint=$(jq -r ".artifacts[$i].fingerprint" ${snapshot_json_filename})
+          echo "Looking at Artifact ${name}"
           if [ "${fingerprint}" == "${FINGERPRINT}" ]; then
+            echo "MATCHED: ${fingerprint} == ${FINGERPRINT}"
             return 0 # true
+          else
+            echo "NO-MATCH ${fingerprint} != ${FINGERPRINT}"
           fi
        fi
     done
     return 1 # false
+}
+
+image_not_deployed()
+{
+    local -r snapshot_json_filename=snapshot.json
+    echo "Failed!"
+    cat "${snapshot_json_filename}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,7 +62,7 @@ ATTEMPTS=1
 until image_deployed
 do
   sleep 10
-  [[ ${ATTEMPTS} -eq ${MAX_ATTEMPTS} ]] && echo "Failed!" && exit 1
+  [[ ${ATTEMPTS} -eq ${MAX_ATTEMPTS} ]] && image_not_deployed && exit 42
   ((ATTEMPTS++))
   echo "Waiting for deployment of Artifact ${IMAGE_NAME} to Environment ${KOSLI_ENVIRONMENT}"
   echo "Attempt # ${ATTEMPTS} / ${MAX_ATTEMPTS}"
