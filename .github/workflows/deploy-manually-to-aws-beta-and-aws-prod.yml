@@ -12,6 +12,9 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
       IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
   deploy_to_prod:
     uses: ./.github/workflows/sub_deploy_to_prod.yml
