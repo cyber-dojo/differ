@@ -133,7 +133,7 @@ jobs:
       #       --name tf-apply-plan-beta
       #       --flow ${{ inputs.KOSLI_FLOW }}
       #       --trail ${{ inputs.KOSLI_TRAIL }}
-      #       --attachments deployment/terraform/tfplan
+      #       --attachments ./tfplan
       #       --host ${{ inputs.KOSLI_HOST }}
       #       --api-token ${{ secrets.KOSLI_API_TOKEN }}
 
@@ -143,7 +143,7 @@ jobs:
             --name tf-apply-plan-beta
             --flow ${{ inputs.KOSLI_FLOW }}
             --trail ${{ inputs.KOSLI_TRAIL }}
-            --attachments deployment/terraform/tfplan
+            --attachments ./tfplan
             --host ${{ inputs.KOSLI_HOST_STAGING }}
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
@@ -167,7 +167,7 @@ jobs:
       # - name: Attest tf state artifact (production)
       #   run: |
       #     kosli attest artifact \
-      #       --artifact-type file deployment/terraform/main.tfstate \
+      #       --artifact-type file ./main.tfstate \
       #       --name state-beta \
       #       --flow ${{ inputs.KOSLI_FLOW }} \
       #       --trail ${{ inputs.KOSLI_TRAIL }} \
@@ -177,7 +177,7 @@ jobs:
       - name: Attest tf state artifact (staging)
         run: |
           kosli attest artifact \
-            --artifact-type file deployment/terraform/main.tfstate \
+            --artifact-type file ./main.tfstate \
             --name state-beta \
             --flow ${{ inputs.KOSLI_FLOW }} \
             --trail ${{ inputs.KOSLI_TRAIL }} \
