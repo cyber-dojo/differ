@@ -21,6 +21,11 @@ on:
       KOSLI_HOST_STAGING:
         required: true
         type: string
+    secrets:
+      KOSLI_API_TOKEN_STAGING:
+        required: true
+      KOSLI_API_TOKEN:
+        required: true
 
 
 env:
