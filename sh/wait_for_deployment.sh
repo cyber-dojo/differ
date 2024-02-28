@@ -18,7 +18,7 @@ image_deployed()
       --api-token="${KOSLI_API_TOKEN}" \
       --org="${KOSLI_ORG}" \
       --output=json \
-        > "${snapshot_json_filename}"
+        | tee "${snapshot_json_filename}"
 
     # Process info, one artifact at a time
     local -r artifacts_length=$(jq '.artifacts | length' ${snapshot_json_filename})
