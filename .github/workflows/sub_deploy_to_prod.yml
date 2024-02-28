@@ -6,21 +6,6 @@ on:
       IMAGE_TAG:
         required: true
         type: string
-      KOSLI_ORG:
-        required: true
-        type: string
-      KOSLI_FLOW:
-        required: true
-        type: string
-      KOSLI_TRAIL:
-        required: true
-        type: string
-      KOSLI_HOST:
-        required: true
-        type: string
-      KOSLI_HOST_STAGING:
-        required: true
-        type: string
     secrets:
       KOSLI_API_TOKEN_STAGING:
         required: true
@@ -29,7 +14,11 @@ on:
 
 
 env:
-  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
+  KOSLI_ORG: cyber-dojo
+  KOSLI_FLOW: differ-ci
+  KOSLI_TRAIL: ${{ github.sha }}
+  KOSLI_HOST: "https://app.kosli.com"
+  KOSLI_HOST_STAGING: "https://staging.app.kosli.com"
 
 jobs:
 
@@ -46,7 +35,7 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "flow_name=${{ inputs.KOSLI_FLOW }}"                           >> ${GITHUB_OUTPUT}        
+        echo "flow_name=${{ env.KOSLI_FLOW }}"                              >> ${GITHUB_OUTPUT}        
         echo "image_tag=${{ inputs.IMAGE_TAG }}"                            >> ${GITHUB_OUTPUT}
         echo "aws_account_id=274425519734"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry=274425519734.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
@@ -131,20 +120,20 @@ jobs:
         run:
           kosli attest generic
             --name tf-apply-plan-prod
-            --flow ${{ inputs.KOSLI_FLOW }}
-            --trail ${{ inputs.KOSLI_TRAIL }}
+            --flow ${{ env.KOSLI_FLOW }}
+            --trail ${{ env.KOSLI_TRAIL }}
             --attachments ./tfplan
-            --host ${{ inputs.KOSLI_HOST }}
+            --host ${{ env.KOSLI_HOST }}
             --api-token ${{ secrets.KOSLI_API_TOKEN }}
 
       - name: Attest tf plan to Kosli trail (staging)
         run:
           kosli attest generic
             --name tf-apply-plan-prod
-            --flow ${{ inputs.KOSLI_FLOW }}
-            --trail ${{ inputs.KOSLI_TRAIL }}
+            --flow ${{ env.KOSLI_FLOW }}
+            --trail ${{ env.KOSLI_TRAIL }}
             --attachments ./tfplan
-            --host ${{ inputs.KOSLI_HOST_STAGING }}
+            --host ${{ env.KOSLI_HOST_STAGING }}
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf plan artifact
@@ -169,9 +158,9 @@ jobs:
           kosli attest artifact \
             --artifact-type file ./main.tfstate \
             --name state-prod \
-            --flow ${{ inputs.KOSLI_FLOW }} \
-            --trail ${{ inputs.KOSLI_TRAIL }} \
-            --host ${{ inputs.KOSLI_HOST }} \
+            --flow ${{ env.KOSLI_FLOW }} \
+            --trail ${{ env.KOSLI_TRAIL }} \
+            --host ${{ env.KOSLI_HOST }} \
             --api-token ${{ secrets.KOSLI_API_TOKEN }}
 
       - name: Attest tf state artifact (staging)
@@ -179,9 +168,9 @@ jobs:
           kosli attest artifact \
             --artifact-type file ./main.tfstate \
             --name state-prod \
-            --flow ${{ inputs.KOSLI_FLOW }} \
-            --trail ${{ inputs.KOSLI_TRAIL }} \
-            --host ${{ inputs.KOSLI_HOST_STAGING }} \
+            --flow ${{ env.KOSLI_FLOW }} \
+            --trail ${{ env.KOSLI_TRAIL }} \
+            --host ${{ env.KOSLI_HOST_STAGING }} \
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf state file artifact
