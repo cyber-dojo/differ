@@ -6,10 +6,25 @@ on:
       IMAGE_TAG:
         required: true
         type: string
+      KOSLI_ORG:
+        required: true
+        type: string
+      KOSLI_FLOW:
+        required: true
+        type: string
+      KOSLI_TRAIL:
+        required: true
+        type: string
+      KOSLI_HOST:
+        required: true
+        type: string
+      KOSLI_HOST_STAGING:
+        required: true
+        type: string
+
 
 env:
-  KOSLI_FLOW: differ-ci
-  KOSLI_TRAIL: ${{ github.sha }}
+  KOSLI_ORG: ${{ inputs.KOSLI_ORG }}
 
 jobs:
 
@@ -26,7 +41,7 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "flow_name=${{ env.KOSLI_FLOW }}"                              >> ${GITHUB_OUTPUT}        
+        echo "flow_name=${{ inputs.KOSLI_FLOW }}"                           >> ${GITHUB_OUTPUT}        
         echo "image_tag=${{ inputs.IMAGE_TAG }}"                            >> ${GITHUB_OUTPUT}
         echo "aws_account_id=274425519734"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry=274425519734.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}

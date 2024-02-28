@@ -6,9 +6,10 @@ on:
       - main
 
 env:
-  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }} # False
-  KOSLI_HOST: ${{ vars.KOSLI_HOST }}       # https://app.kosli.com
-  KOSLI_ORG: ${{ vars.KOSLI_ORG }}         # cyber-dojo
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # False
+  KOSLI_HOST: ${{ vars.KOSLI_HOST }}                 # https://app.kosli.com
+  KOSLI_HOST_STAGING: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
+  KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
   KOSLI_FLOW: differ-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_TRAIL: ${{ github.sha }}
@@ -20,6 +21,11 @@ jobs:
     outputs:
       image_tag:   ${{ steps.variables.outputs.image_tag }}
       image_name:  ${{ steps.variables.outputs.image_name }}
+      kosli_org: ${{ steps.variables.outputs.kosli_org }}
+      kosli_flow: ${{ steps.variables.outputs.kosli_flow }}
+      kosli_trail: ${{ steps.variables.outputs.kosli_trail }}
+      kosli_host: ${{ steps.variables.outputs.kosli_host }}
+      kosli_host_staging: ${{ steps.variables.outputs.kosli_host_staging }}
     steps:
       - uses: actions/checkout@v4
 
@@ -44,6 +50,11 @@ jobs:
           IMAGE_TAG=${GITHUB_SHA:0:7}
           echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}       
           echo "image_name=cyberdojo/differ:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
+          echo "kosli_org=${KOSLI_ORG}" >> ${GITHUB_OUTPUT}
+          echo "kosli_flow=${KOSLI_FLOW}" >> ${GITHUB_OUTPUT}
+          echo "kosli_trail=${KOSLI_TRAIL}" >> ${GITHUB_OUTPUT}
+          echo "kosli_host=${KOSLI_HOST}" >> ${GITHUB_OUTPUT}
+          echo "kosli_host_staging=${KOSLI_HOST_STAGING}" >> ${GITHUB_OUTPUT}
 
 
   pull-request:
@@ -271,6 +282,11 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
+      KOSLI_ORG: ${{ needs.kosli-trail.outputs.kosli_org }}
+      KOSLI_FLOW: ${{ needs.kosli-trail.outputs.kosli_flow }}
+      KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
+      KOSLI_HOST: ${{ needs.kosli-trail.outputs.kosli_host }}
+      KOSLI_HOST_STAGING: ${{ needs.kosli-trail.outputs.kosli_host_staging }}
 
 
   approve-deployment-to-prod:
@@ -304,3 +320,8 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_prod.yml
     with:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
+      KOSLI_ORG: ${{ needs.kosli-trail.outputs.kosli_org }}
+      KOSLI_FLOW: ${{ needs.kosli-trail.outputs.kosli_flow }}
+      KOSLI_TRAIL: ${{ needs.kosli-trail.outputs.kosli_trail }}
+      KOSLI_HOST: ${{ needs.kosli-trail.outputs.kosli_host }}
+      KOSLI_HOST_STAGING: ${{ needs.kosli-trail.outputs.kosli_host_staging }}
