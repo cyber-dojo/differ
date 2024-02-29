@@ -202,7 +202,7 @@ jobs:
           snyk container test ${IMAGE_NAME} \
             --file=Dockerfile \
             --sarif \
-            --sarif-file-output=snyk.json \
+            --sarif-file-output="${SARIF_FILENAME}" \
             --policy-path=.snyk
           set -e
           
