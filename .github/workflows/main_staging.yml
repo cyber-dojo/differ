@@ -176,45 +176,84 @@ jobs:
               --name=differ.branch-coverage
 
 
-  snyk-scan:
+  snyk-container-scan:
     needs: [build-image, kosli-trail]
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Snyk
-        uses: snyk/actions/setup@master
-
-      - name: Run Snyk to check Docker image for vulnerabilities
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        continue-on-error: true
-        run:
-          snyk container test ${IMAGE_NAME} 
-            --file=Dockerfile 
-            --sarif
-            --sarif-file-output=snyk.json 
-            --policy-path=.snyk
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Attest Snyk results to Kosli Trail
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk container scan and report results to Kosli Trail
         env:
+          IMAGE_NAME:        ${{ needs.kosli-trail.outputs.image_name }}
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
-        run:
-          kosli attest snyk ${IMAGE_NAME} 
-            --attachments=.snyk          
-            --name=differ.snyk-scan  
-            --scan-results=snyk.json
+          KOSLI_ATTACHMENTS: /tmp/kosli_attachments
+          SARIF_FILENAME:    snyk.container.scan.json
+          SNYK_TOKEN:        ${{ secrets.SNYK_TOKEN }}
+        run: |
+          set +e          
+          snyk container test ${IMAGE_NAME} \
+            --file=Dockerfile \
+            --sarif \
+            --sarif-file-output=snyk.json \
+            --policy-path=.snyk
+          set -e
+          
+          mkdir "${KOSLI_ATTACHMENTS}"
+          cp .snyk "${KOSLI_ATTACHMENTS}"
+
+          kosli attest snyk "${IMAGE_NAME}" \
+            --name=differ.snyk-container-scan \
+            --scan-results="${SARIF_FILENAME}"
+
+
+  snyk-code-scan:
+    needs: [build-image, kosli-trail]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk code scan and report results to Kosli Trail
+        env:
+          IMAGE_NAME:        ${{ needs.kosli-trail.outputs.image_name }}
+          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
+          KOSLI_ATTACHMENTS: /tmp/kosli_attachments
+          SARIF_FILENAME:    snyk.code.scan.json
+          SNYK_TOKEN:        ${{ secrets.SNYK_TOKEN }}
+        run: |
+          set +e          
+          snyk code test \
+            --sarif \
+            --sarif-file-output="${SARIF_FILENAME}" \
+            --policy-path=.snyk \
+            .
+          set -e
+
+          mkdir "${KOSLI_ATTACHMENTS}"
+          cp .snyk "${KOSLI_ATTACHMENTS}"
+
+          kosli attest snyk "${IMAGE_NAME}" \
+            --name=differ.snyk-code-scan \
+            --scan-results="${SARIF_FILENAME}"
 
 
   sdlc-control-gate:
-    needs: [pull-request, lint, unit-tests, snyk-scan, kosli-trail, build-image]
+    needs: [pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, kosli-trail, build-image]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
