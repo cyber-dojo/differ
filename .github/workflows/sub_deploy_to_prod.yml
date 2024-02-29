@@ -25,7 +25,7 @@ jobs:
   variables:
     runs-on: ubuntu-latest
     outputs:
-      flow_name: ${{ steps.vars.outputs.flow_name }}
+      service_name: ${{ steps.vars.outputs.service_name }}
       image_tag: ${{ steps.vars.outputs.image_tag }}
       aws_account_id: ${{ steps.vars.outputs.aws_account_id }}
       ecr_registry: ${{ steps.vars.outputs.ecr_registry }}
@@ -35,7 +35,7 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "flow_name=${{ env.KOSLI_FLOW }}"                              >> ${GITHUB_OUTPUT}        
+        echo "service_name=differ"                                          >> ${GITHUB_OUTPUT}        
         echo "image_tag=${{ inputs.IMAGE_TAG }}"                            >> ${GITHUB_OUTPUT}
         echo "aws_account_id=274425519734"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry=274425519734.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
@@ -63,8 +63,8 @@ jobs:
 
       - name: Push image to private prod-ECR
         run: |
-          PUBLIC_IMAGE_NAME=cyberdojo/differ:${{ inputs.IMAGE_TAG }}
-          PRIVATE_IMAGE_NAME=${{ needs.variables.outputs.ecr_registry }}/differ:${{ inputs.IMAGE_TAG }}
+          PUBLIC_IMAGE_NAME=cyberdojo/${{ needs.variables.outputs.service_name }}:${{ inputs.IMAGE_TAG }}
+          PRIVATE_IMAGE_NAME=${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ inputs.IMAGE_TAG }}
           docker pull ${PUBLIC_IMAGE_NAME}
           docker tag ${PUBLIC_IMAGE_NAME} ${PRIVATE_IMAGE_NAME}
           docker push ${PRIVATE_IMAGE_NAME}
@@ -83,12 +83,12 @@ jobs:
       working_directory: deployment/terraform/
       tf_apply: 'true'
       tf_version: v1.4.5
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.flow_name }}:${{ needs.variables.outputs.image_tag }}"}'
+      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ needs.variables.outputs.image_tag }}"}'
       tf_sh_version: 0.2.1
       tf_upload_artifact_name_suffix: "_prod"
       tf_upload_artifact_state_file: 'true'
       tf_upload_artifact_plan: 'true'
-      tf_state_file_path_on_s3: "terraform/differ/main.tfstate"
+      tf_state_file_path_on_s3: "terraform/${{ needs.variables.outputs.service_name }}/main.tfstate"
 
   trail-attest-terraform:
     needs: deploy-to-aws-prod

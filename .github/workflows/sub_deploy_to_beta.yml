@@ -36,7 +36,7 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "service_name=${{ env.KOSLI_FLOW }}"                              >> ${GITHUB_OUTPUT}
+        echo "service_name=differ"                                          >> ${GITHUB_OUTPUT}
         echo "image_tag=${{ inputs.IMAGE_TAG }}"                            >> ${GITHUB_OUTPUT}
         echo "aws_account_id=244531986313"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry=244531986313.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
