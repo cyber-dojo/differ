@@ -1,4 +1,4 @@
-name: Main
+name: environment-reporter terraform apply
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
     with:
       aws_region: eu-central-1
       aws_default_region: eu-central-1
-      aws_role_arn: arn:aws:iam::${{ matrix.aws_account_id }}:role/${{ github.event.repository.name }} 
+      aws_role_arn: arn:aws:iam::${{ matrix.aws_account_id }}:role/gh_actions_services
       aws_role_duration: 900
       working_directory: deployment/terraform/environment-reporter
       tf_apply: 'true'
