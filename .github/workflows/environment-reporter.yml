@@ -3,7 +3,7 @@ name: Main
 on:
   push:
     paths:
-      - 'environment-reporter/**'
+      - 'deployment/terraform/environment-reporter/**'
 
 
 jobs:
