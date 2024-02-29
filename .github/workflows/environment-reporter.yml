@@ -1,0 +1,31 @@
+name: Main
+
+on:
+  push:
+    paths:
+      - 'environment-reporter/**'
+
+
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: write
+    uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.18
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [beta, prod]
+        include:
+          - AWS_ACCOUNT_ID: 244531986313
+            environment: beta
+          - AWS_ACCOUNT_ID: 274425519734
+            environment: prod
+    with:
+      aws_region: eu-central-1
+      aws_default_region: eu-central-1
+      aws_role_arn: arn:aws:iam::${{ matrix.aws_account_id }}:role/${{ github.event.repository.name }} 
+      aws_role_duration: 900
+      working_directory: deployment/terraform/environment-reporter
+      tf_apply: 'true'
+      tf_version: v1.4.5
