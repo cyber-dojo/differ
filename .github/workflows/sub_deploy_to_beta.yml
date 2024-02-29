@@ -164,14 +164,6 @@ jobs:
             --host ${{ env.KOSLI_HOST }} \
             --api-token ${{ secrets.KOSLI_API_TOKEN }}
 
-      - name: Attest tf state artifact (production)
-        run: |
-          kosli expect deployment \
-            --artifact-type file ./main.tfstate \
-            --environment terraform-state-${{ needs.variables.outputs.service_name }}-beta \
-            --flow ${{ env.KOSLI_FLOW }} \
-            --api-token ${{ env.KOSLI_API_TOKEN }}
-
       - name: Attest tf state artifact (staging)
         run: |
           kosli attest artifact \
@@ -181,14 +173,6 @@ jobs:
             --trail ${{ env.KOSLI_TRAIL }} \
             --host ${{ env.KOSLI_HOST_STAGING }} \
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
-
-      - name: Attest tf state artifact (staging)
-        run: |
-          kosli expect deployment \
-            --artifact-type file ./main.tfstate \
-            --environment terraform-state-${{ needs.variables.outputs.service_name }}-beta \
-            --flow ${{ env.KOSLI_FLOW }} \
-            --api-token ${{ env.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf state file artifact
         run: |
