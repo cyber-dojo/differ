@@ -379,5 +379,5 @@ jobs:
       - name: Tag image to :latest and push to Dockerhub Registry
         run: |
           docker pull "${IMAGE_NAME}"
-          docker tag "${IMAGE_NAME}" "cyberdojo/${{ env.KOSLI_FLOW }}:latest"
-          docker push "cyberdojo/${{ env.KOSLI_FLOW }}:latest"
+          docker tag "${IMAGE_NAME}" "cyberdojo/differ:latest"
+          docker push "cyberdojo/differ:latest"
