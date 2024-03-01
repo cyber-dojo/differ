@@ -92,7 +92,7 @@ jobs:
       tf_state_file_path_on_s3: "terraform/${{ needs.variables.outputs.service_name }}/main.tfstate"
 
   trail-attest-terraform:
-    needs: deploy-to-aws-beta
+    needs: [variables, deploy-to-aws-beta]
     permissions:
       actions: write
       contents: read
@@ -116,11 +116,14 @@ jobs:
         uses: actions/download-artifact@v4.1.1
         with:
           name: tf_artifacts_state_file_beta
-      
+
+      - name: Rename a state file artifact
+        run: mv main.tfstate ${{ needs.variables.outputs.service_name }}.tfstate
+
       - name: Attest tf plan to Kosli trail (production)
         run:
           kosli attest generic
-            --name tf-apply-plan-beta
+            --name tf-plan-beta
             --flow ${{ env.KOSLI_FLOW }}
             --trail ${{ env.KOSLI_TRAIL }}
             --attachments ./tfplan
@@ -130,7 +133,7 @@ jobs:
       - name: Attest tf plan to Kosli trail (staging)
         run:
           kosli attest generic
-            --name tf-apply-plan-beta
+            --name tf-plan-beta
             --flow ${{ env.KOSLI_FLOW }}
             --trail ${{ env.KOSLI_TRAIL }}
             --attachments ./tfplan
@@ -157,7 +160,7 @@ jobs:
       - name: Attest tf state artifact (production)
         run: |
           kosli attest artifact \
-            --artifact-type file ./main.tfstate \
+            --artifact-type file ./${{ needs.variables.outputs.service_name }}.tfstate \
             --name state-beta \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
@@ -167,7 +170,7 @@ jobs:
       - name: Attest tf state artifact (staging)
         run: |
           kosli attest artifact \
-            --artifact-type file ./main.tfstate \
+            --artifact-type file ./${{ needs.variables.outputs.service_name }}.tfstate \
             --name state-beta \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
