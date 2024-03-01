@@ -2,9 +2,9 @@ version: 1
 
 trail:
   attestations:
-    - name: tf-apply-plan-beta
+    - name: tf-plan-beta
       type: generic
-    - name: tf-apply-plan-prod
+    - name: tf-plan-prod
       type: generic
   artifacts:
     - name: state-beta
