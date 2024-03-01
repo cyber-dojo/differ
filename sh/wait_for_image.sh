@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -Eu
 
-# See https://gitlab.com/cyber-dojo/creator/-/blob/main/.gitlab/workflows/dev-readme.md
-
 readonly IMAGE_NAME="${1}"  # eg cyberdojo/differ:756c728
 readonly MAX_WAIT_TIME=5    # max time to wait for IMAGE_NAME to be pushed, in minutes
 readonly SLEEP_TIME=10      # wait time between pull checks, in seconds
