@@ -17,7 +17,7 @@ module "lambda_reporter" {
   kosli_environment_name            = "terraform-state-${var.env}"
   kosli_org                         = "cyber-dojo"
   reported_aws_resource_name        = local.state_bucket_name
-  kosli_command_optional_parameters = "--include terraform/differ/main.tfstate"
+  kosli_command_optional_parameters = "--include terraform/differ/differ.tfstate"
   schedule_expression               = "rate(5 minutes)"
   tags                              = module.tags.result
 }
