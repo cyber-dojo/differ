@@ -89,7 +89,7 @@ jobs:
       tf_upload_artifact_name_suffix: "_beta"
       tf_upload_artifact_state_file: 'true'
       tf_upload_artifact_plan: 'true'
-      tf_state_file_path_on_s3: "terraform/${{ needs.variables.outputs.service_name }}/main.tfstate"
+      tf_state_file_path_on_s3: "terraform/${{ needs.variables.outputs.service_name }}/${{ needs.variables.outputs.service_name }}.tfstate"
 
   trail-attest-terraform:
     needs: [variables, deploy-to-aws-beta]
