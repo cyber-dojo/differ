@@ -8,7 +8,6 @@ on:
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # False
   KOSLI_HOST: ${{ vars.KOSLI_HOST }}                 # https://app.kosli.com
-  KOSLI_HOST_STAGING: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # differ-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -316,13 +315,56 @@ jobs:
 
   attest-beta-artifacts:
     needs: [deploy-to-beta]
-    uses: ./.github/workflows/attest_beta_artifacts.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+    permissions:
+      actions: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup kosli cli
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version:
+            ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Download a plan artifact
+        uses: actions/download-artifact@v4.1.1
+        with:
+          name: tf_artifacts_plan_beta
+
+      - name: Download a state file artifact
+        uses: actions/download-artifact@v4.1.1
+        with:
+          name: tf_artifacts_state_file_beta
+
+      - name: Rename a state file artifact
+        run: mv main.tfstate ${{ env.SERVICE_NAME }}.tfstate
+
+      - name: Attest tf plan to Kosli trail
+        run:
+          kosli attest generic
+            --name tf-plan-beta
+            --flow ${{ env.KOSLI_FLOW }}
+            --trail ${{ env.KOSLI_TRAIL }}
+            --attachments ./tfplan
+            --host ${{ env.KOSLI_HOST }}
+            --api-token ${{ secrets.KOSLI_API_TOKEN }}
+
+      - name: Attest tf state artifact
+        run: |
+          kosli attest artifact \
+            --artifact-type file ./${{ env.SERVICE_NAME }}.tfstate \
+            --name state-beta \
+            --flow ${{ env.KOSLI_FLOW }} \
+            --trail ${{ env.KOSLI_TRAIL }} \
+            --host ${{ env.KOSLI_HOST }} \
+            --api-token ${{ secrets.KOSLI_API_TOKEN }}
 
 
   approve-deployment-to-prod:
-    needs: [deploy-to-beta, kosli-trail, build-image]
+    needs: [attest-beta-artifacts, kosli-trail, build-image]
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -356,6 +398,49 @@ jobs:
 
   attest-prod-artifacts:
     needs: [deploy-to-prod]
-    uses: ./.github/workflows/attest_prod_artifacts.yml
-    secrets:
-      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+    permissions:
+      actions: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup kosli cli
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version:
+            ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Download a plan artifact
+        uses: actions/download-artifact@v4.1.1
+        with:
+          name: tf_artifacts_plan_prod
+
+      - name: Download a state file artifact
+        uses: actions/download-artifact@v4.1.1
+        with:
+          name: tf_artifacts_state_file_prod
+
+      - name: Rename a state file artifact
+        run: mv main.tfstate ${{ env.SERVICE_NAME }}.tfstate
+
+      - name: Attest tf plan to Kosli trail
+        run:
+          kosli attest generic
+            --name tf-plan-prod
+            --flow ${{ env.KOSLI_FLOW }}
+            --trail ${{ env.KOSLI_TRAIL }}
+            --attachments ./tfplan
+            --host ${{ env.KOSLI_HOST }}
+            --api-token ${{ secrets.KOSLI_API_TOKEN }}
+
+      - name: Attest tf state artifact
+        run: |
+          kosli attest artifact \
+            --artifact-type file ./${{ env.SERVICE_NAME }}.tfstate \
+            --name state-prod \
+            --flow ${{ env.KOSLI_FLOW }} \
+            --trail ${{ env.KOSLI_TRAIL }} \
+            --host ${{ env.KOSLI_HOST }} \
+            --api-token ${{ secrets.KOSLI_API_TOKEN }}
