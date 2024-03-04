@@ -10,9 +10,10 @@ env:
   KOSLI_HOST: ${{ vars.KOSLI_HOST }}                 # https://app.kosli.com
   KOSLI_HOST_STAGING: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
-  KOSLI_FLOW: differ-ci
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # differ-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_TRAIL: ${{ github.sha }}
+  SERVICE_NAME: ${{ github.event.repository.name }}  # differ
 
 jobs:
 
@@ -44,7 +45,7 @@ jobs:
         run: |
           IMAGE_TAG=${GITHUB_SHA:0:7}
           echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}       
-          echo "image_name=cyberdojo/differ:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
+          echo "image_name=cyberdojo/${{ env.SERVICE_NAME }}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
 
 
   pull-request:
