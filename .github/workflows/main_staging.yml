@@ -373,7 +373,7 @@ jobs:
             --flow ${{ env.KOSLI_FLOW }}
             --trail ${{ env.KOSLI_TRAIL }}
             --attachments ./tfplan
-            --host ${{ env.KOSLI_HOST_STAGING }}
+            --host ${{ env.KOSLI_HOST }}
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf plan artifact
@@ -400,7 +400,7 @@ jobs:
             --name state-beta \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
-            --host ${{ env.KOSLI_HOST_STAGING }} \
+            --host ${{ env.KOSLI_HOST }} \
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf state file artifact
@@ -524,7 +524,7 @@ jobs:
             --flow ${{ env.KOSLI_FLOW }}
             --trail ${{ env.KOSLI_TRAIL }}
             --attachments ./tfplan
-            --host ${{ env.KOSLI_HOST_STAGING }}
+            --host ${{ env.KOSLI_HOST }}
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf plan artifact
@@ -551,7 +551,7 @@ jobs:
             --name state-prod \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
-            --host ${{ env.KOSLI_HOST_STAGING }} \
+            --host ${{ env.KOSLI_HOST }} \
             --api-token ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
       - name: Delete tf state file artifact
