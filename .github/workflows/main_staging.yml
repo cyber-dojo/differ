@@ -317,6 +317,13 @@ jobs:
               "${KOSLI_ENVIRONMENT}"
 
 
+  attest-beta-artifacts:
+    needs: [deploy-to-beta]
+    uses: ./.github/workflows/attest_beta_artifacts_staging.yml
+    secrets:
+      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
+
+
   approve-deployment-to-prod:
     needs: [deploy-to-beta, kosli-trail, build-image]
     runs-on: ubuntu-latest
@@ -363,6 +370,13 @@ jobs:
               "${{ env.KOSLI_ORG }}" 
               "${KOSLI_ENVIRONMENT}"
     
+
+  attest-prod-artifacts:
+    needs: [deploy-to-prod]
+    uses: ./.github/workflows/attest_prod_artifacts_staging.yml
+    secrets:
+      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
+
 
   push-latest:
     needs: [deploy-to-prod, kosli-trail]

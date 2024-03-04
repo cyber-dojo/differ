@@ -312,9 +312,14 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
+
+
+  attest-beta-artifacts:
+    needs: [deploy-to-beta]
+    uses: ./.github/workflows/attest_beta_artifacts.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
+
 
   approve-deployment-to-prod:
     needs: [deploy-to-beta, kosli-trail, build-image]
@@ -347,6 +352,10 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_prod.yml
     with:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
+
+
+  attest-prod-artifacts:
+    needs: [deploy-to-prod]
+    uses: ./.github/workflows/attest_prod_artifacts.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
