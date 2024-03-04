@@ -6,11 +6,6 @@ on:
       IMAGE_TAG:
         required: true
         type: string
-    secrets:
-      KOSLI_API_TOKEN_STAGING:
-        required: true
-      KOSLI_API_TOKEN:
-        required: true
 
 
 env:
