@@ -515,7 +515,7 @@ jobs:
           run-id: ${{ steps.get_main_workflow_run_id.outputs.run_id }}
 
       - name: Rename a state file artifact
-        run: mv main.tfstate ${{ needs.variables.outputs.service_name }}.tfstate
+        run: mv main.tfstate ${{ env.SERVICE_NAME }}.tfstate
 
       - name: Attest tf plan to Kosli trail
         run:
@@ -547,7 +547,7 @@ jobs:
       - name: Attest tf state artifact
         run: |
           kosli attest artifact \
-            --artifact-type file ./${{ needs.variables.outputs.service_name }}.tfstate \
+            --artifact-type file ./${{ env.SERVICE_NAME }}.tfstate \
             --name state-prod \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
