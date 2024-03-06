@@ -7,8 +7,8 @@ trail:
     - name: tf-plan-prod
       type: generic
   artifacts:
-    - name: state-beta
-    - name: state-prod
+    - name: tf-state-beta
+    - name: tf-state-prod
     - name: differ
       attestations:
         - name: lint
