@@ -84,7 +84,7 @@ jobs:
         run: |
           kosli attest artifact \
             --artifact-type file ./${{ needs.variables.outputs.service_name }}.tfstate \
-            --name state-beta \
+            --name tf-state-beta \
             --flow ${{ env.KOSLI_FLOW }} \
             --trail ${{ env.KOSLI_TRAIL }} \
             --host ${{ env.KOSLI_HOST }} \
