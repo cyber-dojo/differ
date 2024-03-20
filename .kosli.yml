@@ -1,7 +1,6 @@
 version: 1
 
 trail:
-  attestations:
   artifacts:
     - name: differ
       attestations:
