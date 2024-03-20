@@ -2,13 +2,7 @@ version: 1
 
 trail:
   attestations:
-    - name: tf-plan-beta
-      type: generic
-    - name: tf-plan-prod
-      type: generic
   artifacts:
-    - name: tf-state-beta
-    - name: tf-state-prod
     - name: differ
       attestations:
         - name: lint
