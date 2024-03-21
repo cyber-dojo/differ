@@ -67,7 +67,7 @@ jobs:
         run:
           kosli attest pullrequest github
             --github-token=${{ secrets.GITHUB_TOKEN }}
-            --name=differ.pull-request
+            --name=pull-request
 
 
   lint:
@@ -314,56 +314,6 @@ jobs:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
 
 
-  attest-beta-artifacts:
-    needs: [deploy-to-beta]
-    permissions:
-      actions: write
-      contents: read
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup kosli cli
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version:
-            ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Download a plan artifact
-        uses: actions/download-artifact@v4.1.1
-        with:
-          name: tf_artifacts_plan_beta
-
-      - name: Download a state file artifact
-        uses: actions/download-artifact@v4.1.1
-        with:
-          name: tf_artifacts_state_file_beta
-
-      - name: Rename a state file artifact
-        run: mv main.tfstate ${{ env.SERVICE_NAME }}.tfstate
-
-      - name: Attest tf plan to Kosli trail
-        run:
-          kosli attest generic
-            --name tf-plan-beta
-            --flow ${{ env.KOSLI_FLOW }}
-            --trail ${{ env.KOSLI_TRAIL }}
-            --attachments ./tfplan
-            --host ${{ env.KOSLI_HOST }}
-            --api-token ${{ secrets.KOSLI_API_TOKEN }}
-
-      - name: Attest tf state artifact
-        run: |
-          kosli attest artifact \
-            --artifact-type file ./${{ env.SERVICE_NAME }}.tfstate \
-            --name tf-state-beta \
-            --flow ${{ env.KOSLI_FLOW }} \
-            --trail ${{ env.KOSLI_TRAIL }} \
-            --host ${{ env.KOSLI_HOST }} \
-            --api-token ${{ secrets.KOSLI_API_TOKEN }}
-
-
   approve-deployment-to-prod:
     needs: [attest-beta-artifacts, kosli-trail, build-image]
     runs-on: ubuntu-latest
@@ -395,53 +345,3 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_prod.yml
     with:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
-
-
-  attest-prod-artifacts:
-    needs: [deploy-to-prod]
-    permissions:
-      actions: write
-      contents: read
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup kosli cli
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version:
-            ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Download a plan artifact
-        uses: actions/download-artifact@v4.1.1
-        with:
-          name: tf_artifacts_plan_prod
-
-      - name: Download a state file artifact
-        uses: actions/download-artifact@v4.1.1
-        with:
-          name: tf_artifacts_state_file_prod
-
-      - name: Rename a state file artifact
-        run: mv main.tfstate ${{ env.SERVICE_NAME }}.tfstate
-
-      - name: Attest tf plan to Kosli trail
-        run:
-          kosli attest generic
-            --name tf-plan-prod
-            --flow ${{ env.KOSLI_FLOW }}
-            --trail ${{ env.KOSLI_TRAIL }}
-            --attachments ./tfplan
-            --host ${{ env.KOSLI_HOST }}
-            --api-token ${{ secrets.KOSLI_API_TOKEN }}
-
-      - name: Attest tf state artifact
-        run: |
-          kosli attest artifact \
-            --artifact-type file ./${{ env.SERVICE_NAME }}.tfstate \
-            --name tf-state-prod \
-            --flow ${{ env.KOSLI_FLOW }} \
-            --trail ${{ env.KOSLI_TRAIL }} \
-            --host ${{ env.KOSLI_HOST }} \
-            --api-token ${{ secrets.KOSLI_API_TOKEN }}

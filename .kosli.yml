@@ -1,21 +1,14 @@
 version: 1
 
 trail:
-  artifactsInheritTrailCompliance: false
   attestations:
-    - name: tf-plan-beta
-      type: generic
-    - name: tf-plan-prod
-      type: generic
+    - name: pull-request
+      type: pull_request
   artifacts:
-    - name: tf-state-beta
-    - name: tf-state-prod
     - name: differ
       attestations:
         - name: lint
           type: generic
-        - name: pull-request
-          type: pull_request
         - name: snyk-container-scan
           type: snyk
         - name: snyk-code-scan
