@@ -315,7 +315,7 @@ jobs:
 
 
   approve-deployment-to-prod:
-    needs: [kosli-trail, build-image]
+    needs: [deploy-to-beta, kosli-trail, build-image]
     runs-on: ubuntu-latest
     environment:
       name: production
