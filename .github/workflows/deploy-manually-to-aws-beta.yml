@@ -12,3 +12,9 @@ jobs:
     uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
       IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+
+  attest_beta_artifacts:
+    needs: [deploy_to_beta]
+    uses: ./.github/workflows/attest_beta_artifacts.yml
+    secrets:
+      KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
