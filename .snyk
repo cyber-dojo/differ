@@ -1,3 +1,14 @@
 # This file specifies snyk vulnerabilities to be ignored.
 # If this file contains only comments, then no vulnerabilities are ignored
 # but do not delete this file - it is needed for the live-snyk-scans repo workflows.
+
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-ALPINE319-EXPAT-6446355:
+    - '*':
+        reason: Waiting for base image upgrade
+        expires: 2024-05-01T15:48:22.212Z
+        created: 2024-02-10T15:48:22.228Z
+patch: {}
