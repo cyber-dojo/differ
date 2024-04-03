@@ -57,4 +57,4 @@ jobs:
       tf_upload_artifact_name_suffix: "_prod"
       tf_upload_artifact_state_file: 'true'
       tf_upload_artifact_plan: 'true'
-      tf_state_file_path_on_s3: "terraform/${{ needs.variables.outputs.service_name }}/${{ needs.variables.outputs.service_name }}.tfstate"
+      tf_state_file_dir_on_s3: "terraform/${{ needs.variables.outputs.service_name }}/${{ needs.variables.outputs.service_name }}.tfstate"
