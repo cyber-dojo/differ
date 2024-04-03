@@ -50,9 +50,6 @@ jobs:
         with:
           name: tf_artifacts_state_file_prod
 
-      - name: Rename a state file artifact
-        run: mv main.tfstate ${{ needs.variables.outputs.service_name }}.tfstate
-
       - name: Attest tf plan to Kosli trail
         run:
           kosli attest generic
