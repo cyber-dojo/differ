@@ -11,7 +11,7 @@ env:
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW_TF }}
   KOSLI_TRAIL: ${{ github.sha }}
-  KOSLI_HOST: "https://app.kosli.com"
+  KOSLI_HOST: ${{ vars.KOSLI_HOST }}
 
 
 jobs:
