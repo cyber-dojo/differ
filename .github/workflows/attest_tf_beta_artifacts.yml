@@ -45,6 +45,7 @@ jobs:
           kosli create flow "${{ env.KOSLI_FLOW }}" 
             --description="Terraform human-readable plan and state file fingerprint" 
             --template-file=.kosli-tf.yml
+            --api-token=${{ secrets.KOSLI_API_TOKEN }}
 
       - name: Begin Kosli Terraform Trail
         env: 
@@ -52,6 +53,7 @@ jobs:
         run:
           kosli begin trail "${{ env.KOSLI_TRAIL }}"
             --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
+            --api-token=${{ secrets.KOSLI_API_TOKEN }}
 
       - name: Download a plan artifact
         uses: actions/download-artifact@v4.1.1
