@@ -10,7 +10,7 @@ on:
 env:
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW_TF }} # differ-ci-tf
-  KOSLI_TRAIL: ${{ github.sha }}
+  KOSLI_TRAIL: "beta-${{ github.sha }}"
   KOSLI_HOST: ${{ vars.KOSLI_HOST }}
 
 
@@ -66,7 +66,7 @@ jobs:
       - name: Attest tf plan to Kosli trail
         run:
           kosli attest generic
-            --name=tf-plan-beta
+            --name=tf-plan
             --flow=${{ env.KOSLI_FLOW }}
             --trail=${{ env.KOSLI_TRAIL }}
             --attachments=./tfplan
@@ -94,7 +94,7 @@ jobs:
         run: |
           kosli attest artifact ./${{ needs.variables.outputs.service_name }}.tfstate \
             --artifact-type=file \
-            --name=tf-state-beta \
+            --name=tf-state \
             --flow=${{ env.KOSLI_FLOW }} \
             --trail=${{ env.KOSLI_TRAIL }} \
             --host=${{ env.KOSLI_HOST }} \
