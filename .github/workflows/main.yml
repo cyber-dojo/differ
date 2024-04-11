@@ -10,7 +10,6 @@ env:
   KOSLI_HOST: ${{ vars.KOSLI_HOST }}                 # https://app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # differ-ci
-  KOSLI_FLOW_TF: ${{ vars.KOSLI_FLOW_TF }}           # differ-ci-tf
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_TRAIL: ${{ github.sha }}
   SERVICE_NAME: ${{ github.event.repository.name }}  # differ
@@ -36,20 +35,7 @@ jobs:
             --description="Diff files from two traffic-lights" 
             --template-file=.kosli.yml
 
-      - name: Create Kosli Flow for Terraform artifacts
-        run:
-          kosli create flow "${{ env.KOSLI_FLOW_TF }}" 
-            --description="Terraform human-readable plan and state file fingerprint" 
-            --template-file=.kosli-tf.yml
-
       - name: Begin Kosli Trail
-        run:
-          kosli begin trail "${{ env.KOSLI_TRAIL }}"
-            --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
-
-      - name: Begin Kosli Terraform Trail
-        env: 
-          KOSLI_FLOW: ${{ env.KOSLI_FLOW_TF }}
         run:
           kosli begin trail "${{ env.KOSLI_TRAIL }}"
             --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
