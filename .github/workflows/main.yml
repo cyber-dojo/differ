@@ -392,23 +392,14 @@ jobs:
     #needs: [kosli-trail]
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SONAR_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-            version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
-
-      - name: Attest SonarCloud as generic attestation in Kosli
-        run: ./sonarcloud-scan-and-attest.sh
 
   sonarcloud-attest:
     name: Attest SonarCloud Scan
