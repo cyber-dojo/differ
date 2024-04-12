@@ -41,4 +41,3 @@ attest_to_kosli_generic() {
 get_checks_json
 parse_json
 attest_to_kosli_generic
-
