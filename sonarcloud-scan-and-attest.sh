@@ -16,7 +16,7 @@ get_checks_json()
 
 parse_json() {
     json_filename=check-runs.json
-    get_checks_json | jq '.check_runs.[0]' > ${json_filename}
+    get_checks_json | jq '.check_runs[0]' > ${json_filename}
     success=$(jq -r '.conclusion' ${json_filename})
 
     # URL to the scan analysis results on Github
@@ -38,6 +38,11 @@ attest_to_kosli_generic() {
         --external-url="sonarcloud-code-analysis=${url}"
 }
 
+remove_json() {
+    rm ${json_filename}
+}
+
 get_checks_json
 parse_json
 attest_to_kosli_generic
+remove_json
