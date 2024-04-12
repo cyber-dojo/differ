@@ -31,8 +31,8 @@ jobs:
 
       - name: Create Kosli Flow
         run:
-          kosli create flow "${{ env.KOSLI_FLOW }}" 
-            --description="Diff files from two traffic-lights" 
+          kosli create flow "${{ env.KOSLI_FLOW }}"
+            --description="Diff files from two traffic-lights"
             --template-file=.kosli.yml
 
       - name: Begin Kosli Trail
@@ -44,8 +44,8 @@ jobs:
         id: variables
         run: |
           IMAGE_TAG=${GITHUB_SHA:0:7}
-          echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}       
-          echo "image_name=cyberdojo/${{ env.SERVICE_NAME }}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
+          echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
+          echo "image_name=cyberdojo/${{ env.SERVICE_NAME }}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
 
 
   pull-request:
@@ -102,7 +102,7 @@ jobs:
             --attachments="${KOSLI_ATTACHMENTS}" \
             --compliant="${KOSLI_COMPLIANT}" \
             --name=differ.lint
-          exit ${STATUS}                  
+          exit ${STATUS}
 
   build-image:
     needs: [kosli-trail]
@@ -387,16 +387,33 @@ jobs:
           docker tag "${IMAGE_NAME}" cyberdojo/${{ env.SERVICE_NAME }}:latest
           docker push cyberdojo/${{ env.SERVICE_NAME }}:latest
 
-  sonarcloud:
-    name: SonarCloud
+  sonarcloud-scan:
+    name: Run SonarCloud Scan
     needs: [kosli-trail]
     runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
+
+  sonarcloud-attest:
+    name: Attest SonarCloud Scan
+    needs: [sonarcloud-scan]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+            version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Attest SonarCloud as generic attestation in Kosli
+        run: ./sonarcloud-scan-and-attest.sh
