@@ -33,7 +33,7 @@ attest_to_kosli_generic() {
     kosli attest generic \
         --attachments="${json_filename}" \
         --compliant="${KOSLI_COMPLIANT}" \
-        --name="${OWNER}.sonarcloud" \
+        --name="${REPO}.sonarcloud" \
         --external-url="sonarcloud-code-analysis=${url}"
 }
 
