@@ -34,7 +34,6 @@ attest_to_kosli_generic() {
         --attachments="${json_filename}" \
         --compliant="${KOSLI_COMPLIANT}" \
         --name="${OWNER}.sonarcloud" \
-        --dry-run \
         --external-url="sonarcloud-code-analysis=${url}"
 }
 
