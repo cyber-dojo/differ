@@ -13,6 +13,7 @@ env:
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_TRAIL: ${{ github.sha }}
   SERVICE_NAME: ${{ github.event.repository.name }}  # differ
+  SONARCLOUD_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
 
 jobs:
 
@@ -389,24 +390,21 @@ jobs:
 
   sonarcloud-scan:
     name: Run SonarCloud Scan
-    needs: [kosli-trail]
     runs-on: ubuntu-latest
-    env:
-      SONAR_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
         uses: sonarsource/sonarcloud-github-action@master
 
   sonarcloud-attest:
     name: Attest SonarCloud Scan
-    needs: [sonarcloud-scan]
+    needs: [kosli-trail, sonarcloud-scan]
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 

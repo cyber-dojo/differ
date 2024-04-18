@@ -17,3 +17,5 @@ trail:
           type: junit
         - name: branch-coverage
           type: generic
+        - name: sonarcloud-scan
+          type: generic

@@ -8,25 +8,28 @@ REPO="${SERVICE_NAME}"
 
 get_checks_json()
 {
-    gh api \
-    -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    /repos/${OWNER}/${REPO}/commits/${sha}/check-runs?app_id=12526
+    curl --request GET \
+    --url "https://sonarcloud.io/api/measures/component?metricKeys=alert_status%2Cquality_gate_details%2Cbugs%2Csecurity_rating%2Ccode_smells%2Ccomplexity%2Cmaintainability_issues%2Creliability_issues%2Creliability_rating%2Ccoverage&component=${OWNER}_${REPO}"  \
+    --header "Authorization: ${SONARCLOUD_TOKEN}"
 }
 
 parse_json() {
-    json_filename=check-runs.json
-    get_checks_json | jq '.check_runs[0]' > ${json_filename}
-    success=$(jq -r '.conclusion' ${json_filename})
+    json_filename=results.json
+    get_checks_json | jq '.' > ${json_filename}
+    measures=$(jq -r '.component.measures' ${json_filename})
+    measures_length=$(jq '.component.measures | length' ${json_filename})
 
-    # URL to the scan analysis results on Github
-    # Sonarcloud only seems to show the most recent results and I 
-    # can't find a way to show results from previous scans,
-    # so the Github URL seems the best way to access the results of the 
-    # scan relevant to the commit
-    url=$(jq -r '.html_url' ${json_filename})
+    for i in $(seq 0 $(( ${measures_length} - 1 ))); do
+        metric=$(jq -r ".component.measures[$i].metric" ${json_filename})
+        if ([ ${metric} = "alert_status" ]); then
+            success=$(jq -r ".component.measures[$i].value" ${json_filename})
+            break
+        fi
+    done
 
-    KOSLI_COMPLIANT=$([ ${success} = "success" ] && echo "true" || echo "false")
+    url="https://sonarcloud.io/project/overview?id=${OWNER}_${REPO}"
+
+    KOSLI_COMPLIANT=$([ ${success} = "OK" ] && echo "true" || echo "false")
 }
 
 attest_to_kosli_generic() {
@@ -41,7 +44,6 @@ remove_json() {
     rm ${json_filename}
 }
 
-get_checks_json
 parse_json
 attest_to_kosli_generic
 remove_json
