@@ -37,7 +37,6 @@ attest_to_kosli_generic() {
         --attachments="${json_filename}" \
         --compliant="${KOSLI_COMPLIANT}" \
         --name="${REPO}.sonarcloud" \
-        --dry-run \
         --external-url="sonarcloud-code-analysis=${url}"
 }
 
@@ -45,7 +44,6 @@ remove_json() {
     rm ${json_filename}
 }
 
-#get_checks_json
 parse_json
 attest_to_kosli_generic
 remove_json
