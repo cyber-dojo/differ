@@ -9,7 +9,7 @@ REPO="${SERVICE_NAME}"
 get_checks_json()
 {
     curl --request GET \
-    --url "https://sonarcloud.io/api/measures/component?metricKeys=alert_status%2Cquality_gate_details%2Cbugs%2Csecurity_rating%2Ccode_smells%2Ccomplexity%2Cmaintainability_issues%2Creliability_issues%2Creliability_rating%2Ccoverage&component=${OWNER}_${REPO}"  \
+    --url "https://sonarcloud.io/api/measures/component?metricKeys=alert_status%2Cquality_gate_details%2Cbugs%2Csecurity_issues%2Ccode_smells%2Ccomplexity%2Cmaintainability_issues%2Creliability_issues%2Ccoverage&component=${OWNER}_${REPO}"  \
     --header "Authorization: ${SONARCLOUD_TOKEN}"
 }
 
