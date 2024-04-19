@@ -264,6 +264,27 @@ jobs:
             --name=differ.snyk-code-scan \
             --scan-results="${SARIF_FILENAME}"
 
+  sonarcloud-scan:
+    needs: [build-image, kosli-trail]
+    name: Run SonarCloud Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
+        uses: sonarsource/sonarcloud-github-action@master
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+            version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Attest SonarCloud as generic attestation in Kosli
+        run: ./sh/sonarcloud-scan-and-attest.sh
 
   sdlc-control-gate:
     needs: [pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, kosli-trail, build-image]
@@ -387,31 +408,3 @@ jobs:
           docker pull "${IMAGE_NAME}"
           docker tag "${IMAGE_NAME}" cyberdojo/${{ env.SERVICE_NAME }}:latest
           docker push cyberdojo/${{ env.SERVICE_NAME }}:latest
-
-  sonarcloud-scan:
-    name: Run SonarCloud Scan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: SonarCloud Scan
-        env:
-          SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
-        uses: sonarsource/sonarcloud-github-action@master
-
-  sonarcloud-attest:
-    name: Attest SonarCloud Scan
-    needs: [kosli-trail, sonarcloud-scan]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-            version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Attest SonarCloud as generic attestation in Kosli
-        run: ./sonarcloud-scan-and-attest.sh
