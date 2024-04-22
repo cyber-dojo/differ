@@ -136,6 +136,7 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest image evidence to Kosli Trail and set fingerprint output
+        id: variables
         run: |
           FINGERPRINT=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
           echo "kosli_fingerprint=${FINGERPRINT}" >> ${GITHUB_OUTPUT}
