@@ -110,6 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
+      IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
     outputs:
       kosli_fingerprint: ${{ steps.variables.outputs.kosli_fingerprint }}
     steps:
@@ -134,18 +135,15 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Attest image evidence to Kosli Trail
-        run:
+      - name: Attest image evidence to Kosli Trail and set fingerprint output
+        run: |
+          FINGERPRINT=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
+          echo "kosli_fingerprint=${FINGERPRINT}" >> ${GITHUB_OUTPUT}
           kosli attest artifact "${IMAGE_NAME}" 
             --artifact-type=docker 
             --name=differ 
             --trail="${GITHUB_SHA}"
-
-      - name: Set outputs
-        id: variables
-        run: |
-          FINGERPRINT=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
-          echo "kosli_fingerprint=${FINGERPRINT}" >> ${GITHUB_OUTPUT}
+            --annotate=docker_hub="https://hub.docker.com/layers/cyberdojo/differ/${IMAGE_TAG}/images/sha256-${FINGERPRINT}"
 
 
   unit-tests:
