@@ -263,9 +263,9 @@ jobs:
             --name=differ.snyk-code-scan \
             --scan-results="${SARIF_FILENAME}"
 
+
   sonarcloud-scan:
     needs: [build-image, kosli-trail]
-    name: Run SonarCloud Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -284,6 +284,7 @@ jobs:
 
       - name: Attest SonarCloud as generic attestation in Kosli
         run: ./sh/sonarcloud-scan-and-attest.sh
+
 
   sdlc-control-gate:
     needs: [pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan, kosli-trail, build-image]
