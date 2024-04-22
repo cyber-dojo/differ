@@ -139,10 +139,10 @@ jobs:
         run: |
           FINGERPRINT=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
           echo "kosli_fingerprint=${FINGERPRINT}" >> ${GITHUB_OUTPUT}
-          kosli attest artifact "${IMAGE_NAME}" 
-            --artifact-type=docker 
-            --name=differ 
-            --trail="${GITHUB_SHA}"
+          kosli attest artifact "${IMAGE_NAME}" \
+            --artifact-type=docker \
+            --name=differ \
+            --trail="${GITHUB_SHA}" \
             --annotate=docker_hub="https://hub.docker.com/layers/cyberdojo/differ/${IMAGE_TAG}/images/sha256-${FINGERPRINT}"
 
 
