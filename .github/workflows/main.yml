@@ -283,7 +283,7 @@ jobs:
             version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest SonarCloud as generic attestation in Kosli
-        run: ./sh/sonarcloud-scan-and-attest.sh
+        run: ./sh/sonarcloud_scan_and_attest.sh
 
 
   sdlc-control-gate:
