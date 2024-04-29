@@ -17,7 +17,7 @@ get_checks_json()
 
 parse_json()
 {
-    local success, metric
+    local success metric
     get_checks_json | jq '.' > "${JSON_FILENAME}"
     local -r measures_length=$(jq '.component.measures | length' "${JSON_FILENAME}")
 
