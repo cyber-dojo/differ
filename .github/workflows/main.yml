@@ -191,6 +191,8 @@ jobs:
   snyk-container-scan:
     needs: [build-image, kosli-trail]
     runs-on: ubuntu-latest
+    env:
+      SARIF_FILENAME: snyk.container.scan.json
     steps:
       - uses: actions/checkout@v4
 
@@ -204,9 +206,8 @@ jobs:
 
       - name: Run Snyk container scan
         env:
-          IMAGE_NAME:        ${{ needs.kosli-trail.outputs.image_name }}
-          SARIF_FILENAME:    snyk.container.scan.json
-          SNYK_TOKEN:        ${{ secrets.SNYK_TOKEN }}
+          IMAGE_NAME: ${{ needs.kosli-trail.outputs.image_name }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run:
           snyk container test ${IMAGE_NAME} 
             --file=Dockerfile 
@@ -219,7 +220,6 @@ jobs:
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
           KOSLI_ATTACHMENTS: /tmp/kosli_attachments
-          SARIF_FILENAME:    snyk.container.scan.json
         run: |
           mkdir "${KOSLI_ATTACHMENTS}"
           cp .snyk "${KOSLI_ATTACHMENTS}"
@@ -232,6 +232,8 @@ jobs:
   snyk-code-scan:
     needs: [build-image, kosli-trail]
     runs-on: ubuntu-latest
+    env:
+      SARIF_FILENAME: snyk.code.scan.json
     steps:
       - uses: actions/checkout@v4
 
@@ -245,16 +247,12 @@ jobs:
 
       - name: Run Snyk code scan
         env:
-          IMAGE_NAME:        ${{ needs.kosli-trail.outputs.image_name }}
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
-          KOSLI_ATTACHMENTS: /tmp/kosli_attachments
-          SARIF_FILENAME:    snyk.code.scan.json
-          SNYK_TOKEN:        ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run:
-          snyk code test \
-            --sarif \
-            --sarif-file-output="${SARIF_FILENAME}" \
-            --policy-path=.snyk \
+          snyk code test
+            --sarif
+            --sarif-file-output="${SARIF_FILENAME}"
+            --policy-path=.snyk
             .
 
       - name: Report Snyk code scan results to Kosli Trail
@@ -262,7 +260,6 @@ jobs:
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
           KOSLI_ATTACHMENTS: /tmp/kosli_attachments
-          SARIF_FILENAME:    snyk.code.scan.json
         run: |
           mkdir "${KOSLI_ATTACHMENTS}"
           cp .snyk "${KOSLI_ATTACHMENTS}"
