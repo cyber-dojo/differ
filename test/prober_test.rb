@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'differ_test_base'
+require 'ostruct'
 
 class ProberTest < DifferTestBase
   def self.id58_prefix
