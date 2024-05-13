@@ -9,6 +9,22 @@ ignore:
   SNYK-ALPINE319-EXPAT-6446355:
     - '*':
         reason: Waiting for base image upgrade
-        expires: 2024-05-01T15:48:22.212Z
+        expires: 2024-06-01T15:48:22.212Z
         created: 2024-02-10T15:48:22.228Z
+  SNYK-ALPINE319-NODEJS-6531252:
+    - '*':
+        reason: Waiting for base image upgrade
+        expires: 2024-06-01T15:48:22.212Z
+        created: 2024-05-10T15:48:22.228Z
+  SNYK-ALPINE319-NODEJS-6531253:
+    - '*':
+        reason: Waiting for base image upgrade
+        expires: 2024-06-01T15:48:22.212Z
+        created: 2024-05-10T15:48:22.228Z
+  SNYK-ALPINE319-OPENSSL-6593965:
+    - '*':
+        reason: Waiting for base image upgrade
+        expires: 2024-06-01T15:48:22.212Z
+        created: 2024-05-10T15:48:22.228Z
+
 patch: {}
