@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=cyberdojo/sinatra-base:c65faf8
+ARG BASE_IMAGE=cyberdojo/sinatra-base:5105f0e
 FROM ${BASE_IMAGE}
 LABEL maintainer=jon@jaggersoft.com
 
