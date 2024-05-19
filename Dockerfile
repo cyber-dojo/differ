@@ -1,5 +1,4 @@
-ARG BASE_IMAGE=cyberdojo/sinatra-base:c62d644
-FROM ${BASE_IMAGE}
+FROM cyberdojo/sinatra-base:d6def8c
 LABEL maintainer=jon@jaggersoft.com
 
 RUN apk --update --upgrade --no-cache add git
