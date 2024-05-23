@@ -20,7 +20,6 @@ if on_ci ; then
 else
   echo Not on CI so building the image
   exit_non_zero_unless_installed docker
-  #exit_non_zero_unless_installed docker-compose
   remove_old_images
   build_tagged_images "$@"
   tag_images_to_latest "$@"
