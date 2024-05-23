@@ -16,7 +16,6 @@ source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
 
 exit_non_zero_unless_installed docker
-exit_non_zero_unless_installed docker-compose
 server_up_healthy_and_clean
 client_up_healthy_and_clean "$@"
 copy_in_saver_test_data

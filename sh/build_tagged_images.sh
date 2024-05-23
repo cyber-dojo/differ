@@ -11,7 +11,7 @@ build_tagged_images()
     local -r target=differ_server
   fi
   echo
-  docker-compose build --build-arg COMMIT_SHA="$(git_commit_sha)" ${target:-}
+  docker compose build --build-arg COMMIT_SHA="$(git_commit_sha)" ${target:-}
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
