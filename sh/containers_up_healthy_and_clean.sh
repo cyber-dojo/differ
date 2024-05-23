@@ -5,7 +5,7 @@ server_up_healthy_and_clean()
   export SERVICE_NAME=differ_server
   export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
   export CONTAINER_PORT="${CYBER_DOJO_DIFFER_PORT}"
-    docker-compose up --detach "${SERVICE_NAME}"
+    docker compose up --detach "${SERVICE_NAME}"
   exit_non_zero_unless_healthy
   exit_non_zero_unless_started_cleanly
 }
@@ -17,7 +17,7 @@ client_up_healthy_and_clean()
     export SERVICE_NAME=differ_client
     export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
     export CONTAINER_PORT="${CYBER_DOJO_DIFFER_CLIENT_PORT}"
-    docker-compose up --detach "${SERVICE_NAME}"
+    docker compose up --detach "${SERVICE_NAME}"
     exit_non_zero_unless_healthy
     exit_non_zero_unless_started_cleanly
   fi
