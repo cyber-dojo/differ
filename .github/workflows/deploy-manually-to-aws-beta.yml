@@ -15,6 +15,6 @@ jobs:
 
   attest_beta_artifacts:
     needs: [deploy_to_beta]
-    uses: ./.github/workflows/attest_beta_artifacts.yml
+    uses: ./.github/workflows/attest_tf_beta_artifacts.yml
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
