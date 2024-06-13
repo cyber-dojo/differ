@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 set -Eeu
 
-repo_root() { git rev-parse --show-toplevel; }
-
-readonly OWNER="${KOSLI_ORG}"
-readonly REPO="${SERVICE_NAME}"
+readonly OWNER="${KOSLI_ORG}"    # KOSLI_ORG is set in the CI workflow
+readonly REPO="${SERVICE_NAME}"  # SERVICE_NAME is set in the CI workflow
 readonly JSON_FILENAME=results.json
 
 get_checks_json()
@@ -35,6 +33,7 @@ parse_json()
 
 attest_to_kosli_generic()
 {
+    # Relies CI workflow setting KOSLI_FLOW, KOSLI_TRAIL, KOSLI_FINGERPRINT env-vars.
     local -r url="https://sonarcloud.io/project/overview?id=${OWNER}_${REPO}"
     kosli attest generic \
         --attachments="${JSON_FILENAME}" \
