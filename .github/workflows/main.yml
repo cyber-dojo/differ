@@ -18,6 +18,7 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   IMAGE_TAR_FILENAME: /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
   SONARCLOUD_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
+  SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  #cyber-dojo_differ
 
 jobs:
 
@@ -368,8 +369,12 @@ jobs:
         with:
             version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Attest SonarCloud as generic attestation in Kosli
-        run: ./sh/sonarcloud_scan_and_attest.sh
+      - name: Report SonarCloud scan results to Kosli Trail
+        run: | 
+          kosli attest sonar \
+          --name=differ.sonarcloud-scan \
+          --sonar-project-key=${{ env.SONARCLOUD_PROJECT_KEY }} \
+          --sonar-api-token=${{ env.SONARCLOUD_TOKEN }}
 
 
   sdlc-control-gate:
