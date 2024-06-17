@@ -18,4 +18,4 @@ trail:
         - name: branch-coverage
           type: generic
         - name: sonarcloud-scan
-          type: generic
+          type: sonar
