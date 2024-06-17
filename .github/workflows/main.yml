@@ -371,7 +371,8 @@ jobs:
             version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Report SonarCloud scan results to Kosli Trail
-        run: kosli attest sonar \
+        run: | 
+          kosli attest sonar \
           --name=differ.sonarcloud-scan \
           --sonar-project-key=${{ env.SONARCLOUD_PROJECT_KEY }} \
           --sonar-api-token=${{ env.SONARCLOUD_TOKEN }}
