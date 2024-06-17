@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 'add-kosli-attest-sonar'
 
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # False
@@ -19,7 +18,7 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   IMAGE_TAR_FILENAME: /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
   SONARCLOUD_TOKEN: ${{ secrets.FAYE_SONAR_TOKEN }}
-  SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}
+  SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  #cyber-dojo_differ
 
 jobs:
 
