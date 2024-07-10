@@ -28,4 +28,4 @@ jobs:
       aws_role_duration: 900
       working_directory: deployment/terraform/environment-reporter
       tf_apply: 'true'
-      tf_version: v1.4.5
+      tf_version: v1.9.1
