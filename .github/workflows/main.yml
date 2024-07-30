@@ -352,29 +352,22 @@ jobs:
 
 
   sonarcloud-scan:
-    needs: [setup]
+    needs: [setup, build-image]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
         uses: sonarsource/sonarcloud-github-action@master
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
         with:
-            version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Report SonarCloud scan results to Kosli Trail
-        run:
-          kosli attest sonar
-            --name=differ.sonarcloud-scan
-            --sonar-project-key=${{ env.SONARCLOUD_PROJECT_KEY }}
-            --sonar-api-token=${{ env.SONARCLOUD_TOKEN }}
+          args: >
+            -Dsonar.analysis.kosli_flow=${{ env.KOSLI_FLOW }}
+            -Dsonar.analysis.kosli_trail=${{ env.KOSLI_TRAIL }}
+            -Dsonar.analysis.kosli_artifact_fingerprint=${{ needs.build-image.outputs.artifact_digest }}
 
 
   sdlc-control-gate:
