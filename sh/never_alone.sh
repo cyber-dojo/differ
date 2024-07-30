@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeu
 
+# Spike script for https://github.com/kosli-dev/server/issues/2175
+
 KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
 KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
 KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
