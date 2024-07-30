@@ -47,13 +47,15 @@ done
 
 #gh pr list --search "a96283918944a53b70175ce9605984f4e9e05630" --state merged --json assignees --json author --json mergedBy --json state
 
-# export GITHUB_UPSTREAM=differ
 # x="a96283918944a53b70175ce9605984f4e9e05630"
 
 # function pr_for_sha {
+#   # http://joey.aghion.com/find-the-github-pull-request-for-a-commit/
+#   # This appears not to work because `git log` stays on the current branch unless you use the --all flag.
 #   git log --merges --ancestry-path --oneline ${x}..main
+#   # This might be closer
+#   git log --merges --ancestry-path --oneline ${x}..
 # }
 # pr_for_sha
 
-#| grep 'pull request' | tail -n1 | awk '{print $5}' | cut -c2- | xargs -I % open https://github.com/$GITHUB_UPSTREAM/${PWD##*/}/pull/%
 
