@@ -82,7 +82,8 @@ function get_pull_requests
     for commit in "${commits[@]}"; do
         echo "commit=${commit}"
         echo "${list_separator}" >> ${result_file}
-        gh pr list --search ${commit} --state merged --json author,latestReviews,mergeCommit,url | jq '.[0]' >> ${result_file}
+        gh pr list --search ${commit} --state merged --json author,latestReviews,mergeCommit,url \
+            | jq --arg sha "$commit" '.[] | . + {commit: $sha}' >> ${result_file}
         list_separator=","
     done
     echo "]" >> ${result_file}
