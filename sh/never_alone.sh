@@ -85,11 +85,11 @@ function get_pull_requests
 
         pr_data=$(gh pr list --search "${commit}" --state merged --json author,latestReviews,mergeCommit,url)
         if [ "$(echo "$pr_data" | jq '. | length')" -eq 0 ]; then
-            # No pull request found, so do a new request to get the commit
+            # No pull request found for that commit, so do a new request to get the commit
             commit_data=$(gh search commits "${commit}" --json author,sha)
             echo "$commit_data" | jq '.[0]' >> "${result_file}"
         else
-            # The PR data does not contain the commit sha so we add it manually (use sha as key since that is
+            # The PR data does not contain the commit sha so we add it manually. Use 'sha' as key since that is
             # what is used in the 'gh search commits' command
             echo "$pr_data" | jq --arg sha "$commit" '.[] | . + {sha: $sha}' >> "${result_file}"
         fi
@@ -105,12 +105,13 @@ function main {
     # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
     # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
     current=$(get_current_running ${KOSLI_ENVIRONMENT} ${KOSLI_FLOW})
-    # current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
     proposed=$(git rev-parse ${MAIN_BRANCH})
 
+    # current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
+
     # Examples on kosli server with a mix of pull requests and not
-    current="5174289eb400fa46cca7d714433fdb45fb71ddb8"
-    proposed="ace68ab699b6b7c2f683b63a49671ba685002109"
+    # current="5174289eb400fa46cca7d714433fdb45fb71ddb8"
+    # proposed="ace68ab699b6b7c2f683b63a49671ba685002109"
     get_pull_requests ${current} ${proposed} ${RESULT_JSON_FILE}
 }
 
