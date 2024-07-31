@@ -3,14 +3,14 @@ set -Eeu
 
 # Spike script for https://github.com/kosli-dev/server/issues/2175
 
-KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
-KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
-KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
-KOSLI_FLOW="${KOSLI_FLOW:-differ-ci}"               # wip default
+export KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
+export KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
+export KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
+export KOSLI_FLOW="${KOSLI_FLOW:-differ-ci}"               # wip default
 MAIN_BRANCH="${MAIN_BRANCH:-main}"
 RESULT_JSON_FILE="pull-request-list.json"
 
-function get_current
+function get_current_running
 {
     local -r snapshot_json_filename=/tmp/snapshot.json
 
@@ -32,31 +32,43 @@ function get_current
     done
 }
 
-#function get_pull_requests
-#{
-#    local commits=("$@")
-#
-#}
+function get_pull_requests
+{
+    local current=$1; shift
+    local proposed=$1; shift
+    local result_file=$1; shift
+    local commits list_separator
+    commits=($(git rev-list --first-parent "${current}..${proposed}"))
+    list_separator=""
+    echo "[" > ${result_file}
+    for commit in "${commits[@]}"; do
+        echo "commit=${commit}"
+        echo "${list_separator}" >> ${result_file}
+        gh pr list --search ${commit} --state merged --json author,latestReviews,mergeCommit,url | jq '.[0]' >> ${result_file}
+        list_separator=","
+    done
+    echo "]" >> ${result_file}
+}
+
+function main {
+    local current proposed
+    # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
+    # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
+    current=$(get_current_running)
+    # current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
+    proposed=$(git rev-parse ${MAIN_BRANCH})
+    get_pull_requests ${current} ${proposed} ${RESULT_JSON_FILE}
+}
+
+main "$@"
+
 
 # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
 # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
-proposed=$(git rev-parse ${MAIN_BRANCH})
-current=$(get_current)
+#proposed=$(git rev-parse ${MAIN_BRANCH})
+#current=$(get_current)
 #current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
-current="5513ce31fcb4236ed2511470da39297c33b41b86"
-
-# shellcheck disable=SC2155
-commits=($(git rev-list --first-parent "${current}..${proposed}"))
-
-list_separator=""
-echo "[" > ${RESULT_JSON_FILE}
-for commit in "${commits[@]}"; do
-  echo "commit=${commit}"
-  echo "${list_separator}" >> ${RESULT_JSON_FILE}
-  gh pr list --search ${commit} --state merged --json author,latestReviews,mergeCommit,url | jq '.[0]' >> ${RESULT_JSON_FILE}
-  list_separator=","
-done
-echo "]" >> ${RESULT_JSON_FILE}
+#current="5513ce31fcb4236ed2511470da39297c33b41b86"
 
 
 
