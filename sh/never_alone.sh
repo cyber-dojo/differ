@@ -8,6 +8,7 @@ KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake re
 KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
 KOSLI_FLOW="${KOSLI_FLOW:-differ-ci}"               # wip default
 MAIN_BRANCH="${MAIN_BRANCH:-main}"
+RESULT_JSON_FILE="pull-request-list.json"
 
 function get_current
 {
@@ -31,24 +32,37 @@ function get_current
     done
 }
 
+#function get_pull_requests
+#{
+#    local commits=("$@")
+#
+#}
+
 # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
 # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
 proposed=$(git rev-parse ${MAIN_BRANCH})
 current=$(get_current)
 #current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
+current="5513ce31fcb4236ed2511470da39297c33b41b86"
 
 # shellcheck disable=SC2155
-declare -A commits=$(git rev-list --first-parent "${current}..${proposed}")
+commits=($(git rev-list --first-parent "${current}..${proposed}"))
 
+list_separator=""
+echo "[" > ${RESULT_JSON_FILE}
 for commit in "${commits[@]}"; do
-  echo "${commit}"
-  # TODO: get author + committer info for each
+  echo "commit=${commit}"
+  echo "${list_separator}" >> ${RESULT_JSON_FILE}
+  gh pr list --search ${commit} --state merged --json author,latestReviews,mergeCommit,url | jq '.[0]' >> ${RESULT_JSON_FILE}
+  list_separator=","
 done
+echo "]" >> ${RESULT_JSON_FILE}
 
 
 
 #gh pr list --search "a96283918944a53b70175ce9605984f4e9e05630" --state merged --json assignees --json author --json mergedBy --json state
-
+#commit=5985cdd8870f8d1b6a9223e61adc5f7ed44450e3
+#gh pr list --search ${commit} --state merged --json author,latestReviews,url | jq --arg sha ${commit} 'map({($sha): .}) | add'
 # x="a96283918944a53b70175ce9605984f4e9e05630"
 
 # function pr_for_sha {
