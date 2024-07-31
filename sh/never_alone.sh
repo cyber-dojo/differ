@@ -6,6 +6,8 @@ set -Eeu
 KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
 KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
 KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
+KOSLI_FLOW="${KOSLI_FLOW:-differ-ci}"               # wip default
+MAIN_BRANCH="${MAIN_BRANCH:-main}"
 
 function get_current
 {
@@ -20,7 +22,7 @@ function get_current
         annotation_type=$(jq -r ".artifacts[$i].annotation.type" ${snapshot_json_filename})
         if [ "${annotation_type}" != "exited" ] ; then
           flow=$(jq -r ".artifacts[$i].flow_name" ${snapshot_json_filename})
-          if [ "${flow}" == "differ-ci" ] ; then
+          if [ "${flow}" == "${KOSLI_FLOW}" ] ; then
             git_commit=$(jq -r ".artifacts[$i].git_commit" ${snapshot_json_filename})
             echo "${git_commit}"
             return
@@ -31,9 +33,9 @@ function get_current
 
 # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
 # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
-proposed=$(git rev-parse main)
-#current=$(get_current)
-current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
+proposed=$(git rev-parse ${MAIN_BRANCH})
+current=$(get_current)
+#current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
 
 # shellcheck disable=SC2155
 declare -A commits=$(git rev-list --first-parent "${current}..${proposed}")
