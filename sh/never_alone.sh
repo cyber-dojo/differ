@@ -2,13 +2,49 @@
 set -Eeu
 
 # Spike script for https://github.com/kosli-dev/server/issues/2175
+SCRIPT_NAME=never_alone.sh
 
 export KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
 export KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
 export KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
 export KOSLI_FLOW="${KOSLI_FLOW:-differ-ci}"               # wip default
-MAIN_BRANCH="${MAIN_BRANCH:-main}"
+MAIN_BRANCH="main"
 RESULT_JSON_FILE="pull-request-list.json"
+
+
+function print_help
+{
+    cat <<EOF
+Usage: $SCRIPT_NAME [options]
+
+Script to get pull request info for all commits to main/master branch
+
+Options are:
+  -h          Print this help menu
+  -m <branch> Name of main/master branch. Default: ${MAIN_BRANCH}
+EOF
+}
+
+
+function check_arguments
+{
+    while getopts "he:m:" opt; do
+        case $opt in
+            h)
+                print_help
+                exit 1
+                ;;
+            m)
+                MAIN_BRANCH=${OPTARG}
+                ;;
+            \?)
+                echo "Invalid option: -$OPTARG" >&2
+                exit 1
+                ;;
+        esac
+    done
+}
+
 
 function get_current_running
 {
@@ -53,6 +89,8 @@ function get_pull_requests
 }
 
 function main {
+    check_arguments "$@"
+
     local current proposed
     # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
     # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
