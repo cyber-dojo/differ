@@ -85,11 +85,13 @@ function get_pull_requests
 
         pr_data=$(gh pr list --search "${commit}" --state merged --json author,latestReviews,mergeCommit,url)
         if [ "$(echo "$pr_data" | jq '. | length')" -eq 0 ]; then
-            # No pull request found, so we just add the commit for now
-            echo "{\"commit\": \"$commit\"}" >> "${result_file}"
+            # No pull request found, so do a new request to get the commit
+            commit_data=$(gh search commits "${commit}" --json author,sha)
+            echo "$commit_data" | jq '.[0]' >> "${result_file}"
         else
-            # The PR data does not contain the commit sha so we add it manually
-            echo "$pr_data" | jq --arg sha "$commit" '.[] | . + {commit: $sha}' >> "${result_file}"
+            # The PR data does not contain the commit sha so we add it manually (use sha as key since that is
+            # what is used in the 'gh search commits' command
+            echo "$pr_data" | jq --arg sha "$commit" '.[] | . + {sha: $sha}' >> "${result_file}"
         fi
         list_separator=","
     done
