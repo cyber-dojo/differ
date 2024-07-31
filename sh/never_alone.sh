@@ -82,8 +82,15 @@ function get_pull_requests
     for commit in "${commits[@]}"; do
         echo "commit=${commit}"
         echo "${list_separator}" >> ${result_file}
-        gh pr list --search ${commit} --state merged --json author,latestReviews,mergeCommit,url \
-            | jq --arg sha "$commit" '.[] | . + {commit: $sha}' >> ${result_file}
+
+        pr_data=$(gh pr list --search "${commit}" --state merged --json author,latestReviews,mergeCommit,url)
+        if [ "$(echo "$pr_data" | jq '. | length')" -eq 0 ]; then
+            # No pull request found, so we just add the commit for now
+            echo "{\"commit\": \"$commit\"}" >> "${result_file}"
+        else
+            # The PR data does not contain the commit sha so we add it manually
+            echo "$pr_data" | jq --arg sha "$commit" '.[] | . + {commit: $sha}' >> "${result_file}"
+        fi
         list_separator=","
     done
     echo "]" >> ${result_file}
@@ -98,6 +105,10 @@ function main {
     current=$(get_current_running ${KOSLI_ENVIRONMENT} ${KOSLI_FLOW})
     # current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
     proposed=$(git rev-parse ${MAIN_BRANCH})
+
+    # Examples on kosli server with a mix of pull requests and not
+    current="5174289eb400fa46cca7d714433fdb45fb71ddb8"
+    proposed="ace68ab699b6b7c2f683b63a49671ba685002109"
     get_pull_requests ${current} ${proposed} ${RESULT_JSON_FILE}
 }
 
