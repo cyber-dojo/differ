@@ -12,10 +12,12 @@ RESULT_JSON_FILE="pull-request-list.json"
 
 function get_current_running
 {
+    local kosli_environment=$1; shift
+    local kosli_flow=$1; shift
     local -r snapshot_json_filename=/tmp/snapshot.json
 
     # Use Kosli CLI to get info on what artifacts are currently running in the given environment
-    kosli get snapshot "${KOSLI_ENVIRONMENT}" --output=json > "${snapshot_json_filename}"
+    kosli get snapshot "${kosli_environment}" --output=json > "${snapshot_json_filename}"
 
     artifacts_length=$(jq '.artifacts | length' ${snapshot_json_filename})
     for i in $(seq 0 $(( artifacts_length - 1 )))
@@ -23,7 +25,7 @@ function get_current_running
         annotation_type=$(jq -r ".artifacts[$i].annotation.type" ${snapshot_json_filename})
         if [ "${annotation_type}" != "exited" ] ; then
           flow=$(jq -r ".artifacts[$i].flow_name" ${snapshot_json_filename})
-          if [ "${flow}" == "${KOSLI_FLOW}" ] ; then
+          if [ "${flow}" == "${kosli_flow}" ] ; then
             git_commit=$(jq -r ".artifacts[$i].git_commit" ${snapshot_json_filename})
             echo "${git_commit}"
             return
@@ -54,7 +56,7 @@ function main {
     local current proposed
     # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
     # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
-    current=$(get_current_running)
+    current=$(get_current_running ${KOSLI_ENVIRONMENT} ${KOSLI_FLOW})
     # current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
     proposed=$(git rev-parse ${MAIN_BRANCH})
     get_pull_requests ${current} ${proposed} ${RESULT_JSON_FILE}
