@@ -121,6 +121,7 @@ jobs:
       - name: Attest never alone evidence to Kosli Trail
         env:
           KOSLI_ENVIRONMENT: aws-prod
+          GH_TOKEN: ${{ github.token }}
         run: |
           ./sh/never_alone.sh
           kosli attest generic \
