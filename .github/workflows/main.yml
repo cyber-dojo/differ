@@ -406,7 +406,7 @@ jobs:
 
 
   sdlc-control-gate:
-    needs: [setup, build-image, pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan]
+    needs: [setup, build-image, pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
