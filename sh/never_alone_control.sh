@@ -5,7 +5,7 @@ set -Eeu
 SCRIPT_NAME=never_alone_control.sh
 
 PULL_REQUEST_JSON_FILE="pull-request-list.json"
-MISSING_PULL_REQUESTS_FILE="missing-pull-requests.json"
+MISSING_PULL_REQUESTS_FILE="failed-pull-requests.json"
 
 function print_help
 {
