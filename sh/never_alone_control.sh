@@ -4,14 +4,8 @@ set -Eeu
 # Spike script for https://github.com/kosli-dev/server/issues/2175
 SCRIPT_NAME=never_alone_control.sh
 
-#export KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
-#export KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
-#export KOSLI_ENVIRONMENT="${KOSLI_ENVIRONMENT:-aws-prod}"         # wip default
-#export KOSLI_FLOW="${KOSLI_FLOW:-differ-ci}"               # wip default
-#MAIN_BRANCH="main"
 PULL_REQUEST_JSON_FILE="pull-request-list.json"
 MISSING_PULL_REQUESTS_FILE="missing-pull-requests.json"
-
 
 function print_help
 {
