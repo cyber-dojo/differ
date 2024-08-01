@@ -53,7 +53,7 @@ function main {
     base_commit=$(${SH_DIR}/get_commit_of_current_sw_running.sh -e ${KOSLI_ENVIRONMENT} -f ${KOSLI_FLOW})
     proposed_commit=$(git rev-parse ${MAIN_BRANCH})
     ${SH_DIR}/get_commits_with_pull_request_info.sh -b ${base_commit} -p ${proposed_commit} -o pull-request-list.json
-    ${SH_DIR}/get_failing_pull_requests.sh -i pull-request-list.json -o missing-pull-requests.json
+    ${SH_DIR}/get_failing_pull_requests.sh -i pull-request-list.json -o failed-pull-requests.json
 }
 
 main "$@"

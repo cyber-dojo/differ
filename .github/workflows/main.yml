@@ -110,6 +110,8 @@ jobs:
       pull-requests: read
     steps:
       - uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -126,11 +128,11 @@ jobs:
             --compliant=true \
             --attachments=pull-request-list.json
           
-          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' missing-pull-requests.json)
+          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' failed-pull-requests.json)
           kosli attest generic \
             --name=never-alone-control \
             --compliant=${KOSLI_COMPLIANT} \
-            --attachments=missing-pull-requests.json
+            --attachments=failed-pull-requests.json
 
   lint:
     needs: [setup]

@@ -4,7 +4,7 @@ set -Eeu
 SCRIPT_NAME=get_failing_pull_requests.sh
 
 INPUT_FILE=""
-OUTPUT_FILE="missing-pull-requests.json"
+OUTPUT_FILE="failed-pull-requests.json"
 
 
 function die
