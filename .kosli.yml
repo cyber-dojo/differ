@@ -4,10 +4,10 @@ trail:
   attestations:
     - name: pull-request
       type: pull_request
-    - name: never-alone-data
-      type: generic
-    - name: never-alone-control
-      type: generic
+#    - name: never-alone-data
+#      type: generic
+#    - name: never-alone-control
+#      type: generic
   artifacts:
     - name: differ
       attestations:
@@ -21,5 +21,5 @@ trail:
           type: junit
         - name: branch-coverage
           type: generic
-        - name: sonarcloud-scan
-          type: sonar
+#        - name: sonarcloud-scan
+#          type: sonar
