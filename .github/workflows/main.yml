@@ -102,39 +102,39 @@ jobs:
             --name=pull-request
 
 
-#  never-alone:
-#    needs: [setup]
-#    runs-on: ubuntu-latest
-#    permissions:
-#      id-token: write
-#      contents: write
-#      pull-requests: read
-#    steps:
-#      - uses: actions/checkout@v4.1.1
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Setup Kosli CLI
-#        uses: kosli-dev/setup-cli-action@v2
-#        with:
-#          version: ${{ vars.KOSLI_CLI_VERSION }}
-#
-#      - name: Attest never alone evidence to Kosli Trail
-#        env:
-#          KOSLI_ENVIRONMENT: aws-prod
-#          GH_TOKEN: ${{ github.token }}
-#        run: |
-#          ./sh/never_alone.sh
-#          kosli attest generic \
-#            --name=never-alone-data \
-#            --compliant=true \
-#            --attachments=pull-request-list.json
-#
-#          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' failed-pull-requests.json)
-#          kosli attest generic \
-#            --name=never-alone-control \
-#            --compliant=${KOSLI_COMPLIANT} \
-#            --attachments=failed-pull-requests.json
+ never-alone:
+   needs: [setup]
+   runs-on: ubuntu-latest
+   permissions:
+     id-token: write
+     contents: write
+     pull-requests: read
+   steps:
+     - uses: actions/checkout@v4.1.1
+       with:
+         fetch-depth: 0
+
+     - name: Setup Kosli CLI
+       uses: kosli-dev/setup-cli-action@v2
+       with:
+         version: ${{ vars.KOSLI_CLI_VERSION }}
+
+     - name: Attest never alone evidence to Kosli Trail
+       env:
+         KOSLI_ENVIRONMENT: aws-prod
+         GH_TOKEN: ${{ github.token }}
+       run: |
+         ./sh/never_alone.sh
+         kosli attest generic \
+           --name=never-alone-data \
+           --compliant=true \
+           --attachments=pull-request-list.json
+
+         KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' failed-pull-requests.json)
+         kosli attest generic \
+           --name=never-alone-control \
+           --compliant=${KOSLI_COMPLIANT} \
+           --attachments=failed-pull-requests.json
 
 
   lint:
@@ -406,7 +406,7 @@ jobs:
 
 
   sdlc-control-gate:
-    needs: [setup, build-image, pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    needs: [setup, build-image, pull-request, never-alone, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
