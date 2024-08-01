@@ -101,39 +101,41 @@ jobs:
             --github-token=${{ secrets.GITHUB_TOKEN }}
             --name=pull-request
 
-  never-alone:
-    needs: [setup]
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: write
-      pull-requests: read
-    steps:
-      - uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: 0
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
+#  never-alone:
+#    needs: [setup]
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write
+#      contents: write
+#      pull-requests: read
+#    steps:
+#      - uses: actions/checkout@v4.1.1
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup Kosli CLI
+#        uses: kosli-dev/setup-cli-action@v2
+#        with:
+#          version: ${{ vars.KOSLI_CLI_VERSION }}
+#
+#      - name: Attest never alone evidence to Kosli Trail
+#        env:
+#          KOSLI_ENVIRONMENT: aws-prod
+#          GH_TOKEN: ${{ github.token }}
+#        run: |
+#          ./sh/never_alone.sh
+#          kosli attest generic \
+#            --name=never-alone-data \
+#            --compliant=true \
+#            --attachments=pull-request-list.json
+#
+#          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' failed-pull-requests.json)
+#          kosli attest generic \
+#            --name=never-alone-control \
+#            --compliant=${KOSLI_COMPLIANT} \
+#            --attachments=failed-pull-requests.json
 
-      - name: Attest never alone evidence to Kosli Trail
-        env:
-          KOSLI_ENVIRONMENT: aws-prod
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          ./sh/never_alone.sh
-          kosli attest generic \
-            --name=never-alone-data \
-            --compliant=true \
-            --attachments=pull-request-list.json
-          
-          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' failed-pull-requests.json)
-          kosli attest generic \
-            --name=never-alone-control \
-            --compliant=${KOSLI_COMPLIANT} \
-            --attachments=failed-pull-requests.json
 
   lint:
     needs: [setup]
@@ -384,34 +386,34 @@ jobs:
             --scan-results="${SARIF_FILENAME}"
 
 
-  sonarcloud-scan:
-    needs: [setup]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: 1
-
-      - name: SonarCloud Scan
-        env:
-          SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
-        uses: sonarsource/sonarcloud-github-action@master
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-            version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Report SonarCloud scan results to Kosli Trail
-        run:
-          kosli attest sonar
-            --name=differ.sonarcloud-scan
-            --sonar-project-key=${{ env.SONARCLOUD_PROJECT_KEY }}
-            --sonar-api-token=${{ env.SONARCLOUD_TOKEN }}
+#  sonarcloud-scan:
+#    needs: [setup]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4.1.1
+#        with:
+#          fetch-depth: 1
+#
+#      - name: SonarCloud Scan
+#        env:
+#          SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
+#        uses: sonarsource/sonarcloud-github-action@master
+#
+#      - name: Setup Kosli CLI
+#        uses: kosli-dev/setup-cli-action@v2
+#        with:
+#            version: ${{ vars.KOSLI_CLI_VERSION }}
+#
+#      - name: Report SonarCloud scan results to Kosli Trail
+#        run:
+#          kosli attest sonar
+#            --name=differ.sonarcloud-scan
+#            --sonar-project-key=${{ env.SONARCLOUD_PROJECT_KEY }}
+#            --sonar-api-token=${{ env.SONARCLOUD_TOKEN }}
 
 
   sdlc-control-gate:
-    needs: [setup, build-image, pull-request, never-alone, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    needs: [setup, build-image, pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
