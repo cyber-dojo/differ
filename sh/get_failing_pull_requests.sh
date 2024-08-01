@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# Spike script for https://github.com/kosli-dev/server/issues/2175
-SCRIPT_NAME=get_missing_pull_requests.sh
+SCRIPT_NAME=get_failing_pull_requests.sh
 
 INPUT_FILE=""
 OUTPUT_FILE="missing-pull-requests.json"
 
 
-die()
+function die
 {
     echo "Error: $1" >&2
     exit 1

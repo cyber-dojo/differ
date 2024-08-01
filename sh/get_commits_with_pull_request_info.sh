@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# Spike script for https://github.com/kosli-dev/server/issues/2175
 SCRIPT_NAME=get_commits_with_pull_reqeust_info.sh
 
 OUTPUT_FILE="pull-request-list.json"

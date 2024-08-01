@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# Spike script for https://github.com/kosli-dev/server/issues/2175
 SCRIPT_NAME=get_commit_of_current_sw_running.sh
 
 export KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
 export KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
 export KOSLI_ENVIRONMENT=""
 export KOSLI_FLOW=""
+
+
+function die
+{
+    echo "Error: $1" >&2
+    exit 1
+}
+
 
 function print_help
 {
