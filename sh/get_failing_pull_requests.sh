@@ -63,13 +63,34 @@ function get_failing_pull_requests {
     local file=$1;shift
     local failed_reviews=()
 
-    # Read each entry and check if it is missing latestReviews or if that list is empty
+    # Read each entry and check it
     while IFS= read -r entry; do
-        echo entry=$entry
+        # Check for missing latestReviews or if that list is empty
         latest_reviews=$(echo "$entry" | jq '.latestReviews // empty')
         if [ -z "$latest_reviews" -o "$latest_reviews" = "[]" ]; then
             failed_reviews+=("$entry")
+        else
+            
+            # Check if latest reviewer and auther is the same person
+            commit_author=$(echo "$entry" | jq '.author.login')
+            reviews_length=$(echo "$entry" | jq '.latestReviews | length')
+            for i in $(seq 0 $(( reviews_length - 1 )))
+            do
+                review=$(echo "$entry" | jq ".latestReviews[$i]")
+                echo review=$review
+                review_author=$(echo "$review" | jq ".author.login")
+                if [ "${review_author}" = "${commit_author}" ]; then
+                    failed_reviews+=("$entry")
+                    break
+                fi
+            done
         fi
+
+
+
+
+
+
     done < <(jq -c '.[]' "$file")
 
     echo "${failed_reviews[@]}" | jq  -s '.' > ${OUTPUT_FILE}
