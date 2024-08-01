@@ -46,7 +46,7 @@ function check_arguments
 }
 
 
-function get_current_running
+function get_current_sw_running
 {
     local kosli_environment=$1; shift
     local kosli_flow=$1; shift
@@ -72,11 +72,11 @@ function get_current_running
 
 function get_pull_requests
 {
-    local current=$1; shift
-    local proposed=$1; shift
+    local base_commit=$1; shift
+    local proposed_commit=$1; shift
     local result_file=$1; shift
     local commits list_separator
-    commits=($(git rev-list --first-parent "${current}..${proposed}"))
+    commits=($(git rev-list --first-parent "${base_commit}..${proposed_commit}"))
     list_separator=""
     echo "[" > ${result_file}
     for commit in "${commits[@]}"; do
@@ -101,29 +101,29 @@ function get_pull_requests
 function main {
     check_arguments "$@"
 
-    local current proposed
-    # proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
-    # current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
-    current=$(get_current_running ${KOSLI_ENVIRONMENT} ${KOSLI_FLOW})
-    proposed=$(git rev-parse ${MAIN_BRANCH})
+    local base_commit proposed_commit
+    # proposed_commit: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
+    # base_commit: the commit corresponding to the Artifact base_commitly running in KOSLI_ENVIRONMENT, that will be replaced
+    base_commit=$(get_current_sw_running ${KOSLI_ENVIRONMENT} ${KOSLI_FLOW})
+    proposed_commit=$(git rev-parse ${MAIN_BRANCH})
 
-    # current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
+    # base_commit=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed_commit==base_commit)
 
     # Examples on kosli server with a mix of pull requests and not
-    # current="5174289eb400fa46cca7d714433fdb45fb71ddb8"
-    # proposed="ace68ab699b6b7c2f683b63a49671ba685002109"
-    get_pull_requests ${current} ${proposed} ${RESULT_JSON_FILE}
+    base_commit="5174289eb400fa46cca7d714433fdb45fb71ddb8"
+    proposed_commit="ace68ab699b6b7c2f683b63a49671ba685002109"
+    get_pull_requests ${base_commit} ${proposed_commit} ${RESULT_JSON_FILE}
 }
 
 main "$@"
 
 
-# proposed: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
-# current: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
-#proposed=$(git rev-parse ${MAIN_BRANCH})
-#current=$(get_current)
-#current=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed==currently)
-#current="5513ce31fcb4236ed2511470da39297c33b41b86"
+# proposed_commit: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
+# base_commit: the commit corresponding to the Artifact currently running in KOSLI_ENVIRONMENT, that will be replaced
+#proposed_commit=$(git rev-parse ${MAIN_BRANCH})
+#base_commit=$(get_current)
+#base_commit=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed_commit==base_commit)
+#base_commit="5513ce31fcb4236ed2511470da39297c33b41b86"
 
 
 
