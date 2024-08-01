@@ -70,27 +70,28 @@ function get_failing_pull_requests {
         if [ -z "$latest_reviews" -o "$latest_reviews" = "[]" ]; then
             failed_reviews+=("$entry")
         else
-            
-            # Check if latest reviewer and auther is the same person
+            # Find the entry where 'state' is APPROVED
             commit_author=$(echo "$entry" | jq '.author.login')
             reviews_length=$(echo "$entry" | jq '.latestReviews | length')
             for i in $(seq 0 $(( reviews_length - 1 )))
             do
                 review=$(echo "$entry" | jq ".latestReviews[$i]")
-                echo review=$review
-                review_author=$(echo "$review" | jq ".author.login")
-                if [ "${review_author}" = "${commit_author}" ]; then
-                    failed_reviews+=("$entry")
+                state=$(echo "$review" | jq ".state")
+                if [ "$state" = '"APPROVED"' ]; then
                     break
                 fi
             done
+            if [ "$state" != '"APPROVED"' ]; then
+                # Fail if no APPROVED was found
+                failed_reviews+=("$entry")
+            else
+                # Fail if latest reviewer and auther is the same person
+                review_author=$(echo "$review" | jq ".author.login")
+                if [ "${review_author}" = "${commit_author}" ]; then
+                    failed_reviews+=("$entry")
+                fi
+            fi
         fi
-
-
-
-
-
-
     done < <(jq -c '.[]' "$file")
 
     echo "${failed_reviews[@]}" | jq  -s '.' > ${OUTPUT_FILE}
