@@ -2,9 +2,9 @@
 set -Eeu
 
 # Spike script for https://github.com/kosli-dev/server/issues/2175
-SCRIPT_NAME=get_commit_with_pull_reqeust_info.sh
+SCRIPT_NAME=get_commits_with_pull_reqeust_info.sh
 
-RESULT_JSON_FILE="pull-request-list.json"
+OUTPUT_FILE="pull-request-list.json"
 BASE_COMMIT=""
 PROPOSED_COMMIT=""
 
@@ -21,21 +21,21 @@ function print_help
     cat <<EOF
 Usage: $SCRIPT_NAME [options]
 
-Script that gets all commits on main/master branch between base_commit and proposed_commit
-and collects pull-request information about them. Store the result in a file
+Script that gets all commits between base_commit and proposed_commit
+and collects pull-request information about them. Store the result in a json-file.
 
 Options are:
   -h                   Print this help menu
-  -b <base_commit>     Commit sha of the
-  -p <proposed_commit> Commit
-  -f <output file>     Result output file. Default: ${RESULT_JSON_FILE}
+  -b <base_commit>     Oldest commit sha
+  -p <proposed_commit> Newest commit sha
+  -o <output file>     Result output file. Default: ${OUTPUT_FILE}
 EOF
 }
 
 
 function check_arguments
 {
-    while getopts "hb:f:p:" opt; do
+    while getopts "hb:o:p:" opt; do
         case $opt in
             h)
                 print_help
@@ -44,8 +44,8 @@ function check_arguments
             b)
                 BASE_COMMIT=${OPTARG}
                 ;;
-            f)
-                RESULT_JSON_FILE=${OPTARG}
+            o)
+                OUTPUT_FILE=${OPTARG}
                 ;;
             p)
                 PROPOSED_COMMIT=${OPTARG}
@@ -94,7 +94,7 @@ function get_pull_requests
 
 function main {
     check_arguments "$@"
-    get_pull_requests ${BASE_COMMIT} ${PROPOSED_COMMIT} ${RESULT_JSON_FILE}
+    get_pull_requests ${BASE_COMMIT} ${PROPOSED_COMMIT} ${OUTPUT_FILE}
 }
 
 main "$@"
