@@ -59,14 +59,15 @@ function check_arguments
 
 }
 
-function get_missing_pull_requests {
+function get_failing_pull_requests {
     local file=$1;shift
     local failed_reviews=()
 
     # Read each entry and check if it is missing latestReviews or if that list is empty
     while IFS= read -r entry; do
+        echo entry=$entry
         latest_reviews=$(echo "$entry" | jq '.latestReviews // empty')
-        if [ -z "$latest_reviews" ]; then
+        if [ -z "$latest_reviews" -o "$latest_reviews" = "[]" ]; then
             failed_reviews+=("$entry")
         fi
     done < <(jq -c '.[]' "$file")
@@ -77,7 +78,7 @@ function get_missing_pull_requests {
 
 function main {
     check_arguments "$@"
-    get_missing_pull_requests ${INPUT_FILE}
+    get_failing_pull_requests ${INPUT_FILE}
 }
 
 main "$@"
