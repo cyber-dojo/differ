@@ -110,8 +110,8 @@ function main {
     # base_commit=f4215fc5060e6e7c60b32be05b657929a271efcc   # wip (2 deploys back, because on main, proposed_commit==base_commit)
 
     # Examples on kosli server with a mix of pull requests and not
-    base_commit="5174289eb400fa46cca7d714433fdb45fb71ddb8"
-    proposed_commit="ace68ab699b6b7c2f683b63a49671ba685002109"
+    # base_commit="5174289eb400fa46cca7d714433fdb45fb71ddb8"
+    # proposed_commit="ace68ab699b6b7c2f683b63a49671ba685002109"
     get_pull_requests ${base_commit} ${proposed_commit} ${RESULT_JSON_FILE}
 }
 
