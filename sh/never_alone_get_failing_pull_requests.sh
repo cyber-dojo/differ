@@ -2,16 +2,8 @@
 set -Eeu
 
 SCRIPT_NAME=get_failing_pull_requests.sh
-
 INPUT_FILE=""
-OUTPUT_FILE="failed-pull-requests.json"
-
-
-function die
-{
-    echo "Error: $1" >&2
-    exit 1
-}
+OUTPUT_FILE=""
 
 
 function print_help
@@ -19,15 +11,21 @@ function print_help
     cat <<EOF
 Usage: $SCRIPT_NAME [options]
 
-Script to parse pull request info file to check that all commits have pull-requests
-The script is intended to run on the output of the `get_commits_with_pull_request_info.sh`
-script
+Script to parse pull request info file to check that all commits have pull-request with committer != approver.
+Intended to run on the output of the `never_alone_get_commits_with_pull_request_info.sh` script
 
 Options are:
   -h               Print this help menu
-  -i <input-file>  Json input file
-  -o <output-file> Output file. Default: ${OUTPUT_FILE}
+  -i <input-file>  Json input file. Required
+  -o <output-file> Output file. Required
 EOF
+}
+
+
+function die
+{
+    echo "Error: $1" >&2
+    exit 1
 }
 
 
@@ -53,12 +51,16 @@ function check_arguments
     done
 
     if [ -z "${INPUT_FILE}" ]; then
-        die "option -i <input-file> is mandatory"
+        die "option -i <input-file> is required"
     fi
-
+    if [ -z "${OUTPUT_JSON_FILE}" ]; then
+        die "option -o <output-file> is required"
+    fi
 }
 
-function get_failing_pull_requests {
+
+function get_failing_pull_requests
+{
     local file=$1;shift
     local failed_reviews=()
 
@@ -97,7 +99,8 @@ function get_failing_pull_requests {
 }
 
 
-function main {
+function main
+{
     check_arguments "$@"
     get_failing_pull_requests ${INPUT_FILE}
 }

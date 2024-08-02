@@ -77,7 +77,7 @@ jobs:
       - name: Begin Kosli Trail
         run:
           kosli begin trail "${{ env.KOSLI_TRAIL }}"
-            --description="${{ github.actor }} - $(git log -1 --pretty=%s)"
+            --description="$(git log -1 --pretty='%aN - %s')"
 
 
   pull-request:
@@ -124,17 +124,23 @@ jobs:
           KOSLI_ENVIRONMENT: aws-prod
           GH_TOKEN: ${{ github.token }}
         run: |
-          ./sh/never_alone.sh
+          ALL_PRS_FILENAME=pull-request-list.json
+          FAILED_PRS_FILENAME=failed-pull-requests.json
+          BRANCH=main
+          
+          ./sh/never_alone.sh -p "${ALL_PRS_FILENAME}" -f "${FAILED_PRS_FILENAME} -m "${BRANCH}
+          
           kosli attest generic \
             --name=never-alone-data \
             --compliant=true \
-            --attachments=pull-request-list.json
+            --attachments="${ALL_PRS_FILENAME}"
 
-          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' failed-pull-requests.json)
+          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' "${FAILED_PRS_FILENAME})
+          
           kosli attest generic \
             --name=never-alone-control \
             --compliant=${KOSLI_COMPLIANT} \
-            --attachments=failed-pull-requests.json
+            --attachments="${FAILED_PRS_FILENAME}
 
 
   lint:
@@ -394,7 +400,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: SonarCloud Scan
+      - name: Run SonarCloud scan - report results to Kosli Trail (in Kosli webhook)
         env:
           SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
         uses: sonarsource/sonarcloud-github-action@master

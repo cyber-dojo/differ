@@ -1,34 +1,33 @@
 #!/usr/bin/env bash
 set -Eeu
 
-SCRIPT_NAME=get_commits_with_pull_reqeust_info.sh
-
-OUTPUT_FILE="pull-request-list.json"
+SCRIPT_NAME=never_alone_get_commits_with_pull_reqeust_info.sh
+OUTPUT_FILE=""
 BASE_COMMIT=""
 PROPOSED_COMMIT=""
-
-
-die()
-{
-    echo "Error: $1" >&2
-    exit 1
-}
 
 
 function print_help
 {
     cat <<EOF
-Usage: $SCRIPT_NAME [options]
+Use: $SCRIPT_NAME [options]
 
 Script that gets all commits between base_commit and proposed_commit
-and collects pull-request information about them. Store the result in a json-file.
+and collects pull-request information about them. Stores the results in a json file.
 
 Options are:
   -h                   Print this help menu
-  -b <base_commit>     Oldest commit sha
-  -p <proposed_commit> Newest commit sha
-  -o <output file>     Result output file. Default: ${OUTPUT_FILE}
+  -b <base-commit>     Oldest commit sha. Required
+  -p <proposed-commit> Newest commit sha. Required
+  -o <output-file>     Result output file. Required
 EOF
+}
+
+
+function die
+{
+    echo "Error: $1" >&2
+    exit 1
 }
 
 
@@ -57,10 +56,13 @@ function check_arguments
     done
 
     if [ -z "${BASE_COMMIT}" ]; then
-        die "option -b <base_commit> is mandatory"
+        die "option -b <base-commit> is required"
+    fi
+    if [ -z "${OUTPUT_FILE}" ]; then
+        die "option -o <output-file> is required"
     fi
     if [ -z "${PROPOSED_COMMIT}" ]; then
-        die "option -p <proposed_commit> is mandatory"
+        die "option -p <proposed-commit> is required"
     fi
 }
 
@@ -91,7 +93,9 @@ function get_pull_requests
     echo "]" >> ${result_file}
 }
 
-function main {
+
+function main
+{
     check_arguments "$@"
     get_pull_requests ${BASE_COMMIT} ${PROPOSED_COMMIT} ${OUTPUT_FILE}
 }
