@@ -41,7 +41,7 @@ function check_arguments
                 INPUT_FILE=${OPTARG}
                 ;;
             o)
-                OUTPUT_JSON_FILE=${OPTARG}
+                OUTPUT_FILE=${OPTARG}
                 ;;
             \?)
                 echo "Invalid option: -$OPTARG" >&2
@@ -53,7 +53,7 @@ function check_arguments
     if [ -z "${INPUT_FILE}" ]; then
         die "option -i <input-file> is required"
     fi
-    if [ -z "${OUTPUT_JSON_FILE}" ]; then
+    if [ -z "${OUTPUT_FILE}" ]; then
         die "option -o <output-file> is required"
     fi
 }
