@@ -128,19 +128,19 @@ jobs:
           FAILED_PRS_FILENAME=failed-pull-requests.json
           BRANCH=main
           
-          ./sh/never_alone.sh -p "${ALL_PRS_FILENAME}" -f "${FAILED_PRS_FILENAME} -m "${BRANCH}
+          ./sh/never_alone.sh -p "${ALL_PRS_FILENAME}" -f "${FAILED_PRS_FILENAME}" -m "${BRANCH}"
           
           kosli attest generic \
             --name=never-alone-data \
             --compliant=true \
             --attachments="${ALL_PRS_FILENAME}"
 
-          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' "${FAILED_PRS_FILENAME})
+          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' "${FAILED_PRS_FILENAME}")
           
           kosli attest generic \
             --name=never-alone-control \
             --compliant=${KOSLI_COMPLIANT} \
-            --attachments="${FAILED_PRS_FILENAME}
+            --attachments="${FAILED_PRS_FILENAME}"
 
 
   lint:
