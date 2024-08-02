@@ -1,33 +1,30 @@
 #!/usr/bin/env bash
 set -Eeu
 
-SCRIPT_NAME=get_commit_of_current_sw_running.sh
+SCRIPT_NAME=never_alone_get_commit_of_current_sw_running.sh
+KOSLI_ENVIRONMENT=""
+KOSLI_FLOW=""
 
-export KOSLI_ORG="${KOSLI_ORG:-cyber-dojo}"                       # wip default
-export KOSLI_API_TOKEN="${KOSLI_API_TOKEN:-80rtyg24o0fgh0we8fh}"  # wip default=fake read-only token
-export KOSLI_ENVIRONMENT=""
-export KOSLI_FLOW=""
+
+function print_help
+{
+    cat <<EOF
+Use: $SCRIPT_NAME [options]
+
+Script to get git commit for currently running SW in an environment
+
+Options are:
+  -h               Print this help menu
+  -e <environment> Name of kosli environment to get current SW from. Required
+  -f <flow>        Name of kosli flow the current SW artifact is coming from. Required
+EOF
+}
 
 
 function die
 {
     echo "Error: $1" >&2
     exit 1
-}
-
-
-function print_help
-{
-    cat <<EOF
-Usage: $SCRIPT_NAME [options]
-
-Script to get git commit for currently running SW in an environment
-
-Options are:
-  -h               Print this help menu
-  -e <environment> Name of kosli environment to get current SW from
-  -f <flow>        Name of kosli flow the current SW artifact is coming from
-EOF
 }
 
 
@@ -53,10 +50,10 @@ function check_arguments
     done
 
     if [ -z "${KOSLI_ENVIRONMENT}" ]; then
-        die "option -e <environment> is mandatory"
+        die "option -e <environment> is required"
     fi
     if [ -z "${KOSLI_FLOW}" ]; then
-        die "option -f <flow> is mandatory"
+        die "option -f <flow> is required"
     fi
 }
 
@@ -86,7 +83,8 @@ function get_current_sw_running
 }
 
 
-function main {
+function main
+{
     check_arguments "$@"
     get_current_sw_running ${KOSLI_ENVIRONMENT} ${KOSLI_FLOW}
 }
