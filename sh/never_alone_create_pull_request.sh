@@ -16,7 +16,7 @@ Script to create a pull request on an old commit that is already on main/master
 
 Options are:
   -h               Print this help menu
-  -m <main_branch> Name of main/master branch. Default: ${MAIN_BRANCH}
+  -m <main-branch> Name of main/master branch. Default: ${MAIN_BRANCH}
 EOF
 }
 
@@ -30,11 +30,14 @@ function die
 
 function check_arguments
 {
-    while getopts "h" opt; do
+    while getopts "hm:" opt; do
         case $opt in
             h)
                 print_help
                 exit 1
+                ;;
+            m)
+                MAIN_BRANCH=${OPTARG}
                 ;;
             \?)
                 echo "Invalid option: -$OPTARG" >&2
