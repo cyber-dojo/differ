@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeu
 
-SCRIPT_NAME=never_alone_create_pull_request.sh
+SCRIPT_NAME=never_alone_create_pull_request_for_old_commit.sh
 BASE_COMMIT=""
 MAIN_BRANCH="main"
 TEMPORARY_FILE="never-alone-temporary-file.txt"
