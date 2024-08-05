@@ -124,7 +124,7 @@ jobs:
           KOSLI_ENVIRONMENT: aws-prod
           GH_TOKEN: ${{ github.token }}
         run: |
-          ALL_PRS_FILENAME=pull-request-list.json
+          ALL_PRS_FILENAME=all-pull-requests.json
           FAILED_PRS_FILENAME=failed-pull-requests.json
           BRANCH=main
           
