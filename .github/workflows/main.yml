@@ -112,7 +112,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
