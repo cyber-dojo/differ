@@ -73,13 +73,20 @@ function get_pull_requests
     local proposed_commit=$1; shift
     local result_file=$1; shift
     local commits list_separator
-    commits=($(git rev-list --first-parent "${base_commit}..${proposed_commit}"))
+    # Use gh instead of git so we can keep the commit depth of 1. The order of the response for gh is reversed
+    # so I do a tac at the end to get it the same order.
+    # commits=($(git rev-list --first-parent "${base_commit}..${proposed_commit}"))
+    commits=($(gh api repos/:owner/:repo/compare/${base_commit}...${proposed_commit} -q '.commits[].sha' | tac))
+
     list_separator=""
     echo "[" > ${result_file}
     for commit in "${commits[@]}"; do
         echo "${list_separator}" >> ${result_file}
         pr_data=$(gh pr list --search "${commit}" --state merged --json author,latestReviews,mergeCommit,mergedAt,url)
-        if [ "$(echo "$pr_data" | jq '. | length')" -eq 0 ]; then
+        if [ "$pr_data" = "[]" ]; then
+            # Commit is not merged back to master (this will happen if you run this on a branch)
+            echo '{"sha": "'$commit'"}' >> "${result_file}"
+        elif [ "$(echo "$pr_data" | jq '. | length')" -eq 0 ]; then
             # No pull request found for that commit, so do a new request to get the commit
             commit_data=$(gh search commits --hash "${commit}" --json author,sha)
             echo "$commit_data" | jq '.[0]' >> "${result_file}"
