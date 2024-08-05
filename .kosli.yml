@@ -4,9 +4,7 @@ trail:
   attestations:
     - name: pull-request
       type: pull_request
-    - name: never-alone-data
-      type: generic
-    - name: never-alone-control
+    - name: never-alone
       type: generic
   artifacts:
     - name: differ
