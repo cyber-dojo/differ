@@ -10,7 +10,7 @@ TEMPORARY_FILE="never-alone-temporary-file.txt"
 function print_help
 {
     cat <<EOF
-Usage: $SCRIPT_NAME [options] <git-commit>
+Use: $SCRIPT_NAME [options] <git-commit>
 
 Script to create a pull request on an old commit that is already on main/master
 
