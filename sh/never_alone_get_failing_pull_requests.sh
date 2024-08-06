@@ -9,7 +9,7 @@ OUTPUT_FILE=""
 function print_help
 {
     cat <<EOF
-Usage: $SCRIPT_NAME [options]
+Use: $SCRIPT_NAME [options]
 
 Script to parse pull request info file to check that all commits have pull-request with committer != approver.
 Intended to run on the output of the `never_alone_get_commits_with_pull_request_info.sh` script
