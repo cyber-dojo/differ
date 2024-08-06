@@ -1,0 +1,5 @@
+
+This file was pushed directly to main after turning off the Branch Protection Rules
+[ ] Require a pull request before merging
+
+This was done as part of the testing of the never-alone control.
