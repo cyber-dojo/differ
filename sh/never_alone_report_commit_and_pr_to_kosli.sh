@@ -79,14 +79,9 @@ function get_commit_and_pull_request
     local commit_sha=$1; shift
     local result_file=$1; shift
 
-    set -x
     pr_data=$(gh pr list --search "${commit_sha}" --state merged --json author,latestReviews,mergeCommit,mergedAt,url)
     commit_data=$(gh search commits --hash "${commit_sha}" --json author)
 
-    echo pr_data=$pr_data
-    echo commit_data=$commit_data
-    set +x
-    
     local compliant="true"
     combined_data=$(jq -n --arg commitsha "$commit_sha" --argjson commit "$commit_data" --argjson pr "$pr_data" \
       '{commit_sha: $commitsha, commit: $commit[0], pull_request: $pr[0]}')
