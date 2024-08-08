@@ -70,7 +70,8 @@ function begin_trail
     local trail_name=$1; shift
 
     kosli begin trail ${trail_name} \
-        --flow=${commit_pull_request_flow}
+        --flow=${commit_pull_request_flow} \
+        --description="$(git log -1 --pretty='%aN - %s')"
 }
 
 
