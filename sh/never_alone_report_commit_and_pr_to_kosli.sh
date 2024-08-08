@@ -86,6 +86,11 @@ function get_commit_and_pull_request
       '{commit_sha: $commitsha, commit: $commit[0], pull_request: $pr[0]}')
 
     echo "${combined_data}" > ${result_file}
+    if [ "$pr_data" = "[]" ]; then
+        # Return 1 when PR data are missing
+        return 1
+    fi
+    return 0
 }
 
 function get_commit_and_pr_data_and_report_to_kosli
@@ -99,14 +104,15 @@ function get_commit_and_pr_data_and_report_to_kosli
     for commit_sha in "${commits[@]}"; do
         short_commit_sha=${commit_sha:0:7}
         local file_name="commit_pr_${short_commit_sha}.json"
-        get_commit_and_pull_request ${commit_sha} ${file_name}
-        echo commit_sha=$commit_sha
+        local compliant="true"
+        get_commit_and_pull_request ${commit_sha} ${file_name} || compliant="false"
         kosli attest generic \
             --name=commit_${short_commit_sha} \
-            --compliant=true \
-            --attachments="${file_name}" \
+            --compliant=${compliant} \
+            --attachments=${file_name} \
             --flow=${commit_pull_request_flow} \
             --trail=${trail_name}
+        rm ${file_name}
     done
 }
 

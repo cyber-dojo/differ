@@ -83,6 +83,8 @@ function main
 
     base_commit=30f5f9e60c686caa1f347b39d48553f76d95368b
     proposed_commit=efd1349fcafd75170226eded789a3f1877245211
+#    base_commit=910dbb5a7a52922788a0cb1e0b000b46a47ab25b
+#    proposed_commit=e8db40dbd52737b2786d02a857f734a920af4874
 
     local trail_name=${proposed_commit:0:7}-reviews
     begin_trail ${COMMIT_PULL_REQUEST_FLOW} ${trail_name}
