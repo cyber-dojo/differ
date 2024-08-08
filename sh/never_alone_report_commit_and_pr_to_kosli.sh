@@ -5,6 +5,7 @@ SCRIPT_NAME=never_alone_report_commit_and_pr_to_kosli.sh
 BASE_COMMIT=""
 PROPOSED_COMMIT=""
 FLOW_NAME=""
+TRAIL_NAME=""
 
 
 function print_help
@@ -12,13 +13,14 @@ function print_help
     cat <<EOF
 Use: $SCRIPT_NAME [options]
 
-Script that gets commit and pull-request info for a commit sha
+Script that gets commit and pull-request info for a commit sha and report them to kosli
 
 Options are:
   -h                   Print this help menu
   -b <base-commit>     Oldest commit sha. Required
   -p <proposed-commit> Newest commit sha. Required
   -f <flow-name>       Flow name to report commit and pull-request info. Required
+  -t <trail-name>      Name of trail the attestations shall be reported to. Required
 EOF
 }
 
@@ -32,7 +34,7 @@ function die
 
 function check_arguments
 {
-    while getopts "hb:p:f:" opt; do
+    while getopts "hb:p:f:t:" opt; do
         case $opt in
             h)
                 print_help
@@ -46,6 +48,9 @@ function check_arguments
                 ;;
             f)
                 FLOW_NAME=${OPTARG}
+                ;;
+            t)
+                TRAIL_NAME=${OPTARG}
                 ;;
             \?)
                 echo "Invalid option: -$OPTARG" >&2
@@ -62,6 +67,9 @@ function check_arguments
     fi
     if [ -z "${FLOW_NAME}" ]; then
         die "option -f <flow-name> is required"
+    fi
+    if [ -z "${TRAIL_NAME}" ]; then
+        die "option -t <trail-name> is required"
     fi
 }
 
@@ -85,7 +93,7 @@ function get_commit_and_pr_data_and_report_to_kosli
     local base_commit=$1; shift
     local proposed_commit=$1; shift
     local commit_pull_request_flow=$1; shift
-    local trail_name=${proposed_commit}
+    local trail_name=$1; shift
 
     commits=($(gh api repos/:owner/:repo/compare/${base_commit}...${proposed_commit} -q '.commits[].sha'))
     for commit_sha in "${commits[@]}"; do
@@ -98,20 +106,15 @@ function get_commit_and_pr_data_and_report_to_kosli
             --compliant=true \
             --attachments="${file_name}" \
             --flow=${commit_pull_request_flow} \
-            --trail=${trail_name} \
-            --host="http://localhost" \
-            --org=use-cases \
-            --api-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IlRvcmVNZXJrZWx5In0.Dm-d5pNxmy83B9H6534SPRqG7cXnDSQ5rYOd5SBxwM0"
+            --trail=${trail_name}
     done
 }
-
 
 
 function main
 {
     check_arguments "$@"
-
-    get_commit_and_pr_data_and_report_to_kosli ${BASE_COMMIT} ${PROPOSED_COMMIT} ${FLOW_NAME}
+    get_commit_and_pr_data_and_report_to_kosli ${BASE_COMMIT} ${PROPOSED_COMMIT} ${FLOW_NAME} ${TRAIL_NAME}
 }
 
 main "$@"
