@@ -82,15 +82,49 @@ function get_commit_and_pull_request
     commit_data=$(gh search commits --hash "${commit_sha}" --json author)
     pr_data=$(gh pr list --search "${commit_sha}" --state merged --json author,latestReviews,mergeCommit,mergedAt,url)
 
+    local compliant="true"
     combined_data=$(jq -n --arg commitsha "$commit_sha" --argjson commit "$commit_data" --argjson pr "$pr_data" \
       '{commit_sha: $commitsha, commit: $commit[0], pull_request: $pr[0]}')
 
+    # Check for missing latestReviews or if that list is empty
+    latest_reviews=$(echo "${pr_data}" | jq '.[0].latestReviews')
+    if [ -z "$latest_reviews" -o "$latest_reviews" = "[]" -o "$latest_reviews" = "null" ]; then
+        combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no reviewers"}')
+        compliant="false"
+    else
+        # Find the entry where 'state' is APPROVED
+        commit_author=$(echo "${pr_data}" | jq '.[0].author.login')
+        reviews_length=$(echo "${pr_data}" | jq '.[0].latestReviews | length')
+        for i in $(seq 0 $(( reviews_length - 1 )))
+        do
+            review=$(echo "${pr_data}" | jq ".[0].latestReviews[$i]")
+            state=$(echo "$review" | jq ".state")
+            if [ "$state" = '"APPROVED"' ]; then
+                break
+            fi
+        done
+        if [ "$state" != '"APPROVED"' ]; then
+            combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no state:APPROVED review"}')
+            compliant="false"
+        else
+            # Fail if latest reviewer and auther is the same person
+            review_author=$(echo "$review" | jq ".author.login")
+            if [ "${review_author}" = "${commit_author}" ]; then
+                combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "committer and approver are the same person"}')
+                compliant="false"
+            fi
+        fi
+    fi
+
+    # Make sure that true/false are not quoted
+    combined_data=$(echo "${combined_data}" | jq ". += {\"compliant\": $compliant}")
     echo "${combined_data}" > ${result_file}
-    if [ "$pr_data" = "[]" ]; then
-        # Return 1 when PR data are missing
+
+    if [ "${compliant}" == "true" ]; then
+        return 0
+    else
         return 1
     fi
-    return 0
 }
 
 function get_commit_and_pr_data_and_report_to_kosli
