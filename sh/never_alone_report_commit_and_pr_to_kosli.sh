@@ -96,7 +96,7 @@ function get_commit_and_pull_request
         compliant="false"
     else
         # Find the entry where 'state' is APPROVED
-        commit_author=$(echo "${pr_data}" | jq '.[0].author.login')
+        pr_author=$(echo "${pr_data}" | jq '.[0].author.login')
         reviews_length=$(echo "${pr_data}" | jq '.[0].latestReviews | length')
         for i in $(seq 0 $(( reviews_length - 1 )))
         do
@@ -112,7 +112,7 @@ function get_commit_and_pull_request
         else
             # Fail if latest reviewer and auther is the same person
             review_author=$(echo "$review" | jq ".author.login")
-            if [ "${review_author}" = "${commit_author}" ]; then
+            if [ "${review_author}" = "${pr_author}" ]; then
                 combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "committer and approver are the same person"}')
                 compliant="false"
             fi

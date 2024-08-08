@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeu
 
-SCRIPT_NAME="never_alone_2.sh"
+SCRIPT_NAME="never_alone_create_review_trail.sh"
 MAIN_BRANCH=""
 COMMIT_PULL_REQUEST_FLOW=""
 
@@ -64,7 +64,8 @@ function check_arguments
     fi
 }
 
-function begin_trail {
+function begin_trail
+{
     local commit_pull_request_flow=$1; shift
     local trail_name=$1; shift
 
@@ -81,15 +82,7 @@ function main
     # proposed_commit: the commit corresponding to the Trail for the live workflow, which is building an Artifact to be deployed
     local proposed_commit=$(git rev-parse ${MAIN_BRANCH})
 
-    base_commit=45739b0c6f63f672c150e8265a60269a9d938b77
-    proposed_commit=111c12f7f7abee3b78640a64a63d31bc0cdb5ab9
-    base_commit=910dbb5a7a52922788a0cb1e0b000b46a47ab25b
-    proposed_commit=e8db40dbd52737b2786d02a857f734a920af4874
-    base_commit=4ff042bffd17bf0aa3480d668038aa3f913f7f26
-    proposed_commit=2ec9678ad35f661ac434ab11e656a2c94ec0c687
-
-
-    local trail_name=${proposed_commit:0:7}-reviews
+    local trail_name=${proposed_commit}
     begin_trail ${COMMIT_PULL_REQUEST_FLOW} ${trail_name}
     $(repo_root)/sh/never_alone_report_commit_and_pr_to_kosli.sh \
         -b ${base_commit} \

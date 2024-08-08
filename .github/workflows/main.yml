@@ -142,6 +142,10 @@ jobs:
             --compliant=${KOSLI_COMPLIANT} \
             --attachments="${FAILED_PRS_FILENAME}"
 
+          CODE_REVIEW_FLOW=differ-code-reviews
+          kosli create flow "${CODE_REVIEW_FLOW}" --use-empty-template
+          ./sh/never_alone_create_review_trail.sh -m "${BRANCH}" -f "${CODE_REVIEW_FLOW}"   
+
 
   lint:
     needs: [setup]
