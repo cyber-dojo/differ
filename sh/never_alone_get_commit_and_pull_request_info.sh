@@ -69,7 +69,7 @@ function get_commit_and_pull_request
     combined_data=$(jq -n --arg commitsha "$commit_sha" --argjson commit "$commit_data" --argjson pr "$pr_data" \
       '{commit_sha: $commitsha, commit: $commit[0], pull_request: $pr[0]}')
 
-    echo "${combined_data}" >> ${result_file}
+    echo "${combined_data}" > ${result_file}
 }
 
 
