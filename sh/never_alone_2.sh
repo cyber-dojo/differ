@@ -75,30 +75,30 @@ function begin_trail {
         --api-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IlRvcmVNZXJrZWx5In0.Dm-d5pNxmy83B9H6534SPRqG7cXnDSQ5rYOd5SBxwM0"
 }
 
-function get_commit_and_pr_data_and_report_to_kosli
-{
-    local base_commit=$1; shift
-    local proposed_commit=$1; shift
-    local commit_pull_request_flow=$1; shift
-    local trail_name=${proposed_commit}
-
-    commits=($(gh api repos/:owner/:repo/compare/${base_commit}...${proposed_commit} -q '.commits[].sha'))
-    for commit_sha in "${commits[@]}"; do
-        short_commit_sha=${commit_sha:0:7}
-        local file_name="commit_pr_${short_commit_sha}.json"
-        $(repo_root)/sh/never_alone_get_commit_and_pull_request_info.sh -c ${commit_sha} -o ${file_name}
-        echo commit_sha=$commit_sha
-        kosli attest generic \
-            --name=commit_${short_commit_sha} \
-            --compliant=true \
-            --attachments="${file_name}" \
-            --flow=${commit_pull_request_flow} \
-            --trail=${trail_name} \
-            --host="http://localhost" \
-            --org=use-cases \
-            --api-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IlRvcmVNZXJrZWx5In0.Dm-d5pNxmy83B9H6534SPRqG7cXnDSQ5rYOd5SBxwM0"
-    done
-}
+#function get_commit_and_pr_data_and_report_to_kosli
+#{
+#    local base_commit=$1; shift
+#    local proposed_commit=$1; shift
+#    local commit_pull_request_flow=$1; shift
+#    local trail_name=${proposed_commit}
+#
+#    commits=($(gh api repos/:owner/:repo/compare/${base_commit}...${proposed_commit} -q '.commits[].sha'))
+#    for commit_sha in "${commits[@]}"; do
+#        short_commit_sha=${commit_sha:0:7}
+#        local file_name="commit_pr_${short_commit_sha}.json"
+#        $(repo_root)/sh/never_alone_get_commit_and_pull_request_info.sh -c ${commit_sha} -o ${file_name}
+#        echo commit_sha=$commit_sha
+#        kosli attest generic \
+#            --name=commit_${short_commit_sha} \
+#            --compliant=true \
+#            --attachments="${file_name}" \
+#            --flow=${commit_pull_request_flow} \
+#            --trail=${trail_name} \
+#            --host="http://localhost" \
+#            --org=use-cases \
+#            --api-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IlRvcmVNZXJrZWx5In0.Dm-d5pNxmy83B9H6534SPRqG7cXnDSQ5rYOd5SBxwM0"
+#    done
+#}
 
 function main
 {
@@ -110,7 +110,7 @@ function main
     base_commit=30f5f9e60c686caa1f347b39d48553f76d95368b
     proposed_commit=efd1349fcafd75170226eded789a3f1877245211
     begin_trail ${proposed_commit} ${COMMIT_PULL_REQUEST_FLOW}
-    get_commit_and_pr_data_and_report_to_kosli ${base_commit} ${proposed_commit} ${COMMIT_PULL_REQUEST_FLOW}
+    $(repo_root)/sh/never_alone_report_commit_and_pr_to_kosli.sh -b ${base_commit} -p ${proposed_commit} -f ${COMMIT_PULL_REQUEST_FLOW}
 }
 
 main "$@"
