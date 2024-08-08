@@ -83,8 +83,11 @@ function main
 
     base_commit=45739b0c6f63f672c150e8265a60269a9d938b77
     proposed_commit=111c12f7f7abee3b78640a64a63d31bc0cdb5ab9
-#    base_commit=910dbb5a7a52922788a0cb1e0b000b46a47ab25b
-#    proposed_commit=e8db40dbd52737b2786d02a857f734a920af4874
+    base_commit=910dbb5a7a52922788a0cb1e0b000b46a47ab25b
+    proposed_commit=e8db40dbd52737b2786d02a857f734a920af4874
+    base_commit=4ff042bffd17bf0aa3480d668038aa3f913f7f26
+    proposed_commit=2ec9678ad35f661ac434ab11e656a2c94ec0c687
+
 
     local trail_name=${proposed_commit:0:7}-reviews
     begin_trail ${COMMIT_PULL_REQUEST_FLOW} ${trail_name}

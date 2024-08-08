@@ -88,7 +88,10 @@ function get_commit_and_pull_request
 
     # Check for missing latestReviews or if that list is empty
     latest_reviews=$(echo "${pr_data}" | jq '.[0].latestReviews')
-    if [ -z "$latest_reviews" -o "$latest_reviews" = "[]" -o "$latest_reviews" = "null" ]; then
+    if [ "$latest_reviews" = "null" ]; then
+        combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no pull-request"}')
+        compliant="false"
+    elif [ -z "$latest_reviews" -o "$latest_reviews" = "[]" ]; then
         combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no reviewers"}')
         compliant="false"
     else
