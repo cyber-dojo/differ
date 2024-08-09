@@ -85,8 +85,7 @@ function main
 
     local trail_name=${proposed_commit}
 
-    begin_trail ${COMMIT_PULL_REQUEST_FLOW} ${trail_name} \
-        --description="$(git log -1 --pretty='%aN - %s')"
+    begin_trail ${COMMIT_PULL_REQUEST_FLOW} ${trail_name}
 
     $(repo_root)/sh/never_alone_report_commit_and_pr_to_kosli.sh \
         -b ${base_commit} \
