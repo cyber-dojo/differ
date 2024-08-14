@@ -79,56 +79,46 @@ function get_commit_and_pull_request
     local commit_sha=$1; shift
     local result_file=$1; shift
 
-    pr_data=$(gh pr list --search "${commit_sha}" --state merged --json author,latestReviews,mergeCommit,mergedAt,url)
+    pr_data=$(gh pr list --search "${commit_sha}" --state merged --json author,reviews,mergeCommit,mergedAt,reviewDecision,url)
     commit_data=$(gh search commits --hash "${commit_sha}" --json author)
 
-    local compliant="true"
     combined_data=$(jq -n --arg commitsha "$commit_sha" --argjson commit "$commit_data" --argjson pr "$pr_data" \
       '{commit_sha: $commitsha, commit: $commit[0], pull_request: $pr[0]}')
 
-    # Check for missing latestReviews or if that list is empty
-    latest_reviews=$(echo "${pr_data}" | jq '.[0].latestReviews')
-    if [ "$latest_reviews" = "null" ]; then
+    # Check for missing reviews or if that list is empty
+    reviews=$(echo "${pr_data}" | jq '.[0].reviews')
+    github_review_decision=$(echo "${pr_data}" | jq '.[0].reviewDecision')
+    local compliant="false"
+    if [ "$reviews" == "null" ]; then
         combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no pull-request"}')
-        compliant="false"
-    elif [ -z "$latest_reviews" -o "$latest_reviews" = "[]" ]; then
+    elif [ -z "$reviews" -o "$reviews" == "[]" ]; then
         combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no reviewers"}')
-        compliant="false"
+    elif [ "${github_review_decision}" != '"APPROVED"' ]; then
+        combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "pull-request not approved"}')
     else
-        # Find the entry where 'state' is APPROVED
+        # Loop over reviews and check that at least one approver is not the same as committer
         pr_author=$(echo "${pr_data}" | jq '.[0].author.login')
-        reviews_length=$(echo "${pr_data}" | jq '.[0].latestReviews | length')
+        reviews_length=$(echo "${pr_data}" | jq '.[0].reviews | length')
         for i in $(seq 0 $(( reviews_length - 1 )))
         do
-            review=$(echo "${pr_data}" | jq ".[0].latestReviews[$i]")
+            review=$(echo "${pr_data}" | jq ".[0].reviews[$i]")
             state=$(echo "$review" | jq ".state")
-            if [ "$state" = '"APPROVED"' ]; then
-                break
+            review_author=$(echo "$review" | jq ".author.login")
+            if [ "$state" == '"APPROVED"' -a "${review_author}" != "${pr_author}" ]; then
+                compliant="true"
             fi
         done
-        if [ "$state" != '"APPROVED"' ]; then
-            combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "no state:APPROVED review"}')
-            compliant="false"
-        else
-            # Fail if latest reviewer and auther is the same person
-            review_author=$(echo "$review" | jq ".author.login")
-            if [ "${review_author}" = "${pr_author}" ]; then
-                combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "committer and approver are the same person"}')
-                compliant="false"
-            fi
+        if [ "${compliant}" == "false" ]; then
+            combined_data=$(echo "${combined_data}" | jq '. += {"reason_for_non_compliance": "committer and approver are the same person"}')
         fi
     fi
 
     # Make sure that true/false are not quoted
     combined_data=$(echo "${combined_data}" | jq ". += {\"compliant\": $compliant}")
     echo "${combined_data}" > ${result_file}
-
-    if [ "${compliant}" == "true" ]; then
-        return 0
-    else
-        return 1
-    fi
+    echo "${compliant}"
 }
+
 
 function get_commit_and_pr_data_and_report_to_kosli
 {
@@ -136,13 +126,13 @@ function get_commit_and_pr_data_and_report_to_kosli
     local proposed_commit=$1; shift
     local commit_pull_request_flow=$1; shift
     local trail_name=$1; shift
+    local compliant
 
     commits=($(gh api repos/:owner/:repo/compare/${base_commit}...${proposed_commit} -q '.commits[].sha'))
     for commit_sha in "${commits[@]}"; do
         short_commit_sha=${commit_sha:0:7}
         local file_name="commit_pr_${short_commit_sha}.json"
-        local compliant="true"
-        get_commit_and_pull_request ${commit_sha} ${file_name} || compliant="false"
+        compliant=$(get_commit_and_pull_request ${commit_sha} ${file_name})
         kosli attest generic \
             --name=commit_${short_commit_sha} \
             --compliant=${compliant} \
