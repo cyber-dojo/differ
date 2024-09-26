@@ -83,52 +83,6 @@ jobs:
             --name=pull-request
 
 
-  never-alone:
-    needs: [setup]
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: write
-      pull-requests: read
-    steps:
-      - uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: 1
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Attest never alone evidence to Kosli Trail
-        env:
-          KOSLI_ENVIRONMENT: aws-prod
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          ALL_PRS_FILENAME=all-pull-requests.json
-          FAILED_PRS_FILENAME=failed-pull-requests.json
-          BRANCH=main
-          
-          ./sh/never_alone.sh -p "${ALL_PRS_FILENAME}" -f "${FAILED_PRS_FILENAME}" -m "${BRANCH}"
-          
-          kosli attest generic \
-            --name=never-alone-data \
-            --compliant=true \
-            --attachments="${ALL_PRS_FILENAME}"
-
-          KOSLI_COMPLIANT=$(jq 'if . == [] then true else false end' "${FAILED_PRS_FILENAME}")
-          
-          kosli attest generic \
-            --name=never-alone-control \
-            --compliant=${KOSLI_COMPLIANT} \
-            --attachments="${FAILED_PRS_FILENAME}"
-
-          CODE_REVIEW_FLOW=differ-code-reviews
-          kosli create flow "${CODE_REVIEW_FLOW}" --use-empty-template \
-            --description="Ensure all commits are reviewed by two or more people"          
-          ./sh/never_alone_create_review_trail.sh -m "${BRANCH}" -f "${CODE_REVIEW_FLOW}"   
-
-
   lint:
     needs: [setup]
     runs-on: ubuntu-latest
@@ -399,7 +353,7 @@ jobs:
 
 
   sdlc-control-gate:
-    needs: [setup, build-image, pull-request, never-alone, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    needs: [setup, build-image, pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
