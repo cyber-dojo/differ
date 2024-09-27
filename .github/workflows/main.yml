@@ -63,9 +63,10 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Create Kosli Flow
+      - name: Begin Kosli Trail
         run:
-          kosli create flow "${{ env.KOSLI_FLOW }}"
+          kosli begin trail "${{ env.KOSLI_TRAIL }}"  
+            --flow="${{ env.KOSLI_FLOW }}"
             --description="Diff files from two traffic-lights"
             --template-file=.kosli.yml
 
