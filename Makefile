@@ -2,9 +2,12 @@
 SHORT_SHA := $(shell git rev-parse HEAD | head -c7)
 IMAGE_NAME := cyberdojo/differ:${SHORT_SHA}
 
-.PHONY: all test lint snyk demo image
+.PHONY: all image test lint snyk-container demo
 
-all: test lint snyk demo
+all: image test lint snyk-container demo
+
+image:
+	${PWD}/sh/build_image.sh
 
 test: image
 	${PWD}/sh/run_tests_with_coverage.sh
@@ -15,11 +18,8 @@ lint:
 snyk-container: image
 	snyk container test ${IMAGE_NAME}
         --file=Dockerfile
-        --json-file-output=snyk.json
+        --json-file-output=snyk.container.scan.json
         --policy-path=.snyk
 
 demo: image
 	${PWD}/sh/demo.sh
-
-image:
-	${PWD}/sh/build_image.sh
