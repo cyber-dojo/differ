@@ -16,9 +16,9 @@ lint:
 	docker run --rm --volume "${PWD}:/app" cyberdojo/rubocop --raise-cop-error
 
 snyk-container: image
-	snyk container test ${IMAGE_NAME}
-        --file=Dockerfile
-        --json-file-output=snyk.container.scan.json
+	snyk container test ${IMAGE_NAME} \
+        --file=Dockerfile \
+        --json-file-output=snyk.container.scan.json \
         --policy-path=.snyk
 
 demo: image
