@@ -195,7 +195,6 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest image provenance to Kosli
-        id: variables
         env:
           KOSLI_DRY_RUN: ${{ needs.setup.outputs.kosli_dry_run }}
         run:
