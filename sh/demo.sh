@@ -10,7 +10,6 @@ source "${SH_DIR}/copy_in_saver_test_data.sh"
 source "${SH_DIR}/echo_env_vars.sh"
 source "${SH_DIR}/exit_non_zero_unless_installed.sh"
 source "${SH_DIR}/exit_zero_if_demo_only.sh"
-source "${SH_DIR}/lib.sh"
 
 source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
