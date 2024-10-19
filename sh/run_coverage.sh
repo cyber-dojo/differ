@@ -18,10 +18,10 @@ run_coverage()
 
   if [ "${TYPE}" == 'server' ]; then
     local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/server"
-    local -r HOST_METRICS_DIR="${ROOT_DIR}/test/lib/"
+    local -r HOST_METRICS_DIR="${ROOT_DIR}/test/lib"
   else
     local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/client"
-    local -r HOST_METRICS_DIR="${ROOT_DIR}/client/test/lib/"
+    local -r HOST_METRICS_DIR="${ROOT_DIR}/client/test/lib"
   fi
 
   set +e
