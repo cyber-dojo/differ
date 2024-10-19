@@ -2,7 +2,7 @@
 set -Eeu
 
 readonly MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly TYPE="${1}"     # server
+export COVERAGE_ROOT="${1}" # /tmp/coverage
 readonly TEST_LOG="${2}"    # test.log
 shift; shift
 
@@ -16,8 +16,7 @@ require '${MY_DIR}/coverage.rb'
 }"
 
 export RUBYOPT='-W2'
-export COVERAGE_ROOT="/reports/${TYPE}"
-mkdir -p "${COVERAGE_ROOT}" &> /dev/null || true  # volume-mounted dir may already exist from previous run
+mkdir -p "${COVERAGE_ROOT}"
 
 set +e
 ruby -e "${SCRIPT}" -- ${TEST_ARGS[@]} 2>&1 | tee "${COVERAGE_ROOT}/${TEST_LOG}"
