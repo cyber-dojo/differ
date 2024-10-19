@@ -1,12 +1,11 @@
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
 test_in_container()
 {
   if [ "${1:-}" = 'client' ]; then
     run_tests \
       "${CYBER_DOJO_DIFFER_CLIENT_USER}" \
       "${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}" \
-      client "${@:-}"
+      "${@:-}"
   fi
 
   if [ "${1:-}" = 'server' ]; then
@@ -17,7 +16,6 @@ test_in_container()
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
 run_tests()
 {
   local -r USER="${1}"           # eg nobody
@@ -32,13 +30,13 @@ run_tests()
   local -r COVERAGE_TEST_TAB_NAME=test
   local -r TEST_LOG=test.log
 
-  # CONTAINER_NAME is running with read-only:true and a non-root user(in docker-compose.yml). I want to keep
-  # those settings in the docker-exec call below since that is how the microservice actually runs.
+  # CONTAINER_NAME is running with read-only:true and a non-root user (in docker-compose.yml). I want to
+  # keep those settings in the docker-exec call below since that is how the microservice actually runs.
   # The run.sh is creating coverage files which I process on the host after it completes.
   # I've tried using a :rw volume mount (eg /reports) in docker-compose.yml and writing the
   # coverage files to /reports, so they automatically end up on the host. I cannot find a way that works
-  # on both my M2 laptop, and in the CI workflow. So I am reluctantly writing the coverage files to /tmp
-  # and tar-piping them out.
+  # on both my M2 laptop, and in the CI workflow. So I am writing the coverage files to /tmp and
+  # tar-piping them out.
 
   local -r CONTAINER_TMP_DIR=/tmp
   local -r CONTAINER_COVERAGE_DIR="${CONTAINER_TMP_DIR}/reports"
@@ -53,12 +51,14 @@ run_tests()
   local -r STATUS=$?
   set -e
 
+  local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"
+  rm -rf "${HOST_REPORTS_DIR}" &> /dev/null || true
+  mkdir -p "${HOST_REPORTS_DIR}" &> /dev/null || true
+
   docker exec \
     "${CONTAINER_NAME}" \
-    tar Ccf \
-      "$(dirname "${CONTAINER_COVERAGE_DIR}")" \
-      - "$(basename "${CONTAINER_COVERAGE_DIR}")" \
-        | tar Cxf "${ROOT_DIR}/" -
+    tar Ccf "${CONTAINER_COVERAGE_DIR}" - . \
+        | tar Cxf "${HOST_REPORTS_DIR}" -
 
   echo "${TYPE} test status == ${STATUS}"
   echo

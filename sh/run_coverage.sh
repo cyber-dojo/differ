@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeu
 
-export ROOT_DIR="$(git rev-parse --show-toplevel)"
+export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 run_coverage()
 {

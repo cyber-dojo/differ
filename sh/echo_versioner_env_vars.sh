@@ -1,9 +1,11 @@
 
-# - - - - - - - - - - - - - - - - - - - - - - - -
 echo_versioner_env_vars()
 {
-  local -r sha="$(cd "$(repo_root)" && git rev-parse HEAD)"
+  local -r sha="$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
+  echo COMMIT_SHA="${sha}"
+
   docker run --rm cyberdojo/versioner
+
   echo CYBER_DOJO_DIFFER_SHA="${sha}"
   echo CYBER_DOJO_DIFFER_TAG="${sha:0:7}"
   #
