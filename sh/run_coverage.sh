@@ -42,8 +42,6 @@ run_coverage()
   local -r STATUS=${PIPESTATUS[0]}
   set -e
 
-  echo "${TYPE} test branch-coverage report is at:"
-  echo "${HOST_REPORTS_DIR}/index.html"
   echo "${TYPE} coverage status == ${STATUS}"
   echo
   return ${STATUS}

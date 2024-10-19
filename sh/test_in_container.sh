@@ -60,6 +60,9 @@ run_tests()
     tar Ccf "${CONTAINER_COVERAGE_DIR}" - . \
         | tar Cxf "${HOST_REPORTS_DIR}" -
 
+  echo "${TYPE} test branch-coverage report is at:"
+  echo "${HOST_REPORTS_DIR}/index.html"
+  echo
   echo "${TYPE} test status == ${STATUS}"
   echo
   if [ "${STATUS}" != 0 ]; then
