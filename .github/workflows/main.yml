@@ -260,14 +260,14 @@ jobs:
 
       - name: Setup Kosli CLI
         #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        if: success() || failure())
+        if: success() || failure()
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest junit test evidence to Kosli
         #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        if: success() || failure())
+        if: success() || failure()
         env:
           KOSLI_DRY_RUN: true
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
@@ -278,7 +278,7 @@ jobs:
 
       - name: Attest coverage evidence to Kosli
         #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        if: success() || failure())
+        if: success() || failure()
         env:
           KOSLI_DRY_RUN: true
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
