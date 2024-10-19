@@ -32,11 +32,13 @@ run_tests()
   local -r COVERAGE_TEST_TAB_NAME=test
   local -r TEST_LOG=test.log
 
+  #  --user "${USER}" \
+
   set +e
   docker exec \
     --env COVERAGE_CODE_TAB_NAME=${COVERAGE_CODE_TAB_NAME} \
     --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
-    --user "${USER}" \
+    --user root \
     "${CONTAINER_NAME}" \
       sh -c "/differ/test/lib/run.sh ${TYPE} ${TEST_LOG} ${*:4}"
   local -r STATUS=$?
