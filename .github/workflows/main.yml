@@ -285,7 +285,7 @@ jobs:
         run: |
           KOSLI_COMPLIANT=$([ "${{ steps.coverage.outcome }}" == 'success' ] && echo true || echo false)          
           kosli attest generic \
-              --description="unit-test branch-coverage and metrics" \          
+              --description="unit-test branch-coverage and metrics" \
               --name=differ.unit-test-coverage \
               --user-data=./reports/server/coverage.json
 
