@@ -16,7 +16,6 @@ services:
     restart: "no"
     volumes:
       - ./client/test:/differ/test/:ro
-      - ./reports:/reports/:rw
       - type: tmpfs
         target: /tmp
         tmpfs:
@@ -38,7 +37,6 @@ services:
     restart: "no"
     volumes:
       - ./test:/differ/test/:ro
-      - ./reports:/reports/:rw
       - type: tmpfs
         target: /tmp
         tmpfs:
