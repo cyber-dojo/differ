@@ -96,7 +96,7 @@ jobs:
             --name=pull-request
 
 
-  lint:
+  rubocop-lint:
     runs-on: ubuntu-latest
     needs: []
     steps:
@@ -120,7 +120,7 @@ jobs:
         run: |          
           KOSLI_COMPLIANT=$([ "${{ steps.lint.outcome }}" == 'success' ] && echo true || echo false)
           kosli attest generic \
-            --name=differ.lint
+            --name=differ.rubocop-lint
           
 
   snyk-code-scan:
@@ -285,6 +285,65 @@ jobs:
               --user-data=./reports/server/coverage.json
 
 
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: [setup, build-image]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Retrieve Docker image from cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.IMAGE_TAR_FILENAME }}
+          key: ${{ needs.setup.outputs.image_name }}
+
+      - name: Load Docker image
+        run:
+          docker image load --input ${{ env.IMAGE_TAR_FILENAME }}
+
+      - name: Run integration tests
+        run:
+          make test_integration
+
+      - name: Get integration test coverage
+        id: coverage
+        run:
+          make coverage_integration
+
+      - name: Setup Kosli CLI
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Attest junit test evidence to Kosli
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
+        env:
+          KOSLI_DRY_RUN: true
+          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+        run:
+          kosli attest junit
+              --name=differ.integration-test 
+              --results-dir=./reports/client/junit
+
+      - name: Attest coverage evidence to Kosli
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
+        env:
+          KOSLI_DRY_RUN: true
+          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+        run: |
+          KOSLI_COMPLIANT=$([ "${{ steps.coverage.outcome }}" == 'success' ] && echo true || echo false)          
+          kosli attest generic \
+              --description="integration-test branch-coverage and metrics" \
+              --name=differ.integration-test-coverage \
+              --user-data=./reports/client/coverage.json
+
+
   snyk-container-scan:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
@@ -358,7 +417,7 @@ jobs:
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    needs: [setup, build-image, pull-request, lint, unit-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    needs: [setup, build-image, pull-request, rubocop-lint, unit-tests, integration-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
     steps:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2

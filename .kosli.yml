@@ -7,7 +7,7 @@ trail:
   artifacts:
     - name: differ
       attestations:
-        - name: lint
+        - name: rubocop-lint
           type: generic
         - name: snyk-container-scan
           type: snyk
@@ -16,6 +16,10 @@ trail:
         - name: unit-test
           type: junit
         - name: unit-test-coverage
+          type: generic
+        - name: integration-test
+          type: junit
+        - name: integration-test-coverage
           type: generic
         - name: sonarcloud-scan
           type: sonar
