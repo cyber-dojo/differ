@@ -1,6 +1,4 @@
 snyk.container.scan.json
 
-client/test/reports/*
-client/test/reports/.*
-test/reports/*
-test/reports/.*
+reports/*
+reports/.*

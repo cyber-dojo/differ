@@ -15,7 +15,7 @@ trail:
           type: snyk
         - name: unit-test
           type: junit
-        - name: branch-coverage
+        - name: unit-test-coverage
           type: generic
         - name: sonarcloud-scan
           type: sonar
