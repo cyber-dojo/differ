@@ -17,7 +17,8 @@ require '${MY_DIR}/coverage.rb'
 
 export RUBYOPT='-W2'
 export COVERAGE_ROOT="/reports/${TYPE}"
-mkdir -p "${COVERAGE_ROOT}" &> /dev/null || true  # volume-mounted dir may already exist from previous run
+ls -al /reports
+mkdir -p "${COVERAGE_ROOT}" || true  # volume-mounted dir may already exist from previous run
 
 set +e
 ruby -e "${SCRIPT}" -- ${TEST_ARGS[@]} 2>&1 | tee "${COVERAGE_ROOT}/${TEST_LOG}"
