@@ -4,3 +4,4 @@ Fix run_demo.sh
 Add back check_embedded_sha_env_var test
 Add back tagging server image to plain cyberdojo/differ:TAG (for dependent local development)
 Reinstate makefile target for snyk-container-test
+Fix metrics values, eg app.branches.total==0  app.lines.total==0
