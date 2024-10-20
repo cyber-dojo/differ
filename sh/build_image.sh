@@ -47,12 +47,12 @@ build_image()
 {
   check_args "$@"
 
-  if [ -n "${CI:-}" ] ; then
+  local -r TYPE="${1}"
+
+  if [ -n "${CI:-}" ] && [ "${TYPE}" == 'server' ] ; then
     stderr "In CI workflow - using previous docker/build-push-action@v6 GitHub Action"
     exit 42
   fi
-
-  local -r TYPE="${1}"
 
   exit_non_zero_unless_installed docker
   export $(echo_versioner_env_vars)
