@@ -32,13 +32,4 @@ build_image()
   fi
 }
 
-#build_tagged_images()
-#{
-#  local -r target="${1}"
-#  docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" server
-#  if [ "${target}" != 'server' ]; then
-#    docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" client
-#  fi
-#}
-
 build_image "$@"
