@@ -2,7 +2,6 @@
 set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export SH_DIR="${ROOT_DIR}/sh"
 
 # - - - - - - - - - - - - - - - - - - - - - -
 build_tagged_images()
@@ -17,7 +16,7 @@ build_tagged_images()
 # - - - - - - - - - - - - - - - - - - - - - -
 git_commit_sha()
 {
-  echo $(cd "${ROOT_DIR}" && git rev-parse HEAD)
+  cd "${ROOT_DIR}" && git rev-parse HEAD
 }
 
 # - - - - - - - - - - - - - - - - - - - - - -
