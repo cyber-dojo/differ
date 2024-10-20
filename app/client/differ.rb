@@ -5,7 +5,7 @@ require_relative 'http_json_hash/service'
 module External
   class Differ
     def initialize
-      hostname = 'differ_server'
+      hostname = 'server'
       port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
       @http = HttpJsonHash.service('differ', hostname, port)
     end

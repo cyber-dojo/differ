@@ -107,7 +107,7 @@ jobs:
       - name: Run Rubocop linter on source
         id: lint
         run:
-          make lint
+          make rubocop_lint
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
@@ -251,22 +251,25 @@ jobs:
 
       - name: Run unit tests
         run:
-          make test_unit
+          make test_server
 
       - name: Get unit test coverage
         id: coverage
         run:
-          make coverage_unit
+          make coverage_server
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest junit test evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
         env:
+          KOSLI_DRY_RUN: true
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest junit
@@ -274,8 +277,10 @@ jobs:
               --results-dir=./reports/server/junit
 
       - name: Attest coverage evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
         env:
+          KOSLI_DRY_RUN: true
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run: |
           KOSLI_COMPLIANT=$([ "${{ steps.coverage.outcome }}" == 'success' ] && echo true || echo false)          
@@ -305,22 +310,25 @@ jobs:
 
       - name: Run integration tests
         run:
-          make test_integration
+          make test_client
 
       - name: Get integration test coverage
         id: coverage
         run:
-          make coverage_integration
+          make coverage_client
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest junit test evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
         env:
+          KOSLI_DRY_RUN: true
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest junit
@@ -328,8 +336,10 @@ jobs:
               --results-dir=./reports/client/junit
 
       - name: Attest coverage evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        #if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
+        if: success() || failure()
         env:
+          KOSLI_DRY_RUN: true
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run: |
           KOSLI_COMPLIANT=$([ "${{ steps.coverage.outcome }}" == 'success' ] && echo true || echo false)          

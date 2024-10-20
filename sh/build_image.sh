@@ -1,27 +1,37 @@
 #!/usr/bin/env bash
 set -Eeu
 
-export SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-source "${SH_DIR}/build_tagged_images.sh"
-source "${SH_DIR}/check_embedded_sha_env_var.sh"
-source "${SH_DIR}/echo_env_vars.sh"
-source "${SH_DIR}/exit_non_zero_unless_installed.sh"
-source "${SH_DIR}/remove_old_images.sh"
-source "${SH_DIR}/tag_images_to_latest.sh"
+#source "${SH_DIR}/check_embedded_sha_env_var.sh"
+#source "${SH_DIR}/echo_env_vars.sh"
+#source "${SH_DIR}/tag_images_to_latest.sh"
+source "${ROOT_DIR}/sh/lib.sh"
 
-source "${SH_DIR}/echo_versioner_env_vars.sh"
-export $(echo_versioner_env_vars)
+build_image()
+{
+  if [ -n "${CI:-}" ]; then
+    echo In CI workflow - using image built with the GitHub Action
+  else
+    echo Not in CI workflow - building image
+    exit_non_zero_unless_installed docker
+    containers_down
+    export $(echo_versioner_env_vars)
+    #remove_old_images
+    build_tagged_images "$@"
+    #tag_images_to_latest "$@"
+    #check_embedded_sha_env_var
+    #echo_env_vars
+  fi
+}
 
-if [ -n "${CI:-}" ]; then
-  echo In CI workflow, so not re-building the image
-  echo Instead, letting docker use the already built image
-else
-  echo Not in CI workflow, so building the image
-  exit_non_zero_unless_installed docker
-  remove_old_images
-  build_tagged_images "$@"
-  tag_images_to_latest "$@"
-  check_embedded_sha_env_var
-  echo_env_vars
-fi
+build_tagged_images()
+{
+  local -r target="${1}"
+  docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" server
+  if [ "${target}" != 'server' ]; then
+    docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" client
+  fi
+}
+
+build_image "$@"

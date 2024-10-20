@@ -8,14 +8,15 @@ class DifferClientTest < ClientTestBase
     '2q0'
   end
 
+  hostname = 'server'
+  port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
+
   # - - - - - - - - - - - - - - - - - - - -
 
   test 'jj8', %w[
     clients use probes with a trailing question mark in their path which is overly cute
     so support both with and without ? until all clients have switched to non ?
   ] do
-    hostname = 'differ_server'
-    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
     assert http.get('alive?', {}).instance_of?(TrueClass)
@@ -29,8 +30,6 @@ class DifferClientTest < ClientTestBase
     which is important since in jQuery a $.getJSON() call
     always passes its arguments in the query string
   ) do
-    hostname = 'differ_server'
-    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
     args = { id: 'RNCzUr', was_index: 8, now_index: 9 }
@@ -110,8 +109,6 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   test '7C0', %w[calling unknown method raises] do
-    hostname = 'differ_server'
-    port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
     error = assert_raises(RuntimeError) { http.get(:shar, { x: 42 }) }

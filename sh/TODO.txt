@@ -1,0 +1,6 @@
+
+Add $1 switch-case checking in build_image.sh
+Fix run_demo.sh
+Add back check_embedded_sha_env_var test
+Add back tagging server image to plain cyberdojo/differ:TAG (for dependent local development)
+Reinstate makefile target for snyk-container-test
