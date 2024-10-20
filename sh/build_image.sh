@@ -13,7 +13,7 @@ source "${SH_DIR}/tag_images_to_latest.sh"
 source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
 
-if on_ci ; then
+if [ -n "${CI:-}" ]; then
   echo On CI so not re-building the image
   echo Instead, letting docker pull the built image
 else
