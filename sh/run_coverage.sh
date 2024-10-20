@@ -11,7 +11,7 @@ run_coverage()
   # Process test-run results and coverage data against metrics.rb values and
   #   - print output showing individual metrics and their pass/fail status
   #   - return zero if all metrics pass, otherwise non-zero
-  # Does not create any new files
+  # Does not create any new files.
 
   local -r COVERAGE_CODE_TAB_NAME=app
   local -r COVERAGE_TEST_TAB_NAME=test

@@ -14,10 +14,10 @@ source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
 
 if [ -n "${CI:-}" ]; then
-  echo On CI so not re-building the image
-  echo Instead, letting docker pull the built image
+  echo In CI workflow, so not re-building the image
+  echo Instead, letting docker use the already built image
 else
-  echo Not on CI so building the image
+  echo Not in CI workflow, so building the image
   exit_non_zero_unless_installed docker
   remove_old_images
   build_tagged_images "$@"
