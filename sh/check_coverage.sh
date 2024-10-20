@@ -7,10 +7,10 @@ source "${ROOT_DIR}/sh/lib.sh"
 
 show_help()
 {
-    local -r my_name=check_coverage.sh
+    local -r MY_NAME=$(basename "${BASH_SOURCE[0]}")
     cat <<- EOF
 
-    Use: ${my_name} {client|server}
+    Use: ${MY_NAME} {client|server}
 
     Check test coverage (and other metrics) for tests run from inside the client or server container only
 
@@ -19,8 +19,9 @@ EOF
 
 check_coverage()
 {
+  local -r TYPE="${1:-}"
 
-  case "${1:-}" in
+  case "${TYPE}" in
     '-h' | '--help')
       show_help
       exit 0
@@ -28,12 +29,10 @@ check_coverage()
     'server' | 'client')
       ;;
     *)
-      stderr "$(echo "argument must be 'client' or 'server'")"
+      stderr "argument must be 'client' or 'server'"
       show_help
       exit 42
   esac
-
-  local -r TYPE="${1}" # eg server
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Process test-run results and coverage data against metrics.rb values and

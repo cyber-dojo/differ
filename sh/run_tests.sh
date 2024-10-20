@@ -7,10 +7,10 @@ source "${ROOT_DIR}/sh/lib.sh"
 
 show_help()
 {
-    local -r my_name=run_tests.sh
+    local -r MY_NAME=$(basename "${BASH_SOURCE[0]}")
     cat <<- EOF
 
-    Use: ${my_name} {client|server} [ID...]
+    Use: ${MY_NAME} {client|server} [ID...]
 
     Options:
       client  - run tests inside the client container only
@@ -18,7 +18,7 @@ show_help()
       ID...   - run tests matching these identifiers only
 
     Example:
-      ${my_name} server 198
+      ${MY_NAME} server 198
       ...
       Finished in 0.012960s, 308.6469 runs/s, 3395.1162 assertions/s.
       4 runs, 44 assertions, 0 failures, 0 errors, 0 skips
@@ -34,18 +34,18 @@ EOF
 
 run_tests()
 {
-  export $(echo_versioner_env_vars)
-
   case "${1:-}" in
     '-h' | '--help')
       show_help
       exit 0
       ;;
     'server')
+      export $(echo_versioner_env_vars)
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_SERVER_USER}"
       ;;
     'client')
+      export $(echo_versioner_env_vars)
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_CLIENT_USER}"
       ;;
