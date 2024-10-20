@@ -36,7 +36,7 @@ services:
     read_only: true
     restart: "no"
     volumes:
-      - ./test:/differ/test/:ro
+      - ./test/unit:/differ/test/:ro
       - type: tmpfs
         target: /tmp
         tmpfs:

@@ -37,7 +37,7 @@ run_coverage()
           /reports/test.log \
           /reports/index.html \
           /reports/coverage.json" \
-    | tee "${HOST_REPORTS_DIR}/metrics.log"
+      | tee "${HOST_REPORTS_DIR}/metrics.log"
 
   local -r STATUS=${PIPESTATUS[0]}
   set -e
