@@ -7,7 +7,7 @@ source "${ROOT_DIR}/sh/lib.sh"
 
 exit_non_zero_unless_installed docker
 export $(echo_versioner_env_vars)
-docker compose up --wait --wait-timeout=10 client
+docker compose --progress=plain up --wait --wait-timeout=10 client
 copy_in_saver_test_data
 TMP_HTML_FILENAME=/tmp/differ-demo.html
 docker exec \
