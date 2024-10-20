@@ -1,5 +1,4 @@
-ARG BASE_IMAGE=cyberdojo/sinatra-base:f20e0b5
-FROM ${BASE_IMAGE}
+FROM cyberdojo/sinatra-base:f20e0b5
 LABEL maintainer=jon@jaggersoft.com
 
 WORKDIR /differ
