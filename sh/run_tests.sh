@@ -32,7 +32,7 @@ show_help()
 EOF
 }
 
-run_tests()
+check_args()
 {
   case "${1:-}" in
     '-h' | '--help')
@@ -49,12 +49,20 @@ run_tests()
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_CLIENT_USER}"
       ;;
-    *)
-      stderr "$(echo "first argument must be 'client' or 'server'")"
+    '')
       show_help
+      stderr "no argument - must be 'client' or 'server'"
+      exit 42
+      ;;
+    *)
+      show_help
+      stderr "first argument is '${1:-}' - must be 'client' or 'server'"
       exit 42
   esac
+}
 
+run_tests()
+{
   exit_non_zero_unless_installed docker
   export SERVICE_NAME="${1}"
   # Don't do a build here, because in CI workflow, server image is built with GitHub Action
@@ -123,4 +131,5 @@ test_in_container()
   return ${STATUS}
 }
 
+check_args "$@"
 run_tests "$@"

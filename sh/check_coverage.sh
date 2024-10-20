@@ -17,28 +17,35 @@ show_help()
 EOF
 }
 
-check_coverage()
+check_args()
 {
-  local -r TYPE="${1:-}"
-
-  case "${TYPE}" in
+  case "${1:-}" in
     '-h' | '--help')
       show_help
       exit 0
       ;;
     'server' | 'client')
       ;;
-    *)
-      stderr "argument must be 'client' or 'server'"
+    '')
       show_help
+      stderr "no argument - must be 'client' or 'server'"
+      exit 42
+      ;;
+    *)
+      show_help
+      stderr "argument is '${1:-}' - must be 'client' or 'server'"
       exit 42
   esac
+}
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+check_coverage()
+{
   # Process test-run results and coverage data against metrics.rb values and
   #   - print output showing individual metrics and their pass/fail status
   #   - return zero if all metrics pass, otherwise non-zero
   # Does not create any new files.
+
+  local -r TYPE="${1}"
 
   local -r COVERAGE_CODE_TAB_NAME=app
   local -r COVERAGE_TEST_TAB_NAME=test
@@ -69,4 +76,5 @@ check_coverage()
   return "${STATUS}"
 }
 
+check_args "$@"
 check_coverage "$@"

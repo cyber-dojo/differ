@@ -22,11 +22,9 @@ show_help()
 EOF
 }
 
-build_image()
+check_args()
 {
-  local -r TYPE="${1}"
-
-  case "${TYPE}" in
+  case "${1:-}" in
     '-h' | '--help')
       show_help
       exit 0
@@ -39,12 +37,21 @@ build_image()
       ;;
     'client')
       ;;
-    *)
-      stderr "argument must be 'client' or 'server'"
+    '')
       show_help
+      stderr "no argument - must be 'client' or 'server'"
+      exit 42
+      ;;
+    *)
+      show_help
+      stderr "argument is '${1:-}' - must be 'client' or 'server'"
       exit 42
   esac
+}
 
+build_image()
+{
+  local -r TYPE="${1}"
   exit_non_zero_unless_installed docker
   export $(echo_versioner_env_vars)
   containers_down
@@ -59,4 +66,5 @@ build_image()
   #echo_env_vars
 }
 
+check_args "$@"
 build_image "$@"
