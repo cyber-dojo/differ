@@ -13,12 +13,12 @@ coverage_server:
 	${PWD}/sh/check_coverage.sh server
 
 
-all_client: build_client test_client coverage_client
+all_client: test_client coverage_client
 
 build_client:
 	${PWD}/sh/build_image.sh client
 
-test_client:
+test_client: build_client
 	${PWD}/sh/run_tests.sh client
 
 coverage_client:
