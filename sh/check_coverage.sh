@@ -67,8 +67,7 @@ check_coverage()
         "ruby /app/check_test_results.rb \
           /reports/test.log \
           /reports/index.html \
-          /reports/coverage.json" \
-      | tee "${HOST_REPORTS_DIR}/metrics.log"
+          /reports/coverage.json"
 
   local -r STATUS=${PIPESTATUS[0]}
   set -e
