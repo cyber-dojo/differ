@@ -51,6 +51,7 @@ check_args()
 
 build_image()
 {
+  check_args "$@"
   local -r TYPE="${1}"
   exit_non_zero_unless_installed docker
   export $(echo_versioner_env_vars)
@@ -66,5 +67,4 @@ build_image()
   #echo_env_vars
 }
 
-check_args "$@"
 build_image "$@"

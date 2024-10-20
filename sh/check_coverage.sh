@@ -10,7 +10,7 @@ show_help()
     local -r MY_NAME=$(basename "${BASH_SOURCE[0]}")
     cat <<- EOF
 
-    Use: ${MY_NAME} {client|server}
+    Use: ${MY_NAME} {server|client}
 
     Check test coverage (and other metrics) for tests run from inside the client or server container only
 
@@ -45,6 +45,8 @@ check_coverage()
   #   - return zero if all metrics pass, otherwise non-zero
   # Does not create any new files.
 
+  check_args "$@"
+
   local -r TYPE="${1}"
 
   local -r COVERAGE_CODE_TAB_NAME=app
@@ -76,5 +78,4 @@ check_coverage()
   return "${STATUS}"
 }
 
-check_args "$@"
 check_coverage "$@"

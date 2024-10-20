@@ -10,7 +10,7 @@ show_help()
     local -r MY_NAME=$(basename "${BASH_SOURCE[0]}")
     cat <<- EOF
 
-    Use: ${MY_NAME} {client|server} [ID...]
+    Use: ${MY_NAME} {server|client} [ID...]
 
     Options:
       client  - run tests inside the client container only
@@ -63,20 +63,15 @@ check_args()
 
 run_tests()
 {
+  check_args "$@"
   exit_non_zero_unless_installed docker
   export SERVICE_NAME="${1}"
   # Don't do a build here, because in CI workflow, server image is built with GitHub Action
   docker compose up --no-build --wait "${SERVICE_NAME}"
   exit_non_zero_unless_started_cleanly
   copy_in_saver_test_data
-  test_in_container "${USER}" "${CONTAINER_NAME}" "${@:-}"
-}
 
-test_in_container()
-{
-  local -r USER="${1}"           # eg nobody
-  local -r CONTAINER_NAME="${2}" # eg test_differ_server
-  local -r TYPE="${3}"           # eg server
+  local -r TYPE="${1}"           # {server|client}
 
   echo '=================================='
   echo "Running ${TYPE} tests"
@@ -102,7 +97,7 @@ test_in_container()
     --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
     --user "${USER}" \
     "${CONTAINER_NAME}" \
-      sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:4}"
+      sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:2}"
   local -r STATUS=$?
   set -e
 
@@ -131,5 +126,4 @@ test_in_container()
   return ${STATUS}
 }
 
-check_args "$@"
 run_tests "$@"
