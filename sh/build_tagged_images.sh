@@ -40,5 +40,5 @@ image_sha()
 # - - - - - - - - - - - - - - - - - - - - - -
 sha_in_image()
 {
-  docker run --rm $(image_name):$(image_tag) sh -c 'echo -n ${SHA}'
+  docker run --rm --entrypoint="" $(image_name):$(image_tag) sh -c 'echo -n ${SHA}'
 }
