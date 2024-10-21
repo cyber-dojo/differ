@@ -4,6 +4,7 @@ Should the line
 in main.yml's sdlc-control-gate job be moved into the approve-deployment-to-beta job?
 
 Are test/server/lib and test/client/lib identical? If so collapse duplication?
+They are, except for metrics.rb
 
 Fix sonarscan vulnerabilities (or bypass)
 
