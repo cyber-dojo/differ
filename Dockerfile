@@ -5,7 +5,7 @@ LABEL maintainer=jon@jaggersoft.com
 RUN apk --update --upgrade --no-cache add git
 
 WORKDIR /differ
-COPY --chown=nobody:nogroup app/server .
+COPY app/server .
 
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}

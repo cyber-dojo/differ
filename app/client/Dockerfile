@@ -2,7 +2,7 @@ FROM cyberdojo/sinatra-base:11ddc45
 LABEL maintainer=jon@jaggersoft.com
 
 WORKDIR /differ
-COPY --chown=nobody:nogroup . .
+COPY . .
 
 ARG COMMIT_SHA
 ENV SHA=${COMMIT_SHA}
