@@ -8,7 +8,7 @@ SimpleCov.start do
   filters.clear
   add_filter('/differ/test/lib/id58_test_base.rb')
   coverage_dir(ENV.fetch('COVERAGE_ROOT', nil))
-  #add_group('debug') { |src| puts src.filename; false }
+  # add_group('debug') { |src| puts src.filename; false }
   test_tab = ENV.fetch('COVERAGE_TEST_TAB_NAME', nil)
   code_tab = ENV.fetch('COVERAGE_CODE_TAB_NAME', nil)
   test_re = %r{^/differ/test}
