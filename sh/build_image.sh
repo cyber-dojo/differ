@@ -3,9 +3,6 @@ set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-#source "${SH_DIR}/check_embedded_sha_env_var.sh"
-#source "${SH_DIR}/echo_env_vars.sh"
-#source "${SH_DIR}/tag_images_to_latest.sh"
 source "${ROOT_DIR}/sh/lib.sh"
 
 show_help()
@@ -57,7 +54,7 @@ build_image()
   exit_non_zero_unless_installed docker
   export $(echo_versioner_env_vars)
   containers_down
-  #remove_old_images
+  remove_old_images
   docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" server
   if [ "${TYPE}" == 'client' ]; then
     docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" client

@@ -113,3 +113,9 @@ strip_known_warning()
   fi
   echo "${STRIPPED}"
 }
+
+remove_old_images()
+{
+  # TODO
+  :
+}
