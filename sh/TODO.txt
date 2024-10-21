@@ -1,2 +1,0 @@
-
-Fix metrics values, eg app.branches.total==0  app.lines.total==0
