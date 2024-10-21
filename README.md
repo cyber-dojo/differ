@@ -4,7 +4,7 @@
 - An HTTP service (sinatra based) for diffing two sets of files.
 - Demonstrates a [Kosli](https://www.kosli.com/) instrumented [GitHub CI workflow](https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/) 
   deploying, with Continuous Compliance, to [staging](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/) and [production](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/) AWS environments.
-- Uses patterns from https://www.kosli.com/blog/using-kosli-attest-in-github-action-workflows-some-tips/
+- Uses Attestation patterns from https://www.kosli.com/blog/using-kosli-attest-in-github-action-workflows-some-tips/
 
 
 ***

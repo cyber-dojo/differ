@@ -1,28 +1,28 @@
 
 services:
 
-  differ_client:
+  client:
     build:
-      context: client
+      context: app/client
       args: [ COMMIT_SHA ]
     image: ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     container_name: ${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
     depends_on:
-      - differ_server
+      - server
     env_file: [ .env ]
     ports: [ "${CYBER_DOJO_DIFFER_CLIENT_PORT}:${CYBER_DOJO_DIFFER_CLIENT_PORT}" ]
     read_only: true
-    restart: "no"
+    restart: no
     volumes:
-      - ./client/test:/differ/test/:ro
+      - ./test/client:/differ/test/:ro
       - type: tmpfs
         target: /tmp
         tmpfs:
           mode: 01777
           size: 10485760  # 10MB
 
-  differ_server:
+  server:
     build:
       context: .
       args: [ COMMIT_SHA ]
@@ -34,9 +34,9 @@ services:
     env_file: [ .env ]
     ports: [ "${CYBER_DOJO_DIFFER_PORT}:${CYBER_DOJO_DIFFER_PORT}" ]
     read_only: true
-    restart: "no"
+    restart: no
     volumes:
-      - ./test:/differ/test/:ro
+      - ./test/server:/differ/test/:ro
       - type: tmpfs
         target: /tmp
         tmpfs:
@@ -48,9 +48,8 @@ services:
     user: saver
     ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
     env_file: [ .env ]
-    init: true
     read_only: true
-    restart: "no"
+    restart: no
     tmpfs:
       - /cyber-dojo:uid=19663,gid=65533
       - /tmp:uid=19663,gid=65533
