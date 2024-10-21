@@ -1,0 +1,9 @@
+
+Are test/server/lib and test/client/lib identical? If so collapse duplication?
+
+Fix sonarscan vulnerabilities (or bypass)
+
+When check_coverage produces incorrect zero values for, eg, app.lines.total raise an error instead of passing quietly.
+  This was caused by an incorrect grouping in coverage.rb, eg add_group(code_tab) { |src| src.filename !~ test_re }
+  See if a count of the matches can be kept, and if it is zero, raise an exception.
+
