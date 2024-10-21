@@ -63,9 +63,21 @@ build_image()
     docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" client
   fi
 
-  #tag_images_to_latest "$@"
-  #check_embedded_sha_env_var
-  #echo_env_vars
+  local -r image_name="${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
+  local -r sha_in_image=$(  docker run --rm --entrypoint="" ${image_name} sh -c 'echo -n ${SHA}')
+  if [ "${COMMIT_SHA}" != "${sha_in_image}" ]; then
+    echo "ERROR: unexpected env-var inside image ${image_name}"
+    echo "expected: 'SHA=${COMMIT_SHA}'"
+    echo "  actual: 'SHA=${sha_in_image}'"
+    exit 42
+  fi
+
+  # Tag image-name for local development where differs name comes from echo-versioner-env-vars
+  if [ "${TYPE}" == 'server' ]; then
+    docker tag "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}" cyberdojo/differ:${CYBER_DOJO_DIFFER_TAG}
+    echo "CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
+    echo "CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"
+  fi
 }
 
 build_image "$@"
