@@ -116,6 +116,23 @@ strip_known_warning()
 
 remove_old_images()
 {
-  # TODO
-  :
+  echo Removing old images
+  local -r dil=$(docker image ls --format "{{.Repository}}:{{.Tag}}" | grep differ)
+  remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_CLIENT_IMAGE}"
+  remove_all_but_latest "${dil}" "${CYBER_DOJO_DIFFER_IMAGE}"
+  remove_all_but_latest "${dil}" cyberdojo/differ
+}
+
+remove_all_but_latest()
+{
+  # Keep latest in the cache
+  local -r docker_image_ls="${1}"
+  local -r name="${2}"
+  for image_name in $(echo "${docker_image_ls}" | grep "${name}:")
+  do
+    if [ "${image_name}" != "${name}:latest" ]; then
+      docker image rm "${image_name}"
+    fi
+  done
+  docker system prune --force
 }

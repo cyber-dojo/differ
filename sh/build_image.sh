@@ -44,10 +44,10 @@ build_image()
 {
   check_args "$@"
 
-  local -r TYPE="${1}"
+  local -r type="${1}"
 
-  if [ -n "${CI:-}" ] && [ "${TYPE}" == 'server' ] ; then
-    stderr "In CI workflow - using previous docker/build-push-action@v6 GitHub Action"
+  if [ -n "${CI:-}" ] && [ "${type}" == 'server' ] ; then
+    stderr "In CI workflow - use previous docker/build-push-action@v6 GitHub Action"
     exit 42
   fi
 
@@ -56,12 +56,12 @@ build_image()
   containers_down
   remove_old_images
   docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" server
-  if [ "${TYPE}" == 'client' ]; then
+  if [ "${type}" == 'client' ]; then
     docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" client
   fi
 
   local -r image_name="${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
-  local -r sha_in_image=$(  docker run --rm --entrypoint="" ${image_name} sh -c 'echo -n ${SHA}')
+  local -r sha_in_image=$(  docker run --rm --entrypoint="" "${image_name}" sh -c 'echo -n ${SHA}')
   if [ "${COMMIT_SHA}" != "${sha_in_image}" ]; then
     echo "ERROR: unexpected env-var inside image ${image_name}"
     echo "expected: 'SHA=${COMMIT_SHA}'"
@@ -70,9 +70,8 @@ build_image()
   fi
 
   # Tag image-name for local development where differs name comes from echo-versioner-env-vars
-  if [ "${TYPE}" == 'server' ]; then
+  if [ "${type}" == 'server' ]; then
     docker tag "${image_name}" "cyberdojo/differ:${CYBER_DOJO_DIFFER_TAG}"
-    docker tag "${image_name}" cyberdojo/differ:latest
     echo "CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
     echo "CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"
   fi
