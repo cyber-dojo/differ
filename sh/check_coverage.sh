@@ -53,7 +53,7 @@ check_coverage()
   local -r COVERAGE_TEST_TAB_NAME=test
 
   local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"
-  local -r HOST_METRICS_DIR="${ROOT_DIR}/test/${TYPE}/lib"
+  local -r HOST_METRICS_DIR="${ROOT_DIR}/test/${TYPE}"
 
   set +e
   docker run \
