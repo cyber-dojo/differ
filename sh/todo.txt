@@ -2,6 +2,7 @@
 Should the line
     if: ${{ github.ref == 'refs/heads/main' }}
 in main.yml's sdlc-control-gate job be moved into the approve-deployment-to-beta job?
+No, because the kosli-attests will not be visible.
 
 Are test/server/lib and test/client/lib identical? If so collapse duplication?
 They are, except for metrics.rb
