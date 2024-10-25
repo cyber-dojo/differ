@@ -67,7 +67,6 @@ jobs:
         run:
           kosli begin trail "${{ env.KOSLI_TRAIL }}"  
             --flow="${{ env.KOSLI_FLOW }}"
-            --description="Diff files from two traffic-lights"
             --template-file=.kosli.yml
 
         
