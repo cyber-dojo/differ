@@ -3,7 +3,7 @@ set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-source "${ROOT_DIR}/sh/lib.sh"
+source "${ROOT_DIR}/bin/lib.sh"
 
 exit_non_zero_unless_installed snyk
 export $(echo_versioner_env_vars)

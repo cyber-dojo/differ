@@ -3,7 +3,7 @@ set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-source "${ROOT_DIR}/sh/lib.sh"
+source "${ROOT_DIR}/bin/lib.sh"
 
 show_help()
 {
@@ -47,21 +47,15 @@ check_coverage()
 
   check_args "$@"
 
-  local -r TYPE="${1}"
-
-  local -r COVERAGE_CODE_TAB_NAME=app
-  local -r COVERAGE_TEST_TAB_NAME=test
-
-  local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"
-  local -r HOST_METRICS_DIR="${ROOT_DIR}/test/${TYPE}"
+  local -r TYPE="${1}"  # client | server
 
   set +e
   docker run \
-    --env COVERAGE_CODE_TAB_NAME="${COVERAGE_CODE_TAB_NAME}" \
-    --env COVERAGE_TEST_TAB_NAME="${COVERAGE_TEST_TAB_NAME}" \
+    --env COVERAGE_CODE_TAB_NAME=app \
+    --env COVERAGE_TEST_TAB_NAME=test \
     --rm \
-    --volume "${HOST_REPORTS_DIR}":/reports/:ro \
-    --volume "${HOST_METRICS_DIR}"/metrics.rb:/app/metrics.rb:ro \
+    --volume "${ROOT_DIR}/reports/${TYPE}":/reports/:ro \
+    --volume "${ROOT_DIR}/test/${TYPE}"/metrics.rb:/app/metrics.rb:ro \
     cyberdojo/check-test-results:latest \
       sh -c \
         "ruby /app/check_test_results.rb \

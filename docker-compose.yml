@@ -3,7 +3,7 @@ services:
 
   client:
     build:
-      context: app/client
+      context: source/client
       args: [ COMMIT_SHA ]
     image: ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     container_name: ${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}

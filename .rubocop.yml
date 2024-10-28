@@ -4,16 +4,16 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - 'test/**/*.rb'
-    - app/server/app_base.rb
+    - source/server/app_base.rb
 
 Metrics/MethodLength:
   Exclude:
     - 'test/**/*.rb'
-    - app/client/html_demo.rb
-    - app/server/git_diff_parser.rb
-    - app/server/external/sheller.rb
-    - app/server/differ.rb
-    - app/client/http_json_hash/service_error.rb
+    - source/client/html_demo.rb
+    - source/server/git_diff_parser.rb
+    - source/server/external/sheller.rb
+    - source/server/differ.rb
+    - source/client/http_json_hash/service_error.rb
 
 Style/Documentation:
   Exclude:
@@ -22,13 +22,13 @@ Style/Documentation:
 Metrics/CyclomaticComplexity:
   Exclude:
     - test/*/lib/id58_test_base.rb
-    - app/server/git_diff_parser.rb
+    - source/server/git_diff_parser.rb
 
 Metrics/AbcSize:
   Exclude:
     - test/*/lib/simplecov_json.rb
     - test/*/lib/id58_test_base.rb
-    - app/server/git_diff_parser.rb
+    - source/server/git_diff_parser.rb
 
 
 Metrics/ClassLength:
@@ -38,7 +38,7 @@ Metrics/ClassLength:
     - test/server/git_diff_parser_test.rb
     - test/server/differ_test.rb
     - test/server/diff_summary_test.rb
-    - app/server/git_diff_parser.rb
+    - source/server/git_diff_parser.rb
 
 Style/FormatStringToken:
   Exclude:
@@ -54,12 +54,12 @@ Style/ClassVars:
 
 Naming/VariableNumber:
   Exclude:
-    - app/server/external/gitter.rb
+    - source/server/external/gitter.rb
 
 Metrics/ParameterLists:
   Exclude:
     - test/server/saver.rb
-    - app/client/saver.rb
+    - source/client/saver.rb
 
 Style/OpenStructUse:
   Exclude:
@@ -69,24 +69,24 @@ Style/OpenStructUse:
 
 Lint/RescueException:
   Exclude:
-    - app/client/client.rb
+    - source/client/client.rb
 
 Lint/SymbolConversion:
   Exclude:
-    - app/server/app_base.rb
+    - source/server/app_base.rb
     - test/*/lib/id58_test_base.rb
 
 Style/FetchEnvVar:
   Exclude:
-    - app/server/app_base.rb
+    - source/server/app_base.rb
 
 Style/HashConversion:
   Exclude:
-    - app/server/app_base.rb
+    - source/server/app_base.rb
 
 Style/HashTransformKeys:
   Exclude:
-    - app/server/app_base.rb
+    - source/server/app_base.rb
 
 
 
