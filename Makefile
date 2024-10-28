@@ -1,32 +1,32 @@
 
-all_server: build_server test_server coverage_server
+all_server: image_server test_server coverage_server
 
-build_server:
-	${PWD}/sh/build_image.sh server
+image_server:
+	${PWD}/bin/build_image.sh server
 
 # test_server does NOT depend on build_server, because in the CI workflow, the image is built with a GitHub Action
 # If you want to run only some tests, locally, use run_tests.sh directly
 test_server:
-	${PWD}/sh/run_tests.sh server
+	${PWD}/bin/run_tests.sh server
 
 coverage_server:
-	${PWD}/sh/check_coverage.sh server
+	${PWD}/bin/check_coverage.sh server
 
 
 all_client: test_client coverage_client
 
-build_client:
-	${PWD}/sh/build_image.sh client
+image_client:
+	${PWD}/bin/build_image.sh client
 
-test_client: build_client
-	${PWD}/sh/run_tests.sh client
+test_client: image_client
+	${PWD}/bin/run_tests.sh client
 
 coverage_client:
-	${PWD}/sh/check_coverage.sh client
+	${PWD}/bin/check_coverage.sh client
 
 
 demo:
-	${PWD}/sh/demo.sh
+	${PWD}/bin/demo.sh
 
 
 rubocop_lint:
@@ -34,7 +34,7 @@ rubocop_lint:
 
 
 snyk_container_test:
-	${PWD}/sh/snyk_container_test.sh
+	${PWD}/bin/snyk_container_test.sh
 
 
 snyk_code:
