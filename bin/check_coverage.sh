@@ -40,28 +40,34 @@ check_args()
 
 check_coverage()
 {
-  # Process test-run results and coverage data against metrics.rb values and
-  #   - print output showing individual metrics and their pass/fail status
-  #   - return zero if all metrics pass, otherwise non-zero
-  # Does not create any new files.
-
   check_args "$@"
+  export $(echo_versioner_env_vars)
 
-  local -r TYPE="${1}"  # client | server
+  local -r TYPE="${1}"           # {server|client}
+  local -r TEST_LOG=test.log
+  local -r HOST_TEST_DIR="${ROOT_DIR}/test/${TYPE}"
+  local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"  # where report json files have been written to
+  local -r CONTAINER_TMP_DIR=/tmp
+
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/${TEST_LOG}"
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/test_metrics.json"
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/coverage_metrics.json"
+  exit_non_zero_unless_file_exists "${HOST_TEST_DIR}/lib/check_test_metrics.rb"
 
   set +e
   docker run \
+    --read-only \
+    --rm \
+    --entrypoint="" \
+    --env COVERAGE_ROOT="${CONTAINER_TMP_DIR}" \
     --env COVERAGE_CODE_TAB_NAME=app \
     --env COVERAGE_TEST_TAB_NAME=test \
-    --rm \
-    --volume "${ROOT_DIR}/reports/${TYPE}":/reports/:ro \
-    --volume "${ROOT_DIR}/test/${TYPE}"/metrics.rb:/app/metrics.rb:ro \
-    cyberdojo/check-test-results:latest \
-      sh -c \
-        "ruby /app/check_test_results.rb \
-          /reports/test.log \
-          /reports/index.html \
-          /reports/coverage.json"
+    --volume ${HOST_REPORTS_DIR}/test_metrics.json:${CONTAINER_TMP_DIR}/test_metrics.json:ro \
+    --volume ${HOST_REPORTS_DIR}/coverage_metrics.json:${CONTAINER_TMP_DIR}/coverage_metrics.json:ro \
+    --volume ${HOST_TEST_DIR}/lib/check_test_metrics.rb:${CONTAINER_TMP_DIR}/check_test_metrics.rb:ro \
+      "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}" \
+        sh -c "ruby ${CONTAINER_TMP_DIR}/check_test_metrics.rb" \
+        | tee -a "${HOST_REPORTS_DIR}/${TEST_LOG}"
 
   local -r STATUS=${PIPESTATUS[0]}
   set -e
