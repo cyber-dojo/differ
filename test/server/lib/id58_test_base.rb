@@ -1,10 +1,15 @@
 # frozen_string_literal: true
-
 require 'English'
 require 'minitest/autorun'
-require 'minitest/ci'
+require 'minitest/reporters'
+require_relative 'slim_json_reporter'
 
-Minitest::Ci.report_dir = "#{ENV.fetch('COVERAGE_ROOT')}/junit"
+reporters = [
+  Minitest::Reporters::DefaultReporter.new,
+  Minitest::Reporters::SlimJsonReporter.new,
+  Minitest::Reporters::JUnitReporter.new("#{ENV.fetch('COVERAGE_ROOT')}/junit")
+]
+Minitest::Reporters.use!(reporters)
 
 def require_app(required)
   require_relative "../../#{required}"
@@ -20,8 +25,6 @@ class Id58TestBase < Minitest::Test
   @@args = (ARGV.sort.uniq - ['--']) # eg 2m4
   @@seen_ids = []
   @@timings = {}
-
-  # - - - - - - - - - - - - - - - - - - - - - -
 
   def self.test(id58_suffix, *lines, &test_block)
     src = test_block.source_location
@@ -50,12 +53,10 @@ class Id58TestBase < Minitest::Test
     define_method("test_\n#{name}".to_sym, &execute_around)
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - -
-
   Minitest.after_run do
     slow = @@timings.select { |_name, secs| secs > 0.000 }
     sorted = slow.sort_by { |_name, secs| -secs }.to_h
-    size = [sorted.size, 10].min
+    size = [sorted.size, 5].min
     puts
     puts 'Slowest tests are...' unless sorted.empty?
     sorted.each_with_index do |(name, secs), index|
@@ -64,8 +65,6 @@ class Id58TestBase < Minitest::Test
     end
     puts
   end
-
-  # - - - - - - - - - - - - - - - - - - - - - -
 
   ID58_ALPHABET = %w[
     0 1 2 3 4 5 6 7 8 9
@@ -102,13 +101,9 @@ class Id58TestBase < Minitest::Test
     id58
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - -
-
   def id58_setup; end
 
   def id58_teardown; end
-
-  # - - - - - - - - - - - - - - - - - - - - - -
 
   def id58
     @_id58

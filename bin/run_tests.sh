@@ -72,14 +72,13 @@ run_tests()
   copy_in_saver_test_data
 
   local -r TYPE="${1}"           # {server|client}
+  local -r TEST_LOG=test.log
+  local -r CONTAINER_COVERAGE_DIR="/tmp/reports"
+  local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"
 
   echo '=================================='
   echo "Running ${TYPE} tests"
   echo '=================================='
-
-  local -r COVERAGE_CODE_TAB_NAME=app
-  local -r COVERAGE_TEST_TAB_NAME=test
-  local -r TEST_LOG=test.log
 
   # CONTAINER_NAME is running with read-only:true and a non-root user (in docker-compose.yml). I want to
   # keep those settings in the docker-exec call below since that is how I want the microservice to run.
@@ -89,27 +88,27 @@ run_tests()
   # on both my M2 laptop, and in the CI workflow. So I am writing the coverage files to /tmp and
   # tar-piping them out.
 
-  local -r CONTAINER_COVERAGE_DIR="/tmp/reports"
-
   set +e
   docker exec \
-    --env COVERAGE_CODE_TAB_NAME=${COVERAGE_CODE_TAB_NAME} \
-    --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
+    --env COVERAGE_CODE_TAB_NAME=app \
+    --env COVERAGE_TEST_TAB_NAME=test \
     --user "${USER}" \
     "${CONTAINER_NAME}" \
       sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:2}"
   local -r STATUS=$?
   set -e
 
-  local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"
-
   rm -rf "${HOST_REPORTS_DIR}" &> /dev/null || true
   mkdir -p "${HOST_REPORTS_DIR}" &> /dev/null || true
 
-  docker exec \
-    "${CONTAINER_NAME}" \
-    tar Ccf "${CONTAINER_COVERAGE_DIR}" - . \
-        | tar Cxf "${HOST_REPORTS_DIR}" -
+  docker exec --user "${USER}" "${CONTAINER_NAME}" tar Ccf "${CONTAINER_COVERAGE_DIR}" - . \
+    | tar Cxf "${HOST_REPORTS_DIR}" -
+
+  # Check we generated the expected files.
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/${TEST_LOG}"
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/index.html"
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/test_metrics.json"
+  exit_non_zero_unless_file_exists "${HOST_REPORTS_DIR}/coverage_metrics.json"
 
   echo "${TYPE} test branch-coverage report is at:"
   echo "${HOST_REPORTS_DIR}/index.html"

@@ -25,15 +25,22 @@ stderr()
   >&2 echo "ERROR: ${message}"
 }
 
+exit_non_zero_unless_file_exists()
+{
+  local -r filename="${1}"
+  if [ ! -f "${filename}" ]; then
+    stderr "${filename} does not exist"
+    exit 42
+  fi
+}
+
 copy_in_saver_test_data()
 {
-  local -r SRC_PATH=${ROOT_DIR}/test/server/data/cyber-dojo
   local -r SAVER_CID=$(docker ps --filter status=running --format '{{.Names}}' | grep "saver")
+  local -r SRC_PATH=${ROOT_DIR}/test/server/data/cyber-dojo
   local -r DEST_PATH=/cyber-dojo
   # You cannot docker cp to a tmpfs, so tar-piping instead...
-  pushd "${SRC_PATH}" || exit 99
-  tar -c . | docker exec -i "${SAVER_CID}" tar x -C ${DEST_PATH}
-  popd || exit 99
+  tar --no-xattrs -c -C "${SRC_PATH}" - . | docker exec -i "${SAVER_CID}" tar x -C ${DEST_PATH}
 }
 
 containers_down()

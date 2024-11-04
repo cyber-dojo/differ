@@ -1,35 +1,46 @@
 AllCops:
     NewCops: enable
 
-Metrics/BlockLength:
-  Exclude:
-    - 'test/**/*.rb'
-    - source/server/app_base.rb
-
-Metrics/MethodLength:
-  Exclude:
-    - 'test/**/*.rb'
-    - source/client/html_demo.rb
-    - source/server/git_diff_parser.rb
-    - source/server/external/sheller.rb
-    - source/server/differ.rb
-    - source/client/http_json_hash/service_error.rb
-
-Style/Documentation:
-  Exclude:
-    - '*/**/*.rb'
-
-Metrics/CyclomaticComplexity:
+Layout/EmptyLineAfterMagicComment:
   Exclude:
     - test/*/lib/id58_test_base.rb
-    - source/server/git_diff_parser.rb
+
+Layout/ExtraSpacing:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
+
+Layout/LineLength:
+  Exclude:
+    - test/*/lib/simplecov_formatter_json.rb
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
+
+Layout/SpaceInsideReferenceBrackets:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
+
+Lint/RescueException:
+  Exclude:
+    - source/client/client.rb
+
+Lint/SymbolConversion:
+  Exclude:
+    - source/server/app_base.rb
+    - test/*/lib/id58_test_base.rb
 
 Metrics/AbcSize:
   Exclude:
-    - test/*/lib/simplecov_json.rb
     - test/*/lib/id58_test_base.rb
     - source/server/git_diff_parser.rb
+    - test/*/lib/simplecov_formatter_json.rb
+    - test/*/lib/check_test_metrics.rb
 
+Metrics/BlockLength:
+  Exclude:
+    - test/**/*.rb
+    - source/server/app_base.rb
 
 Metrics/ClassLength:
   Exclude:
@@ -40,41 +51,61 @@ Metrics/ClassLength:
     - test/server/diff_summary_test.rb
     - source/server/git_diff_parser.rb
 
-Style/FormatStringToken:
+Metrics/CyclomaticComplexity:
   Exclude:
     - test/*/lib/id58_test_base.rb
+    - source/server/git_diff_parser.rb
 
-Layout/LineLength:
+Metrics/MethodLength:
   Exclude:
-    - test/*/lib/simplecov_json.rb
-
-Style/ClassVars:
-  Exclude:
-    - test/*/lib/id58_test_base.rb
-
-Naming/VariableNumber:
-  Exclude:
-    - source/server/external/gitter.rb
+    - test/**/*.rb
+    - source/client/html_demo.rb
+    - source/server/git_diff_parser.rb
+    - source/server/external/sheller.rb
+    - source/server/differ.rb
+    - source/client/http_json_hash/service_error.rb
 
 Metrics/ParameterLists:
   Exclude:
     - test/server/saver.rb
     - source/client/saver.rb
 
-Style/OpenStructUse:
+Naming/VariableNumber:
   Exclude:
-    - test/server/prober_test.rb
-    - test/server/http_adapter_stub.rb
-    - test/client/http_response_unpacker_test.rb
+    - source/server/external/gitter.rb
 
-Lint/RescueException:
+Security/Eval:
   Exclude:
-    - source/client/client.rb
+    - test/*/lib/check_test_metrics.rb
 
-Lint/SymbolConversion:
+Style/ClassVars:
   Exclude:
-    - source/server/app_base.rb
     - test/*/lib/id58_test_base.rb
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - test/*/lib/slim_json_reporter.rb
+
+Style/Documentation:
+  Exclude:
+    - '*/**/*.rb'
+
+Style/DocumentDynamicEvalDefinition:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
+
+Style/EvalWithLocation:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
+
+Style/FormatString:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
+
+Style/FormatStringToken:
+  Exclude:
+    - test/*/lib/id58_test_base.rb
+    - test/*/lib/check_test_metrics.rb
 
 Style/FetchEnvVar:
   Exclude:
@@ -88,5 +119,13 @@ Style/HashTransformKeys:
   Exclude:
     - source/server/app_base.rb
 
+Style/OpenStructUse:
+  Exclude:
+    - test/server/prober_test.rb
+    - test/server/http_adapter_stub.rb
+    - test/client/http_response_unpacker_test.rb
 
+Style/TrailingCommaInArrayLiteral:
+  Exclude:
+    - test/*/lib/check_test_metrics.rb
 
