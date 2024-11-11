@@ -6,9 +6,28 @@
   deploying, with Continuous Compliance, to [staging](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/) and [production](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/) AWS environments.
 - Uses Attestation patterns from https://www.kosli.com/blog/using-kosli-attest-in-github-action-workflows-some-tips/
 
+# Development
 
-***
-API
+There are two sets of tests:
+- server: these run from inside the saver container
+- client: these run from outside the saver container, making api calls only 
+
+```bash
+# Build the images
+$ make {image_server|image_client}
+
+# Run all tests
+$ make {test_server|test_client}
+
+# Run only specific tests
+$ ./bin/run_tests.sh {-h|--help}
+$ ./bin/run_tests.sh server B56
+
+# Check coverage metrics
+$ make {coverage_server|coverage_client}
+```
+
+# API
 
 * [GET sha](docs/api.md#get-sha)
 * [GET alive](docs/api.md#get-alive)  
@@ -16,6 +35,6 @@ API
 * [GET diff_files(id,was_index,now_index)](docs/api.md#get-diff_filesidwas_indexnow_index)
 * [GET diff_summary(id,was_index,now_index)](docs/api.md#get-diff_summaryidwas_indexnow_index)
 
-***
+# Screenshots
 
 ![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snapshot.png)
