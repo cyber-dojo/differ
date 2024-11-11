@@ -30,7 +30,7 @@ demo:
 
 
 rubocop_lint:
-	docker run --rm --volume "${PWD}:/app" cyberdojo/rubocop --raise-cop-error
+	@${PWD}/bin/rubocop_lint.sh
 
 
 snyk_container_test:
