@@ -90,7 +90,7 @@ run_tests()
 
   set +e
   docker exec \
-    --env COVERAGE_CODE_TAB_NAME=app \
+    --env COVERAGE_CODE_TAB_NAME=code \
     --env COVERAGE_TEST_TAB_NAME=test \
     --user "${USER}" \
     "${CONTAINER_NAME}" \

@@ -23,8 +23,17 @@ $ make {test_server|test_client}
 $ ./bin/run_tests.sh {-h|--help}
 $ ./bin/run_tests.sh server B56
 
-# Check coverage metrics
-$ make {coverage_server|coverage_client}
+# Check test metrics
+$ make {metrics_test_server|metrics_test_client}
+
+# Check test coverage metrics
+$ make {metrics_coverage_server|metrics_coverage_client}
+
+# Check image for snyk vulnerabilities
+$ make snyk_container_test 
+
+# Run demo
+$ make demo
 ```
 
 # API

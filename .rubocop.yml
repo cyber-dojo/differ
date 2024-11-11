@@ -7,19 +7,30 @@ Layout/EmptyLineAfterMagicComment:
 
 Layout/ExtraSpacing:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
+    - test/*/lib/test_metrics_limits.rb
+
+Layout/LeadingEmptyLines:
+  Exclude:
+    - test/*/lib/check_metrics.rb
 
 Layout/LineLength:
   Exclude:
     - test/*/lib/simplecov_formatter_json.rb
 
+Layout/SpaceBeforeComma:
+  Exclude:
+    - test/*/lib/test_metrics_limits.rb
+    - test/*/lib/coverage_metrics_limits.rb
+
 Layout/SpaceInsideArrayLiteralBrackets:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/test_metrics_limits.rb
+    - test/*/lib/coverage_metrics_limits.rb
 
 Layout/SpaceInsideReferenceBrackets:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
 
 Lint/RescueException:
   Exclude:
@@ -33,9 +44,9 @@ Lint/SymbolConversion:
 Metrics/AbcSize:
   Exclude:
     - test/*/lib/id58_test_base.rb
-    - source/server/git_diff_parser.rb
     - test/*/lib/simplecov_formatter_json.rb
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
+    - source/server/git_diff_parser.rb
 
 Metrics/BlockLength:
   Exclude:
@@ -76,7 +87,7 @@ Naming/VariableNumber:
 
 Security/Eval:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
 
 Style/ClassVars:
   Exclude:
@@ -92,20 +103,20 @@ Style/Documentation:
 
 Style/DocumentDynamicEvalDefinition:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
 
 Style/EvalWithLocation:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
 
 Style/FormatString:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
 
 Style/FormatStringToken:
   Exclude:
     - test/*/lib/id58_test_base.rb
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/check_metrics.rb
 
 Style/FetchEnvVar:
   Exclude:
@@ -127,5 +138,10 @@ Style/OpenStructUse:
 
 Style/TrailingCommaInArrayLiteral:
   Exclude:
-    - test/*/lib/check_test_metrics.rb
+    - test/*/lib/test_metrics_limits.rb
+    - test/*/lib/coverage_metrics_limits.rb
 
+Style/TrailingCommaInHashLiteral:
+  Exclude:
+    - test/*/lib/test_metrics_limits.rb
+    - test/*/lib/simplecov_formatter_json.rb

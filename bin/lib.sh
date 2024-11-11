@@ -81,7 +81,7 @@ exit_non_zero_unless_started_cleanly()
   # local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   # DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
 
-  echo "Checking if ${SERVICE_NAME} started cleanly."
+  echo "Checking if ${SERVICE_NAME} started cleanly"
   local -r log_top5=$(echo "${DOCKER_LOG}" | head -5)
   if [ "${log_top5}" != "$(clean_top_5)" ]; then
     echo "${SERVICE_NAME} did not start cleanly."
