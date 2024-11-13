@@ -15,11 +15,15 @@ trail:
           type: snyk
         - name: unit-test
           type: junit
-        - name: unit-test-coverage
+        - name: unit-test-metrics
+          type: generic
+        - name: unit-test-coverage-metrics
           type: generic
         - name: integration-test
           type: junit
-        - name: integration-test-coverage
+        - name: integration-test-metrics
+          type: generic
+        - name: integration-test-coverage-metrics
           type: generic
         - name: sonarcloud-scan
           type: sonar
