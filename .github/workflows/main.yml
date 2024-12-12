@@ -17,6 +17,7 @@ env:
   IMAGE_TAR_FILENAME: /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
   SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
   SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  #cyber-dojo_differ
+  DOCKER_API_VERSION: ${{ vars.DOCKER_API_VERSION }}
 
 jobs:
 
