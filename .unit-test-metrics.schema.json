@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "description": "Schema for test execution results",
+  "properties": {
+    "error_count": {
+      "type": "integer",
+      "description": "Number of errors encountered during test execution",
+      "minimum": 0
+    },
+    "failure_count": {
+      "type": "integer",
+      "description": "Number of failed tests",
+      "minimum": 0
+    },
+    "skip_count": {
+      "type": "integer",
+      "description": "Number of skipped tests",
+      "minimum": 0
+    },
+    "test_count": {
+      "type": "integer",
+      "description": "Total number of tests executed",
+      "minimum": 0
+    },
+    "total_time": {
+      "type": "number",
+      "description": "Total execution time in seconds",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "error_count",
+    "failure_count",
+    "skip_count",
+    "test_count",
+    "total_time"
+  ]
+}
