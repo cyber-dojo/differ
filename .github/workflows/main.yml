@@ -302,7 +302,7 @@ jobs:
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run: |
-          org="${KOSLI_FLOW}"
+          org="${KOSLI_ORG}"
           flow="${KOSLI_FLOW}"
           trail="${KOSLI_TRAIL}"
           type_name="unit-test-metrics"
