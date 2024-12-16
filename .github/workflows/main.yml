@@ -312,7 +312,7 @@ jobs:
           
           URL="${host}/api/v2/attestations/${org}/${flow}/trail/${trail}/custom"
           attestation_data="$(jq -c . ./reports/server/test_metrics.json)"
-          JSON_PAYLOAD='{"name":"unit-test-metrics-custom", "target_artifacts": ["differ"], "type_name":"'${type_name}'", "artifact_fingerprint": "'${KOSLI_FINGERPRINT}'", "attestation_data": '${attestation_data}'}'
+          JSON_PAYLOAD='{"attestation_name":"unit-test-metrics-custom", "target_artifacts": ["differ"], "type_name":"'${type_name}'", "artifact_fingerprint": "'${KOSLI_FINGERPRINT}'", "attestation_data": '${attestation_data}'}'
           ./bin/loud_curl_form_data.sh POST "${URL}" "${api_token}" "${JSON_PAYLOAD}"
 
       - name: Attest coverage metrics to Kosli
