@@ -463,7 +463,7 @@ jobs:
             -Dsonar.analysis.kosli_flow=${{ env.KOSLI_FLOW }}
             -Dsonar.analysis.kosli_trail=${{ env.KOSLI_TRAIL }}
             -Dsonar.analysis.kosli_artifact_fingerprint=${{ needs.build-image.outputs.artifact_digest }}
-            -Dsonar.analysis.kosli_attestation=sonarcloud-scan
+            -Dsonar.analysis.kosli_attestation=differ.sonarcloud-scan
 
 
   sdlc-control-gate:
