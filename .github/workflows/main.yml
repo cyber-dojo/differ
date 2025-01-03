@@ -311,10 +311,16 @@ jobs:
           host=$(echo "${KOSLI_HOST}" | cut -d',' -f2)
           api_token=$(echo "${KOSLI_API_TOKEN}" | cut -d',' -f2)
           
-          URL="${host}/api/v2/attestations/${org}/${flow}/trail/${trail}/custom"
-          attestation_data="$(jq -c . ./reports/server/test_metrics.json)"
-          JSON_PAYLOAD='{"attestation_name":"unit-test-metrics-custom", "target_artifacts": ["differ"], "type_name":"'${type_name}'", "artifact_fingerprint": "'${KOSLI_FINGERPRINT}'", "attestation_data": '${attestation_data}'}'
-          ./bin/loud_curl_form_data.sh POST "${URL}" "${api_token}" "${JSON_PAYLOAD}"
+#          URL="${host}/api/v2/attestations/${org}/${flow}/trail/${trail}/custom"
+#          attestation_data="$(jq -c . ./reports/server/test_metrics.json)"
+#          JSON_PAYLOAD='{"attestation_name":"unit-test-metrics-custom", "target_artifacts": ["differ"], "type_name":"'${type_name}'", "artifact_fingerprint": "'${KOSLI_FINGERPRINT}'", "attestation_data": '${attestation_data}'}'
+#          ./bin/loud_curl_form_data.sh POST "${URL}" "${api_token}" "${JSON_PAYLOAD}"
+          kosli attest custom \
+            --host="${host}" \
+            --api-token="${api_token}" \
+            --attestation-data=./reports/server/test_metrics.json \
+            --name=unit-test-metrics-custom \
+            --type=unit-test-metrics
 
       - name: Attest coverage metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
