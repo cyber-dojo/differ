@@ -19,6 +19,8 @@ trail:
           type: generic
         - name: unit-test-coverage-metrics
           type: generic
+        - name: unit-test-metrics-custom
+          type: custom:unit-test-metrics
         - name: integration-test
           type: junit
         - name: integration-test-metrics
