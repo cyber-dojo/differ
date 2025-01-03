@@ -302,20 +302,10 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
-        run: |
-          org="${KOSLI_ORG}"
-          flow="${KOSLI_FLOW}"
-          trail="${KOSLI_TRAIL}"
-          type_name="unit-test-metrics"
-          
-          host=$(echo "${KOSLI_HOST}" | cut -d',' -f2)
-          api_token=$(echo "${KOSLI_API_TOKEN}" | cut -d',' -f2)
-          
-          kosli attest custom \
-            --host="${host}" \
-            --api-token="${api_token}" \
-            --attestation-data=./reports/server/test_metrics.json \
-            --name=unit-test-metrics-custom \
+        run:
+          kosli attest custom 
+            --attestation-data=./reports/server/test_metrics.json 
+            --name=differ.unit-test-metrics-custom 
             --type=unit-test-metrics
 
       - name: Attest coverage metrics to Kosli
