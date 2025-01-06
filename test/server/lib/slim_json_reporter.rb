@@ -19,7 +19,7 @@ class Minitest::Reporters::SlimJsonReporter < Minitest::Reporters::BaseReporter
           test_count: 73
         },
         max: {
-          total_time: 50
+          total_time: 30
         }
       }
     }

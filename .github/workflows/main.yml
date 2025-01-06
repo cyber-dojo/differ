@@ -277,14 +277,14 @@ jobs:
               --name=differ.unit-test 
               --results-dir=./reports/server/junit
 
-      - name: Attest test metrics to Kosli (custom)
+      - name: Attest test metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest custom 
             --attestation-data=./reports/server/test_metrics.json 
-            --name=differ.unit-test-metrics-custom 
+            --name=differ.unit-test-metrics
             --type=test-metrics
 
       - name: Attest coverage metrics to Kosli
@@ -349,11 +349,12 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
-        run: |
-          KOSLI_COMPLIANT=$([ "${{ steps.test_metrics.outcome }}" == 'success' ] && echo true || echo false)
-          kosli attest generic \
-              --name=differ.integration-test-metrics \
-              --user-data="./reports/client/test_metrics.json"
+        run:
+          kosli attest custom 
+            --attestation-data=./reports/client/test_metrics.json 
+            --name=differ.integration-test-metrics
+            --type=test-metrics
+
 
       - name: Attest coverage metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
