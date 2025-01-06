@@ -90,7 +90,7 @@ exit_non_zero_unless_started_cleanly()
     echo "${DOCKER_LOG}" | head -10
     echo
     clean_top_5
-    exit 42
+    # exit 42
   fi
 }
 

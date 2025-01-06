@@ -70,17 +70,6 @@ jobs:
             --flow="${{ env.KOSLI_FLOW }}"
             --template-file=.kosli.yml
 
-      - name: Create unit test metrics attestation type
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run:
-          kosli create attestation-type unit-test-metrics
-            --schema=.unit-test-metrics.schema.json
-            --jq ".test_count >= 73"
-            --jq ".total_time <= 50"
-            --jq ".failure_count == 0"
-            --jq ".error_count == 0"
-            --jq ".skip_count == 0"
-
   pull-request:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
@@ -296,7 +285,7 @@ jobs:
           kosli attest custom 
             --attestation-data=./reports/server/test_metrics.json 
             --name=differ.unit-test-metrics-custom 
-            --type=unit-test-metrics
+            --type=test-metrics
 
       - name: Attest coverage metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
