@@ -12,8 +12,18 @@ module SimpleCov
         data = {
           timestamp: result.created_at.to_i,
           command_name: result.command_name,
+          variables: {
+            max: {
+              test_lines_total: 234,
+              code_lines_total: 101,
+              code_lines_missed: 0,
+              code_branches_total: 8,
+              code_branches_missed: 0
+            }
+          }
         }
         result.groups.each do |name, file_list|
+          # name == 'code' or name == 'test'
           data[name] = {
             lines: {
               total: file_list.lines_of_code,
@@ -26,6 +36,14 @@ module SimpleCov
               missed: file_list.missed_branches
             }
           }
+          # create single name entries for kosli-attest-custom
+          data["#{name}_lines_total"] = file_list.lines_of_code
+          data["#{name}_lines_covered"] = file_list.covered_lines
+          data["#{name}_lines_missed"] = file_list.missed_lines
+
+          data["#{name}_branches_total"] = file_list.total_branches
+          data["#{name}_branches_covered"] = file_list.covered_branches
+          data["#{name}_branches_missed"] = file_list.missed_branches
         end
         File.open(output_filepath, 'w+') do |file|
           file.print(JSON.pretty_generate(data))
