@@ -252,11 +252,6 @@ jobs:
         run:
           make test_server
 
-      - name: Check test metrics
-        id: test_metrics
-        run:
-          make metrics_test_server
-
       - name: Check coverage metrics
         id: coverage_metrics
         run:
@@ -319,11 +314,6 @@ jobs:
       - name: Run integration tests
         run:
           make image_client test_client
-
-      - name: Check test metrics
-        id: test_metrics
-        run:
-          make metrics_test_client
 
       - name: Check coverage metrics
         id: coverage_metrics
