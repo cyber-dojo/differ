@@ -16,10 +16,10 @@ class Minitest::Reporters::SlimJsonReporter < Minitest::Reporters::BaseReporter
       skip_count: skips,
       variables: {
         min: {
-          test_count: 73,
+          test_count: 73
         },
         max: {
-          total_time: 50,
+          total_time: 50
         }
       }
     }
