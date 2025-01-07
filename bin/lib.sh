@@ -83,15 +83,28 @@ exit_non_zero_unless_started_cleanly()
 
   echo "Checking if ${SERVICE_NAME} started cleanly"
   local -r log_top5=$(echo "${DOCKER_LOG}" | head -5)
-  if [ "${log_top5}" != "$(clean_top_5)" ]; then
+  if ! array_prefix "$(clean_top_5)" "${log_top5}" ; then
     echo "${SERVICE_NAME} did not start cleanly."
     echo "First 10 lines of: docker logs ${CONTAINER_NAME}"
     echo
     echo "${DOCKER_LOG}" | head -10
     echo
     clean_top_5
-    # exit 42
+    exit 42
   fi
+}
+
+array_prefix()
+{
+  readarray -t expected_lines <<<"${1}"
+  readarray -t actual_lines <<<"${2}"
+  for i in {0..4}
+  do
+     if ! [[ "${actual_lines[$i]}" =~ ^"${expected_lines[$i]}" ]] ; then
+       return 1 # false
+     fi
+  done
+  return 0  # true
 }
 
 clean_top_5()
@@ -99,7 +112,7 @@ clean_top_5()
   # 1st 5 lines on Puma
   local -r L1="Puma starting in single mode..."
   local -r L2='* Puma version: 6.5.0 ("Sky'"'"'s Version")'
-  local -r L3='* Ruby version: ruby 3.3.6 (2024-11-05 revision 75015d4c1f) [x86_64-linux-musl]'
+  local -r L3='* Ruby version: ruby 3.3.6 (2024-11-05 revision 75015d4c1f)' # [aarch64-linux-musl]
   local -r L4="*  Min threads: 0"
   local -r L5="*  Max threads: 5"
   #
