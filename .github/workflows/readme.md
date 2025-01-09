@@ -12,7 +12,7 @@ deploy-manually-to-aws-beta-and-aws-prod.yml is a manually triggered pipeline, w
    image_tag that still works, since it will be deployed to https://cyber-dojo.org
 
    The simplest way to ensure this, is to pick an image that failed only its
-   snyk-scan. For example e091a4d (See https://app.kosli.com/cyber-dojo/flows/differ/artifacts/fb96934)
+   snyk-scan. For example 38f3dc8 (See https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/38f3dc8b63abb632ac94a12b3f818b49f8047fa1)
    This will create a snapshot where differ has provenance, but is non-compliant.
    Eg https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/1461?active_tab=running
   
