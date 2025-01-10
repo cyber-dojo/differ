@@ -13,15 +13,7 @@ class Minitest::Reporters::SlimJsonReporter < Minitest::Reporters::BaseReporter
       test_count: count,
       failure_count: failures,
       error_count: errors,
-      skip_count: skips,
-      variables: {
-        min: {
-          test_count: 34
-        },
-        max: {
-          total_time: 50
-        }
-      }
+      skip_count: skips
     }
     File.write(filename, JSON.pretty_generate(metrics))
   end

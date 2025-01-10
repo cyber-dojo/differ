@@ -248,9 +248,9 @@ jobs:
         run:
           docker image load --input ${{ env.IMAGE_TAR_FILENAME }}
 
-      - name: Run unit tests
+      - name: Run unit tests with metrics checks
         run:
-          make test_server
+          make test_server metrics_test_server metrics_coverage_server
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
@@ -264,8 +264,8 @@ jobs:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest junit
-              --name=differ.unit-test 
-              --results-dir=./reports/server/junit
+            --name=differ.unit-test 
+            --results-dir=./reports/server/junit
 
       - name: Attest test metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
@@ -306,9 +306,9 @@ jobs:
         run:
           docker image load --input ${{ env.IMAGE_TAR_FILENAME }}
 
-      - name: Run integration tests
+      - name: Run integration tests with metrics checks
         run:
-          make image_client test_client
+          make image_client test_client metrics_test_client metrics_coverage_client
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
@@ -322,8 +322,8 @@ jobs:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest junit
-              --name=differ.integration-test 
-              --results-dir=./reports/client/junit
+            --name=differ.integration-test 
+            --results-dir=./reports/client/junit
 
       - name: Attest test metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
