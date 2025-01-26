@@ -4,7 +4,9 @@ services:
   client:
     build:
       context: source/client
-      args: [ COMMIT_SHA ]
+      args:
+        - COMMIT_SHA
+        - BASE_IMAGE=${CYBER_DOJO_DIFFER_BASE_IMAGE}
     image: ${CYBER_DOJO_DIFFER_CLIENT_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     container_name: ${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}
     user: ${CYBER_DOJO_DIFFER_CLIENT_USER}
@@ -25,7 +27,9 @@ services:
   server:
     build:
       context: .
-      args: [ COMMIT_SHA ]
+      args:
+        - COMMIT_SHA
+        - BASE_IMAGE=${CYBER_DOJO_DIFFER_BASE_IMAGE}
     image: ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     container_name: ${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}
     user: ${CYBER_DOJO_DIFFER_SERVER_USER}

@@ -26,7 +26,13 @@ check_args()
       show_help
       exit 0
       ;;
-    'server' | 'client')
+    'server')
+      if [ -n "${CI:-}" ] ; then
+        stderr "In CI workflow - use docker/build-push-action@v6 GitHub Action"
+        exit 42
+      fi
+      ;;
+    'client')
       ;;
     '')
       show_help
@@ -52,12 +58,22 @@ build_image()
   fi
 
   exit_non_zero_unless_installed docker
-  export $(echo_versioner_env_vars)
+  # shellcheck disable=SC2046
+  export $(echo_env_vars)
   containers_down
   remove_old_images
-  docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" server
+
+  echo
+  echo "Building with --build-args"
+  echo "  COMMIT_SHA=${COMMIT_SHA}"
+  echo "  BASE_IMAGE=${CYBER_DOJO_DIFFER_BASE_IMAGE}"
+  echo "To change this run:"
+  echo "$ COMMIT_SHA=... CYBER_DOJO_DIFFER_BASE_IMAGE=cyberdojo/sinatra-base:... make image_${type}"
+  echo
+
+  docker compose build server
   if [ "${type}" == 'client' ]; then
-    docker compose build --build-arg COMMIT_SHA="${COMMIT_SHA}" client
+    docker compose build client
   fi
 
   local -r image_name="${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
@@ -73,7 +89,8 @@ build_image()
   if [ "${type}" == 'server' ]; then
     docker tag "${image_name}" "cyberdojo/differ:${CYBER_DOJO_DIFFER_TAG}"
     echo "CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
-    echo "CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"
+    echo "CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"]
+    echo "${image_name}"
   fi
 }
 

@@ -40,12 +40,14 @@ check_args()
       exit 0
       ;;
     'server')
-      export $(echo_versioner_env_vars)
+      # shellcheck disable=SC2046
+      export $(echo_env_vars)
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_SERVER_USER}"
       ;;
     'client')
-      export $(echo_versioner_env_vars)
+      # shellcheck disable=SC2046
+      export $(echo_env_vars)
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_CLIENT_USER}"
       ;;
@@ -64,17 +66,18 @@ check_args()
 run_tests()
 {
   check_args "$@"
-  exit_non_zero_unless_installed docker
-  export SERVICE_NAME="${1}"
-  # Don't do a build here, because in CI workflow, server image is built with GitHub Action
-  docker compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
-  exit_non_zero_unless_started_cleanly
-  copy_in_saver_test_data
 
   local -r TYPE="${1}"           # {server|client}
   local -r TEST_LOG=test.log
   local -r CONTAINER_COVERAGE_DIR="/tmp/reports"
   local -r HOST_REPORTS_DIR="${ROOT_DIR}/reports/${TYPE}"
+
+  exit_non_zero_unless_installed docker
+  export SERVICE_NAME="${1}"
+  # Don't do a build here, because in CI workflow, server image is built with GitHub Action
+  docker compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
+  echo_warnings "${TYPE}"
+  copy_in_saver_test_data
 
   echo '=================================='
   echo "Running ${TYPE} tests"

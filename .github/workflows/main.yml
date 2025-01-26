@@ -7,13 +7,14 @@ env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # false
   KOSLI_HOST: ${{ vars.KOSLI_HOST }}                 # https://app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
-  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # differ-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # differ-ci
   KOSLI_TRAIL: ${{ github.sha }}
-  SERVICE_NAME: ${{ github.event.repository.name }}  # differ
+
   AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
   AWS_ECR_ID: ${{ vars.AWS_ECR_ID }}
   AWS_REGION: ${{ vars.AWS_REGION }}
+  SERVICE_NAME: ${{ github.event.repository.name }}  # differ
   IMAGE_TAR_FILENAME: /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
   SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
   SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  #cyber-dojo_differ
@@ -31,22 +32,17 @@ jobs:
       service_name: ${{ steps.vars.outputs.service_name }}
       image_tag: ${{ steps.vars.outputs.image_tag }}
       image_name: ${{ steps.vars.outputs.image_name }}
-      image_name_previous: ${{ steps.vars.outputs.image_name_previous }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 1
 
       - name: Prepare outputs for workflow jobs
         id: vars
         run: |
           IMAGE_TAG=${GITHUB_SHA:0:7}        
-          IMAGE_TAG_PREVIOUS=$(git rev-parse --short=7 HEAD^)
-
-          ECR_REGISTRY="${AWS_ECR_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-          
+          ECR_REGISTRY="${AWS_ECR_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"          
           IMAGE_NAME="${ECR_REGISTRY}/${{ env.SERVICE_NAME }}:${IMAGE_TAG}"
-          IMAGE_NAME_PREVIOUS="${ECR_REGISTRY}/${{ env.SERVICE_NAME }}:${IMAGE_TAG_PREVIOUS}"
           
           echo "aws_account_id=${AWS_ACCOUNT_ID}"             >> ${GITHUB_OUTPUT}
           echo "ecr_registry=${ECR_REGISTRY}"                 >> ${GITHUB_OUTPUT}
@@ -55,7 +51,6 @@ jobs:
           echo "service_name=${{ env.SERVICE_NAME }}"         >> ${GITHUB_OUTPUT}
           echo "image_tag=${IMAGE_TAG}"                       >> ${GITHUB_OUTPUT}
           echo "image_name=${IMAGE_NAME}"                     >> ${GITHUB_OUTPUT}
-          echo "image_name_previous=${IMAGE_NAME_PREVIOUS}"   >> ${GITHUB_OUTPUT}
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' }}
@@ -66,8 +61,7 @@ jobs:
       - name: Begin Kosli Trail
         if: ${{ github.ref == 'refs/heads/main' }}
         run:
-          kosli begin trail "${{ env.KOSLI_TRAIL }}"  
-            --flow="${{ env.KOSLI_FLOW }}"
+          kosli begin trail "${KOSLI_TRAIL}"  
             --template-file=.kosli.yml
 
   pull-request:
@@ -187,6 +181,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Get base-image
+        id: vars
+        run: | 
+          source ./bin/lib.sh
+          echo "base_image="$(echo_base_image)" >> ${GITHUB_OUTPUT}
+
       - name: Build and push Docker image to ECR
         id: docker_build
         uses: docker/build-push-action@v6
@@ -194,10 +194,9 @@ jobs:
           context: .
           push: true
           tags: ${{ env.IMAGE_NAME }}
-          cache-from: type=registry,ref=${{ needs.setup.outputs.image_name_previous }}
-          cache-to: type=inline,mode=max
-          build-args:
+          build-args: |
             COMMIT_SHA=${{ github.sha }}
+            BASE_IMAGE=${{ steps.vars.outputs.base_image }}            
 
       - name: Make Artifact fingerprint available to following jobs
         id: variables
@@ -207,8 +206,8 @@ jobs:
 
       - name: Tar Docker image
         run: |
-          docker pull ${{ env.IMAGE_NAME }}          
-          docker image save ${{ env.IMAGE_NAME }} --output ${{ env.IMAGE_TAR_FILENAME }}
+          docker pull ${IMAGE_NAME}          
+          docker image save ${IMAGE_NAME} --output ${IMAGE_TAR_FILENAME}
 
       - name: Cache Docker image
         uses: actions/cache@v4
@@ -225,7 +224,7 @@ jobs:
       - name: Attest image provenance to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
         run:
-          kosli attest artifact "${{ env.IMAGE_NAME }}" 
+          kosli attest artifact "${IMAGE_NAME}" 
             --artifact-type=docker
             --name=differ
 
@@ -233,6 +232,8 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
+    env:
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -246,7 +247,7 @@ jobs:
 
       - name: Load Docker image
         run:
-          docker image load --input ${{ env.IMAGE_TAR_FILENAME }}
+          docker image load --input ${IMAGE_TAR_FILENAME}
 
       - name: Run unit tests with metrics checks
         run:
@@ -260,8 +261,6 @@ jobs:
 
       - name: Attest junit test evidence to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest junit
             --name=differ.unit-test 
@@ -269,8 +268,6 @@ jobs:
 
       - name: Attest test metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest custom 
             --attestation-data=./reports/server/test_metrics.json 
@@ -279,8 +276,6 @@ jobs:
 
       - name: Attest coverage metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest custom 
             --attestation-data=./reports/server/coverage_metrics.json 
@@ -291,6 +286,8 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
+    env:
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -304,7 +301,7 @@ jobs:
 
       - name: Load Docker image
         run:
-          docker image load --input ${{ env.IMAGE_TAR_FILENAME }}
+          docker image load --input ${IMAGE_TAR_FILENAME}
 
       - name: Run integration tests with metrics checks
         run:
@@ -318,8 +315,6 @@ jobs:
 
       - name: Attest junit test evidence to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest junit
             --name=differ.integration-test 
@@ -327,8 +322,6 @@ jobs:
 
       - name: Attest test metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest custom 
             --attestation-data=./reports/client/test_metrics.json 
@@ -337,8 +330,6 @@ jobs:
 
       - name: Attest coverage metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest custom 
             --attestation-data=./reports/client/coverage_metrics.json 
@@ -350,7 +341,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
     env:
+      IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
       SARIF_FILENAME: snyk.container.scan.json
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -364,14 +357,13 @@ jobs:
 
       - name: Load Docker image
         run:
-          docker image load --input ${{ env.IMAGE_TAR_FILENAME }}
+          docker image load --input ${IMAGE_TAR_FILENAME}
 
       - name: Setup Snyk
         uses: snyk/actions/setup@master
 
       - name: Run Snyk container scan
         env:
-          IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run:
           snyk container test ${IMAGE_NAME}
@@ -388,8 +380,6 @@ jobs:
 
       - name: Attest evidence to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        env:
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli attest snyk
             --attachments=.snyk
@@ -421,6 +411,9 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     needs: [setup, build-image, pull-request, rubocop-lint, unit-tests, integration-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    env:
+      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
     steps:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -428,9 +421,6 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Kosli SDLC gate to short-circuit the workflow
-        env:
-          IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
         run:
           kosli assert artifact ${IMAGE_NAME}
 
@@ -438,6 +428,9 @@ jobs:
   approve-deployment-to-beta:
     runs-on: ubuntu-latest
     needs: [setup, build-image, sdlc-control-gate]
+    env:
+      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
     environment:
       name: staging
       url: https://beta.cyber-dojo.org
@@ -452,13 +445,10 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest approval of deployment to Kosli
-        env:
-          IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
-          KOSLI_ENVIRONMENT: aws-beta
         run:
           kosli report approval ${IMAGE_NAME} 
             --approver="${{ github.actor }}"
+            --environment=aws-beta
 
 
   deploy-to-beta:
@@ -478,6 +468,9 @@ jobs:
   approve-deployment-to-prod:
     runs-on: ubuntu-latest
     needs: [setup, build-image, attest-beta-artifacts]
+    env:
+      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
     environment:
       name: production
       url: https://cyber-dojo.org
@@ -492,13 +485,10 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest approval of deployment to Kosli
-        env:
-          IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
-          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
-          KOSLI_ENVIRONMENT: aws-prod
         run:
           kosli report approval ${IMAGE_NAME} 
             --approver="${{ github.actor }}"
+            --environment=aws-prod
 
 
   deploy-to-prod:

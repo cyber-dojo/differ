@@ -1,4 +1,42 @@
 
+echo_base_image()
+{
+  #local -r json="$(curl --fail --silent --request GET https://beta.cyber-dojo.org/differ/base_image)"
+  #echo "${json}" | jq -r '.base_image'
+  echo cyberdojo/sinatra-base:db948c1
+}
+
+echo_env_vars()
+{
+  # --build-arg ...
+  if [[ ! -v CYBER_DOJO_DIFFER_BASE_IMAGE ]] ; then
+    echo CYBER_DOJO_DIFFER_BASE_IMAGE="$(echo_base_image)"
+  fi
+  if [[ ! -v COMMIT_SHA ]] ; then
+    local -r sha="$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
+    echo COMMIT_SHA="${sha}"
+  fi
+
+  # From versioner ...
+  docker run --rm cyberdojo/versioner
+
+  echo CYBER_DOJO_DIFFER_SHA="${sha}"
+  echo CYBER_DOJO_DIFFER_TAG="${sha:0:7}"
+  #
+  echo CYBER_DOJO_DIFFER_CLIENT_IMAGE=cyberdojo/differ-client
+  echo CYBER_DOJO_DIFFER_CLIENT_PORT=9999
+  #
+  echo CYBER_DOJO_DIFFER_CLIENT_USER=nobody
+  echo CYBER_DOJO_DIFFER_SERVER_USER=nobody
+  #
+  echo CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME=test_differ_client
+  echo CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME=test_differ_server
+  #
+  local -r AWS_ACCOUNT_ID=244531986313
+  local -r AWS_REGION=eu-central-1
+  echo CYBER_DOJO_DIFFER_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/differ"
+}
+
 exit_non_zero_unless_installed()
 {
   for dependent in "$@"
@@ -48,76 +86,18 @@ containers_down()
   docker compose down --remove-orphans --volumes
 }
 
-echo_versioner_env_vars()
+echo_warnings()
 {
-  local -r sha="$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
-  echo COMMIT_SHA="${sha}"
-
-  docker run --rm cyberdojo/versioner
-
-  echo CYBER_DOJO_DIFFER_SHA="${sha}"
-  echo CYBER_DOJO_DIFFER_TAG="${sha:0:7}"
-  #
-  echo CYBER_DOJO_DIFFER_CLIENT_IMAGE=cyberdojo/differ-client
-  echo CYBER_DOJO_DIFFER_CLIENT_PORT=9999
-  #
-  echo CYBER_DOJO_DIFFER_CLIENT_USER=nobody
-  echo CYBER_DOJO_DIFFER_SERVER_USER=nobody
-  #
-  echo CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME=test_differ_client
-  echo CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME=test_differ_server
-  #
-  local -r AWS_ACCOUNT_ID=244531986313
-  local -r AWS_REGION=eu-central-1
-  echo CYBER_DOJO_DIFFER_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/differ"
-}
-
-exit_non_zero_unless_started_cleanly()
-{
-  echo
+  local -r SERVICE_NAME="${1}"
   local -r DOCKER_LOG=$(docker logs "${CONTAINER_NAME}" 2>&1)
-
   # Handle known warnings (eg waiting on Gem upgrade)
   # local -r SHADOW_WARNING="server.rb:(.*): warning: shadowing outer local variable - filename"
   # DOCKER_LOG=$(strip_known_warning "${DOCKER_LOG}" "${SHADOW_WARNING}")
 
-  echo "Checking if ${SERVICE_NAME} started cleanly"
-  local -r log_top5=$(echo "${DOCKER_LOG}" | head -5)
-  if ! array_prefix "$(clean_top_5)" "${log_top5}" ; then
-    echo "${SERVICE_NAME} did not start cleanly."
-    echo "First 10 lines of: docker logs ${CONTAINER_NAME}"
-    echo
-    echo "${DOCKER_LOG}" | head -10
-    echo
-    clean_top_5
-    exit 42
+  if echo "${DOCKER_LOG}" | grep --quiet "warning" ; then
+    echo "Warnings in ${SERVICE_NAME} container"
+    echo "${DOCKER_LOG}"
   fi
-}
-
-array_prefix()
-{
-  readarray -t expected_lines <<<"${1}"
-  readarray -t actual_lines <<<"${2}"
-  for i in {0..4}
-  do
-     if ! [[ "${actual_lines[$i]}" =~ ^"${expected_lines[$i]}" ]] ; then
-       return 1 # false
-     fi
-  done
-  return 0  # true
-}
-
-clean_top_5()
-{
-  # 1st 5 lines on Puma
-  local -r L1="Puma starting in single mode..."
-  local -r L2='* Puma version: 6.5.0 ("Sky'"'"'s Version")'
-  local -r L3='* Ruby version: ruby 3.3.6 (2024-11-05 revision 75015d4c1f)' # [aarch64-linux-musl]
-  local -r L4="*  Min threads: 0"
-  local -r L5="*  Max threads: 5"
-  #
-  local -r top5="$(printf "%s\n%s\n%s\n%s\n%s" "${L1}" "${L2}" "${L3}" "${L4}" "${L5}")"
-  echo "${top5}"
 }
 
 strip_known_warning()

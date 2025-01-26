@@ -125,70 +125,82 @@ The same as `diff_lines` except its Hash entries do *not* include "lines".
 ]
 ```
 
-
 - - - -
-# GET sha
-The git commit sha used to create the Docker image.
-Present inside the image as the environment variable SHA.
-- returns
-  * The 40 character sha string.
-  * eg
-  ```bash
-  $ docker run --rm cyberdojo/differ:latest bash -c 'echo ${SHA}'
-  b28b3e13c0778fe409a50d23628f631f87920ce5
-  ```
-  ```json
-  { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
-  ```
+## GET alive?
+The runtime liveness probe to see if the service is alive.  
 - parameters
   * none
-  ```json
-  {}
-  ```
-
-- - - -
-# GET alive
-Useful as a runtime-environment liveness-probe.
-- returns
+- result 
   * **true**
-  ```json
-  { "alive": true }
+- example
+  ```bash     
+  $ curl --fail --silent --request GET https://${DOMAIN}:${PORT}/alive?
   ```
-- parameters
-  * none
-  ```json
-  {}
+  ```bash
+  {"alive?":true}
   ```
 
+
 - - - -
-# GET ready
-Useful as a Docker heathcheck or runtime-environment readyness-probe.
-- returns
-  * **true** if the service is ready
-  ```json
-  { "ready": true }
-  ```
-  * **false** if the service is not ready
-  ```json
-  { "ready": false }
-  ```
+## GET ready?
+The runtime readiness probe to see if the service is ready to handle requests.  
 - parameters
   * none
-  ```json
-  {}
+- result 
+  * **true** when the service is ready
+  * **false** when the service is not ready
+- example
+  ```bash     
+  $ curl --fail --silent --request GET https://${DOMAIN}:${PORT}/ready?
   ```
+  ```bash
+  {"ready?":false}
+  ```
+
+
+- - - -
+## GET sha
+The git commit sha used to create the Docker image.
+- parameters
+  * none
+- result 
+  * the 40 character commit sha string.
+- example
+  ```bash     
+  $ curl --fail --silent --request GET https://${DOMAIN}:${PORT}/sha
+  ```
+  ```bash
+  {"sha":"b28b3e13c0778fe409a50d23628f631f87920ce5"}
+  ```
+
+
+- - - -
+## GET base-image
+The base-image used in the Dockerfile's FROM statement.
+- parameters
+  * none
+- result 
+  * the name of the base image.
+- example
+  ```bash     
+  $ curl --fail --silent --request GET https://${DOMAIN}:${PORT}/base_image
+  ```
+  ```bash
+  {"base_image":"cyberdojo/sinatra-base:edb2887"}
+  ```
+
 
 - - - -
 ## JSON in
-- All methods can pass any arguments either as a JSON Hash in the http request body,
-  or in the query string of the URL.
+- All methods can pass any arguments either as a JSON Hash in the http request body, or in the query string of the URL.
+- If there are no arguments you can use `''` (which is the default for `curl --data`) instead of `'{}'`.
 
 - - - -
 ## JSON out      
 - All methods return a JSON Hash in the http response body.
 - If the method completes, a key equals the method's name. eg
   ```bash
-  $ curl --silent --request GET http://${IP_ADDRESS}:${PORT}/ready
+  $ curl --silent --request GET https://${DOMAIN}:${PORT}/ready
   { "ready":true }
   ```
 - If the method raises an exception, a key equals `"exception"`.
