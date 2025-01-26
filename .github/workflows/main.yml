@@ -185,7 +185,7 @@ jobs:
         id: vars
         run: | 
           source ./bin/lib.sh
-          echo "base_image="$(echo_base_image)" >> ${GITHUB_OUTPUT}
+          echo "base_image=$(echo_base_image)" >> ${GITHUB_OUTPUT}
 
       - name: Build and push Docker image to ECR
         id: docker_build
