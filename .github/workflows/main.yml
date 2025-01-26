@@ -16,6 +16,8 @@ on:
         required: true
       SNYK_TOKEN:
         required: true
+      SONARCLOUD_TOKEN:
+        required: true
       KOSLI_API_TOKEN:
         required: true
       KOSLI_SONAR_API_TOKEN:
@@ -34,7 +36,6 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   SERVICE_NAME: ${{ github.event.repository.name }}  # differ
   IMAGE_TAR_FILENAME: /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
-  SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
   SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  # cyber-dojo_differ
   DOCKER_API_VERSION: ${{ vars.DOCKER_API_VERSION }}
 
@@ -409,7 +410,7 @@ jobs:
 
       - name: Run SonarCloud scan - report results to Kosli (in Kosli webhook)
         env:
-          SONAR_TOKEN: ${{ env.SONARCLOUD_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         with:
           args: >

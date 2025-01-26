@@ -29,6 +29,8 @@ jobs:
       DOCKER_USER:           ${{ secrets.DOCKER_USER }}
       DOCKER_PASS:           ${{ secrets.DOCKER_PASS }}
       SNYK_TOKEN:            ${{ secrets.SNYK_TOKEN }}
+      SONARCLOUD_TOKEN:      ${{ secrets.SONARCLOUD_TOKEN }}
       KOSLI_API_TOKEN:       ${{ secrets.KOSLI_API_TOKEN }}
       KOSLI_SONAR_API_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+
 
