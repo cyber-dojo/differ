@@ -36,7 +36,7 @@ class ProberTest < DifferTestBase
 
   test '192', %w[base_image] do
     base_image = prober.base_image
-    assert base_image.include?("cyberdojo/sinatra-base:")
+    assert base_image.include?('cyberdojo/sinatra-base:')
   end
 
   private
