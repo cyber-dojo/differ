@@ -1,7 +1,25 @@
-name: Main
+name: Sub - main
 
 on:
-  push:
+  workflow_call:
+    inputs:
+      BASE_IMAGE:
+        required: true
+        type: string
+      KOSLI_TRAIL:
+        required: true
+        type: string
+    secrets:
+      DOCKER_USER:
+        required: true
+      DOCKER_PASS:
+        required: true
+      SNYK_TOKEN:
+        required: true
+      KOSLI_API_TOKEN:
+        required: true
+      KOSLI_SONAR_API_TOKEN:
+        required: true
 
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # false
@@ -9,7 +27,7 @@ env:
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # differ-ci
-  KOSLI_TRAIL: ${{ github.sha }}
+  KOSLI_TRAIL: ${{ inputs.kosli_trail }}
 
   AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
   AWS_ECR_ID: ${{ vars.AWS_ECR_ID }}
@@ -17,7 +35,7 @@ env:
   SERVICE_NAME: ${{ github.event.repository.name }}  # differ
   IMAGE_TAR_FILENAME: /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
   SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-  SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  #cyber-dojo_differ
+  SONARCLOUD_PROJECT_KEY: ${{ github.repository_owner }}_${{ github.event.repository.name }}  # cyber-dojo_differ
   DOCKER_API_VERSION: ${{ vars.DOCKER_API_VERSION }}
 
 jobs:
@@ -181,12 +199,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Get base-image
-        id: vars
-        run: | 
-          source ./bin/lib.sh
-          echo "base_image=$(echo_base_image)" >> ${GITHUB_OUTPUT}
-
       - name: Build and push Docker image to ECR
         id: docker_build
         uses: docker/build-push-action@v6
@@ -196,7 +208,7 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}
           build-args: |
             COMMIT_SHA=${{ github.sha }}
-            BASE_IMAGE=${{ steps.vars.outputs.base_image }}            
+            BASE_IMAGE=${{ inputs.base_image }}            
 
       - name: Make Artifact fingerprint available to following jobs
         id: variables
