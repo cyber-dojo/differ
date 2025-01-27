@@ -91,7 +91,12 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '944', 'sha 200' do
+  test '944', 'probes 200' do
+    assert differ.alive.instance_of?(TrueClass)
+    assert differ.ready.instance_of?(TrueClass)
+  end
+
+  test '945', 'sha 200' do
     sha = differ.sha
     assert_equal 40, sha.size, 'sha.size'
     sha.each_char do |ch|
@@ -99,9 +104,9 @@ class DifferClientTest < ClientTestBase
     end
   end
 
-  test '945', 'probes 200' do
-    assert differ.alive.instance_of?(TrueClass)
-    assert differ.ready.instance_of?(TrueClass)
+  test '946', 'base_image 200' do
+    base_image = differ.base_image
+    assert base_image.include?('cyberdojo/sinatra-base:')
   end
 
   # - - - - - - - - - - - - - - - - - - - -

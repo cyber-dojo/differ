@@ -6,7 +6,8 @@ export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "${ROOT_DIR}/bin/lib.sh"
 
 exit_non_zero_unless_installed docker
-export $(echo_versioner_env_vars)
+# shellcheck disable=SC2046
+export $(echo_env_vars)
 docker compose --progress=plain up --wait --wait-timeout=10 client
 copy_in_saver_test_data
 TMP_HTML_FILENAME=/tmp/differ-demo.html

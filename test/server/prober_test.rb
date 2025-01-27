@@ -9,13 +9,6 @@ class ProberTest < DifferTestBase
   end
 
   # - - - - - - - - - - - - - - - - -
-  test '191', %w[sha] do
-    sha = prober.sha
-    assert_equal 40, sha.size
-    sha.each_char do |ch|
-      assert '0123456789abcdef'.include?(ch)
-    end
-  end
 
   test '601', %w[alive] do
     assert true?(prober.alive)
@@ -25,14 +18,25 @@ class ProberTest < DifferTestBase
     assert true?(prober.ready)
   end
 
-  # - - - - - - - - - - - - - - - - -
-
   test '604', %w[
     |when saver http-proxy is not ready
     |then ready? is false
   ] do
     externals.instance_exec { @saver = STUB_READY_FALSE }
     assert false?(prober.ready)
+  end
+
+  test '191', %w[sha] do
+    sha = prober.sha
+    assert_equal 40, sha.size
+    sha.each_char do |ch|
+      assert '0123456789abcdef'.include?(ch)
+    end
+  end
+
+  test '192', %w[base_image] do
+    base_image = prober.base_image
+    assert base_image.include?('cyberdojo/sinatra-base:')
   end
 
   private
