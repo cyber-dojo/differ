@@ -20,8 +20,6 @@ on:
         required: true
       KOSLI_API_TOKEN:
         required: true
-      KOSLI_SONAR_API_TOKEN:
-        required: true
 
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # false
