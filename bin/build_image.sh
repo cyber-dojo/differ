@@ -66,9 +66,9 @@ build_image()
   echo
   echo "Building with --build-args"
   echo "  COMMIT_SHA=${COMMIT_SHA}"
-  echo "  BASE_IMAGE=${CYBER_DOJO_DIFFER_BASE_IMAGE}"
+  echo "  BASE_IMAGE=${BASE_IMAGE}"
   echo "To change this run:"
-  echo "$ COMMIT_SHA=... CYBER_DOJO_DIFFER_BASE_IMAGE=cyberdojo/sinatra-base:... make image_${type}"
+  echo "$ COMMIT_SHA=... BASE_IMAGE=cyberdojo/sinatra-base:... make image_${type}"
   echo
 
   docker compose build server

@@ -8,13 +8,13 @@ echo_base_image()
 
 echo_env_vars()
 {
-  # --build-arg ...
-  if [[ ! -v CYBER_DOJO_DIFFER_BASE_IMAGE ]] ; then
-    echo CYBER_DOJO_DIFFER_BASE_IMAGE="$(echo_base_image)"
+  # Set env-vars for this repos differ service
+  if [[ ! -v BASE_IMAGE ]] ; then
+    echo BASE_IMAGE="$(echo_base_image)"  # --build-arg ...
   fi
   if [[ ! -v COMMIT_SHA ]] ; then
     local -r sha="$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
-    echo COMMIT_SHA="${sha}"
+    echo COMMIT_SHA="${sha}"  # --build-arg ...
   fi
 
   # From versioner ...
