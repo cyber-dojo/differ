@@ -179,7 +179,7 @@ jobs:
       id-token: write
       contents: write
     outputs:
-      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
+      digest: ${{ steps.variables.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -209,11 +209,11 @@ jobs:
             COMMIT_SHA=${{ github.sha }}
             BASE_IMAGE=${{ inputs.base_image }}            
 
-      - name: Make Artifact fingerprint available to following jobs
+      - name: Make Artifact digest available to following jobs
         id: variables
         run: |
-          FINGERPRINT=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')          
-          echo "artifact_digest=${FINGERPRINT}" >> ${GITHUB_OUTPUT}
+          DIGEST=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')          
+          echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
 
       - name: Tar Docker image
         run: |
@@ -244,7 +244,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
     env:
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -254,7 +255,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.IMAGE_TAR_FILENAME }}
-          key: ${{ needs.setup.outputs.image_name }}
+          key: ${{ env.IMAGE_NAME }}
 
       - name: Load Docker image
         run:
@@ -298,7 +299,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
     env:
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -308,7 +310,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.IMAGE_TAR_FILENAME }}
-          key: ${{ needs.setup.outputs.image_name }}
+          key: ${{ env.IMAGE_NAME }}
 
       - name: Load Docker image
         run:
@@ -352,9 +354,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, build-image]
     env:
-      IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
-      SARIF_FILENAME: snyk.container.scan.json
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
+      SARIF_FILENAME:    snyk.container.scan.json
     steps:
       - uses: actions/checkout@v4
         with:
@@ -364,7 +366,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.IMAGE_TAR_FILENAME }}
-          key: ${{ needs.setup.outputs.image_name }}
+          key: ${{ env.IMAGE_NAME }}
 
       - name: Load Docker image
         run:
@@ -401,6 +403,8 @@ jobs:
   sonarcloud-scan:
     runs-on: ubuntu-latest
     needs: [build-image]
+    env:
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -414,7 +418,7 @@ jobs:
           args: >
             -Dsonar.analysis.kosli_flow=${{ env.KOSLI_FLOW }}
             -Dsonar.analysis.kosli_trail=${{ env.KOSLI_TRAIL }}
-            -Dsonar.analysis.kosli_artifact_fingerprint=${{ needs.build-image.outputs.artifact_digest }}
+            -Dsonar.analysis.kosli_artifact_fingerprint=${{ env.KOSLI_FINGERPRINT }}
             -Dsonar.analysis.kosli_attestation=differ.sonarcloud-scan
 
 
@@ -424,7 +428,7 @@ jobs:
     needs: [setup, build-image, pull-request, rubocop-lint, unit-tests, integration-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
     env:
       IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -441,7 +445,7 @@ jobs:
     needs: [setup, build-image, sdlc-control-gate]
     env:
       IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     environment:
       name: staging
       url: https://beta.cyber-dojo.org
@@ -456,17 +460,18 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest approval of deployment to Kosli
+        env:
+          KOSLI_ENVIRONMENT: aws-beta
         run:
           kosli report approval ${IMAGE_NAME} 
             --approver="${{ github.actor }}"
-            --environment=aws-beta
 
 
   deploy-to-beta:
-    needs: [setup, approve-deployment-to-beta]
+    needs: [setup, build-image, approve-deployment-to-beta]
     uses: ./.github/workflows/sub_deploy_to_beta.yml
     with:
-      IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}
+      IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}@sha256:${{ needs.build-image.outputs.digest }}
 
 
   attest-beta-artifacts:
@@ -481,7 +486,7 @@ jobs:
     needs: [setup, build-image, attest-beta-artifacts]
     env:
       IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     environment:
       name: production
       url: https://cyber-dojo.org
@@ -496,17 +501,18 @@ jobs:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest approval of deployment to Kosli
+        env:
+          KOSLI_ENVIRONMENT: aws-prod
         run:
           kosli report approval ${IMAGE_NAME} 
             --approver="${{ github.actor }}"
-            --environment=aws-prod
 
 
   deploy-to-prod:
-    needs: [setup, approve-deployment-to-prod]
+    needs: [setup, build-image, approve-deployment-to-prod]
     uses: ./.github/workflows/sub_deploy_to_prod.yml
     with:
-      IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}
+      IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}@sha256:${{ needs.build-image.outputs.digest }}
 
 
   attest-prod-artifacts:
@@ -518,7 +524,7 @@ jobs:
 
   # The cyberdojo/versioner refresh-env.sh script
   # https://github.com/cyber-dojo/versioner/blob/master/sh/refresh-env.sh
-  # relies on being able to:
+  # currently relies on being able to:
   #   - get the :latest image
   #   - extract the SHA env-var embedded inside it
   #   - use the 1st 7 chars of the SHA as a latest-equivalent tag
@@ -554,7 +560,9 @@ jobs:
           IMAGE_TAG:  ${{ needs.setup.outputs.image_tag }}
         run: |
           docker pull "${IMAGE_NAME}"
+
           docker tag "${IMAGE_NAME}" cyberdojo/${{ env.SERVICE_NAME }}:${IMAGE_TAG}
-          docker tag "${IMAGE_NAME}" cyberdojo/${{ env.SERVICE_NAME }}:latest
           docker push cyberdojo/${{ env.SERVICE_NAME }}:${IMAGE_TAG}
+
+          docker tag "${IMAGE_NAME}" cyberdojo/${{ env.SERVICE_NAME }}:latest
           docker push cyberdojo/${{ env.SERVICE_NAME }}:latest
