@@ -1,11 +1,9 @@
 name: Base Image Update
 
 on:
-  workflow_dispatch:
-    inputs:
-      base_image:
-        description: "Image-Tag for cyberdojo/sinatra (short commit SHA - first 7 digits) eg edb2887"
-        required: true
+  repository_dispatch:
+    types: [base-image-update]
+
 
 jobs:
   setup:
@@ -17,8 +15,12 @@ jobs:
       - name: Outputs
         id: vars
         run: | 
-          echo "base_image=cyberdojo/sinatra-base:${{ inputs.base_image }}"  >> ${GITHUB_OUTPUT}
-          echo "kosli_trail=base-image-update-${{ inputs.base_image }}"      >> ${GITHUB_OUTPUT}
+          NAME="${{ github.event.client_payload.name }}"
+          TAG="${{ github.event.client_payload.tag }}"
+          DIGEST="${{ github.event.client_payload.digest }}"
+          echo "base_image=${NAME}:${TAG}@sha256:${DIGEST}" >> ${GITHUB_OUTPUT}
+          echo "kosli_trail=base-image-update-${TAG}"       >> ${GITHUB_OUTPUT}
+
 
   trigger:
     needs: [setup]
@@ -29,6 +31,6 @@ jobs:
     secrets:
       DOCKER_USER:      ${{ secrets.DOCKER_USER }}
       DOCKER_PASS:      ${{ secrets.DOCKER_PASS }}
-      SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-      SNYK_TOKEN:       ${{ secrets.SNYK_TOKEN }}
       KOSLI_API_TOKEN:  ${{ secrets.KOSLI_API_TOKEN }}
+      SNYK_TOKEN:       ${{ secrets.SNYK_TOKEN }}
+      SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}

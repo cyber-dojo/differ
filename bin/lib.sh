@@ -17,6 +17,12 @@ echo_env_vars()
     echo COMMIT_SHA="${sha}"  # --build-arg ...
   fi
 
+  # Setup port env-vars in .env file using versioner
+  local -r env_filename="${ROOT_DIR}/.env"
+  echo "# This file is generated in bin/lib.sh echo_env_vars()" > "${env_filename}"
+  echo "CYBER_DOJO_DIFFER_CLIENT_PORT=9999"                    >> "${env_filename}"
+  docker run --rm cyberdojo/versioner | grep PORT              >> "${env_filename}"
+
   # From versioner ...
   docker run --rm cyberdojo/versioner
 
@@ -48,6 +54,32 @@ exit_non_zero_unless_installed()
   done
 }
 
+exit_non_zero_unless_file_exists()
+{
+  local -r filename="${1}"
+  if [ ! -f "${filename}" ]; then
+    stderr "${filename} does not exist"
+    exit 42
+  fi
+}
+
+exit_non_zero_if_bad_base_image()
+{
+  # Called in setup job in .github/workflows/main.yml
+  local -r base_image="${1}"
+  local -r regex=":[a-z0-9]{7}@sha256:[a-z0-9]{64}$"
+  if [[ ${base_image} =~ $regex ]]; then
+    echo "PASSED: base_image=${base_image}"
+  else
+    stderr "base_image=${base_image}"
+    stderr "must have a 7-digit short-sha tag and a full 64-digit digest, Eg"
+    stderr "  name  : cyberdojo/sinatra-base"
+    stderr "  tag   : 559d354"
+    stderr "  digest: ddab9080cd0bbd8e976a18bdd01b37b66e47fe83b0db396e65dc3014bad17fd3"
+    exit 42
+  fi
+}
+
 installed()
 {
   if hash "${1}" &> /dev/null; then
@@ -61,15 +93,6 @@ stderr()
 {
   local -r message="${1}"
   >&2 echo "ERROR: ${message}"
-}
-
-exit_non_zero_unless_file_exists()
-{
-  local -r filename="${1}"
-  if [ ! -f "${filename}" ]; then
-    stderr "${filename} does not exist"
-    exit 42
-  fi
 }
 
 copy_in_saver_test_data()
