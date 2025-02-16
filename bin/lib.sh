@@ -1,9 +1,25 @@
 
 echo_base_image()
 {
-  #local -r json="$(curl --fail --silent --request GET https://beta.cyber-dojo.org/differ/base_image)"
-  #echo "${json}" | jq -r '.base_image'
-  echo cyberdojo/sinatra-base:db948c1
+  # This is set to the env-var BASE_IMAGE which is set as a docker compose build --build-arg
+  # and used the Dockerfile's 'FROM ${BASE_IMAGE}' statement
+  # This BASE_IMAGE abstraction is to facilitate the base_image_update.yml workflow.
+  # echo_base_image_via_curl
+  echo_base_image_via_code
+}
+
+echo_base_image_via_curl()
+{
+  local -r json="$(curl --fail --silent --request GET https://beta.cyber-dojo.org/differ/base_image)"
+  echo "${json}" | jq -r '.base_image'
+}
+
+echo_base_image_via_code()
+{
+  # An alternative echo_base_image for local development.
+  local -r tag=db948c1
+  local -r digest=3abb65e0e8f3b780a64da6fe0c7a3123162d9b0d40a03e4668fef03d441e398b
+  echo "cyberdojo/sinatra-base:${tag}@sha256:${digest}"
 }
 
 echo_env_vars()
