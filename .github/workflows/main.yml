@@ -498,6 +498,7 @@ jobs:
       tf_state_file_dir_on_s3: "terraform/${{ needs.variables.outputs.service_name }}"
       tf_state_file_name: "${{ needs.variables.outputs.service_name }}.tfstate"
 
+
   attest-beta-artifacts:
     needs: [deploy-to-beta]
     uses: ./.github/workflows/attest_tf_beta_artifacts.yml
