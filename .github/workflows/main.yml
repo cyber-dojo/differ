@@ -491,7 +491,12 @@ jobs:
       tf_apply:               true
       tf_version:             v1.9.1
       tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.setup.outputs.ecr_registry }}/${{ needs.setup.outputs.service_name }}:${{ needs.setup.outputs.image_tag }}@sha256:${{ needs.build-image.outputs.digest }}"}'
-
+      tf_sh_version: 0.2.1
+      tf_upload_artifact_name_suffix: "_beta"
+      tf_upload_artifact_state_file: 'true'
+      tf_upload_artifact_plan: 'true'
+      tf_state_file_dir_on_s3: "terraform/${{ needs.variables.outputs.service_name }}"
+      tf_state_file_name: "${{ needs.variables.outputs.service_name }}.tfstate"
 
   attest-beta-artifacts:
     needs: [deploy-to-beta]
@@ -542,6 +547,12 @@ jobs:
       tf_apply:               true
       tf_version:             v1.9.1
       tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.setup.outputs.ecr_registry }}/${{ needs.setup.outputs.service_name }}:${{ needs.setup.outputs.image_tag }}@sha256:${{ needs.build-image.outputs.digest }}"}'
+      tf_sh_version: 0.2.1
+      tf_upload_artifact_name_suffix: "_prod"
+      tf_upload_artifact_state_file: 'true'
+      tf_upload_artifact_plan: 'true'
+      tf_state_file_dir_on_s3: "terraform/${{ needs.variables.outputs.service_name }}"
+      tf_state_file_name: "${{ needs.variables.outputs.service_name }}.tfstate"
 
 
   attest-prod-artifacts:
