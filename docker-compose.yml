@@ -48,7 +48,7 @@ services:
           size: 10485760  # 10MB
 
   saver:
-    image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}
+    image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}@sha256:${CYBER_DOJO_SAVER_DIGEST}
     user: saver
     ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
     env_file: [ .env ]
