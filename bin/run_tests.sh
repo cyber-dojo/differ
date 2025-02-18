@@ -2,7 +2,6 @@
 set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 source "${ROOT_DIR}/bin/lib.sh"
 
 show_help()
@@ -75,7 +74,7 @@ run_tests()
   exit_non_zero_unless_installed docker
   export SERVICE_NAME="${1}"
   # Don't do a build here, because in CI workflow, server image is built with GitHub Action
-  docker compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
+  docker --log-level=ERROR compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
   echo_warnings "${TYPE}"
   copy_in_saver_test_data
 
