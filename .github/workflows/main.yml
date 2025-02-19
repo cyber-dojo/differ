@@ -93,7 +93,7 @@ jobs:
   pull-request:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    needs: []
+    needs: [setup]
     permissions:
       id-token:      write
       contents:      read
@@ -117,7 +117,7 @@ jobs:
 
   rubocop-lint:
     runs-on: ubuntu-latest
-    needs: []
+    needs: [setup]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -143,7 +143,7 @@ jobs:
 
   snyk-code-scan:
     runs-on: ubuntu-latest
-    needs: []
+    needs: [setup]
     env:
       SARIF_FILENAME: snyk.code.scan.json
     steps:
