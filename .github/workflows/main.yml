@@ -161,6 +161,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run:
           snyk code test
+            --debug
             --policy-path=.snyk
             --sarif
             --sarif-file-output="${SARIF_FILENAME}"
