@@ -26,7 +26,7 @@ env:
   KOSLI_AWS_BETA:  ${{ vars.KOSLI_AWS_BETA }}          # aws-beta
   KOSLI_AWS_PROD:  ${{ vars.KOSLI_AWS_PROD }}          # aws-prod
   KOSLI_DEBUG:     ${{ vars.KOSLI_DEBUG }}             # true/false
-  KOSLI_DRY_RUN:   ${{ vars.KOSLI_DRY_RUN }}           # false
+  KOSLI_DRY_RUN:   ${{ vars.KOSLI_DRY_RUN }}           # true/false
   KOSLI_HOST:      ${{ vars.KOSLI_HOST }}              # https://app.kosli.com
   KOSLI_ORG:       ${{ vars.KOSLI_ORG }}               # cyber-dojo
   KOSLI_FLOW:      ${{ vars.KOSLI_FLOW }}              # differ-ci
@@ -91,6 +91,7 @@ jobs:
         run:
           kosli begin trail "${KOSLI_TRAIL}"  
             --template-file=.kosli.yml
+
 
   pull-request:
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -228,9 +229,9 @@ jobs:
           echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
 
       - name: Tar Docker image
-        run: |
-          docker pull ${IMAGE_NAME}          
-          docker image save ${IMAGE_NAME} --output ${IMAGE_TAR_FILENAME}
+        run:
+          docker image save ${IMAGE_NAME}
+            --output ${IMAGE_TAR_FILENAME}
 
       - name: Cache Docker image
         uses: actions/cache@v4
@@ -271,7 +272,8 @@ jobs:
 
       - name: Load Docker image
         run:
-          docker image load --input ${IMAGE_TAR_FILENAME}
+          docker image load
+            --input ${IMAGE_TAR_FILENAME}
 
       - name: Run unit tests with metrics checks
         run:
@@ -326,7 +328,8 @@ jobs:
 
       - name: Load Docker image
         run:
-          docker image load --input ${IMAGE_TAR_FILENAME}
+          docker image load
+            --input ${IMAGE_TAR_FILENAME}
 
       - name: Run integration tests with metrics checks
         run:
@@ -382,7 +385,8 @@ jobs:
 
       - name: Load Docker image
         run:
-          docker image load --input ${IMAGE_TAR_FILENAME}
+          docker image load
+            --input ${IMAGE_TAR_FILENAME}
 
       - name: Setup Snyk
         uses: snyk/actions/setup@master
@@ -483,7 +487,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.21
+    uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.23
     with:
       aws_region: ${{ needs.setup.outputs.aws_region }}
       aws_role_arn: arn:aws:iam::${{ needs.setup.outputs.aws_account_id_beta }}:role/${{ needs.setup.outputs.gh_actions_iam_role_name }}
@@ -539,7 +543,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.21
+    uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.23
     with:
       aws_region: ${{ needs.setup.outputs.aws_region }}
       aws_role_arn: arn:aws:iam::${{ needs.setup.outputs.aws_account_id_prod }}:role/${{ needs.setup.outputs.gh_actions_iam_role_name }}
