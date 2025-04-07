@@ -11,7 +11,7 @@ module "lambda_reporter" {
   name                              = "differ-state-reporter"
   kosli_environment_type            = "s3"
   kosli_host                        = var.KOSLI_HOST
-  kosli_cli_version                 = "v2.10.13"
+  kosli_cli_version                 = "v2.11.11"
   kosli_environment_name            = "terraform-state-differ-${var.env}"
   kosli_org                         = "cyber-dojo"
   reported_aws_resource_name        = local.state_bucket_name
