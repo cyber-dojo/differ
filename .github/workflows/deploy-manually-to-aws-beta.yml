@@ -35,7 +35,6 @@ jobs:
         echo "aws_region=${{ env.AWS_REGION }}"                                               >> ${GITHUB_OUTPUT}
         echo "gh_actions_iam_role_name=gh_actions_services"                                   >> ${GITHUB_OUTPUT}
 
-
   deploy-to-aws-beta:
     needs: [variables]
     permissions:
