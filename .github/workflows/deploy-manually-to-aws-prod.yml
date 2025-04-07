@@ -1,4 +1,4 @@
-name: Deploy-manually to aws-beta and aws-prod
+name: Deploy-manually to aws-prod
 
 on:
   workflow_dispatch:
