@@ -18,7 +18,8 @@ This will create a new non-compliant snapshot in the Kosli aws-beta Environment.
 
 ### An image with provenance that is non-compliant 
 Use the short-sha `38f3dc8`   
-This is the tag/commit of a differ image that failed its snyk-scan.  
+This is the tag/commit of a differ image that failed its snyk-scan. 
+Its fingerprint is a365bf5141a02231470539a5e52470e9530c0c13f73dc1653bb2ea6165beb2db
 See [example in snapshot](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/4352?fingerprint=a365bf5141a02231470539a5e52470e9530c0c13f73dc1653bb2ea6165beb2db)  
 See [example in trail](https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/38f3dc8b63abb632ac94a12b3f818b49f8047fa1)  
 
