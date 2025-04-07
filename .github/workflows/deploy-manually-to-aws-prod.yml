@@ -6,6 +6,9 @@ on:
       image_tag:
         description: 'Image tag (short commit SHA - first 7 digits)'
         required: true
+      image_fingerprint:
+        description: 'Image digest (64 hex digits)'
+        required: true
 
 env:
   SERVICE_NAME: ${{ github.event.repository.name }}   # differ
@@ -20,6 +23,7 @@ jobs:
     outputs:
       service_name: ${{ steps.vars.outputs.service_name }}
       image_tag: ${{ steps.vars.outputs.image_tag }}
+      image_fingerprint: ${{ steps.vars.outputs.image_fingerprint }}
       aws_account_id: ${{ steps.vars.outputs.aws_account_id }}
       ecr_registry: ${{ steps.vars.outputs.ecr_registry }}
       aws_region: ${{ steps.vars.outputs.aws_region }}
@@ -28,8 +32,9 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "service_name=${{ env.SERVICE_NAME }}"                                           >> ${GITHUB_OUTPUT}        
-        echo "image_tag=${{ inputs.IMAGE_TAG }}"                                              >> ${GITHUB_OUTPUT}
+        echo "service_name=${{ env.SERVICE_NAME }}"                                           >> ${GITHUB_OUTPUT}
+        echo "image_tag=${{ inputs.image_tag }}"                                              >> ${GITHUB_OUTPUT}
+        echo "image_fingerprint=${{ inputs.image_fingerprint }}"                              >> ${GITHUB_OUTPUT}                
         echo "aws_account_id=${{ env.AWS_ACCOUNT_ID }}"                                       >> ${GITHUB_OUTPUT}
         echo "ecr_registry=${{ env.AWS_ECR_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com" >> ${GITHUB_OUTPUT}
         echo "aws_region=${{ env.AWS_REGION }}"                                               >> ${GITHUB_OUTPUT}
@@ -49,4 +54,4 @@ jobs:
       working_directory: deployment/terraform/
       tf_apply: 'true'
       tf_version: v1.9.1
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ needs.variables.outputs.image_tag }}"}'
+      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ needs.variables.outputs.image_tag }}@sha256:${{ needs.variables.outputs.fingerprint }}"}'
