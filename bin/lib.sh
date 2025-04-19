@@ -17,8 +17,8 @@ echo_base_image_via_curl()
 echo_base_image_via_code()
 {
   # An alternative echo_base_image for local development.
-  local -r tag=97cbc87
-  local -r digest=fcd7994b7d6c2a7545bbaf99367d874f060f999e0257cb03528bfe0d0e446cb2
+  local -r tag=759c4e9
+  local -r digest=d5f87f343a9f88a598b810c0f02b81db0bb67319701a956aec3577cbd51c1c24
   echo "cyberdojo/sinatra-base:${tag}@sha256:${digest}"
 }
 
