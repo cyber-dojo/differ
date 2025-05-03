@@ -8,8 +8,6 @@ class ProberTest < DifferTestBase
     '198'
   end
 
-  # - - - - - - - - - - - - - - - - -
-
   test '601', %w[alive] do
     assert true?(prober.alive)
   end
@@ -33,13 +31,6 @@ class ProberTest < DifferTestBase
       assert '0123456789abcdef'.include?(ch)
     end
   end
-
-  test '192', %w[base_image] do
-    base_image = prober.base_image
-    assert base_image.include?('cyberdojo/sinatra-base:')
-  end
-
-  private
 
   STUB_READY_FALSE = OpenStruct.new(ready?: false)
 

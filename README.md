@@ -41,7 +41,6 @@ $ make demo
 * [GET alive](docs/api.md#get-alive)  
 * [GET ready](docs/api.md#get-ready)
 * [GET sha](docs/api.md#get-sha)
-* [GET base_image](docs/api.md#get-base-image)
 * [GET diff_files(id,was_index,now_index)](docs/api.md#get-diff_filesidwas_indexnow_index)
 * [GET diff_summary(id,was_index,now_index)](docs/api.md#get-diff_summaryidwas_indexnow_index)
 

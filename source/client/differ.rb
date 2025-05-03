@@ -22,10 +22,6 @@ module External
       @http.get(__method__, {})
     end
 
-    def base_image
-      @http.get(__method__, {})
-    end
-
     # - - - - - - - - - - - - - - - - - - -
 
     def diff_lines(id, was_index, now_index)

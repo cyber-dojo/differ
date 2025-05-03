@@ -1,14 +1,8 @@
 
 # Workflows 
 
-## commit_trigger.yml
-Calls main.yml when there is a pushed commit.
-
-## base_image_update.yml
-A repository_dispatch workflow for updating the base-image in Dockerfile's `FROM ${BASE_IMAGE}`
-Calls main.yml
-
 ## main.yml 
+Calls main.yml when there is a pushed commit.
 Reports to https://app.kosli.com  
 The workflow to look in if you want to learn about Kosli.
 
