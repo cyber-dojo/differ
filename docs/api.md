@@ -173,23 +173,6 @@ The git commit sha used to create the Docker image.
   {"sha":"b28b3e13c0778fe409a50d23628f631f87920ce5"}
   ```
 
-
-- - - -
-## GET base-image
-The base-image used in the Dockerfile's FROM statement.
-- parameters
-  * none
-- result 
-  * the name of the base image.
-- example
-  ```bash     
-  $ curl --fail --silent --request GET https://${DOMAIN}:${PORT}/base_image
-  ```
-  ```bash
-  {"base_image":"cyberdojo/sinatra-base:edb2887"}
-  ```
-
-
 - - - -
 ## JSON in
 - All methods can pass any arguments either as a JSON Hash in the http request body, or in the query string of the URL.

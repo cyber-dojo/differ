@@ -19,8 +19,6 @@ class Client
     html_json_fail(500, path, e)
   end
 
-  private
-
   def html_json_pass(status, result)
     json = JSON.fast_generate(result)
     html_json(status, json)

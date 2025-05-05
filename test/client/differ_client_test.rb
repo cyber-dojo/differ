@@ -104,11 +104,6 @@ class DifferClientTest < ClientTestBase
     end
   end
 
-  test '946', 'base_image 200' do
-    base_image = differ.base_image
-    assert base_image.include?('cyberdojo/sinatra-base:')
-  end
-
   # - - - - - - - - - - - - - - - - - - - -
   # failure cases
   # - - - - - - - - - - - - - - - - - - - -
