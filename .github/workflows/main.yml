@@ -177,9 +177,8 @@ jobs:
 
   unit-tests:
     runs-on: ubuntu-latest
-    needs: [setup, build-image]
+    needs: [build-image]
     env:
-      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - name: Download docker image
@@ -211,7 +210,7 @@ jobs:
       - name: Attest test metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         run:
-          kosli attest custom 
+          kosli attest custom
             --attestation-data=./reports/server/test_metrics.json 
             --name=differ.unit-test-metrics
             --type=test-metrics
@@ -219,7 +218,7 @@ jobs:
       - name: Attest coverage metrics to Kosli
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         run:
-          kosli attest custom 
+          kosli attest custom
             --attestation-data=./reports/server/coverage_metrics.json 
             --name=differ.unit-test-coverage-metrics
             --type=coverage-metrics
@@ -227,9 +226,8 @@ jobs:
 
   integration-tests:
     runs-on: ubuntu-latest
-    needs: [setup, build-image]
+    needs: [build-image]
     env:
-      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - name: Download docker image
@@ -277,9 +275,9 @@ jobs:
 
   snyk-container-scan:
     runs-on: ubuntu-latest
-    needs: [setup, build-image]
+    needs: [build-image]
     env:
-      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
+      IMAGE_NAME:        ${{ needs.build-image.outputs.tagged_image_name }}
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
       SARIF_FILENAME:    snyk.container.scan.json
     steps:
@@ -344,9 +342,8 @@ jobs:
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    needs: [setup, build-image, pull-request, rubocop-lint, unit-tests, integration-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    needs: [build-image, pull-request, rubocop-lint, unit-tests, integration-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
     env:
-      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - name: Setup Kosli CLI
@@ -360,15 +357,14 @@ jobs:
 
       - name: Kosli SDLC gate to short-circuit the workflow
         run:
-          kosli assert artifact ${IMAGE_NAME}
+          kosli assert artifact
             --environment=${KOSLI_AWS_BETA}
 
 
   approve-deployment-to-beta:
     runs-on: ubuntu-latest
-    needs: [setup, build-image, sdlc-control-gate]
+    needs: [build-image, sdlc-control-gate]
     env:
-      IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     environment:
       name: staging
@@ -385,7 +381,7 @@ jobs:
 
       - name: Attest approval of deployment to Kosli
         run:
-          kosli report approval ${IMAGE_NAME} 
+          kosli report approval
             --approver="${{ github.actor }}"
             --environment=${KOSLI_AWS_BETA}
 
@@ -404,7 +400,7 @@ jobs:
       working_directory: deployment/terraform/
       tf_apply: true
       tf_version: v1.9.1
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.setup.outputs.ecr_registry }}/${{ needs.setup.outputs.service_name }}:${{ needs.setup.outputs.image_tag }}@sha256:${{ needs.build-image.outputs.digest }}"}'
+      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.build-image.outputs.tagged_image_name }}@sha256:${{ needs.build-image.outputs.digest }}"}'
 
 # Deployment to aws-prod Environment is done with a Release/Promotion workflow.
 # See https://github.com/cyber-dojo/aws-prod-co-promotion

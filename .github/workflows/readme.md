@@ -5,6 +5,17 @@
 Calls main.yml when there is a pushed commit.
 Reports to https://app.kosli.com  
 The workflow to look in if you want to learn about Kosli.
+The main structure in this workflow is:
+- The build-image job calls a reusable workflow which:
+  - builds the image
+  - pushes it to its private registry
+  - saves the image as a tar file
+  - pushes the tar file to the Github Action cache
+  - returns the image fingerprint/digest
+- Subsequent jobs do **not** build the image
+  - They load it from the Github Action cache using cyber-dojo/download-artifact@main
+  - The kosli-attest commands use the fingerprint returned from the build-image job
+
 
 ## deploy-manually-to-aws-beta.yml 
 Deliberately run a non-compliant (but functional) artifact to https://beta.cyber-dojo.org for demo purposes.  

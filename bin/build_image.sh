@@ -19,6 +19,11 @@ show_help()
 EOF
 }
 
+exit_non_zero()
+{
+  kill -INT $$
+}
+
 check_args()
 {
   case "${1:-}" in
@@ -27,9 +32,9 @@ check_args()
       exit 0
       ;;
     'server')
-      if [ -n "${CI:-}" ] ; then
-        stderr "In CI workflow - use docker/build-push-action@v6 GitHub Action"
-        exit 42
+      if [ "${CI:-}" == 'true' ] ; then
+        stderr "In CI workflow, image must be built with Github Action"
+        exit_non_zero
       fi
       ;;
     'client')
@@ -37,12 +42,12 @@ check_args()
     '')
       show_help
       stderr "no argument - must be 'client' or 'server'"
-      exit 42
+      exit_non_zero
       ;;
     *)
       show_help
       stderr "argument is '${1:-}' - must be 'client' or 'server'"
-      exit 42
+      exit_non_zero
   esac
 }
 
@@ -52,19 +57,17 @@ build_image()
 
   local -r type="${1}"
 
-  if [ -n "${CI:-}" ] && [ "${type}" == 'server' ] ; then
-    stderr "In CI workflow - use previous docker/build-push-action@v6 GitHub Action"
-    exit 42
-  fi
-
   exit_non_zero_unless_installed docker
   # shellcheck disable=SC2046
   export $(echo_env_vars)
   containers_down
 
-  # Commenting out the removal of old images because it currently deleted the image
-  # pulled just after the secure-docker-build workflow runs.
-  # remove_old_images
+  if [ "${CI:-}" != 'true' ]; then
+    # In CI workflow, don't remove image pulled in the 'Download docker image' CI workflow jobs.
+    remove_old_images
+    # Locally, client and server tests both need a server
+    docker --log-level=ERROR compose build server
+  fi
 
   echo
   echo "Building with --build-args"
@@ -73,11 +76,12 @@ build_image()
   echo "$ COMMIT_SHA=... make image_${type}"
   echo
 
-  docker --log-level=ERROR compose build server
   if [ "${type}" == 'client' ]; then
+    # In CI workflow, we need to build the client image
     docker --log-level=ERROR compose build client
   fi
 
+  # image_name must match server:image: in docker-compose.yml
   local -r image_name="${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}"
   local -r sha_in_image=$(docker run --rm --entrypoint="" "${image_name}" sh -c 'echo -n ${SHA}')
   if [ "${COMMIT_SHA}" != "${sha_in_image}" ]; then
