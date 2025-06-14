@@ -20,7 +20,7 @@ class Client
   end
 
   def html_json_pass(status, result)
-    json = JSON.fast_generate(result)
+    json = JSON.generate(result)
     html_json(status, json)
   end
 
