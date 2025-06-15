@@ -19,11 +19,6 @@ show_help()
 EOF
 }
 
-exit_non_zero()
-{
-  kill -INT $$
-}
-
 check_args()
 {
   case "${1:-}" in
@@ -88,7 +83,7 @@ build_image()
     echo "ERROR: unexpected env-var inside image ${image_name}"
     echo "expected: 'SHA=${COMMIT_SHA}'"
     echo "  actual: 'SHA=${sha_in_image}'"
-    exit 42
+    exit_non_zero
   fi
 
   # Tag image-name for local development where differs name comes from echo-versioner-env-vars
