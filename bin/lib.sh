@@ -38,7 +38,7 @@ exit_non_zero_unless_installed()
   do
     if ! installed "${dependent}" ; then
       stderr "${dependent} is not installed!"
-      exit 42
+      exit_non_zero
     fi
   done
 }
@@ -48,7 +48,7 @@ exit_non_zero_unless_file_exists()
   local -r filename="${1}"
   if [ ! -f "${filename}" ]; then
     stderr "${filename} does not exist"
-    exit 42
+    exit_non_zero
   fi
 }
 
@@ -65,6 +65,11 @@ stderr()
 {
   local -r message="${1}"
   >&2 echo "ERROR: ${message}"
+}
+
+exit_non_zero()
+{
+  kill -INT $$
 }
 
 copy_in_saver_test_data()
@@ -104,7 +109,7 @@ strip_known_warning()
     echo "Known service start-up warning found: ${KNOWN_WARNING}"
   else
     echo "Known service start-up warning NOT found: ${KNOWN_WARNING}"
-    exit 42
+    exit_non_zero
   fi
   echo "${STRIPPED}"
 }

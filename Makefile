@@ -17,7 +17,7 @@ metrics_coverage_server:
 	@${PWD}/bin/check_coverage_metrics.sh server
 
 
-all_client: test_client metrics_test_client metrics_coverage_client
+all_client: image_client test_client metrics_test_client metrics_coverage_client
 
 image_client:
 	${PWD}/bin/build_image.sh client
