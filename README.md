@@ -1,16 +1,17 @@
 [![Github Action (main)](https://github.com/cyber-dojo/differ/actions/workflows/main.yml/badge.svg)](https://github.com/cyber-dojo/differ/actions)
 
 - A [docker-containerized](https://registry.hub.docker.com/r/cyberdojo/differ) micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
-- An HTTP service (sinatra based) for diffing two sets of files.
+- An HTTP [Ruby](https://www.ruby-lang.org) [Sinatra](http://sinatrarb.com/) service for diffing two sets of files.
 - Demonstrates a [Kosli](https://www.kosli.com/) instrumented [GitHub CI workflow](https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/) 
-  deploying, with Continuous Compliance, to [staging](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/) and [production](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/) AWS environments.
+  deploying, with Continuous Compliance, to its [staging](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/) AWS environment.
+- Deployment to its [production](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/) AWS environment is via a separate [promotion workflow](https://github.com/cyber-dojo/aws-prod-co-promotion).
 - Uses Attestation patterns from https://www.kosli.com/blog/using-kosli-attest-in-github-action-workflows-some-tips/
 
 # Development
 
 There are two sets of tests:
-- server: these run from inside the saver container
-- client: these run from outside the saver container, making api calls only 
+- server: these run from inside the differ container
+- client: these run from outside the differ container, making api calls only 
 
 ```bash
 # Build the images
