@@ -330,7 +330,7 @@ jobs:
       - name: Run SonarCloud scan - report results to Kosli (in Kosli webhook)
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-        uses: SonarSource/sonarqube-scan-action@v4.2.1
+        uses: SonarSource/sonarqube-scan-action@v5.3.1
         with:
           args: >
             -Dsonar.analysis.kosli_flow=${{ env.KOSLI_FLOW }}

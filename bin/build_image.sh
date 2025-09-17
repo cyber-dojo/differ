@@ -89,8 +89,8 @@ build_image()
   # Tag image-name for local development where differs name comes from echo-versioner-env-vars
   if [ "${type}" == 'server' ]; then
     docker tag "${image_name}" "cyberdojo/differ:${CYBER_DOJO_DIFFER_TAG}"
-    echo "CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
-    echo "CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"]
+    echo "echo CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
+    echo "echo CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"]
     echo "${image_name}"
   fi
 }
