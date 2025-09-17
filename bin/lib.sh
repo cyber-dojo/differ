@@ -14,6 +14,9 @@ echo_env_vars()
     docker run --rm cyberdojo/versioner 2> /dev/null | grep PORT
   } > "${ROOT_DIR}/.env"
 
+  # From versioner
+  docker run --rm cyberdojo/versioner 2> /dev/null
+
   echo CYBER_DOJO_DIFFER_SHA="${sha}"
   echo CYBER_DOJO_DIFFER_TAG="${sha:0:7}"
   #
