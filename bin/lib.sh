@@ -8,12 +8,11 @@ echo_env_vars()
   fi
 
   # Setup port env-vars in .env file using versioner
-  local -r env_filename="${ROOT_DIR}/.env"
-  echo "# This file is generated in bin/lib.sh echo_env_vars()" > "${env_filename}"
-  echo "CYBER_DOJO_DIFFER_CLIENT_PORT=9999"                    >> "${env_filename}"
-  docker run --rm cyberdojo/versioner 2> /dev/null | grep PORT >> "${env_filename}"
-  # From versioner ...
-  docker run --rm cyberdojo/versioner 2> /dev/null
+  {
+    echo "# This file is generated in bin/lib.sh echo_env_vars()"
+    echo "CYBER_DOJO_DIFFER_CLIENT_PORT=9999"
+    docker run --rm cyberdojo/versioner 2> /dev/null | grep PORT
+  } > "${ROOT_DIR}/.env"
 
   echo CYBER_DOJO_DIFFER_SHA="${sha}"
   echo CYBER_DOJO_DIFFER_TAG="${sha:0:7}"
