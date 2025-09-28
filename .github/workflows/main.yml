@@ -61,6 +61,12 @@ jobs:
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
+      - name: Create Kosli Flow
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run:
+          kosli create flow "${KOSLI_FLOW}"
+            --description="Diff files from two traffic-lights"
+
       - name: Begin Kosli Trail
         if: ${{ github.ref == 'refs/heads/main' }}
         run:
