@@ -32,13 +32,15 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "service_name=${{ env.SERVICE_NAME }}"                                           >> ${GITHUB_OUTPUT}
-        echo "image_tag=${{ inputs.image_tag }}"                                              >> ${GITHUB_OUTPUT}
-        echo "image_fingerprint=${{ inputs.image_fingerprint }}"                              >> ${GITHUB_OUTPUT}                
-        echo "aws_account_id=${{ env.AWS_ACCOUNT_ID }}"                                       >> ${GITHUB_OUTPUT}
-        echo "ecr_registry=${{ env.AWS_ECR_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com" >> ${GITHUB_OUTPUT}
-        echo "aws_region=${{ env.AWS_REGION }}"                                               >> ${GITHUB_OUTPUT}
-        echo "gh_actions_iam_role_name=gh_actions_services"                                   >> ${GITHUB_OUTPUT}
+        {
+          echo "service_name=${{ env.SERVICE_NAME }}"                                          
+          echo "image_tag=${{ inputs.image_tag }}"                                             
+          echo "image_fingerprint=${{ inputs.image_fingerprint }}"                                             
+          echo "aws_account_id=${{ env.AWS_ACCOUNT_ID }}"                                      
+          echo "ecr_registry=${{ env.AWS_ECR_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+          echo "aws_region=${{ env.AWS_REGION }}"                                              
+          echo "gh_actions_iam_role_name=gh_actions_services"                                   
+        } >> ${GITHUB_OUTPUT}
 
   deploy-to-aws-prod:
     needs: [variables]
