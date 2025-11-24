@@ -73,6 +73,12 @@ jobs:
           kosli begin trail "${KOSLI_TRAIL}"  
             --template-file=.kosli.yml
 
+      - name: Write Trail URL to GitHub Step Summary
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          url="https://app.kosli.com/${KOSLI_ORG}/flows/${KOSLI_FLOW}/trails/${KOSLI_TRAIL}"
+          echo "[Kosli Trail](${url})" > "${GITHUB_STEP_SUMMARY}"
+
 
   pull-request:
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -349,7 +355,15 @@ jobs:
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    needs: [build-image, pull-request, rubocop-lint, unit-tests, integration-tests, snyk-container-scan, snyk-code-scan, sonarcloud-scan]
+    needs:
+      - build-image
+      - pull-request
+      - rubocop-lint
+      - unit-tests
+      - integration-tests
+      - snyk-container-scan
+      - snyk-code-scan
+      - sonarcloud-scan
     env:
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
