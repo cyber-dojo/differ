@@ -2,15 +2,15 @@
 # If this file contains only comments, then no vulnerabilities are ignored
 # but do not delete this file - it is needed for the live-snyk-scans repo workflows.
 
-ignore:
-  SNYK-ALPINE320-BUSYBOX-14102403:
-    - '*':
-      reason: Waiting for fix
-      expires: 2025-12-24T10:53:10.182Z
-      created: 2025-11-24T10:53:10.201Z
+# ignore:
+#   SNYK-ALPINE320-BUSYBOX-14102403:
+#     - '*':
+#       reason: Waiting for fix
+#       expires: 2025-12-24T10:53:10.182Z
+#       created: 2025-11-24T10:53:10.201Z
 
-  SNYK-ALPINE320-BUSYBOX-14102404:
-    - '*':
-      reason: Waiting for fix
-      expires: 2025-12-24T10:53:10.182Z
-      created: 2025-11-24T10:53:10.201Z
+#   SNYK-ALPINE320-BUSYBOX-14102404:
+#     - '*':
+#       reason: Waiting for fix
+#       expires: 2025-12-24T10:53:10.182Z
+#       created: 2025-11-24T10:53:10.201Z
