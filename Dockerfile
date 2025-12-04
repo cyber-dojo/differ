@@ -3,7 +3,7 @@ FROM ghcr.io/cyber-dojo/sinatra-base:ba7acf3@sha256:8baa0ce05142cf89a9333bf0f5a1
 LABEL maintainer=jon@jaggersoft.com
 
 ARG COMMIT_SHA
-ENV SHA=${COMMIT_SHA}
+ENV COMMIT_SHA=${COMMIT_SHA}
 
 RUN apk --update --upgrade --no-cache add git
 
