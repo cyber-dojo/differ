@@ -13,7 +13,7 @@ reporters = [
 Minitest::Reporters.use!(reporters)
 
 def require_app(required)
-  require_relative "../../#{required}"
+  require_relative "../../source/#{required}"
 end
 
 class Id58TestBase < Minitest::Test

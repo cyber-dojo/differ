@@ -16,6 +16,7 @@ services:
     read_only: true
     restart: no
     volumes:
+      - ./source/client:/differ/source/:ro
       - ./test/client:/differ/test/:ro
       - type: tmpfs
         target: /tmp
@@ -38,6 +39,7 @@ services:
     read_only: true
     restart: no
     volumes:
+      - ./source/server:/differ/source/:ro
       - ./test/server:/differ/test/:ro
       - type: tmpfs
         target: /tmp
