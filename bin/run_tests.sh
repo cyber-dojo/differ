@@ -87,7 +87,7 @@ run_tests()
   # The [docker exec run.sh] is creating coverage files which I process on the host after it completes.
   # I've tried using an :rw volume mount (eg /reports) in docker-compose.yml and writing the
   # coverage files to /reports, so they automatically end up on the host. I cannot find a way that works
-  # on both my M2 laptop, and in the CI workflow. So I am writing the coverage files to /tmp and
+  # on both my Mac M-laptop, and in the CI workflow. So I am writing the coverage files to /tmp and
   # tar-piping them out.
 
   set +e
