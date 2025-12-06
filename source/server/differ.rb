@@ -19,8 +19,8 @@ class Differ
   private
 
   def diff_plus(id, was_index, now_index, options)
-    was = saver.kata_event(id, was_index.to_i)
-    now = saver.kata_event(id, now_index.to_i)
+    was = saver.kata_event(id, was_index)
+    now = saver.kata_event(id, now_index)
     was_files = files(was)
     now_files = files(now)
     diff_lines = GitDiffer.new(@externals).diff(id, was_files, now_files)
