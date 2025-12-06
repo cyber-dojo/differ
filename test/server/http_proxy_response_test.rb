@@ -51,7 +51,7 @@ class HttpProxyResponseTest < DifferTestBase
     |it raises an exception
   ] do
     stub_saver_http('{"exception":42}')
-    ready_raises_exception('body has embedded exception')
+    ready_raises_exception('42')
   end
 
   # - - - - - - - - - - - - - - - - -
