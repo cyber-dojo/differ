@@ -13,8 +13,10 @@ class DifferTest < DifferTestBase
 
   test 'A2C',
        'empty file is created' do
-    @was_files = {}
-    @now_files = { 'empty.h' => '' }
+    # Saver v2 uses git and its implementation currently relies on there
+    # always being at least one file (cyber-dojo.sh cannot be deleted )
+    @was_files = { 'xx' => 'Hello' }
+    @now_files = { 'xx' => 'Hello', 'empty.h' => '' }
 
     assert_diff [
       :created, nil, 'empty.h', 0, 0, 0,
@@ -93,8 +95,10 @@ class DifferTest < DifferTestBase
 
   test 'D09',
        'non-empty file is created' do
-    @was_files = {}
-    @now_files = { 'non-empty.c' => 'something' }
+    # Saver v2 uses git and its implementation currently relies on there
+    # always being at least one file (cyber-dojo.sh cannot be deleted )
+    @was_files = { 'xx' => 'Hello' }
+    @now_files = { 'xx' => 'Hello', 'non-empty.c' => 'something' }
     assert_diff [
       :created, nil, 'non-empty.c', 1, 0, 0,
       [
@@ -316,6 +320,7 @@ class DifferTest < DifferTestBase
   def starter_manifest
     manifest = saver.kata_manifest('5U2J18') # from test-data copied into saver
     %w[id created group_id group_index].each { |key| manifest.delete(key) }
+    manifest['version'] = 2
     manifest
   end
 
