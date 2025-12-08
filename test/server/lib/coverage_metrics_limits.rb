@@ -3,7 +3,7 @@
 def metrics
   [
     [ nil ],
-    [ 'test.lines.total'    , '<=', 524 ],
+    [ 'test.lines.total'    , '<=', 545 ],
     [ 'test.lines.missed'   , '<=', 0   ],
     [ 'test.branches.total' , '<=', 0   ],
     [ 'test.branches.missed', '<=', 0   ],

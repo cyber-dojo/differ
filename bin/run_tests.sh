@@ -3,6 +3,8 @@ set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "${ROOT_DIR}/bin/lib.sh"
+# shellcheck disable=SC2046
+export $(echo_env_vars)
 
 show_help()
 {
@@ -39,14 +41,10 @@ check_args()
       exit 0
       ;;
     'server')
-      # shellcheck disable=SC2046
-      export $(echo_env_vars)
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_SERVER_USER}"
       ;;
     'client')
-      # shellcheck disable=SC2046
-      export $(echo_env_vars)
       export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_CLIENT_USER}"
       ;;
