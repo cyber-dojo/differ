@@ -269,7 +269,7 @@ class DifferTest < DifferTestBase
     ex = assert_raises(RuntimeError) do
       differ.diff_lines(id: id, was_index: was_index, now_index: now_index + 1)
     end
-    assert_equal ex.message, "Invalid index: #{now_index + 1}"
+    assert_equal "Invalid index: #{now_index + 1}", ex.message
   end
 
   private
