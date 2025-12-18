@@ -257,7 +257,7 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '4D3', 'diff-lines with a non-existent now-index raises reasonable exception' do
+  version_test 2, '4D3', 'diff-lines with a non-existent now-index raises reasonable exception' do
     manifest = starter_manifest
     manifest['version'] = 2
     id = saver.kata_create(manifest)
@@ -269,7 +269,7 @@ class DifferTest < DifferTestBase
     ex = assert_raises(RuntimeError) do
       differ.diff_lines(id: id, was_index: was_index, now_index: now_index + 1)
     end
-    assert_equal "Invalid index: #{now_index + 1}", ex.message
+    assert_equal "Invalid index #{now_index + 1}", ex.message
   end
 
   private

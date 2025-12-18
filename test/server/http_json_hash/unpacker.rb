@@ -11,20 +11,21 @@ module Test
 
       def get(path, args)
         response = @requester.get(path, args)
-        json = JSON.parse!(response.body)
-        keyed_for_now(json, path)
+        unpacked(response.body, path.to_s, args)
       end
 
       def post(path, args)
         response = @requester.post(path, args)
-        json = JSON.parse!(response.body)
-        keyed_for_now(json, path)
+        unpacked(response.body, path.to_s, args)
       end
 
       private
 
-      def keyed_for_now(json, path)
-        path = path.to_s
+      def unpacked(body, path, args)
+        json = JSON.parse!(body)
+        if json.has_key?('exception')
+          fail json['exception']
+        end
         json[path]
       end
     end
