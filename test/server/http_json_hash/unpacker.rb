@@ -21,11 +21,10 @@ module Test
 
       private
 
-      def unpacked(body, path, args)
+      def unpacked(body, path, _args)
         json = JSON.parse!(body)
-        if json.has_key?('exception')
-          fail json['exception']
-        end
+        raise json['exception'] if json.key?('exception')
+
         json[path]
       end
     end
