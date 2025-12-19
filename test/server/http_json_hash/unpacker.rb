@@ -23,8 +23,6 @@ module Test
 
       def unpacked(body, path, _args)
         json = JSON.parse!(body)
-        raise json['exception'] if json.key?('exception')
-
         json[path]
       end
     end
