@@ -1,7 +1,7 @@
 # API
 
 - - - -
-## GET diff_files(id,was_index,now_index)
+## GET diff_lines(id,was_index,now_index)
 A diff of two sets of files (designated with **was_index** and **now_index**) from the kata designated with **id**.
 Also includes unchanged files and the content of files renamed but with identical content.
 - parameters
