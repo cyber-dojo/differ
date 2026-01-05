@@ -9,7 +9,7 @@ SimpleCov.start do
   enable_coverage :branch
   filters.clear
   add_filter('test/lib/id58_test_base.rb')
-  coverage_dir(ENV.fetch('COVERAGE_ROOT', nil))
+  coverage_dir(ENV.fetch('COVERAGE_ROOT'))
   root(APP_DIR)
 
   test_tab = ENV.fetch('COVERAGE_TEST_TAB_NAME')
