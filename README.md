@@ -22,7 +22,8 @@ $ make {test_server|test_client}
 
 # Run only specific tests
 $ ./bin/run_tests.sh {-h|--help}
-$ ./bin/run_tests.sh {server|client} B56
+$ ./bin/run_tests.sh {server|client} B56Sp3
+$ make {test_server|test_client} tid=B56
 
 # Check test metrics
 $ make {metrics_test_server|metrics_test_client}

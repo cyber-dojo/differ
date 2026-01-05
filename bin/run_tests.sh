@@ -94,7 +94,7 @@ run_tests()
     --env COVERAGE_TEST_TAB_NAME=test \
     --user "${USER}" \
     "${CONTAINER_NAME}" \
-      sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:2}"
+      sh -c "/differ/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:2} ${tid:-}"
   local -r STATUS=$?
   set -e
 
