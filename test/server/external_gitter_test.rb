@@ -4,9 +4,6 @@ require_relative 'differ_test_base'
 require_relative 'spy_sheller'
 
 class ExternalGitterTest < DifferTestBase
-  def self.id58_prefix
-    'DC3'
-  end
 
   def id58_setup
     externals.instance_eval { @shell = SpySheller.new }
@@ -14,8 +11,9 @@ class ExternalGitterTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '0B4',
-       'git.setup' do
+  test 'DC30B4', %w(
+  | git.setup
+  ) do
     expected = [
       'git init --quiet',
       "git config user.name 'differ'",
@@ -27,8 +25,9 @@ class ExternalGitterTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '8AB',
-       'for git.add_commit_tag_0' do
+  test 'DC38AB', %w(
+  | for git.add_commit_tag_0
+  ) do
     expected = [
       'git add .',
       'git commit --allow-empty --all --message 0 --quiet',
@@ -38,8 +37,9 @@ class ExternalGitterTest < DifferTestBase
     assert_shell(expected)
   end
 
-  test '8AC',
-       'for git.add_commit_tag_1' do
+  test 'DC38AC', %w(
+  | for git.add_commit_tag_1
+  ) do
     expected = [
       'git add .',
       'git commit --allow-empty --all --message 1 --quiet',
@@ -51,8 +51,9 @@ class ExternalGitterTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - -
 
-  test '9A2',
-       'git.diff_0_1' do
+  test 'DC39A2', %w(
+  | git.diff_0_1
+  ) do
     expected = [
       'git diff',
       '--unified=99999999999',
@@ -77,4 +78,5 @@ class ExternalGitterTest < DifferTestBase
   def path
     'a/b/c/'
   end
+
 end

@@ -4,16 +4,14 @@ require_relative 'differ_test_base'
 require_app 'git_diff_parse_filenames'
 
 class GitDiffParseFilenamesTest < DifferTestBase
-  def self.id58_prefix
-    'wK7'
-  end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parse_old_new_filenames()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'D5F',
-       'parse old & new filenames with space in both filenames' do
+  test 'wK7D5F', %w(
+  | parse old & new filenames with space in both filenames
+  ) do
     header = [
       'diff --git "e mpty.h" "e mpty.h"',
       'index 0000000..e69de29'
@@ -25,8 +23,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '1B5',
-       'parse old & new filenames with double-quote and space in both filenames' do
+  test 'wK71B5', %w(
+  | parse old & new filenames with double-quote and space in both filenames
+  ) do
     # double-quote " is a legal character in a linux filename
     header = [
       'diff --git "li n\"ux" "em bed\"ded"',
@@ -39,8 +38,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '50A',
-       'parse old & new filenames with double-quote and space only in new-filename' do
+  test 'wK750A', %w(
+  | parse old & new filenames with double-quote and space only in new-filename
+  ) do
     # git diff only double quotes filenames if it has to
     header = [
       'diff --git plain "em bed\"ded"',
@@ -53,8 +53,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '4D8',
-       'parse old & new filenames with double-quote and space only in old-filename' do
+  test 'wK74D8', %w(
+  | parse old & new filenames with double-quote and space only in old-filename
+  ) do
     # double-quote " is a legal character in a linux filename
     header = [
       'diff --git "emb ed\"ded" plain',
@@ -67,8 +68,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '740',
-       'new_filename is nil for for deleted file' do
+  test 'wK7740', %w(
+  | new_filename is nil for for deleted file
+  ) do
     header = [
       'diff --git Deleted.java Deleted.java',
       'deleted file mode 100644',
@@ -81,8 +83,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '2A9',
-       'old_filename is nil for new file' do
+  test 'wK72A9', %w(
+  | old_filename is nil for new file
+  ) do
     header = [
       'diff --git empty.h empty.h',
       'new file mode 100644',
@@ -95,8 +98,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'A90',
-       'parse old & new filenames for renamed file' do
+  test 'wK7A90', %w(
+  | parse old & new filenames for renamed file
+  ) do
     diff_lines = [
       'diff --git old_name.h "new \"name.h"',
       'similarity index 100%',
@@ -110,8 +114,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'AD7',
-       'parse old & new filenames for new file in nested sub-dir' do
+  test 'wK7AD7', %w(
+  | parse old & new filenames for new file in nested sub-dir
+  ) do
     header = [
       'diff --git 1/2/3/empty.h 1/2/3/empty.h',
       'new file mode 100644',
@@ -124,8 +129,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'AD8',
-       'parse old & new filenames for renamed file in nested sub-dir' do
+  test 'wK7AD8', %w(
+  | parse old & new filenames for renamed file in nested sub-dir
+  ) do
     diff_lines = [
       'diff --git 1/2/3/old_name.h 1/2/3/new_name.h',
       'similarity index 100%',
@@ -139,8 +145,9 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'AD9',
-       'parse old & new filenames for renamed file across nested sub-dir' do
+  test 'wK7AD9', %w(
+  | parse old & new filenames for renamed file across nested sub-dir
+  ) do
     diff_lines = [
       'diff --git 1/2/3/old_name.h 4/5/6/new_name.h',
       'similarity index 100%',
@@ -154,10 +161,10 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'AD0', %w[
-    parse old & new nested sub-dir filenames
-    with double-quote and space in both filenames
-  ] do
+  test 'wK7AD0', %w(
+  | parse old & new nested sub-dir filenames
+  | with double-quote and space in both filenames
+  ) do
     # double-quote " is a legal character in a linux filename
     header = [
       'diff --git "s/d/f/li n\"ux" "u/i/o/em bed\"ded"',
@@ -170,12 +177,12 @@ class GitDiffParseFilenamesTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'AD1', %w[
-    parse old & new nested sub-dir filenames
-    with double-quote and space in both filenames
-    and where first sub-dir is a or b which could clash
-    with git-diff output which uses a/ and b/
-  ] do
+  test 'wK7AD1', %w(
+  | parse old & new nested sub-dir filenames
+  | with double-quote and space in both filenames
+  | and where first sub-dir is a or b which could clash
+  | with git-diff output which uses a/ and b/
+  ) do
     # double-quote " is a legal character in a linux filename
     header = [
       'diff --git "a/d/f/li n\"ux" "b/u/i/o/em bed\"ded"',

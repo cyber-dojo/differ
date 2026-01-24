@@ -4,19 +4,16 @@ require_relative 'client_test_base'
 require 'cgi'
 
 class DifferClientTest < ClientTestBase
-  def self.id58_prefix
-    '2q0'
-  end
 
   hostname = 'server'
   port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'jj8', %w[
-    clients use probes with a trailing question mark in their path which is overly cute
-    so support both with and without ? until all clients have switched to non ?
-  ] do
+  test '2q0jj8', %w(
+  | clients use probes with a trailing question mark in their path which is overly cute
+  | so support both with and without ? until all clients have switched to non ?
+  ) do
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
     assert http.get('alive?', {}).instance_of?(TrueClass)
@@ -25,10 +22,10 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'jj9', %w(
-    /diff_summary can use GET query args
-    which is important since in jQuery a $.getJSON() call
-    always passes its arguments in the query string
+  test '2q0jj9', %w(
+  | /diff_summary can use GET query args
+  | which is important since in jQuery a $.getJSON() call
+  | always passes its arguments in the query string
   ) do
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
@@ -73,16 +70,18 @@ class DifferClientTest < ClientTestBase
   # >10K query was a problem for thin at one time
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '347',
-       '>10K query is not rejected by web server' do
+  test '2q0347', %w(
+  | >10K query is not rejected by web server
+  ) do
     @old_files = { 'wibble.h' => 'X' * 45 * 1024 }
     @new_files = {}
     id, was_index, now_index = *run_diff_prepare
     differ.diff_summary(id, was_index, now_index)
   end
 
-  test '348',
-       '>10K query in nested sub-dir is not rejected by web-server' do
+  test '2q0348', %w(
+  | >10K query in nested sub-dir is not rejected by web-server
+  ) do
     @old_files = { 'gh/jk/wibble.h' => 'X' * 45 * 1024 }
     @new_files = {}
     id, was_index, now_index = *run_diff_prepare
@@ -91,12 +90,16 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '944', 'probes 200' do
+  test '2q0944', %w(
+  | probes 200
+  ) do
     assert differ.alive.instance_of?(TrueClass)
     assert differ.ready.instance_of?(TrueClass)
   end
 
-  test '945', 'sha 200' do
+  test '2q0945', %w(
+  | sha 200
+  ) do
     sha = differ.sha
     assert_equal 40, sha.size, 'sha.size'
     sha.each_char do |ch|
@@ -108,7 +111,9 @@ class DifferClientTest < ClientTestBase
   # failure cases
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '7C0', %w[calling unknown method raises] do
+  test '2q07C0', %w(
+  | calling unknown method raises
+  ) do
     requester = HttpJsonHash::Requester.new(hostname, port)
     http = HttpJsonHash::Unpacker.new('differ', requester)
     error = assert_raises(RuntimeError) { http.get(:shar, { x: 42 }) }
@@ -131,8 +136,9 @@ class DifferClientTest < ClientTestBase
   # delete file
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '313',
-       'deleted empty file' do
+  test '2q0313', %w(
+  | deleted empty file
+  ) do
     @old_files = { 'hiker.h' => '' }
     @new_files = {}
     assert_diff(
@@ -158,8 +164,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '314',
-       'deleted empty file in nested sub-dir' do
+  test '2q0314', %w(
+  | deleted empty file in nested sub-dir
+  ) do
     @old_files = { '6/7/8/hiker.h' => '' }
     @new_files = {}
     assert_diff(
@@ -175,8 +182,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'FE9',
-       'deleted non-empty file shows as all lines deleted' do
+  test '2q0FE9', %w(
+  | deleted non-empty file shows as all lines deleted
+  ) do
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = {}
     assert_diff(
@@ -208,8 +216,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'FEA',
-       'deleted non-empty file in nested sub-dir shows as all lines deleted' do
+  test '2q0FEA', %w(
+  | deleted non-empty file in nested sub-dir shows as all lines deleted
+  ) do
     @old_files = { '4/5/6/7/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = {}
     assert_diff(
@@ -233,9 +242,10 @@ class DifferClientTest < ClientTestBase
   # delete content
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'B67',
-       'all lines deleted but file not deleted',
-       'shows as all lines deleted' do
+  test '2q0B67', %w(
+  | all lines deleted but file not deleted
+  | shows as all lines deleted
+  ) do
     @old_files = { 'hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'hiker.h' => '' }
     assert_diff(
@@ -257,9 +267,10 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'B68',
-       'all lines deleted but nested sub-dir file not deleted',
-       'shows as all lines deleted' do
+  test '2q0B68', %w(
+  | all lines deleted but nested sub-dir file not deleted
+  | shows as all lines deleted
+  ) do
     @old_files = { 'r/t/y/hiker.h' => "a\nb\nc\nd\n" }
     @new_files = { 'r/t/y/hiker.h' => '' }
     assert_diff(
@@ -283,8 +294,9 @@ class DifferClientTest < ClientTestBase
   # new file
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '95F',
-       %w[created new empty file] do
+  test '2q095F', %w(
+  | created new empty file
+  ) do
     @old_files = {}
     @new_files = { 'diamond.h' => '' }
     assert_diff(
@@ -300,8 +312,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '960',
-       %w[created empty file in nested sub-dir] do
+  test '2q0960', %w(
+  | created empty file in nested sub-dir
+  ) do
     @old_files = {}
     @new_files = { 'a/b/c/diamond.h' => '' }
     assert_diff(
@@ -327,8 +340,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '2C3',
-       %w[created non-empty file] do
+  test '2q02C3', %w(
+  | created non-empty file
+  ) do
     @old_files = {}
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff(
@@ -350,8 +364,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '2C4',
-       %w[created non-empty file in nested sub-dir] do
+  test '2q02C4', %w(
+  | created non-empty file in nested sub-dir
+  ) do
     @old_files = {}
     @new_files = { 'q/w/e/diamond.h' => "a\nb\nc\nd" }
     assert_diff(
@@ -375,8 +390,9 @@ class DifferClientTest < ClientTestBase
   # change
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'E3E',
-       %w[changed non-empty file] do
+  test '2q0E3E', %w(
+  | changed non-empty file
+  ) do
     @old_files = { 'diamond.h' => 'a' }
     @new_files = { 'diamond.h' => 'b' }
     assert_diff(
@@ -396,8 +412,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'E3F',
-       %w[changed non-empty file in nested sub-dir] do
+  test '2q0E3F', %w(
+  | changed non-empty file in nested sub-dir
+  ) do
     @old_files = { 't/y/u/diamond.h' => 'a1' }
     @new_files = { 't/y/u/diamond.h' => 'b2' }
     assert_diff(
@@ -417,9 +434,10 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'B9E',
-       'changed non-empty file shows as deleted and added lines',
-       'with each hunk in its own indexed section' do
+  test '2q0B9E', %w(
+  | changed non-empty file shows as deleted and added lines
+  | with each hunk in its own indexed section
+  ) do
     @old_files = {
       'diamond.h' =>
         [
@@ -475,9 +493,10 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'B9F',
-       'changed non-empty file in nested sub-dir shows as deleted and added lines',
-       'with each hunk in its own indexed section' do
+  test '2q0B9F', %w(
+  | changed non-empty file in nested sub-dir shows as deleted and added lines
+  | with each hunk in its own indexed section
+  ) do
     @old_files = {
       'a/b/c/diamond.h' =>
         [
@@ -535,8 +554,9 @@ class DifferClientTest < ClientTestBase
   # renamed file
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'E50',
-       '100% identical renamed file' do
+  test '2q0E50', %w(
+  | 100% identical renamed file
+  ) do
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff(
@@ -567,8 +587,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'E51',
-       '100% identical renamed file in nested sub-dir' do
+  test '2q0E51', %w(
+  | 100% identical renamed file in nested sub-dir
+  ) do
     @old_files = { 'a/f/d/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'a/f/d/diamond.h' => "a\nb\nc\nd" }
     assert_diff(
@@ -589,8 +610,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'FDB',
-       '<100% identical rename' do
+  test '2q0FDB', %w(
+  | <100% identical rename
+  ) do
     @old_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nX\nd" }
     assert_diff(
@@ -613,8 +635,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'FDC',
-       '<100% identical renamed in nested sub-dir' do
+  test '2q0FDC', %w(
+  | <100% identical renamed in nested sub-dir
+  ) do
     @old_files = { 'a/b/c/hiker.h'   => "a\nb\nc\nd" }
     @new_files = { 'a/b/c/diamond.h' => "a\nb\nX\nd" }
     assert_diff(
@@ -639,8 +662,9 @@ class DifferClientTest < ClientTestBase
   # unchanged files
   # - - - - - - - - - - - - - - - - - - - -
 
-  test 'AEC',
-       'unchanged empty files' do
+  test '2q0AEC', %w(
+  | unchanged empty files
+  ) do
     @old_files = { 'diamond.h' => '' }
     @new_files = { 'diamond.h' => '' }
     assert_diff(
@@ -656,8 +680,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '7FF',
-       'unchanged empty-file in nested sub-dir' do
+  test '2q07FF', %w(
+  | unchanged empty-file in nested sub-dir
+  ) do
     @old_files = { 'w/e/r/diamond.h' => '' }
     @new_files = { 'w/e/r/diamond.h' => '' }
     assert_diff(
@@ -673,8 +698,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '365',
-       'unchanged non-empty file' do
+  test '2q0365', %w(
+  | unchanged non-empty file
+  ) do
     @old_files = { 'diamond.h' => "a\nb\nc\nd" }
     @new_files = { 'diamond.h' => "a\nb\nc\nd" }
     assert_diff(
@@ -695,8 +721,9 @@ class DifferClientTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
 
-  test '366',
-       'unchanged non-empty file in nested sub-dir shows as all lines same' do
+  test '2q0366', %w(
+  | unchanged non-empty file in nested sub-dir shows as all lines same
+  ) do
     @old_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
     @new_files = { 'r/t/y/diamond.h' => "a\nbb\nc\nd" }
     assert_diff(
@@ -825,4 +852,5 @@ class DifferClientTest < ClientTestBase
   def section(index)
     { 'type' => 'section', 'index' => index }
   end
+
 end

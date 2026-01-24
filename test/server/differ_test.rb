@@ -3,9 +3,6 @@
 require_relative 'differ_test_base'
 
 class DifferTest < DifferTestBase
-  def self.id58_prefix
-    'C9s'
-  end
 
   def self.versions_test(id58_suffix, *lines, &block)
     versions = 0..2
@@ -26,7 +23,9 @@ class DifferTest < DifferTestBase
   # empty file
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'A2C', 'empty file is created' do
+  versions_test 'C9sA2C', %w(
+  | empty file is created
+  ) do
     # Saver v2 uses git and its implementation currently relies on there
     # always being at least one file (cyber-dojo.sh cannot be deleted )
     @was_files = { 'xx' => 'Hello' }
@@ -40,7 +39,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'A5C', 'empty file is deleted' do
+  versions_test 'C9sA5C', %w(
+  | empty file is deleted
+  ) do
     @was_files = { 'empty.rb' => '' }
     @now_files = {}
     assert_diff [
@@ -51,7 +52,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '3ED', 'empty file is unchanged' do
+  versions_test 'C9s3ED', %w(
+  | empty file is unchanged
+  ) do
     @was_files = { 'empty.py' => '' }
     @now_files = { 'empty.py' => '' }
     assert_diff [
@@ -62,7 +65,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'AA6', 'empty file is renamed 100% identical' do
+  versions_test 'C9sAA6', %w(
+  | empty file is renamed 100% identical
+  ) do
     @was_files = { 'plain' => '' }
     @now_files = { 'copy'  => '' }
     assert_diff [
@@ -73,7 +78,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'A2D', 'empty file is renamed 100% identical across dirs' do
+  versions_test 'C9sA2D', %w(
+  | empty file is renamed 100% identical across dirs
+  ) do
     @was_files = { 'plain'    => '' }
     @now_files = { 'a/b/copy' => '' }
     assert_diff [
@@ -84,7 +91,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'F2E', 'empty file has some content added' do
+  versions_test 'C9sF2E', %w(
+  | empty file has some content added
+  ) do
     @was_files = { 'empty.c' => '' }
     @now_files = { 'empty.c' => "three\nlines\nadded" }
     assert_diff [
@@ -102,7 +111,9 @@ class DifferTest < DifferTestBase
   # non-empty file
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'D09', 'non-empty file is created' do
+  versions_test 'C9sD09', %w(
+  | non-empty file is created
+  ) do
     # Saver v2 uses git and its implementation currently relies on there
     # always being at least one file (cyber-dojo.sh cannot be deleted )
     @was_files = { 'xx' => 'Hello' }
@@ -118,7 +129,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '0C6', 'non-empty file is deleted' do
+  versions_test 'C9s0C6', %w(
+  | non-empty file is deleted
+  ) do
     @was_files = { 'non-empty.h' => "two\nlines" }
     @now_files = {}
     assert_diff [
@@ -133,7 +146,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '21D', 'non-empty file is unchanged' do
+  versions_test 'C9s21D', %w(
+  | non-empty file is unchanged
+  ) do
     @was_files = { 'non-empty.h' => '#include<stdio.h>' }
     @now_files = { 'non-empty.h' => '#include<stdio.h>' }
     assert_diff [
@@ -146,7 +161,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'AA7', 'non-empty file is renamed 100% identical' do
+  versions_test 'C9sAA7', %w(
+  | non-empty file is renamed 100% identical
+  ) do
     @was_files = { 'plain' => 'xxx' }
     @now_files = { 'copy' => 'xxx' }
     assert_diff [
@@ -159,7 +176,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'BA7', 'non-empty file is renamed 100% identical across dirs' do
+  versions_test 'C9sBA7', %w(
+  | non-empty file is renamed 100% identical across dirs
+  ) do
     @was_files = { 'a/b/plain' => "a\nb\nc\nd" }
     @now_files = { 'copy' => "a\nb\nc\nd" }
     assert_diff [
@@ -175,7 +194,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'AA8', 'non-empty file is renamed <100% identical' do
+  versions_test 'C9sAA8', %w(
+  | non-empty file is renamed <100% identical
+  ) do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
     @now_files = { 'diamond.h' => "a\nb\nX\nd" }
     assert_diff [
@@ -193,7 +214,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'AA9', 'non-empty file is renamed <100% identical across dirs' do
+  versions_test 'C9sAA9', %w(
+  | non-empty file is renamed <100% identical across dirs
+  ) do
     @was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
     @now_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
     assert_diff [
@@ -211,7 +234,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '4D0', 'non-empty file has some content added at the start' do
+  versions_test 'C9s4D0', %w(
+  | non-empty file has some content added at the start
+  ) do
     @was_files = { 'non-empty.c' => 'something' }
     @now_files = { 'non-empty.c' => "more\nsomething" }
     assert_diff [
@@ -226,7 +251,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '4D1', 'non-empty file has some content added at the end' do
+  versions_test 'C9s4D1', %w(
+  | non-empty file has some content added at the end
+  ) do
     @was_files = { 'non-empty.c' => 'something' }
     @now_files = { 'non-empty.c' => "something\nmore" }
     assert_diff [
@@ -241,7 +268,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test '4D2', 'non-empty file has some content added in the middle' do
+  versions_test 'C9s4D2', %w(
+  | non-empty file has some content added in the middle
+  ) do
     @was_files = { 'non-empty.c' => "a\nc" }
     @now_files = { 'non-empty.c' => "a\nB\nc" }
     assert_diff [
@@ -257,7 +286,9 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  version_test 2, '4D3', 'diff-lines with a non-existent now-index raises reasonable exception' do
+  version_test 2, 'C9s4D3', %w(
+  | diff-lines with a non-existent now-index raises reasonable exception
+  ) do
     manifest = starter_manifest
     manifest['version'] = 2
     id = saver.kata_create(manifest)
@@ -392,4 +423,5 @@ class DifferTest < DifferTestBase
   def one_line(type, number, line)
     { type: type, number: number, line: line }
   end
+
 end
