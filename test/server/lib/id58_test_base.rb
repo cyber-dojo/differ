@@ -26,11 +26,11 @@ class Id58TestBase < Minitest::Test
   @@seen_ids = []
   @@timings = {}
 
-  def self.test(id58_suffix, *lines, &test_block)
+  def self.test(id58, *lines, &test_block)
     src = test_block.source_location
     src_file = File.basename(src[0])
     src_line = src[1].to_s
-    id58 = checked_id58(id58_suffix, lines)
+    id58 = checked_id58(id58, lines)
     return unless @@args == [] || @@args.any? { |arg| id58.include?(arg) }
 
     name58 = lines.join(' ')
@@ -49,7 +49,7 @@ class Id58TestBase < Minitest::Test
         id58_teardown
       end
     }
-    name = "id58 '#{id58_suffix}',\n'#{name58}'"
+    name = "id58 '#{id58}',\n'#{name58}'"
     define_method("test_\n#{name}".to_sym, &execute_around)
   end
 
@@ -77,25 +77,15 @@ class Id58TestBase < Minitest::Test
       arg.chars.all? { |chr| ID58_ALPHABET.include?(chr) }
   end
 
-  def self.checked_id58(id58_suffix, lines)
-    method = 'def self.id58_prefix'
-    pointer = "#{' ' * method.index('.')}!"
-    pointee = ['', pointer, method, '', ''].join("\n")
-    pointer = "\n\n#{pointer}"
-    raise "#{pointer}missing#{pointee}" unless respond_to?(:id58_prefix)
-    raise "#{pointer}empty#{pointee}" if id58_prefix == ''
-    raise "#{pointer}not id58#{pointee}" unless id58?(id58_prefix)
-
-    method = "test '#{id58_suffix}',"
+  def self.checked_id58(id58, lines)
+    method = "test '#{id58}',"
     pointer = "#{' ' * method.index("'")}!"
     proposition = lines.join(' ')
     pointee = ['', pointer, method, "'#{proposition}'", '', ''].join("\n")
-    id58 = id58_prefix + id58_suffix
     pointer = "\n\n#{pointer}"
-    raise "#{pointer}empty#{pointee}" if id58_suffix == ''
-    raise "#{pointer}not id58#{pointee}" unless id58?(id58_suffix)
+    raise "#{pointer}empty#{pointee}" if id58 == ''
+    raise "#{pointer}not id58#{pointee}" unless id58?(id58)
     raise "#{pointer}duplicate#{pointee}" if @@seen_ids.include?(id58)
-    raise "#{pointer}overlap#{pointee}" if id58_prefix[-2..] == id58_suffix[0..1]
 
     @@seen_ids << id58
     id58

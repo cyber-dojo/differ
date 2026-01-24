@@ -3,14 +3,10 @@
 require_relative 'differ_test_base'
 
 class GitDiffParserTest < DifferTestBase
-  def self.id58_prefix
-    'B56'
-  end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'sP3',
-       'empty options in ctor gives no lines and no line_counts' do
+  test 'B56sP3', %w(
+  | empty options in ctor gives no lines and no line_counts
+  ) do
     diff = [
       'diff --git instructions instructions_new',
       'similarity index 87%',
@@ -50,8 +46,9 @@ class GitDiffParserTest < DifferTestBase
   # parse_all
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'E10',
-       'parse diff containing filename with backslash' do
+  test 'B56E10', %w(
+  | parse diff containing filename with backslash
+  ) do
     diff = [
       'diff --git "\\\\was_newfile_FIU" "\\\\was_newfile_FIU"',
       'deleted file mode 100644',
@@ -82,8 +79,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '196',
-       'parse diff deleted file' do
+  test 'B56196', %w(
+  | parse diff deleted file
+  ) do
     diff = [
       'diff --git original original',
       'deleted file mode 100644',
@@ -106,8 +104,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '0FE',
-       'parse another diff-form of a deleted file' do
+  test 'B560FE', %w(
+  | parse another diff-form of a deleted file
+  ) do
     diff = [
       'diff --git untitled.rb untitled.rb',
       'deleted file mode 100644',
@@ -141,8 +140,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'D91',
-       'parse diff for renamed but unchanged file and newname is quoted' do
+  test 'B56D91', %w(
+  | parse diff for renamed but unchanged file and newname is quoted
+  ) do
     diff = [
       'diff --git "was_\\\\wa s_newfile_FIU" "\\\\was_newfile_FIU"',
       'similarity index 100%',
@@ -166,8 +166,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'E38',
-       'parse diff for renamed but unchanged file' do
+  test 'B56E38', %w(
+  | parse diff for renamed but unchanged file
+  ) do
     diff = [
       'diff --git oldname newname',
       'similarity index 100%',
@@ -191,8 +192,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'A61',
-       'parse diff for renamed and changed file' do
+  test 'B56A61', %w(
+  | parse diff for renamed and changed file
+  ) do
     diff = [
       'diff --git instructions instructions_new',
       'similarity index 87%',
@@ -244,8 +246,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '91D',
-       'parse diffs for two files' do
+  test 'B5691D', %w(
+  | parse diffs for two files
+  ) do
     diff = [
       'diff --git lines lines',
       'index 1d60b70..14fc1c2 100644',
@@ -302,8 +305,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '1BC',
-       'two hunks with no newline at end of file' do
+  test 'B561BC', %w(
+  | two hunks with no newline at end of file
+  ) do
     diff = [
       'diff --git lines lines',
       'index f70c2c0..ba0f878 100644',
@@ -342,8 +346,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'B2C',
-       'diff one-hunk one-line' do
+  test 'B56B2C', %w(
+  | diff one-hunk one-line
+  ) do
     diff = [
       'diff --git lines lines',
       'index 72943a1..f761ec1 100644',
@@ -372,8 +377,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'A8A',
-       'standard diff' do
+  test 'B56A8A', %w(
+  | standard diff
+  ) do
     diff = [
       'diff --git gapper.rb gapper.rb',
       'index 26bc41b..8a5b0b7 100644',
@@ -404,8 +410,9 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '3B5',
-       'find copies harder finds a rename' do
+  test 'B563B5', %w(
+  | find copies harder finds a rename
+  ) do
     diff = [
       'diff --git hiker.h diamond.h',
       'similarity index 99%',
@@ -420,11 +427,11 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '124', %w[
-    renamed but unchanged file has no trailing
-    --- or +++ lines and must not consume diff
-    of following file as its header_lines
-  ] do
+  test 'B56124', %w(
+  | renamed but unchanged file has no trailing
+  | --- or +++ lines and must not consume diff
+  |  of following file as its header_lines
+  ) do
     diff = [
       'diff --git hiker.h hiker.txt',
       'similarity index 100%',
@@ -475,4 +482,5 @@ class GitDiffParserTest < DifferTestBase
   def src(type, number, line)
     { type: type, number: number, line: line }
   end
+
 end

@@ -20,9 +20,7 @@ $ make {image_server|image_client}
 # Run all tests
 $ make {test_server|test_client}
 
-# Run only specific tests
-$ ./bin/run_tests.sh {-h|--help}
-$ ./bin/run_tests.sh {server|client} B56Sp3
+# Run only tests whose id starts with B56
 $ make {test_server|test_client} tid=B56
 
 # Check test metrics

@@ -3,26 +3,24 @@
 require_relative 'differ_test_base'
 
 class ExternalShellerTest < DifferTestBase
-  def self.id58_prefix
-    'C89'
-  end
 
-  # - - - - - - - - - - - - - - - - -
-
-  test 'DBB',
-       'assert_exec(*commands) returns stdout when the commands all succeed' do
+  test 'C89DBB', %w(
+  | assert_exec(*commands) returns stdout when the commands all succeed
+  ) do
     assert_equal 'Hello', shell.assert_exec('echo -n Hello')
   end
 
-  test '0B8',
-       'assert_cd_exec(path,*commands) returns stdout when the cd and the commands succeeds' do
+  test 'C890B8', %w(
+  | assert_cd_exec(path,*commands) returns stdout when the cd and the commands succeeds
+  ) do
     assert_equal 'Hello', shell.assert_cd_exec('.', 'echo -n Hello')
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'AF6',
-       'assert_exec(*commands) raises when a command fails' do
+  test 'C89AF6', %w(
+  | assert_exec(*commands) raises when a command fails
+  ) do
     error = assert_raises { shell.assert_exec('zzzz') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
@@ -30,8 +28,9 @@ class ExternalShellerTest < DifferTestBase
     assert_equal 127, json['exit_status']
   end
 
-  test 'ACD',
-       'assert_cd_exec(path,*commands) raises when the cd fails' do
+  test 'C89ACD', %w(
+  | assert_cd_exec(path,*commands) raises when the cd fails
+  ) do
     error = assert_raises { shell.assert_cd_exec('zzzz', 'echo -n Hello') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
@@ -40,12 +39,14 @@ class ExternalShellerTest < DifferTestBase
     assert_equal 2, json['exit_status']
   end
 
-  test '995',
-       'assert_cd_exec(path,*commands) raises when a command fails' do
+  test 'C89995', %w(
+  | assert_cd_exec(path,*commands) raises when a command fails
+  ) do
     error = assert_raises { shell.assert_cd_exec('.', 'zzzz') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
     assert json['stderr'].end_with?("sh: zzzz: not found\n"), json['stderr']
     assert_equal 127, json['exit_status']
   end
+
 end

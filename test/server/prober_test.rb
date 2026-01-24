@@ -4,19 +4,16 @@ require_relative 'differ_test_base'
 require 'ostruct'
 
 class ProberTest < DifferTestBase
-  def self.id58_prefix
-    '198'
-  end
 
-  test '601', %w[alive] do
+  test '198601', %w[alive] do
     assert true?(prober.alive)
   end
 
-  test '603', %w[ready] do
+  test '198603', %w[ready] do
     assert true?(prober.ready)
   end
 
-  test '604', %w[
+  test '198604', %w[
     |when saver http-proxy is not ready
     |then ready? is false
   ] do
@@ -24,7 +21,7 @@ class ProberTest < DifferTestBase
     assert false?(prober.ready)
   end
 
-  test '191', %w[sha] do
+  test '198191', %w[sha] do
     sha = prober.sha
     assert_equal 40, sha.size
     sha.each_char do |ch|
@@ -41,4 +38,5 @@ class ProberTest < DifferTestBase
   def false?(arg)
     arg.instance_of?(FalseClass)
   end
+
 end

@@ -3,26 +3,27 @@
 require_relative 'differ_test_base'
 
 class ExternalsTest < DifferTestBase
-  def self.id58_prefix
-    '7A9'
-  end
 
-  test '920',
-       'default disk is ExternalDiskWriter' do
+  test '7A9920', %w(
+  | default disk is ExternalDiskWriter
+  ) do
     assert_equal External::DiskWriter, disk.class
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test 'C8F',
-       'default git is ExternalGitter' do
+  test '7A9C8F', %w(
+  | default git is ExternalGitter
+  ) do
     assert_equal External::Gitter, git.class
   end
 
   # - - - - - - - - - - - - - - - - -
 
-  test '1B1',
-       'default shell is ExternalSheller' do
+  test '7A91B1', %w(
+  | default shell is ExternalSheller
+  ) do
     assert_equal External::Sheller, shell.class
   end
+
 end
