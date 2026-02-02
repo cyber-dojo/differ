@@ -2,12 +2,12 @@
 set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 source "${ROOT_DIR}/bin/lib.sh"
-
-exit_non_zero_unless_installed docker
+source "${ROOT_DIR}/bin/echo_env_vars.sh"
 # shellcheck disable=SC2046
 export $(echo_env_vars)
+exit_non_zero_unless_installed docker
+
 docker compose --progress=plain up --wait --wait-timeout=10 client
 copy_in_saver_test_data
 TMP_HTML_FILENAME=/tmp/differ-demo.html

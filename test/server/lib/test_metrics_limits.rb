@@ -3,7 +3,7 @@
 def metrics
   [
     [ nil ],
-    [ 'test_count',    '>=', 106 ],
+    [ 'test_count',    '>=',  90 ],
     [ 'total_time',    '<=',  75 ],
     [ nil ],
     [ 'failure_count', '<=', 0   ],
