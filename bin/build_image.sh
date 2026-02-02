@@ -2,8 +2,11 @@
 set -Eeu
 
 export ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 source "${ROOT_DIR}/bin/lib.sh"
+source "${ROOT_DIR}/bin/echo_env_vars.sh"
+# shellcheck disable=SC2046
+export $(echo_env_vars)
+exit_non_zero_unless_installed docker
 
 show_help()
 {
@@ -52,9 +55,6 @@ build_image()
 
   local -r type="${1}"
 
-  exit_non_zero_unless_installed docker
-  # shellcheck disable=SC2046
-  export $(echo_env_vars)
   containers_down
 
   if [ "${CI:-}" != 'true' ]; then

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -Eeu
 
-
 loud_curl_form_data()
 {
   # curl that prints the server traceback if the response

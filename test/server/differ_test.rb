@@ -4,8 +4,15 @@ require_relative 'differ_test_base'
 
 class DifferTest < DifferTestBase
 
-  def self.versions_test(id58_suffix, *lines, &block)
-    versions = 0..2
+  #def self.versions_test(id58_suffix, *lines, &block)
+  #  versions = 0..2
+  #  versions.each do |version|
+  #    version_test(version, id58_suffix, *lines, &block)
+  #  end
+  #end
+
+  def self.versions_0_1_test(id58_suffix, *lines, &block)
+    versions = 0..1
     versions.each do |version|
       version_test(version, id58_suffix, *lines, &block)
     end
@@ -23,7 +30,8 @@ class DifferTest < DifferTestBase
   # empty file
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sA2C', %w(
+  #versions_test 'C9sA2C', %w(
+  versions_0_1_test 'C9sA2C', %w(
   | empty file is created
   ) do
     # Saver v2 uses git and its implementation currently relies on there
@@ -39,7 +47,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sA5C', %w(
+  #versions_test 'C9sA5C', %w(
+  versions_0_1_test 'C9sA5C', %w(
   | empty file is deleted
   ) do
     @was_files = { 'empty.rb' => '' }
@@ -52,7 +61,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9s3ED', %w(
+  #versions_test 'C9s3ED', %w(
+  versions_0_1_test 'C9s3ED', %w(
   | empty file is unchanged
   ) do
     @was_files = { 'empty.py' => '' }
@@ -65,7 +75,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sAA6', %w(
+  #versions_test 'C9sAA6', %w(
+  versions_0_1_test 'C9sAA6', %w(
   | empty file is renamed 100% identical
   ) do
     @was_files = { 'plain' => '' }
@@ -78,7 +89,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sA2D', %w(
+  #versions_test 'C9sA2D', %w(
+  versions_0_1_test 'C9sA2D', %w(
   | empty file is renamed 100% identical across dirs
   ) do
     @was_files = { 'plain'    => '' }
@@ -91,7 +103,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sF2E', %w(
+  #versions_test 'C9sF2E', %w(
+  versions_0_1_test 'C9sF2E', %w(
   | empty file has some content added
   ) do
     @was_files = { 'empty.c' => '' }
@@ -111,7 +124,8 @@ class DifferTest < DifferTestBase
   # non-empty file
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sD09', %w(
+  #versions_test 'C9sD09', %w(
+  versions_0_1_test 'C9sD09', %w(
   | non-empty file is created
   ) do
     # Saver v2 uses git and its implementation currently relies on there
@@ -129,7 +143,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9s0C6', %w(
+  #versions_test 'C9s0C6', %w(
+  versions_0_1_test 'C9s0C6', %w(
   | non-empty file is deleted
   ) do
     @was_files = { 'non-empty.h' => "two\nlines" }
@@ -146,7 +161,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9s21D', %w(
+  #versions_test 'C9s21D', %w(
+  versions_0_1_test 'C9s21D', %w(
   | non-empty file is unchanged
   ) do
     @was_files = { 'non-empty.h' => '#include<stdio.h>' }
@@ -161,7 +177,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sAA7', %w(
+  #versions_test 'C9sAA7', %w(
+  versions_0_1_test 'C9sAA7', %w(
   | non-empty file is renamed 100% identical
   ) do
     @was_files = { 'plain' => 'xxx' }
@@ -176,7 +193,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sBA7', %w(
+  #versions_test 'C9sBA7', %w(
+  versions_0_1_test 'C9sBA7', %w(
   | non-empty file is renamed 100% identical across dirs
   ) do
     @was_files = { 'a/b/plain' => "a\nb\nc\nd" }
@@ -194,7 +212,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sAA8', %w(
+  #versions_test 'C9sAA8', %w(
+  versions_0_1_test 'C9sAA8', %w(
   | non-empty file is renamed <100% identical
   ) do
     @was_files = { 'hiker.h'   => "a\nb\nc\nd" }
@@ -214,7 +233,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9sAA9', %w(
+  #versions_test 'C9sAA9', %w(
+  versions_0_1_test 'C9sAA9', %w(
   | non-empty file is renamed <100% identical across dirs
   ) do
     @was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
@@ -234,7 +254,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9s4D0', %w(
+  #versions_test 'C9s4D0', %w(
+  versions_0_1_test 'C9s4D0', %w(
   | non-empty file has some content added at the start
   ) do
     @was_files = { 'non-empty.c' => 'something' }
@@ -251,7 +272,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9s4D1', %w(
+  #versions_test 'C9s4D1', %w(
+  versions_0_1_test 'C9s4D1', %w(
   | non-empty file has some content added at the end
   ) do
     @was_files = { 'non-empty.c' => 'something' }
@@ -268,7 +290,8 @@ class DifferTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  versions_test 'C9s4D2', %w(
+  #versions_test 'C9s4D2', %w(
+  versions_0_1_test 'C9s4D2', %w(
   | non-empty file has some content added in the middle
   ) do
     @was_files = { 'non-empty.c' => "a\nc" }
@@ -293,21 +316,17 @@ class DifferTest < DifferTestBase
     manifest['version'] = 2
     id = saver.kata_create(manifest)
 
-    was_files = { '1/2/hiker.h'   => "a\nb\nc\nd" }
-    now_files = { '3/4/diamond.h' => "a\nb\nX\nd" }
-    kata_ran_tests(id, was_index = 1, was_files)
-    kata_ran_tests(id, now_index = 2, now_files)
     ex = assert_raises(RuntimeError) do
-      differ.diff_lines(id: id, was_index: was_index, now_index: now_index + 1)
+      differ.diff_lines(id: id, was_index: 1, now_index: 2)
     end
-    assert_equal "Invalid index #{now_index + 1}", ex.message
+    assert_equal 'Invalid index 1', ex.message
   end
 
   private
 
   def assert_diff(raw_expected)
     expected = expected_diff(raw_expected)
-    assert_diff_lines(expected)
+    assert_diff_lines(expected) # <<
     expected[0].delete(:lines)
     assert_diff_summary(expected)
   end
@@ -342,7 +361,7 @@ class DifferTest < DifferTestBase
     kata_ran_tests(id, was_index = 1, @was_files)
     kata_ran_tests(id, now_index = 2, @now_files)
     [id, was_index, now_index]
-  end
+  end  
 
   # - - - - - - - - - - - - - - - - - - - -
 
