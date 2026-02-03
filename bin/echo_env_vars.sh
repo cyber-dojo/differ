@@ -34,6 +34,7 @@ echo_env_vars()
   echo CYBER_DOJO_DIFFER_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/differ"
   
   # Overrides for local development
-  #echo CYBER_DOJO_SAVER_SHA=d80c6e4f9d17b41da878fa69315de7298e059350
-  #echo CYBER_DOJO_SAVER_TAG=d80c6e4
+  # echo CYBER_DOJO_SAVER_SHA=d80c6e4f9d17b41da878fa69315de7298e059350
+  # echo CYBER_DOJO_SAVER_TAG=d80c6e4
+  #
 }

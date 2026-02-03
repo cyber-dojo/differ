@@ -1,0 +1,4 @@
+
+- When saver.kata_event() which is called in server tests
+it can throw an exception. This exception is swallowed by differ
+and returns nil. Instead, the exception should be propagated.

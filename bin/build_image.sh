@@ -64,13 +64,6 @@ build_image()
     docker --log-level=ERROR compose build server
   fi
 
-  echo
-  echo "Building with --build-args"
-  echo "  COMMIT_SHA=${COMMIT_SHA}"
-  echo "To change this run:"
-  echo "$ COMMIT_SHA=... make image_${type}"
-  echo
-
   if [ "${type}" == 'client' ]; then
     # In CI workflow, we need to build the client image
     docker --log-level=ERROR compose build client
@@ -89,8 +82,10 @@ build_image()
   # Tag image-name for local development where differs name comes from echo-versioner-env-vars
   if [ "${type}" == 'server' ]; then
     docker tag "${image_name}" "cyberdojo/differ:${CYBER_DOJO_DIFFER_TAG}"
+    echo
     echo "  echo CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
     echo "  echo CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"]
+    echo
     echo "${image_name}"
   fi
 }
