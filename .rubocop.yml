@@ -54,7 +54,6 @@ Style/FetchEnvVar:
 Style/FrozenStringLiteralComment:
   Exclude:
     - source/**/*
-    - test/**/*
 
 Style/HashConversion:
   Exclude:
