@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Utf8
   def self.clean(str)
     # force an encoding change - if encoding is already utf-8

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'http_json_args'
 require 'json'
 require 'rack'

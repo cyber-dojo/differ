@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'client_test_base'
 require_app 'http_json_hash/unpacker'
 require 'ostruct'
