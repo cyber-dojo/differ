@@ -3,8 +3,6 @@
 
 ## main.yml 
 main.yml runs when there is a pushed commit.
-Reports to https://app.kosli.com  
-The workflow to look in if you want to learn about [Kosli](https://kosli.com).
 The main structure in this workflow is:
 - The build-image job calls a [reusable-workflow](https://github.com/cyber-dojo/reusable-actions-workflows) which:
   - builds the image
@@ -15,6 +13,9 @@ The main structure in this workflow is:
 - Subsequent jobs do **not** build the image
   - They load it from the Github Action cache using [cyber-dojo/download-artifact@main](https://github.com/cyber-dojo/download-artifact)
   - The kosli-attest commands use the fingerprint returned from the build-image job
+
+Reports compliance to https://app.kosli.com  
+The workflow to look in if you want to learn about [Kosli](https://app.kosli.com/cyber-dojo/flows/differ-ci/trails/).
 
 
 ## deploy-manually-to-aws-beta.yml 
