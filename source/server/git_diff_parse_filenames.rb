@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module GitDiffParseFilenames
   def parse_old_new_filenames(header)
     old_filename, new_filename = old_new_filenames(header[0])

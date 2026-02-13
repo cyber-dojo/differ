@@ -51,6 +51,10 @@ Style/FetchEnvVar:
   Exclude:
     - source/server/app_base.rb
 
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - source/**/*
+
 Style/HashConversion:
   Exclude:
     - source/server/app_base.rb

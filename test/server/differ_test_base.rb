@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'lib/id58_test_base'
 require_relative 'saver'
 require_app 'externals'
