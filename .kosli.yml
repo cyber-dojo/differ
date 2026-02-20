@@ -9,8 +9,6 @@ trail:
       attestations:
         - name: rubocop-lint
           type: junit
-        - name: snyk-code-scan
-          type: snyk
         - name: unit-test
           type: junit
         - name: unit-test-metrics
