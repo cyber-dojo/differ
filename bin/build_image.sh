@@ -84,7 +84,7 @@ build_image()
     docker tag "${image_name}" "cyberdojo/differ:${CYBER_DOJO_DIFFER_TAG}"
     echo
     echo "  echo CYBER_DOJO_DIFFER_SHA=${CYBER_DOJO_DIFFER_SHA}"
-    echo "  echo CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"]
+    echo "  echo CYBER_DOJO_DIFFER_TAG=${CYBER_DOJO_DIFFER_TAG}"
     echo
     echo "${image_name}"
   fi
