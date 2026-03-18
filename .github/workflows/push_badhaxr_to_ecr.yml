@@ -38,13 +38,13 @@ jobs:
       contents: write
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-region:            ${{ needs.setup.outputs.aws_region }}
           role-duration-seconds: 900
           role-session-name:     ${{ github.event.repository.name }}
           role-to-assume:        arn:aws:iam::${{ needs.setup.outputs.aws_account_id }}:role/${{ needs.setup.outputs.gh_actions_iam_role_name }}
-          mask-aws-account-id:   no
+          mask-aws-account-id:   false
 
       - name: Login to Amazon ECR
         id: login-ecr
