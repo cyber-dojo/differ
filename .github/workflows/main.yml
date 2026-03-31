@@ -87,7 +87,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
+        uses: kosli-dev/setup-cli-action@v3
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
@@ -117,7 +117,7 @@ jobs:
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        uses: kosli-dev/setup-cli-action@v2
+        uses: kosli-dev/setup-cli-action@v3
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
@@ -191,7 +191,7 @@ jobs:
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        uses: kosli-dev/setup-cli-action@v2
+        uses: kosli-dev/setup-cli-action@v3
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
@@ -245,7 +245,7 @@ jobs:
 
       - name: Setup Kosli CLI
         if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        uses: kosli-dev/setup-cli-action@v2
+        uses: kosli-dev/setup-cli-action@v3
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
@@ -321,7 +321,7 @@ jobs:
           egress-policy: audit
 
       - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
+        uses: kosli-dev/setup-cli-action@v3
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
@@ -354,7 +354,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
+        uses: kosli-dev/setup-cli-action@v3
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
