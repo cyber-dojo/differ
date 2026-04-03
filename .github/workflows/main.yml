@@ -13,7 +13,6 @@ env:
   KOSLI_FLOW:      ${{ vars.KOSLI_FLOW }}              # differ-ci
   KOSLI_TRAIL:     ${{ github.sha }}
 
-  DOCKER_API_VERSION:     ${{ vars.DOCKER_API_VERSION }}
   AWS_ECR_ID:             ${{ vars.AWS_ECR_ID }}
   AWS_REGION:             ${{ vars.AWS_REGION }}
   AWS_ACCOUNT_ID_BETA:    ${{ vars.AWS_ACCOUNT_ID_BETA }}
