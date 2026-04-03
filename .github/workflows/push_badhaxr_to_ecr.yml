@@ -7,7 +7,6 @@ env:
   AWS_ACCOUNT_ID:     ${{ vars.AWS_ACCOUNT_ID }}
   AWS_ECR_ID:         ${{ vars.AWS_ECR_ID }}
   AWS_REGION:         ${{ vars.AWS_REGION }}
-  DOCKER_API_VERSION: ${{ vars.DOCKER_API_VERSION }}
 
 jobs:
 
