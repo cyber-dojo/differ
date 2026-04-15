@@ -2,6 +2,7 @@ name: Main
 
 on:
   push:
+  pull_request:
 
 env:
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
