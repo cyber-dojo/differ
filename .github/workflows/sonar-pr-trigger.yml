@@ -30,6 +30,8 @@ jobs:
 
       - name: Create branch with temporary file
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           BRANCH="sonar-trigger/$(date +%Y%m%d%H%M%S)"
           echo "${BRANCH}" > .sonar-trigger
           git checkout -b "${BRANCH}"
@@ -37,15 +39,18 @@ jobs:
           git commit -m "Trigger SonarCloud PR scan"
           git push origin "${BRANCH}"
           echo "BRANCH=${BRANCH}" >> "${GITHUB_ENV}"
+          echo "### SonarCloud PR Trigger" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- **Branch:** ${BRANCH}" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Create PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create \
+          PR_URL=$(gh pr create \
             --title "DO NOT MERGE - Automated SonarCloud PR scan trigger" \
             --body "This PR was automatically created to trigger a SonarCloud PR scan for CLI testing. It will be closed automatically." \
-            --head "${BRANCH}"
+            --head "${BRANCH}")
+          echo "- **PR:** ${PR_URL}" >> "${GITHUB_STEP_SUMMARY}"
 
       # Wait up to 5 minutes to ensure the SonarCloud PR Scan workflow
       # has started before we close the PR and delete the branch.
@@ -57,16 +62,17 @@ jobs:
           for i in $(seq 1 10); do
             RUNS=$(gh run list --branch "${BRANCH}" --workflow "SonarCloud PR Scan" --json status --jq 'length')
             if [ "${RUNS}" -gt 0 ]; then
-              echo "SonarCloud PR Scan workflow has started"
+              echo "- **Scan workflow:** started" >> "${GITHUB_STEP_SUMMARY}"
               exit 0
             fi
             echo "Waiting for workflow to start (attempt ${i}/10)..."
             sleep 30
           done
-          echo "Timed out waiting, proceeding to close PR"
+          echo "- **Scan workflow:** timed out waiting" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Close PR and delete branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr close "${BRANCH}" --delete-branch
+          echo "- **Cleanup:** PR closed and branch deleted" >> "${GITHUB_STEP_SUMMARY}"

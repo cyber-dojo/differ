@@ -27,3 +27,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         uses: SonarSource/sonarqube-scan-action@v6.0.0
+
+      - name: Write step summary
+        run: |
+          echo "### SonarCloud PR Scan" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- **Project:** ${SONARCLOUD_PROJECT_KEY}" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- **PR:** #${{ github.event.pull_request.number }}" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- **Results:** [SonarCloud](https://sonarcloud.io/summary/overall?id=${SONARCLOUD_PROJECT_KEY}&pullRequest=${{ github.event.pull_request.number }})" >> "${GITHUB_STEP_SUMMARY}"
