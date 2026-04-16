@@ -1,0 +1,72 @@
+# Periodically creates a throwaway PR to trigger a SonarCloud PR scan.
+# This ensures there is always at least one PR scan in SonarCloud,
+# which is used in CLI testing. The PR is never merged — it is closed
+# and the branch deleted once the scan workflow has started.
+
+name: SonarCloud PR Trigger
+
+on:
+  schedule:
+    - cron: '0 2 1,15 * *'  # 1st and 15th of each month at 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+
+  trigger-sonar-pr-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Create branch with temporary file
+        run: |
+          BRANCH="sonar-trigger/$(date +%Y%m%d%H%M%S)"
+          echo "${BRANCH}" > .sonar-trigger
+          git checkout -b "${BRANCH}"
+          git add .sonar-trigger
+          git commit -m "Trigger SonarCloud PR scan"
+          git push origin "${BRANCH}"
+          echo "BRANCH=${BRANCH}" >> "${GITHUB_ENV}"
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "DO NOT MERGE - Automated SonarCloud PR scan trigger" \
+            --body "This PR was automatically created to trigger a SonarCloud PR scan for CLI testing. It will be closed automatically." \
+            --head "${BRANCH}"
+
+      # Wait up to 5 minutes to ensure the SonarCloud PR Scan workflow
+      # has started before we close the PR and delete the branch.
+      # Once started, the workflow run completes even if the PR is closed.
+      - name: Wait for scan workflow to start
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for i in $(seq 1 10); do
+            RUNS=$(gh run list --branch "${BRANCH}" --workflow "SonarCloud PR Scan" --json status --jq 'length')
+            if [ "${RUNS}" -gt 0 ]; then
+              echo "SonarCloud PR Scan workflow has started"
+              exit 0
+            fi
+            echo "Waiting for workflow to start (attempt ${i}/10)..."
+            sleep 30
+          done
+          echo "Timed out waiting, proceeding to close PR"
+
+      - name: Close PR and delete branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr close "${BRANCH}" --delete-branch
