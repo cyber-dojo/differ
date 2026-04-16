@@ -68,7 +68,7 @@ jobs:
 
       - name: Write scan summary
         run: |
-          echo "- **Scan:** [SonarCloud](https://sonarcloud.io/summary/overall?id=${SONARCLOUD_PROJECT_KEY}&pullRequest=${PR_NUMBER})" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- **Scan:** [SonarCloud](https://sonarcloud.io/summary/new_code?id=${SONARCLOUD_PROJECT_KEY}&pullRequest=${PR_NUMBER})" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Close PR and delete branch
         env:
