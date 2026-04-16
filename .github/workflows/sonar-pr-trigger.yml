@@ -80,8 +80,12 @@ jobs:
           retention-days: 90
 
       - name: Write scan summary
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "- **Scan:** [SonarCloud](https://sonarcloud.io/summary/new_code?id=${SONARCLOUD_PROJECT_KEY}&pullRequest=${PR_NUMBER})" >> "${GITHUB_STEP_SUMMARY}"
+          ARTIFACT_URL=$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts --jq '.artifacts[] | select(.name=="sonar-pr-report-task") | .archive_download_url')
+          echo "- **Artifact:** [sonar-pr-report-task](${ARTIFACT_URL})" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Close PR and delete branch
         env:
