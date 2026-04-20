@@ -147,21 +147,18 @@ jobs:
       kosli_api_token: ${{ secrets.KOSLI_API_TOKEN }}
 
 
-  # https://github.com/cyber-dojo/snyk-container-test/blob/main/action.yml
   snyk-container-scan:
     needs: [build-image]
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: write
-    steps:
-      - name: Run snyk-container-test and attest results to Kosli
-        uses: cyber-dojo/snyk-container-test@main
-        with:
-          snyk_token:        ${{ secrets.SNYK_TOKEN }}
-          image_name:        ${{ needs.build-image.outputs.tagged_image_name }}
-          kosli_cli_version: ${{ vars.KOSLI_CLI_VERSION }}
-          attestation_name:  differ.snyk-container-scan
+    uses: cyber-dojo/snyk-scanning/.github/workflows/artifact_snyk_test.yml@main
+    with:
+      aws_rolename: gh_actions_services
+      artifact_name: ${{ needs.build-image.outputs.tagged_image_name }}
+      kosli_flow: ${{ vars.KOSLI_FLOW }}
+      kosli_trail: ${{ github.sha }}
+      kosli_attestation_name: differ.snyk-container-scan
+    secrets:
+      snyk_token: ${{ secrets.SNYK_TOKEN }}
+      kosli_api_token: ${{ secrets.KOSLI_API_TOKEN }}
 
 
   unit-tests:

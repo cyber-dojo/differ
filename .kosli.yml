@@ -24,4 +24,4 @@ trail:
         - name: sonarcloud-scan
           type: sonar
         - name: snyk-container-scan
-          type: snyk
+          type: generic
