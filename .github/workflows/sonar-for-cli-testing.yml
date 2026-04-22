@@ -1,12 +1,16 @@
-# Periodically creates a throwaway PR and runs a SonarCloud PR scan.
-# This ensures there is always at least one PR scan in SonarCloud,
-# which is used in CLI testing. The PR is never merged — it is closed
-# and the branch deleted once the scan completes.
+# Provides SonarCloud scan results for Kosli CLI integration tests.
 #
-# Note: The scan runs directly in this workflow because events created
+# PR scan:  Creates a throwaway PR, runs a SonarCloud PR scan, uploads
+#           report-task.txt, then closes the PR and deletes the branch.
+#           SonarCloud automatically deletes PR scan results after 4 weeks.
+#
+# Main scan: Runs a SonarCloud scan on the main branch and uploads
+#            report-task.txt.
+#
+# Note: The PR scan runs directly in this workflow because events created
 # with GITHUB_TOKEN do not trigger other workflows.
 
-name: SonarCloud PR Trigger
+name: SonarCloud for CLI Testing
 
 on:
   schedule:
@@ -23,7 +27,7 @@ env:
 
 jobs:
 
-  trigger-sonar-pr-scan:
+  pr-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
@@ -46,7 +50,7 @@ jobs:
           git commit -m "Trigger SonarCloud PR scan"
           git push origin "${BRANCH}"
           echo "BRANCH=${BRANCH}" >> "${GITHUB_ENV}"
-          echo "### SonarCloud PR Trigger" >> "${GITHUB_STEP_SUMMARY}"
+          echo "### SonarCloud PR Scan" >> "${GITHUB_STEP_SUMMARY}"
           echo "- **Branch:** ${BRANCH}" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Create PR
@@ -74,7 +78,7 @@ jobs:
 
       # The Kosli CLI integration tests need a valid SonarCloud report-task.txt
       # from a PR scan. Upload it as an artifact so the CLI tests can download it.
-      - name: Upload report-task.txt for CLI integration tests
+      - name: Upload report-task.txt
         uses: actions/upload-artifact@v4
         with:
           name: sonar-pr-report-task
@@ -95,3 +99,38 @@ jobs:
         run: |
           gh pr close "${BRANCH}" --delete-branch
           echo "- **Cleanup:** PR closed and branch deleted" >> "${GITHUB_STEP_SUMMARY}"
+
+  main-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run SonarCloud scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+
+      # The Kosli CLI integration tests need a valid SonarCloud report-task.txt
+      # from a main branch scan. Upload it as an artifact so the CLI tests can download it.
+      - name: Upload report-task.txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonar-main-report-task
+          path: .scannerwork/report-task.txt
+          retention-days: 90
+
+      - name: Write scan summary
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "### SonarCloud Main Scan" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- **Scan:** [SonarCloud](https://sonarcloud.io/summary/new_code?id=${SONARCLOUD_PROJECT_KEY})" >> "${GITHUB_STEP_SUMMARY}"
+          ARTIFACT_URL=$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts --jq '.artifacts[] | select(.name=="sonar-main-report-task") | .archive_download_url')
+          echo "- **Artifact:** [sonar-main-report-task](${ARTIFACT_URL})" >> "${GITHUB_STEP_SUMMARY}"
