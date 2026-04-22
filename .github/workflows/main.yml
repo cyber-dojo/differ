@@ -299,6 +299,7 @@ jobs:
             -Dsonar.analysis.kosli_attestation=differ.sonarcloud-scan
 
 
+
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
