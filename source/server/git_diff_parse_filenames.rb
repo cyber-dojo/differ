@@ -3,6 +3,7 @@ module GitDiffParseFilenames
     old_filename, new_filename = old_new_filenames(header[0])
     new_filename = nil if header[1].start_with?('deleted file mode')
     old_filename = nil if header[1].start_with?('new file mode')
+    old_filename = nil if header[2]&.start_with?('copy from')
     [old_filename, new_filename]
   end
 

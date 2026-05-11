@@ -11,6 +11,7 @@ class AppBase < Sinatra::Base
   end
 
   silently { register Sinatra::Contrib } # respond_to
+  set :json_encoder, Sinatra::JSON       # avoids MultiJson.encode deprecation warning
   set :port, ENV['PORT']
 
   def self.get_json(name, klass)
