@@ -50,7 +50,7 @@ module External
       '--unified=99999999999',
       '--no-prefix',
       '--ignore-space-at-eol',
-      '--find-copies-harder',
+      '--find-renames',
       '--indent-heuristic',
       '0',
       '1',

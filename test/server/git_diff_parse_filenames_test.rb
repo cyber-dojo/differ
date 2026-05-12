@@ -191,5 +191,27 @@ class GitDiffParseFilenamesTest < DifferTestBase
     assert_equal 'b/u/i/o/em bed"ded', new_filename, :new_filename
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'wK7C3F', %w(
+  | old_filename is nil for copied file.
+  | git diff --find-copies-harder (used in gitter.rb) enables copy
+  | detection across unmodified files. All empty files share the same
+  | blob hash (e69de29), so when a new empty file is added alongside
+  | an existing empty file, git sees two files with identical content
+  | and emits copy from/to headers instead of new file mode.
+  | The parser must treat this as :created, not :renamed.
+  ) do
+    header = [
+      'diff --git empty.txt new_file.txt',
+      'similarity index 100%',
+      'copy from empty.txt',
+      'copy to new_file.txt'
+    ]
+    old_filename, new_filename = parse_old_new_filenames(header)
+    assert_nil old_filename, :old_filename
+    assert_equal 'new_file.txt', new_filename, :new_filename
+  end
+
   include GitDiffParseFilenames
 end
