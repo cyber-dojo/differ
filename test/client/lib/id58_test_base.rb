@@ -40,7 +40,6 @@ class Id58TestBase < Minitest::Test
 
     name58 = lines.join(' ')
     execute_around = lambda {
-      ENV['ID58'] = id58
       @_id58 = id58
       @_name58 = name58
       id58_setup
