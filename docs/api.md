@@ -3,7 +3,7 @@
 - - - -
 ## GET diff_lines(id,was_index,now_index)
 A diff of two sets of files (designated with **was_index** and **now_index**) from the kata designated with **id**.
-Also includes unchanged files and the content of files renamed but with identical content.
+Also handles unchanged files and files renamed but with identical content.
 - parameters
   * **id:String** the id of the kata.
   * **was_index:Integer** the test-submission index of the first set of files.
@@ -107,6 +107,139 @@ Also includes unchanged files and the content of files renamed but with identica
     ...
   ]
   ```
+
+- - - -
+## GET diff_lines_files(was_files,now_files)
+A diff of two sets of files supplied directly as parameters.
+Also handles unchanged files and files renamed but with identical content.
+- parameters
+  * **was_files:Hash** a Hash of filename to content Strings for the first set of files.
+  * **now_files:Hash** a Hash of filename to content Strings for the second set of files.
+  * eg
+  ```json
+  {
+    "was_files": { "hiker.h": "#ifndef HIKER_INCLUDED\n#define WIBBLE\n" },
+    "now_files": { "hiker.h": "#ifndef HIKER_INCLUDED\n#define HIKER_INCLUDED\n" }
+  }
+  ```
+- returns an Array of Hashes with each Hash being the diff of a single file. Each Hash has the following keys:
+  * "type" - one of the Strings [ "created", "deleted", "renamed", "changed", "unchanged" ].
+  * "old_filename" - the String name of the **was_files** file, unless "type" is "created" in which case **null**.
+  * "new_filename" - the String name of the **now_files** file, unless "type" is "deleted" in which case **null**.
+  * "lines" - an Array of Hashes, each Hash detailing an "added", "deleted", or "same" line, or
+    a "section" marker before a diff-chunk.
+  * "line_counts" - a Hash with three entries:
+    - "added" - the number of lines added to **now_files**'s "new_filename" file.
+    - "deleted" - the number of lines deleted from **was_files**'s "old_filename" file.
+    - "same" - the number of lines identical in both **now_files**'s "new_filename" and **was_files**'s "old_filename" file.
+  *
+  * eg a created file, which always has a single "section" marker.
+  ```json
+  [
+    {
+      "type": "created",
+      "old_filename": null,
+      "new_filename": "the.created.filename",
+      "lines":
+      [
+        { "type": "section", "index": 0 },              
+        { "type": "added", "line": "this file", "number": 1 },
+        { "type": "added", "line": "is new",    "number": 2 }
+      ],
+      "line_counts": { "added":2, "deleted":0, "same":0 }
+    }
+    ,
+    ...
+  ]
+  ```
+  * eg a deleted file, which always has a single "section" marker.
+  ```json
+  [
+    {
+      "type": "deleted",
+      "old_filename": "the.deleted.filename",
+      "new_filename": null,
+      "lines":
+      [
+        { "type": "section", "index": 0 },      
+        { "type": "deleted", "line": "this file",   "number": 1 },
+        { "type": "deleted", "line": "had 2 lines", "number": 2 }
+      ],
+      "line_counts": { "added":0, "deleted":2, "same":0 }
+    }
+    ,
+    ...
+  ]
+  ```
+  * eg a renamed file with identical content, which always has zero "section" markers.
+  ```json
+  [
+    {
+      "type": "renamed",
+      "old_filename": "the.old.filename",
+      "new_filename": "the.new.filename",
+      "lines":
+      [
+        { "type": "same", "line": "this file has",   "number": 1 },
+        { "type": "same", "line": "changed its name", "number": 2 }
+        { "type": "same", "line": "but not its contents", "number": 3 }
+      ],
+      "line_counts": { "added":0, "deleted":0, "same":3 }
+    }
+    ,
+    ...
+  ]
+  ```
+  * eg a changed file with two diff-chunks.
+  ```json
+  [
+    {
+      "type": "changed",
+      "old_filename": "hiker.h",
+      "new_filename": "hiker.h",
+      "lines":
+      [
+        { "type": "same", "line": "#ifndef HIKER_INCLUDED",   "number": 1 },
+        { "type": "section", "index": 0 },              
+        { "type": "deleted", "line": "#define WIBBLE",   "number": 2 },
+        { "type": "added",   "line": "#define HIKER_INCLUDED", "number": 2 },
+        { "type": "same", "line": "", "number": 3 },
+        { "type": "section", "index": 1 },              
+        { "type": "deleted", "line": "struct wibble",   "number": 3 },
+        { "type": "added",   "line": "struct hiker", "number": 3 },
+        { "type": "same", "line": "{", "number": 4 },        
+        { "type": "same", "line": "};", "number": 5 },        
+        { "type": "same", "line": "#endif", "number": 6 },        
+      ],
+      "line_counts": { "added":2, "deleted":2, "same":5 }
+    }
+    ,
+    ...
+  ]
+  ```
+
+- - - -
+## GET diff_summary_files(was_files,now_files)
+A diff of two sets of files supplied directly as parameters.
+Also handles unchanged files and files renamed but with identical content.
+- parameters
+  * **was_files:Hash** a Hash of filename to content Strings for the first set of files.
+  * **now_files:Hash** a Hash of filename to content Strings for the second set of files.
+  * eg
+  ```json
+  {
+    "was_files": { "hiker.h": "#ifndef HIKER_INCLUDED\n#define WIBBLE\n" },
+    "now_files": { "hiker.h": "#ifndef HIKER_INCLUDED\n#define HIKER_INCLUDED\n" }
+  }
+  ```
+- returns an Array of Hashes with each Hash being the diff of a single file. Each Hash has the following keys:
+  * "type" - one of the Strings [ "created", "deleted", "renamed", "changed", "unchanged" ].
+  * "old_filename" - the String name of the **was_files** file, unless "type" is "created" in which case **null**.
+  * "new_filename" - the String name of the **now_files** file, unless "type" is "deleted" in which case **null**.
+  * "line_counts" - a Hash with three entries:
+    - "added" - the number of lines added to **now_files**'s "new_filename" file.
+    - "deleted" - the number of lines deleted from **was_files**'s "old_filename" file.
+    - "same" - the number of lines identical in both **now_files**'s "new_filename" and **was_files**'s "old_filename" file.
 
 - - - -
 ## GET diff_summary(id,was_index,now_index)

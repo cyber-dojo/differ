@@ -7,6 +7,8 @@ class App < AppBase
   get_json(:ready,      Prober)
   get_json(:sha,        Prober)
 
-  get_json(:diff_lines,   Differ)
-  get_json(:diff_summary, Differ)
+  get_json(:diff_lines,         Differ)
+  get_json(:diff_summary,       Differ)
+  get_json(:diff_lines_files,   Differ)
+  get_json(:diff_summary_files, Differ)
 end

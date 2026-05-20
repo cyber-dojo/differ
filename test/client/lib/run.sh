@@ -10,6 +10,7 @@ readonly TEST_FILES=(${MY_DIR}/../*_test.rb)
 readonly TEST_ARGS=(${@})
 
 readonly SCRIPT="
+\$stdout.sync = true
 require '${MY_DIR}/coverage.rb'
 %w(${TEST_FILES[*]}).shuffle.each{ |file|
   require file
