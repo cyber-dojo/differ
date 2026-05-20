@@ -1,7 +1,10 @@
 require 'English'
+require 'etc'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require_relative 'slim_json_reporter'
+
+Minitest.parallel_executor = Minitest::Parallel::Executor.new(Etc.nprocessors)
 
 reporters = [
   Minitest::Reporters::DefaultReporter.new,
@@ -21,9 +24,12 @@ class Id58TestBase < Minitest::Test
     super
   end
 
+  parallelize_me!
+
   @@args = (ARGV.sort.uniq - ['--']) # eg 2m4
   @@seen_ids = []
   @@timings = {}
+  TIMINGS_LOCK = Mutex.new
 
   def self.test(id58, *lines, &test_block)
     src = test_block.source_location
@@ -42,7 +48,7 @@ class Id58TestBase < Minitest::Test
         t1 = Time.now
         instance_eval(&test_block)
         t2 = Time.now
-        @@timings["#{id58}:#{src_file}:#{src_line}:#{name58}"] = (t2 - t1)
+        TIMINGS_LOCK.synchronize { @@timings["#{id58}:#{src_file}:#{src_line}:#{name58}"] = (t2 - t1) }
       ensure
         puts $ERROR_INFO.message unless $ERROR_INFO.nil?
         id58_teardown

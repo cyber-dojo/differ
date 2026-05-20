@@ -49,6 +49,7 @@ services:
 
   saver:
     image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}
+    container_name: ${CYBER_DOJO_SAVER_CONTAINER_NAME}
     user: saver
     ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
     env_file: [ .env ]

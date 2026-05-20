@@ -28,6 +28,7 @@ echo_env_vars()
   #
   echo CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME=test_differ_client
   echo CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME=test_differ_server
+  echo CYBER_DOJO_SAVER_CONTAINER_NAME=test_differ_saver
   #
   local -r AWS_ACCOUNT_ID=244531986313
   local -r AWS_REGION=eu-central-1
