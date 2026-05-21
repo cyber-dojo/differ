@@ -64,6 +64,7 @@ check_args()
 run_tests()
 {
   check_args "$@"
+  containers_down
 
   local -r TYPE="${1}"           # {server|client}
   local -r TEST_LOG=test.log

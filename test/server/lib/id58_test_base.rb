@@ -3,13 +3,15 @@ require 'etc'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require_relative 'slim_json_reporter'
+require_relative 'slow_tests_reporter'
 
 Minitest.parallel_executor = Minitest::Parallel::Executor.new(Etc.nprocessors)
 
 reporters = [
   Minitest::Reporters::DefaultReporter.new,
   Minitest::Reporters::SlimJsonReporter.new,
-  Minitest::Reporters::JUnitReporter.new("#{ENV.fetch('COVERAGE_ROOT')}/junit")
+  Minitest::Reporters::JUnitReporter.new("#{ENV.fetch('COVERAGE_ROOT')}/junit"),
+  Minitest::Reporters::SlowTestsReporter.new
 ]
 Minitest::Reporters.use!(reporters)
 
@@ -28,8 +30,6 @@ class Id58TestBase < Minitest::Test
 
   @@args = (ARGV.sort.uniq - ['--']) # eg 2m4
   @@seen_ids = []
-  @@timings = {}
-  TIMINGS_LOCK = Mutex.new
 
   def self.test(id58, *lines, &test_block)
     src = test_block.source_location
@@ -47,7 +47,7 @@ class Id58TestBase < Minitest::Test
         t1 = Time.now
         instance_eval(&test_block)
         t2 = Time.now
-        TIMINGS_LOCK.synchronize { @@timings["#{id58}:#{src_file}:#{src_line}:#{name58}"] = (t2 - t1) }
+        SlowTestsTimings::LOCK.synchronize { SlowTestsTimings::TIMINGS["#{id58}:#{src_file}:#{src_line}:#{name58}"] = (t2 - t1) }
       ensure
         puts $ERROR_INFO.message unless $ERROR_INFO.nil?
         id58_teardown
@@ -55,19 +55,6 @@ class Id58TestBase < Minitest::Test
     }
     name = "id58 '#{id58}',\n'#{name58}'"
     define_method("test_\n#{name}".to_sym, &execute_around)
-  end
-
-  Minitest.after_run do
-    slow = @@timings.select { |_name, secs| secs > 0.000 }
-    sorted = slow.sort_by { |_name, secs| -secs }.to_h
-    size = [sorted.size, 5].min
-    puts
-    puts 'Slowest tests are...' unless sorted.empty?
-    sorted.each_with_index do |(name, secs), index|
-      puts format('%3.4f - %-72s', secs, name)
-      break if index == size
-    end
-    puts
   end
 
   ID58_ALPHABET = %w[
