@@ -50,7 +50,11 @@ copy_in_saver_test_data()
 
 containers_down()
 {
-  docker compose down --remove-orphans --volumes
+  local -r all=$(docker ps --all --quiet)
+  if [ -n "${all}" ]; then
+    # shellcheck disable=SC2086
+    docker rm --force ${all}
+  fi
 }
 
 echo_warnings()
@@ -95,10 +99,11 @@ remove_all_but_latest()
   # Keep latest in the cache
   local -r docker_image_ls="${1}"
   local -r name="${2}"
+  docker container prune --force
   for image_name in $(echo "${docker_image_ls}" | grep "${name}:")
   do
     if [ "${image_name}" != "${name}:latest" ]; then
-      docker image rm "${image_name}"
+      docker image rm --force "${image_name}"
     fi
   done
   docker system prune --force
