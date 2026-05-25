@@ -1,8 +1,8 @@
 def metrics
   [
     [ nil ],
-    [ 'test_count',    '>=', 34 ],
-    [ 'total_time',    '<=', 50  ],
+    [ 'test_count',    '>=', 33 ],
+    [ 'total_time',    '<=', 10  ],
     [ nil ],
     [ 'failure_count', '<=', 0   ],
     [ 'error_count'  , '<=', 0   ],

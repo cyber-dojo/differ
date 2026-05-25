@@ -34,7 +34,7 @@ class HtmlDemo
   end
 
   def diff
-    duration, result = timed { differ.diff_lines('5U2J18', 1, 2) }
+    duration, result = timed { differ.diff_lines(was_files: WAS_FILES, now_files: now_files) }
     pre('diff_lines', duration, 'LightGreen', result)
   end
 
@@ -61,21 +61,70 @@ class HtmlDemo
     html
   end
 
-  def old_files
-    {
-      'cyber-dojo.sh': 'blah blah',
-      'hiker.c': '#include <hiker.h>',
-      'deleted.txt': 'tweedle-dee'
-    }
-  end
-
-  def new_files
-    {
-      'cyber-dojo.sh': 'blah blah blah',
-      'hiker.c': '#include "hiker.h"',
-      'hiker.h': "#ifndef HIKER_INCLUDED\n#endif"
-    }
+  def now_files
+    hiker_sh = [
+      '#!/bin/bash',
+      '',
+      'answer()',
+      '{',
+      '  echo $((6 * 999sss))',
+      '}',
+      ''
+    ].join("\n")
+    WAS_FILES.merge('hiker.sh' => hiker_sh)
   end
 end
+
+WAS_FILES = {
+  'test_hiker.sh' => [
+    '#!/usr/bin/env bats',
+    '',
+    'source ./hiker.sh',
+    '',
+    '@test "life the universe and everything" {',
+    '  local actual=$(answer)',
+    '  [ "$actual" == "42" ]',
+    '}',
+    ''
+  ].join("\n"),
+  'bats_help.txt' => [
+    '',
+    'bats help is online at',
+    'https://github.com/bats-core/bats-core#usage',
+    ''
+  ].join("\n"),
+  'hiker.sh' => [
+    '#!/bin/bash',
+    '',
+    'answer()',
+    '{',
+    '  echo $((6 * 999))',
+    '}',
+    ''
+  ].join("\n"),
+  'cyber-dojo.sh' => [
+    'chmod 700 *.sh',
+    './test_*.sh',
+    ''
+  ].join("\n"),
+  'readme.txt' => [
+    'Your task is to create an LCD string representation of an',
+    'integer value using a 3x3 grid of space, underscore, and',
+    'pipe characters for each digit. Each digit is shown below',
+    '(using a dot instead of a space)',
+    '',
+    '._.   ...   ._.   ._.   ...   ._.   ._.   ._.   ._.   ._.',
+    '|.|   ..|   ._|   ._|   |_|   |_.   |_.   ..|   |_|   |_|',
+    '|_|   ..|   |_.   ._|   ..|   ._|   |_|   ..|   |_|   ..|',
+    '',
+    '',
+    'Example: 910',
+    '',
+    '._. ... ._.',
+    '|_| ..| |.|',
+    '..| ..| |_|',
+    ''
+  ].join("\n")
+}.freeze
 
 puts(HtmlDemo.new.html)

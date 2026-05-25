@@ -39,15 +39,6 @@ exit_non_zero()
   kill -INT $$
 }
 
-copy_in_saver_test_data()
-{
-  local -r SAVER_CID="${CYBER_DOJO_SAVER_CONTAINER_NAME}"
-  local -r SRC_PATH=${ROOT_DIR}/test/server/data/cyber-dojo
-  local -r DEST_PATH=/cyber-dojo
-  # You cannot docker cp to a tmpfs, so tar-piping instead...
-  tar --no-xattrs -c -C "${SRC_PATH}" - . | docker exec -i "${SAVER_CID}" tar x -C ${DEST_PATH}
-}
-
 containers_down()
 {
   local -r all=$(docker ps --all --quiet)

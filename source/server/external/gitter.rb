@@ -4,13 +4,9 @@ module External
       @externals = externals
     end
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - -
-
     def setup(path)
       shell.assert_cd_exec(path, SETUP)
     end
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - -
 
     def add_commit_tag_0(path)
       shell.assert_cd_exec(path, ADD_COMMIT_TAG_0)
@@ -19,8 +15,6 @@ module External
     def add_commit_tag_1(path)
       shell.assert_cd_exec(path, ADD_COMMIT_TAG_1)
     end
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - -
 
     def diff_0_1(path)
       shell.assert_cd_exec(path, DIFF_0_1)

@@ -1,14 +1,12 @@
 class Prober
-  def initialize(externals)
-    @externals = externals
-  end
+  def initialize(_externals); end # rubocop:disable Style/RedundantInitialize
 
   def alive
     true
   end
 
   def ready
-    @externals.saver.ready?
+    true
   end
 
   def sha
