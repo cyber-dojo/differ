@@ -6,25 +6,25 @@ class Differ
     @externals = externals
   end
 
-  def diff_lines(id:, was_index:, now_index:)
-    was_files = files(saver.kata_event(id, was_index))
-    now_files = files(saver.kata_event(id, now_index))
-    diff_lines_files(was_files: was_files, now_files: now_files)
-  end
-
-  def diff_summary(id:, was_index:, now_index:)
-    was_files = files(saver.kata_event(id, was_index))
-    now_files = files(saver.kata_event(id, now_index))
-    diff_summary_files(was_files: was_files, now_files: now_files)
-  end
-
-  def diff_lines_files(was_files:, now_files:)
+  def diff_lines(was_files:, now_files:)
     diff_plus(was_files, now_files, lines: true)
   end
 
+  def diff_summary(was_files:, now_files:)
+    diff_plus(was_files, now_files, lines: false)
+  end
+
+  # :nocov:
+  def diff_lines_files(was_files:, now_files:)
+    diff_plus(was_files, now_files, lines: true)
+  end
+  # :nocov:
+
+  # :nocov:
   def diff_summary_files(was_files:, now_files:)
     diff_plus(was_files, now_files, lines: false)
   end
+  # :nocov:
 
   private
 
@@ -33,12 +33,6 @@ class Differ
     diffs = GitDiffParser.new(diff_lines, options).parse_all
     fill_identical_renamed_files(diffs, now_files, options)
     diffs + unchanged_files(now_files, diffs, options)
-  end
-
-  def files(event)
-    event['files'].transform_values do |file|
-      file['content']
-    end
   end
 
   def fill_identical_renamed_files(diffs, new_files, options)
@@ -76,9 +70,5 @@ class Differ
     lines.collect.with_index(1) do |line, number|
       { type: :same, line: line, number: number }
     end
-  end
-
-  def saver
-    @externals.saver
   end
 end

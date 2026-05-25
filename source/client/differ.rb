@@ -22,19 +22,17 @@ module External
 
     # - - - - - - - - - - - - - - - - - - -
 
-    def diff_lines(id, was_index, now_index)
+    def diff_lines(was_files:, now_files:)
       @http.get(__method__, {
-                  id: id,
-                  was_index: was_index,
-                  now_index: now_index
+                  was_files: was_files,
+                  now_files: now_files
                 })
     end
 
-    def diff_summary(id, was_index, now_index)
+    def diff_summary(was_files:, now_files:)
       @http.get(__method__, {
-                  id: id,
-                  was_index: was_index,
-                  now_index: now_index
+                  was_files: was_files,
+                  now_files: now_files
                 })
     end
   end

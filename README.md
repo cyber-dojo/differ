@@ -41,10 +41,8 @@ $ make demo
 * [GET alive](docs/api.md#get-alive)  
 * [GET ready](docs/api.md#get-ready)
 * [GET sha](docs/api.md#get-sha)
-* [GET diff_lines_files(was_files,now_files)](docs/api.md#get-diff_lines_fileswas_filesnow_files)
-* [GET diff_summary_files(was_files,now_files)](docs/api.md#get-diff_summary_fileswas_filesnow_files)
-* [GET diff_lines(id,was_index,now_index)](docs/api.md#get-diff_linesidwas_indexnow_index)
-* [GET diff_summary(id,was_index,now_index)](docs/api.md#get-diff_summaryidwas_indexnow_index)
+* [GET diff_lines(was_files,now_files)](docs/api.md#get-diff_lineswas_filesnow_files)
+* [GET diff_summary(was_files,now_files)](docs/api.md#get-diff_summarywas_filesnow_files)
 
 # Screenshots
 

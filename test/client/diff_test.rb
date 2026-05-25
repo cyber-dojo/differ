@@ -1,134 +1,6 @@
 require_relative 'client_test_base'
-require 'cgi'
 
-class DifferClientTest < ClientTestBase
-
-  hostname = 'server'
-  port = ENV['CYBER_DOJO_DIFFER_PORT'].to_i
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  test '2q0jj8', %w(
-  | clients use probes with a trailing question mark in their path which is overly cute
-  | so support both with and without ? until all clients have switched to non ?
-  ) do
-    requester = HttpJsonHash::Requester.new(hostname, port)
-    http = HttpJsonHash::Unpacker.new('differ', requester)
-    assert http.get('alive?', {}).instance_of?(TrueClass)
-    assert http.get('alive', {}).instance_of?(TrueClass)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  test '2q0jj9', %w(
-  | /diff_summary can use GET query args
-  | which is important since in jQuery a $.getJSON() call
-  | always passes its arguments in the query string
-  ) do
-    requester = HttpJsonHash::Requester.new(hostname, port)
-    http = HttpJsonHash::Unpacker.new('differ', requester)
-    args = { id: 'RNCzUr', was_index: 8, now_index: 9 }
-    encoded = args.map do |name, value|
-      "#{name}=#{CGI.escape(value.to_s)}"
-    end.join('&')
-    path = "diff_summary?#{encoded}"
-    diff_summary = http.get(path, {})
-    expected = [
-      { 'type' => 'deleted',
-        'old_filename' => 'readme.txt',
-        'new_filename' => nil,
-        'line_counts' => { 'added' => 0, 'deleted' => 14, 'same' => 0 } },
-      {
-        'type' => 'unchanged',
-        'old_filename' => 'test_hiker.sh',
-        'new_filename' => 'test_hiker.sh',
-        'line_counts' => { 'same' => 8, 'added' => 0, 'deleted' => 0 }
-      },
-      { 'type' => 'unchanged',
-        'old_filename' => 'bats_help.txt',
-        'new_filename' => 'bats_help.txt',
-        'line_counts' => { 'same' => 3, 'added' => 0, 'deleted' => 0 } },
-      { 'type' => 'unchanged',
-        'old_filename' => 'hiker.sh',
-        'new_filename' => 'hiker.sh',
-        'line_counts' => { 'same' => 6, 'added' => 0, 'deleted' => 0 } },
-      { 'type' => 'unchanged',
-        'old_filename' => 'cyber-dojo.sh',
-        'new_filename' => 'cyber-dojo.sh',
-        'line_counts' => { 'same' => 2, 'added' => 0, 'deleted' => 0 } },
-      { 'type' => 'unchanged',
-        'old_filename' => 'sub_dir/empty.file.rename',
-        'new_filename' => 'sub_dir/empty.file.rename',
-        'line_counts' => { 'same' => 1, 'added' => 0, 'deleted' => 0 } }
-    ]
-    assert_equal expected, diff_summary
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-  # >10K query was a problem for thin at one time
-  # - - - - - - - - - - - - - - - - - - - -
-
-  test '2q0347', %w(
-  | >10K query is not rejected by web server
-  ) do
-    @old_files = { 'wibble.h' => 'X' * 45 * 1024 }
-    @new_files = {}
-    id, was_index, now_index = *run_diff_prepare
-    differ.diff_summary(id, was_index, now_index)
-  end
-
-  test '2q0348', %w(
-  | >10K query in nested sub-dir is not rejected by web-server
-  ) do
-    @old_files = { 'gh/jk/wibble.h' => 'X' * 45 * 1024 }
-    @new_files = {}
-    id, was_index, now_index = *run_diff_prepare
-    differ.diff_summary(id, was_index, now_index)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  test '2q0944', %w(
-  | probes 200
-  ) do
-    assert differ.alive.instance_of?(TrueClass)
-    assert differ.ready.instance_of?(TrueClass)
-  end
-
-  test '2q0945', %w(
-  | sha 200
-  ) do
-    sha = differ.sha
-    assert_equal 40, sha.size, 'sha.size'
-    sha.each_char do |ch|
-      assert '0123456789abcdef'.include?(ch), ch
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-  # failure cases
-  # - - - - - - - - - - - - - - - - - - - -
-
-  test '2q07C0', %w(
-  | calling unknown method raises
-  ) do
-    requester = HttpJsonHash::Requester.new(hostname, port)
-    http = HttpJsonHash::Unpacker.new('differ', requester)
-    error = assert_raises(RuntimeError) { http.get(:shar, { x: 42 }) }
-    json = JSON.parse(error.message)
-    expected = {
-      'request' => {
-        'service' => 'differ',
-        'path' => 'shar',
-        'args' => { 'x' => 42 }
-      },
-      'response' => {
-        'body' => '<h1>Not Found</h1>'
-      },
-      'message' => 'body is not JSON'
-    }
-    assert_equal expected, json
-  end
+class DiffTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - -
   # delete file
@@ -148,16 +20,6 @@ class DifferClientTest < ClientTestBase
         'lines' => []
       }
     )
-    assert_existing_diff_summary('RNCzUr', 3, 4) do
-      [
-        :deleted, 'empty.file', nil, 0, 0, 0,
-        :unchanged, 'test_hiker.sh', 'test_hiker.sh', 0, 0, 8,
-        :unchanged, 'bats_help.txt', 'bats_help.txt', 0, 0, 3,
-        :unchanged, 'hiker.sh', 'hiker.sh', 0, 0, 6,
-        :unchanged, 'cyber-dojo.sh', 'cyber-dojo.sh', 0, 0, 2,
-        :unchanged, 'readme.txt', 'readme.txt', 0, 0, 14
-      ]
-    end
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -200,16 +62,6 @@ class DifferClientTest < ClientTestBase
         ]
       }
     )
-    assert_existing_diff_summary('RNCzUr', 8, 9) do
-      [
-        :deleted, 'readme.txt', nil, 0, 14, 0,
-        :unchanged, 'test_hiker.sh', 'test_hiker.sh', 0, 0, 8,
-        :unchanged, 'bats_help.txt', 'bats_help.txt', 0, 0, 3,
-        :unchanged, 'hiker.sh', 'hiker.sh', 0, 0, 6,
-        :unchanged, 'cyber-dojo.sh', 'cyber-dojo.sh', 0, 0, 2,
-        :unchanged, 'sub_dir/empty.file.rename', 'sub_dir/empty.file.rename', 0, 0, 1
-      ]
-    end
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -324,16 +176,6 @@ class DifferClientTest < ClientTestBase
         'lines' => []
       }
     )
-    assert_existing_diff_summary('RNCzUr', 2, 3) do
-      [
-        :created, nil, 'empty.file', 0, 0, 0,
-        :unchanged, 'test_hiker.sh', 'test_hiker.sh', 0, 0, 8,
-        :unchanged, 'bats_help.txt', 'bats_help.txt', 0, 0, 3,
-        :unchanged, 'hiker.sh', 'hiker.sh', 0, 0, 6,
-        :unchanged, 'cyber-dojo.sh', 'cyber-dojo.sh', 0, 0, 2,
-        :unchanged, 'readme.txt', 'readme.txt', 0, 0, 14
-      ]
-    end
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -571,16 +413,6 @@ class DifferClientTest < ClientTestBase
         ]
       }
     )
-    assert_existing_diff_summary('RNCzUr', 5, 6) do
-      [
-        :renamed, 'empty.file', 'empty.file.rename', 0, 0, 0,
-        :unchanged, 'test_hiker.sh', 'test_hiker.sh', 0, 0, 8,
-        :unchanged, 'bats_help.txt', 'bats_help.txt', 0, 0, 3,
-        :unchanged, 'hiker.sh', 'hiker.sh', 0, 0, 6,
-        :unchanged, 'cyber-dojo.sh', 'cyber-dojo.sh', 0, 0, 2,
-        :unchanged, 'readme.txt', 'readme.txt', 0, 0, 14
-      ]
-    end
   end
 
   # - - - - - - - - - - - - - - - - - - - -
@@ -751,82 +583,15 @@ class DifferClientTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff_lines(expected)
-    id, was_index, now_index = *run_diff_prepare
-    diff = differ.diff_lines(id, was_index, now_index)
+    diff = differ.diff_lines(was_files: @old_files, now_files: @new_files)
     assert diff.include?(expected), diff
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_diff_summary(expected)
-    id, was_index, now_index = *run_diff_prepare
-    diff = differ.diff_summary(id, was_index, now_index)
+    diff = differ.diff_summary(was_files: @old_files, now_files: @new_files)
     assert diff.include?(expected), diff
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def run_diff_prepare
-    id = saver.kata_create(starter_manifest)
-    kata_ran_tests(id, was_index = 1, @old_files)
-    kata_ran_tests(id, now_index = 2, @new_files)
-    [id, was_index, now_index]
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def kata_ran_tests(id, index, files)
-    saver.kata_ran_tests(
-      id,
-      index,
-      plain(files),
-      { # stdout
-        'content' => 'this is stdout',
-        'truncated' => false
-      },
-      { # stderr
-        'content' => 'this is stderr',
-        'truncated' => false
-      },
-      '0', # status
-      { # summary
-        'duration' => 0.457764,
-        'colour' => 'green',
-        'predicted' => 'none'
-      }
-    )
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def starter_manifest
-    manifest = saver.kata_manifest('5U2J18') # from test-data copied into saver
-    %w[id created group_id group_index].each { |key| manifest.delete(key) }
-    manifest
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def plain(files)
-    files.transform_values do |content|
-      {
-        'content' => content,
-        'truncated' => false
-      }
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def assert_existing_diff_summary(id, was_index, now_index)
-    expected = *yield.each_slice(6).to_a.map do |diff|
-      { 'type' => diff[0].to_s,
-        'old_filename' => diff[1],
-        'new_filename' => diff[2],
-        'line_counts' => { 'added' => diff[3], 'deleted' => diff[4], 'same' => diff[5] } }
-    end
-    diff_summary = differ.diff_summary(id, was_index, now_index)
-    assert_equal expected, diff_summary
   end
 
   # - - - - - - - - - - - - - - - - - - - -

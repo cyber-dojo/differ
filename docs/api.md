@@ -1,115 +1,7 @@
-# API
+# Diff API
 
 - - - -
-## GET diff_lines(id,was_index,now_index)
-A diff of two sets of files (designated with **was_index** and **now_index**) from the kata designated with **id**.
-Also handles unchanged files and files renamed but with identical content.
-- parameters
-  * **id:String** the id of the kata.
-  * **was_index:Integer** the test-submission index of the first set of files.
-  * **now_index:Integer** the test-submission index of the second set of files.
-  * eg the diff between the 3rd and 4th test submissions of kata "qs34Rk"
-  ```json
-  { "id":"qs34Rk", "was_index":3, "now_index":4 }
-  ```
-- returns an Array of Hashes with each Hash being the diff of a single file. Each Hash has the following keys:
-  * "type" - one of the Strings [ "created", "deleted", "renamed", "changed", "unchanged" ].
-  * "old_filename" - the String name of the **was_index** file, unless "type" is "created" in which case **null**.
-  * "new_filename" - the String name of the **now_index** file, unless "type" is "deleted" in which case **null**.
-  * "lines" - an Array of Hashes, each Hash detailing an "added", "deleted", or "same" line, or
-    a "section" marker before a diff-chunk.
-  * "line_counts" - a Hash with three entries:
-    - "added" - the number of lines added to **now_index**'s "new_filename" file.
-    - "deleted" - the number of lines deleted from **was_index**'s "old_filename" file.
-    - "same" - the number of lines identical in **now_index**'s "new_filename" file and **was_index**'s "old_filename" file.
-  *
-  * eg a created file, which always has a single "section" marker.
-  ```json
-  [
-    {
-      "type": "created",
-      "old_filename": null,
-      "new_filename": "the.created.filename",
-      "lines":
-      [
-        { "type": "section", "index": 0 },              
-        { "type": "added", "line": "this file", "number": 1 },
-        { "type": "added", "line": "is new",    "number": 2 }
-      ],
-      "line_counts": { "added":2, "deleted":0, "same":0 }
-    }
-    ,
-    ...
-  ]
-  ```
-  * eg a deleted file, which always has a single "section" marker.
-  ```json
-  [
-    {
-      "type": "deleted",
-      "old_filename": "the.deleted.filename",
-      "new_filename": null,
-      "lines":
-      [
-        { "type": "section", "index": 0 },      
-        { "type": "deleted", "line": "this file",   "number": 1 },
-        { "type": "deleted", "line": "had 2 lines", "number": 2 }
-      ],
-      "line_counts": { "added":0, "deleted":2, "same":0 }
-    }
-    ,
-    ...
-  ]
-  ```
-  * eg a renamed file with identical content, which always has zero "section" markers.
-  ```json
-  [
-    {
-      "type": "renamed",
-      "old_filename": "the.old.filename",
-      "new_filename": "the.new.filename",
-      "lines":
-      [
-        { "type": "same", "line": "this file has",   "number": 1 },
-        { "type": "same", "line": "changed its name", "number": 2 }
-        { "type": "same", "line": "but not its contents", "number": 3 }
-      ],
-      "line_counts": { "added":0, "deleted":0, "same":3 }
-    }
-    ,
-    ...
-  ]
-  ```
-  * eg a changed file with two diff-chunks.
-  ```json
-  [
-    {
-      "type": "changed",
-      "old_filename": "hiker.h",
-      "new_filename": "hiker.h",
-      "lines":
-      [
-        { "type": "same", "line": "#ifndef HIKER_INCLUDED",   "number": 1 },
-        { "type": "section", "index": 0 },              
-        { "type": "deleted", "line": "#define WIBBLE",   "number": 2 },
-        { "type": "added",   "line": "#define HIKER_INCLUDED", "number": 2 },
-        { "type": "same", "line": "", "number": 3 },
-        { "type": "section", "index": 1 },              
-        { "type": "deleted", "line": "struct wibble",   "number": 3 },
-        { "type": "added",   "line": "struct hiker", "number": 3 },
-        { "type": "same", "line": "{", "number": 4 },        
-        { "type": "same", "line": "};", "number": 5 },        
-        { "type": "same", "line": "#endif", "number": 6 },        
-      ],
-      "line_counts": { "added":2, "deleted":2, "same":5 }
-    }
-    ,
-    ...
-  ]
-  ```
-
-- - - -
-## GET diff_lines_files(was_files,now_files)
+## GET diff_lines(was_files,now_files)
 A diff of two sets of files supplied directly as parameters.
 Also handles unchanged files and files renamed but with identical content.
 - parameters
@@ -219,8 +111,8 @@ Also handles unchanged files and files renamed but with identical content.
   ```
 
 - - - -
-## GET diff_summary_files(was_files,now_files)
-A diff of two sets of files supplied directly as parameters.
+## GET diff_summary(was_files,now_files)
+A diff summary of two sets of files supplied directly as parameters.
 Also handles unchanged files and files renamed but with identical content.
 - parameters
   * **was_files:Hash** a Hash of filename to content Strings for the first set of files.
@@ -241,22 +133,8 @@ Also handles unchanged files and files renamed but with identical content.
     - "deleted" - the number of lines deleted from **was_files**'s "old_filename" file.
     - "same" - the number of lines identical in both **now_files**'s "new_filename" and **was_files**'s "old_filename" file.
 
-- - - -
-## GET diff_summary(id,was_index,now_index)
-The same as `diff_lines` except its Hash entries do *not* include "lines".
-* eg a file with changes spread across one or more diff-chunks.
-```json
-[
-  {
-    "type": "changed",
-    "old_filename": "hiker.cpp",
-    "new_filename": "hiker.cpp",
-    "line_counts": { "added":22, "deleted":29, "same":57 }
-  }
-  ,
-  ...
-]
-```
+# Probe API
+
 
 - - - -
 ## GET alive?

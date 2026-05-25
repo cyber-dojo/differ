@@ -57,6 +57,8 @@ build_image()
 
   containers_down
 
+  export DOCKER_DEFAULT_PLATFORM=linux/amd64
+
   if [ "${CI:-}" != 'true' ]; then
     # In CI workflow, don't remove image pulled in the 'Download docker image' CI workflow jobs.
     remove_old_images

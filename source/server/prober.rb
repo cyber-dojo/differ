@@ -1,6 +1,5 @@
 class Prober
-  def initialize(externals)
-    @externals = externals
+  def initialize(_externals)
   end
 
   def alive
@@ -8,7 +7,7 @@ class Prober
   end
 
   def ready
-    @externals.saver.ready?
+    true
   end
 
   def sha

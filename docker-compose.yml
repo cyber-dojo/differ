@@ -2,6 +2,7 @@
 services:
 
   client:
+    platform: linux/amd64
     build:
       context: source/client
       args:
@@ -25,6 +26,7 @@ services:
           size: 10485760  # 10MB
 
   server:
+    platform: linux/amd64
     build:
       context: .
       args:
@@ -32,8 +34,6 @@ services:
     image: ${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}
     container_name: ${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}
     user: ${CYBER_DOJO_DIFFER_SERVER_USER}
-    depends_on:
-      - saver
     env_file: [ .env ]
     ports: [ "${CYBER_DOJO_DIFFER_PORT}:${CYBER_DOJO_DIFFER_PORT}" ]
     read_only: true
@@ -46,15 +46,3 @@ services:
         tmpfs:
           mode: 01777
           size: 10485760  # 10MB
-
-  saver:
-    image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}
-    container_name: ${CYBER_DOJO_SAVER_CONTAINER_NAME}
-    user: saver
-    ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
-    env_file: [ .env ]
-    read_only: true
-    restart: no
-    tmpfs:
-      - /cyber-dojo:uid=19663,gid=65533
-      - /tmp:uid=19663,gid=65533
