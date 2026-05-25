@@ -1,6 +1,5 @@
 class Prober
-  def initialize(_externals)
-  end
+  def initialize(_externals); end # rubocop:disable Style/RedundantInitialize
 
   def alive
     true
