@@ -14,7 +14,7 @@ name: SonarCloud for CLI Testing
 
 on:
   schedule:
-    - cron: '0 2 1,15 * *'  # 1st and 15th of each month at 02:00 UTC
+    - cron: '0 2 */2 * *'  # every 2nd day at 02:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -116,6 +116,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         uses: SonarSource/sonarqube-scan-action@v6.0.0
+        with:
+          args: >
+            -Dsonar.projectVersion=cli-test-${{ github.run_number }}
 
       # The Kosli CLI integration tests need a valid SonarCloud report-task.txt
       # from a main branch scan. Upload it as an artifact so the CLI tests can download it.
