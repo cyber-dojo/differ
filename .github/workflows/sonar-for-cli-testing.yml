@@ -116,6 +116,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         uses: SonarSource/sonarqube-scan-action@v6.0.0
+        with:
+          args: >
+            -Dsonar.projectVersion=cli-test-${{ github.run_number }}
 
       # The Kosli CLI integration tests need a valid SonarCloud report-task.txt
       # from a main branch scan. Upload it as an artifact so the CLI tests can download it.
