@@ -59,6 +59,8 @@ jobs:
         uses: cyber-dojo/kosli-begin-trail@main
         with:
           flow_description: "Diff files from two traffic-lights"
+          flow_tags: |
+            env=${{ env.KOSLI_AWS_BETA }}
 
 
   pull-request:
