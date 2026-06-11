@@ -28,6 +28,19 @@ installed()
   fi
 }
 
+service_container()
+{
+  # Echo the container id of the given docker-compose service within this
+  # repo's project. The project is COMPOSE_PROJECT_NAME (set by bin/demo.sh),
+  # defaulting to differ so the test helpers also work against a plain test
+  # run, where Compose derives the same project name from the repo directory.
+  local -r service="${1}"
+  docker ps \
+    --filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME:-differ}" \
+    --filter "label=com.docker.compose.service=${service}" \
+    --format '{{.ID}}'
+}
+
 stderr()
 {
   local -r message="${1}"
@@ -41,11 +54,11 @@ exit_non_zero()
 
 containers_down()
 {
-  local -r all=$(docker ps --all --quiet)
-  if [ -n "${all}" ]; then
-    # shellcheck disable=SC2086
-    docker rm --force ${all}
-  fi
+  # Tear down only this repo's docker-compose project, leaving any other
+  # repo's running demo untouched. Compose derives the project from
+  # COMPOSE_PROJECT_NAME (or the repo directory name) so this is scoped to
+  # differ's own containers.
+  docker compose down --remove-orphans --volumes
 }
 
 echo_warnings()

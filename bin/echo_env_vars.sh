@@ -26,9 +26,6 @@ echo_env_vars()
   echo CYBER_DOJO_DIFFER_CLIENT_USER=nobody
   echo CYBER_DOJO_DIFFER_SERVER_USER=nobody
   #
-  echo CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME=test_differ_client
-  echo CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME=test_differ_server
-  #
   local -r AWS_ACCOUNT_ID=244531986313
   local -r AWS_REGION=eu-central-1
   echo CYBER_DOJO_DIFFER_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/differ"
