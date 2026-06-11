@@ -42,11 +42,9 @@ check_args()
       exit 0
       ;;
     'server')
-      export CONTAINER_NAME="${CYBER_DOJO_DIFFER_SERVER_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_SERVER_USER}"
       ;;
     'client')
-      export CONTAINER_NAME="${CYBER_DOJO_DIFFER_CLIENT_CONTAINER_NAME}"
       export USER="${CYBER_DOJO_DIFFER_CLIENT_USER}"
       ;;
     '')
@@ -75,6 +73,8 @@ run_tests()
   export SERVICE_NAME="${1}"
   # Don't do a build here, because in CI workflow, server image is built with GitHub Action
   docker --log-level=ERROR compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
+  # Resolve the container now it is up; Compose namespaces it by project+service.
+  export CONTAINER_NAME="$(service_container "${SERVICE_NAME}")"
   echo_warnings "${TYPE}"
 
   echo '=================================='
