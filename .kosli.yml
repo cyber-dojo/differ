@@ -7,6 +7,15 @@ trail:
   artifacts:
     - name: differ
       attestations:
+        - name: provenance
+          type: decision
+
+        - name: sbom
+          type: decision
+
+        - name: snyk-container-scan
+          type: decision
+
         - name: rubocop-lint
           type: junit
         - name: unit-test
@@ -23,5 +32,3 @@ trail:
           type: custom:coverage-metrics
         - name: sonarcloud-scan
           type: sonar
-        - name: snyk-container-scan
-          type: decision
