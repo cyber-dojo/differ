@@ -29,7 +29,7 @@ jobs:
       aws_region: ${{ steps.vars.outputs.aws_region }}
       gh_actions_iam_role_name: ${{ steps.vars.outputs.gh_actions_iam_role_name }}
     steps:
-    - name: Prepare outputs for fivexl deployment workflow
+    - name: Prepare outputs for the tf deployment workflow
       id: vars
       run: |
         {
@@ -47,13 +47,19 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: fivexl/gh-workflow-tf-plan-apply/.github/workflows/base.yml@v0.0.23
+      pull-requests: read
+    uses: kosli-dev/tf/.github/workflows/apply.yml@main
     with:
       aws_region: ${{ needs.variables.outputs.aws_region }}
       aws_role_arn: arn:aws:iam::${{ needs.variables.outputs.aws_account_id }}:role/${{ needs.variables.outputs.gh_actions_iam_role_name }}
-      aws_default_region: ${{ needs.variables.outputs.aws_region }}
-      aws_role_duration: 900
+      environment: prod
       working_directory: deployment/terraform/
-      tf_apply: 'true'
-      tf_version: v1.9.1
-      tf_additional_env_vars: '{"TF_VAR_TAGGED_IMAGE": "${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ needs.variables.outputs.image_tag }}@sha256:${{ needs.variables.outputs.image_fingerprint }}"}'
+      tf_version: v1.14.9
+      tf_vars: |
+        TF_VAR_TAGGED_IMAGE=${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ needs.variables.outputs.image_tag }}@sha256:${{ needs.variables.outputs.image_fingerprint }}
+      kosli_host: ${{ vars.KOSLI_HOST }}
+      kosli_org: cyber-dojo
+      kosli_template_file: flow-templates/kosli-apply.yml
+    secrets:
+      kosli_api_token: ${{ secrets.KOSLI_API_TOKEN }}
+      kosli_github_token: ${{ secrets.GITHUB_TOKEN }}
