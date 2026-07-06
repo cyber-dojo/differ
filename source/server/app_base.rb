@@ -10,7 +10,7 @@ class AppBase < Sinatra::Base
   end
 
   silently { register Sinatra::Contrib } # respond_to
-  set :json_encoder, Sinatra::JSON       # avoids MultiJson.encode deprecation warning
+  set :json_encoder, :to_json            # use the json gem; Sinatra::JSON calls the deprecated MultiJson.dump
   set :port, ENV['PORT']
 
   def self.get_json(name, klass)
