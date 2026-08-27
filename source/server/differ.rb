@@ -14,17 +14,17 @@ class Differ
     diff_plus(was_files, now_files, lines: false)
   end
 
-  # :nocov:
+  # simplecov:disable
   def diff_lines_files(was_files:, now_files:)
     diff_plus(was_files, now_files, lines: true)
   end
-  # :nocov:
+  # simplecov:enable
 
-  # :nocov:
+  # simplecov:disable
   def diff_summary_files(was_files:, now_files:)
     diff_plus(was_files, now_files, lines: false)
   end
-  # :nocov:
+  # simplecov:enable
 
   private
 
