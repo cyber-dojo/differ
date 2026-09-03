@@ -103,9 +103,8 @@ remove_old_images()
   remove_all_but_current "${dil}" cyberdojo/differ
 }
 
-# Keeps :latest, which preserves the image-layer build cache, and this commit's
-# tag, which names the build just made. Every older tag goes, and an earlier
-# build whose last tag was one of those goes with it.
+# Keeps this commit's tag, which names the build just made. Every older tag
+# goes, and an earlier build whose last tag was one of those goes with it.
 remove_all_but_current()
 {
   local -r docker_image_ls="${1}"
@@ -115,8 +114,7 @@ remove_all_but_current()
   local tagged_name
   for tagged_name in $(echo "${docker_image_ls}" | grep "${name}:" || true)
   do
-    if [ "${tagged_name}" != "${name}:latest" ] \
-    && [ "${tagged_name}" != "${name}:${CYBER_DOJO_DIFFER_TAG}" ]; then
+    if [ "${tagged_name}" != "${name}:${CYBER_DOJO_DIFFER_TAG}" ]; then
       docker image rm --force "${tagged_name}" || echo "  skipped ${tagged_name} (in use)"
     fi
   done
