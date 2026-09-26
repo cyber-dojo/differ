@@ -53,7 +53,7 @@ jobs:
       aws_region: ${{ needs.variables.outputs.aws_region }}
       aws_role_arn: arn:aws:iam::${{ needs.variables.outputs.aws_account_id }}:role/${{ needs.variables.outputs.gh_actions_iam_role_name }}
       environment: beta
-      working_directory: deployment/terraform/
+      working_directory: deployment/terraform-differ/
       tf_version: v1.14.9
       tf_vars: |
         TF_VAR_TAGGED_IMAGE=${{ needs.variables.outputs.ecr_registry }}/${{ needs.variables.outputs.service_name }}:${{ needs.variables.outputs.image_tag }}@sha256:${{ needs.variables.outputs.image_fingerprint }}
