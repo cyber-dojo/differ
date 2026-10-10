@@ -2,7 +2,6 @@
 services:
 
   client:
-    platform: linux/amd64
     build:
       context: source/client
       args:
@@ -24,7 +23,6 @@ services:
           size: 10485760  # 10MB
 
   server:
-    platform: linux/amd64
     build:
       context: .
       args:

@@ -72,7 +72,7 @@ run_tests()
   exit_non_zero_unless_installed docker
   export SERVICE_NAME="${1}"
   # Don't do a build here, because in CI workflow, server image is built with GitHub Action
-  docker --log-level=ERROR compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
+  docker compose --progress=plain up --no-build --wait --wait-timeout=10 "${SERVICE_NAME}"
   # Resolve the container now it is up; Compose namespaces it by project+service.
   export CONTAINER_NAME="$(service_container "${SERVICE_NAME}")"
   echo_warnings "${TYPE}"
