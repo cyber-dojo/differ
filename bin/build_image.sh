@@ -57,16 +57,14 @@ build_image()
 
   containers_down
 
-  export DOCKER_DEFAULT_PLATFORM=linux/amd64
-
   if [ "${CI:-}" != 'true' ]; then
     # Locally, client and server tests both need a server
-    docker --log-level=ERROR compose build server
+    docker compose build server
   fi
 
   if [ "${type}" == 'client' ]; then
     # In CI workflow, we need to build the client image
-    docker --log-level=ERROR compose build client
+    docker compose build client
   fi
 
   # image_name must match server:image: in docker-compose.yml
