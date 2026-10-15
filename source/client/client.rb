@@ -43,8 +43,4 @@ class Client
       'message' => error.message
     } }
   end
-
-  # - - - - - - - - - - - - - - - -
-
-  CONTENT_TYPE_JSON = { 'Content-Type' => 'application/json' }.freeze
 end

@@ -1,5 +1,4 @@
-require_relative 'silently'
-silently { require 'sinatra/contrib' } # N x "warning: method redefined"
+require 'sinatra/base'
 require 'json'
 require 'English'
 
@@ -9,32 +8,24 @@ class AppBase < Sinatra::Base
     super(nil)
   end
 
-  silently { register Sinatra::Contrib } # respond_to
-  set :json_encoder, :to_json            # use the json gem; Sinatra::JSON calls the deprecated MultiJson.dump
   set :port, ENV['PORT']
+  set :host_authorization, { permitted_hosts: [] } # https://github.com/sinatra/sinatra/issues/2065#issuecomment-2484285707
 
   def self.get_json(name, klass)
     get "/#{name}", provides: [:json] do
-      respond_to do |format|
-        format.json do
-          target = klass.new(@externals)
-          result = { name => target.public_send(name, **named_args) }
-          probe_compatible(name, result)
-          json(result)
-        end
-      end
+      target = klass.new(@externals)
+      result = { name => target.public_send(name, **named_args) }
+      probe_compatible(name, result)
+      content_type(:json)
+      result.to_json
     end
   end
 
   private
 
   def named_args
-    args = if params.empty?
-             request.body.rewind
-             json_hash_parse(request.body.read)
-           else
-             params
-           end
+    request.body.rewind
+    args = json_hash_parse(request.body.read)
     Hash[args.map { |key, value| [key.to_sym, value] }]
   end
 
@@ -67,6 +58,7 @@ class AppBase < Sinatra::Base
     error = $ERROR_INFO
     status(500)
     content_type('application/json')
+    request.body.rewind
     info = {
       exception: {
         time: Time.now,
@@ -74,21 +66,10 @@ class AppBase < Sinatra::Base
           path: request.path,
           params: request.params,
           body: request.body.read
-        }
-      }
-    }
-    exception = info[:exception]
-    if error.instance_of?(::HttpJsonHash::ServiceError)
-      exception[:http_service] = {
-        name: error.name,
-        path: error.path,
-        args: error.args,
-        body: error.body,
+        },
         message: error.message
       }
-    else
-      exception[:message] = error.message
-    end
+    }
     diagnostic = JSON.pretty_generate(info)
     puts(diagnostic)
     body(diagnostic)
