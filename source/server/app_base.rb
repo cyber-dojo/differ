@@ -32,11 +32,19 @@ class AppBase < Sinatra::Base
   # - - - - - - - - - - - - - - - - - - - - - -
 
   def json_hash_parse(body)
-    body = '{}' if body == ''
-    json = JSON.parse!(body)
+    # The request body as a Hash of args: an empty body is no args, and any
+    # JSON value other than a Hash is refused.
+    return {} if body == ''
+
+    json = json_parse(body)
     raise 'body is not JSON Hash' unless json.instance_of?(Hash)
 
     json
+  end
+
+  def json_parse(body)
+    # body parsed as JSON. A body that is not JSON is refused.
+    JSON.parse!(body)
   rescue JSON::ParserError
     raise 'body is not JSON'
   end

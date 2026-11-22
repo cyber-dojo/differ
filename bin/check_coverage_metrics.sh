@@ -62,7 +62,7 @@ check_coverage()
     --volume ${HOST_TEST_DIR}/lib/check_metrics.rb:${CONTAINER_TMP_DIR}/check_metrics.rb:ro \
     --volume ${HOST_REPORTS_DIR}/coverage_metrics.json:${CONTAINER_TMP_DIR}/coverage_metrics.json:ro \
     --volume ${HOST_TEST_DIR}/lib/coverage_metrics_limits.rb:${CONTAINER_TMP_DIR}/coverage_metrics_limits.rb:ro \
-      "${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}" \
+      "${CYBER_DOJO_DIFFER_RUBY_IMAGE:-${CYBER_DOJO_DIFFER_IMAGE}:${CYBER_DOJO_DIFFER_TAG}}" \
         sh -c "ruby ${CONTAINER_TMP_DIR}/check_metrics.rb ${CONTAINER_TMP_DIR}/coverage_metrics.json coverage_metrics_limits" \
         | tee -a "${HOST_REPORTS_DIR}/${TEST_LOG}"
 

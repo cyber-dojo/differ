@@ -26,6 +26,16 @@ class ExternalShellerTest < DifferTestBase
     assert_equal 127, json['exit_status']
   end
 
+  test 'C89E1B', %w(
+  | assert_exec(*commands) raises when the commands succeed but write to stderr
+  ) do
+    error = assert_raises { shell.assert_exec('echo -n Hello && echo -n warning >&2') }
+    json = JSON.parse(error.message)
+    assert_equal 'Hello', json['stdout']
+    assert_equal 'warning', json['stderr']
+    assert_equal 0, json['exit_status']
+  end
+
   test 'C89ACD', %w(
   | assert_cd_exec(path,*commands) raises when the cd fails
   ) do

@@ -522,7 +522,48 @@ class DiffTest < DifferTestBase
     )
   end
 
+  # - - - - - - - - - - - - - - - - - - - -
+  # filenames git writes unquoted with a space, or quoted
+  # - - - - - - - - - - - - - - - - - - - -
+
+  test 'Pf3G1A', %w(
+  | a file is reported under its own name whatever characters the name holds:
+  | a space, which git writes unquoted, or a double-quote, a backslash, a tab
+  | or a non-ASCII letter, which git writes quoted with escapes; changed,
+  | created, deleted and renamed alike, and as that one file only
+  ) do
+    names = ['sp ace.txt', 'quo"te.txt', 'back\\slash.txt', "ta\tb.txt", 'naïve.txt']
+    expected = names.to_h do |name|
+      [name, {
+        changed: [summary(:changed, name, name, added: 1, same: 1)],
+        created: [summary(:created, nil, name, added: 1)],
+        deleted: [summary(:deleted, name, nil, deleted: 1)],
+        renamed: [summary(:renamed, name, "re #{name}", same: 3)]
+      }]
+    end
+    actual = names.to_h do |name|
+      [name, {
+        changed: differ.diff_summary(was_files: { name => "a\n" }, now_files: { name => "a\nb\n" }),
+        created: differ.diff_summary(was_files: {}, now_files: { name => "c\n" }),
+        deleted: differ.diff_summary(was_files: { name => "a\n" }, now_files: {}),
+        renamed: differ.diff_summary(was_files: { name => "a\nb\nc\n" },
+                                     now_files: { "re #{name}" => "a\nb\nc\n" })
+      }]
+    end
+    assert_equal expected, actual
+  end
+
   private
+
+  def summary(type, old_filename, new_filename, added: 0, deleted: 0, same: 0)
+    # One file's entry in a diff summary.
+    {
+      type: type,
+      new_filename: new_filename,
+      old_filename: old_filename,
+      line_counts: { added: added, deleted: deleted, same: same }
+    }
+  end
 
   def assert_diff(expected)
     assert_diff_lines(expected)
