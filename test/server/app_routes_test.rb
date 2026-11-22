@@ -32,6 +32,20 @@ class AppRoutesTest < DifferTestBase
     assert_equal expected, get_json_200('/diff_lines', args.to_json)
   end
 
+  test 'Rt8wA5', %w(
+  | GET /diff_lines_files and /diff_summary_files, the routes saver calls, return 200
+  | and what Differ#diff_lines and #diff_summary return, under the route's own name
+  ) do
+    args = { was_files: { 'hiker.rb' => "a\n" }, now_files: { 'hiker.rb' => "a\nb\n" } }
+    expected = JSON.parse({
+      'diff_lines_files' => differ.diff_lines(**args),
+      'diff_summary_files' => differ.diff_summary(**args)
+    }.to_json)
+    actual = get_json_200('/diff_lines_files', args.to_json)
+             .merge(get_json_200('/diff_summary_files', args.to_json))
+    assert_equal expected, actual
+  end
+
   test 'Rt8wB1', %w(
   | GET with a body that is not JSON returns 500 and the error as a JSON diagnostic.
   | The same diagnostic is written to stdout.

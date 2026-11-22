@@ -15,7 +15,8 @@ class DifferTestBase < Id58TestBase
   end
 
   def prober
-    @prober ||= Prober.new(externals)
+    # The prober under test, on this test's externals.
+    Prober.new(externals)
   end
 
   def disk

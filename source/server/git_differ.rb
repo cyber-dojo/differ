@@ -1,3 +1,5 @@
+require 'tmpdir'
+
 class GitDiffer
   def initialize(external)
     @external = external

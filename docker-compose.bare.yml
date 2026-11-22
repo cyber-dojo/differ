@@ -1,0 +1,16 @@
+# Layered on docker-compose.yml by bin/run_tests_bare.sh (via COMPOSE_FILE),
+# so the server tests run in the bare image, the Dockerfile's base stage
+# (built with --target base): Ruby, its gems, the OS packages and the nobody
+# user, with no source code. The source and tests are mounted, as they are
+# for the deployed image, so the deployed image need not be built before the
+# tests run. The server tests call the differ in-process, so no server
+# process is started; the bare image has no HEALTHCHECK to wait on.
+
+services:
+
+  server:
+    image: ${CYBER_DOJO_DIFFER_BARE_IMAGE}
+    entrypoint: [ "sleep", "infinity" ]
+    working_dir: /differ/source
+    environment:
+      - COMMIT_SHA=${COMMIT_SHA}

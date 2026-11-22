@@ -425,6 +425,24 @@ class GitDiffParserTest < DifferTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'B56F0A', %w(
+  | a line in a file's diff that is no same, deleted or added line raises,
+  | naming the line, rather than stalling the parse
+  ) do
+    diff = [
+      'diff --git hiker.h hiker.h',
+      'index 78981922..61780798 100644',
+      '--- hiker.h',
+      '+++ hiker.h',
+      '@@ -1 +1 @@',
+      '?a'
+    ].join("\n")
+    error = assert_raises(RuntimeError) { GitDiffParser.new(diff, lines: true).parse_all }
+    assert_equal 'unparsed git diff line: ?a', error.message
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'B56124', %w(
   | renamed but unchanged file has no trailing
   | --- or +++ lines and must not consume diff

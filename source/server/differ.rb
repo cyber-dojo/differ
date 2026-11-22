@@ -14,17 +14,9 @@ class Differ
     diff_plus(was_files, now_files, lines: false)
   end
 
-  # simplecov:disable
-  def diff_lines_files(was_files:, now_files:)
-    diff_plus(was_files, now_files, lines: true)
-  end
-  # simplecov:enable
-
-  # simplecov:disable
-  def diff_summary_files(was_files:, now_files:)
-    diff_plus(was_files, now_files, lines: false)
-  end
-  # simplecov:enable
+  # The names saver's differ client calls them by.
+  alias diff_lines_files diff_lines
+  alias diff_summary_files diff_summary
 
   private
 
